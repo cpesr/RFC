@@ -3,16 +3,17 @@ Etude sur les vacations/heures complémentaires
 
 ## Quelques dataviz
 
-On commence par le nb d’heures hors service en fonction du nb de
-titulaires, en gardant les data à partir de 2014.
+On commence par le nb d’heures hors service (=heures complémentaires +
+vacations d’enseignement) en fonction du nb de titulaires, en gardant
+les data moyen à partir de 2014 et pour chaque établissement.
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
 ![](Vacations_files/figure-gfm/hcompPtit-1.png)<!-- -->
 
-On continue en regardant la variation (en %) du nombre d’HComp par tous
-les établissements. Cette variation est obtenue, pour chaque
-établissement, en regardant l’écart à la moyenne sur la période
+On continue en regardant la variation (en %) du nombre d’heures hors
+service par tous les établissements. Cette variation est obtenue, pour
+chaque établissement, en regardant l’écart à la moyenne sur la période
 2014-2018. La transparence représente cette valeur moyenne (moins c’est
 transparent, plus le nombre d’heures moyen est élevé)
 
