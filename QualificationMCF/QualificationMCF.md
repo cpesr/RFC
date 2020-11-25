@@ -8,9 +8,32 @@ library("gridExtra")
 data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
 ```
 
-# Pourcentage de réussite à la qualification
+## Description des données
 
-## Moyenne toutes sections confondues de 2005 à 2019
+  - Nombre d’observations : 855
+  - Variables :
+
+<!-- end list -->
+
+``` r
+colnames(data_CNU)
+```
+
+    ##  [1] "TypeRecrutement"            "GrandeDisciplineCNU"       
+    ##  [3] "GroupeCNU"                  "SectionCNU"                
+    ##  [5] "SectionCNU.ID"              "Annee"                     
+    ##  [7] "QualificationDossiers.MCF"  "QualificationQualifies.MCF"
+    ##  [9] "PostesPublies.MCF"          "Candidatures.MCF"          
+    ## [11] "Candidats.MCF"              "PostesPourvus.MCF"         
+    ## [13] "Candidatures.MCF.F"         "Candidatures.MCF.H"        
+    ## [15] "Candidats.MCF.F"            "Candidats.MCF.H"           
+    ## [17] "Recrutes.MCF.F"             "Recrutes.MCF.H"
+
+  - Période : 2005, 2019
+
+## Pourcentage de réussite à la qualification
+
+### Moyenne toutes sections confondues de 2005 à 2019
 
 ``` r
 tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
@@ -21,7 +44,7 @@ tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, d
     ##      2013      2014      2015      2016      2017      2018      2019 
     ## 0.6946531 0.6956818 0.6848906 0.7009596 0.7129845 0.7122116 0.6941814
 
-## Evolution du taux de réussite de 2005 à 2019
+### Evolution du taux de réussite de 2005 à 2019
 
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
@@ -35,7 +58,7 @@ tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, d
       - soit par une baisse éventuellement relative du nombre de
         candidats.
 
-# Nombre de dossiers de qualification MCF
+## Nombre de dossiers de qualification MCF
 
 ``` r
 tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
@@ -46,13 +69,13 @@ tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
     ##     2013     2014     2015     2016     2017     2018     2019 
     ## 230.8246 232.3158 225.3333 216.0877 204.0175 202.0000 208.8947
 
-## Evolution du nombre de dossiers de qualification MCF de 2005 à 2019
+### Evolution du nombre de dossiers de qualification MCF de 2005 à 2019
 
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 ![](QualificationMCF_files/figure-gfm/DossiersQualificationMCF-1.png)<!-- -->
 
-# Nombre de qualifiés MCF
+## Nombre de qualifiés MCF
 
 ``` r
 tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
@@ -63,7 +86,7 @@ tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
     ##     2013     2014     2015     2016     2017     2018     2019 
     ## 161.1053 160.6491 154.3158 152.1930 143.8947 141.3860 143.5789
 
-## Evolution du nombre de qualifiés de 2005 à 2019
+### Evolution du nombre de qualifiés de 2005 à 2019
 
     ## Warning: Removed 3 rows containing missing values (geom_point).
 

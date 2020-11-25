@@ -14,12 +14,25 @@ library("gridExtra")
 data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
 ```
 
-# Pourcentage de réussite à la qualification
-## Moyenne toutes sections confondues de 2005 à 2019
+
+## Description des données 
+
+- Nombre d'observations : `r nrow(data_CNU)`
+- Variables : 
+```{r vars}
+colnames(data_CNU)
+```
+- Période : `r range(data_CNU$Annee)`
+
+
+## Pourcentage de réussite à la qualification
+
+### Moyenne toutes sections confondues de 2005 à 2019
 ```{r MoyenneReussiteQualificationMCF}
 tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
 ```
-## Evolution du taux de réussite de 2005 à 2019
+
+### Evolution du taux de réussite de 2005 à 2019
 ```{r ReussiteQualificationMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
 ggplot(data_CNU, aes(x = (QualificationQualifies.MCF/QualificationDossiers.MCF)*100, y = GroupeCNU, color=Annee)) +
   geom_jitter(width = 0, height = 0.15) +
@@ -41,11 +54,12 @@ ggplot(data_CNU, aes(x = (QualificationQualifies.MCF/QualificationDossiers.MCF)*
   + soit par l'augmentation des standards ;
   + soit par une baisse éventuellement relative du nombre de candidats.
 
-# Nombre de dossiers de qualification MCF
+## Nombre de dossiers de qualification MCF
 ```{r MoyenneDossiersQualificationMCF}
 tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
 ```
-## Evolution du nombre de dossiers de qualification MCF de 2005 à 2019
+
+### Evolution du nombre de dossiers de qualification MCF de 2005 à 2019
 ```{r DossiersQualificationMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
 ggplot(data_CNU, aes(x = QualificationDossiers.MCF, y = GroupeCNU, color=Annee)) +
   geom_jitter(width = 0, height = 0.15) +
@@ -60,11 +74,12 @@ ggplot(data_CNU, aes(x = QualificationDossiers.MCF, y = GroupeCNU, color=Annee))
   labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
 ```
 
-# Nombre de qualifiés MCF
+## Nombre de qualifiés MCF
 ```{r MoyenneQualifiesMCF}
 tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
 ```
-## Evolution du nombre de qualifiés de 2005 à 2019
+
+### Evolution du nombre de qualifiés de 2005 à 2019
 ```{r QualifiesMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
 ggplot(data_CNU, aes(x = QualificationQualifies.MCF, y = GroupeCNU, color=Annee)) +
   geom_jitter(width = 0, height = 0.15) +
