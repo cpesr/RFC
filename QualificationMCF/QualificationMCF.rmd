@@ -1,0 +1,85 @@
+---
+title: "Qualification MCF"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r cars}
+library(ggplot2)
+library(ggbeeswarm)
+library("gridExtra")
+data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
+```
+
+# Pourcentage de réussite à la qualification
+## Moyenne toutes sections confondues de 2005 à 2019
+```{r MoyenneReussiteQualificationMCF}
+tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
+```
+## Evolution du taux de réussite de 2005 à 2019
+```{r ReussiteQualificationMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
+ggplot(data_CNU, aes(x = (QualificationQualifies.MCF/QualificationDossiers.MCF)*100, y = GroupeCNU, color=Annee)) +
+  geom_jitter(width = 0, height = 0.15) +
+  geom_vline(xintercept=55.88368, linetype="dashed", color = "#E69F00", size=0.8) + 
+  geom_vline(xintercept=69.41814, linetype="dashed", color = "#009E73", size=0.8) +
+  xlim(0,100) +
+  theme(legend.position="bottom") +
+  facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
+  theme(strip.text.y = element_text(size = 8)) +
+  scale_color_gradient(low="#E69F00", high="#009E73") +
+  labs(title="Qualifications MCF, de 2005 à 2019", y ="Grandes disciplines CNU", x = "Pourcentage de réussite à la qualification (%)") +
+  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+```
+
+**Hypothèses**
+
+- la qualification devient de plus en plus facile à avoir ;
+- augmentation du niveau des candidats ;
+  + soit par l'augmentation des standards ;
+  + soit par une baisse éventuellement relative du nombre de candidats.
+
+# Nombre de dossiers de qualification MCF
+```{r MoyenneDossiersQualificationMCF}
+tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
+```
+## Evolution du nombre de dossiers de qualification MCF de 2005 à 2019
+```{r DossiersQualificationMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
+ggplot(data_CNU, aes(x = QualificationDossiers.MCF, y = GroupeCNU, color=Annee)) +
+  geom_jitter(width = 0, height = 0.15) +
+  geom_vline(xintercept=297.5357, linetype="dashed", color = "#E69F00", size=0.8) + 
+  geom_vline(xintercept=208.8947, linetype="dashed", color = "#009E73", size=0.8) +
+  xlim(0,1100) +
+  theme(legend.position="bottom") +
+  facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
+  theme(strip.text.y = element_text(size = 8)) +
+  scale_color_gradient(low="#E69F00", high="#009E73") +
+  labs(title="Qualifications MCF, de 2005 à 2019", y ="Grandes disciplines CNU", x = "Nombre de dossiers de qualification") +
+  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+```
+
+# Nombre de qualifiés MCF
+```{r MoyenneQualifiesMCF}
+tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
+```
+## Evolution du nombre de qualifiés de 2005 à 2019
+```{r QualifiesMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
+ggplot(data_CNU, aes(x = QualificationQualifies.MCF, y = GroupeCNU, color=Annee)) +
+  geom_jitter(width = 0, height = 0.15) +
+  geom_vline(xintercept=167.7500, linetype="dashed", color = "#E69F00", size=0.8) + 
+  geom_vline(xintercept=143.5789, linetype="dashed", color = "#009E73", size=0.8) +
+  xlim(0,700) +
+  theme(legend.position="bottom") +
+  facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
+  theme(strip.text.y = element_text(size = 8)) +
+  scale_color_gradient(low="#E69F00", high="#009E73") +
+  labs(title="Qualifications MCF, de 2005 à 2019", y ="Grandes disciplines CNU", x = "Nombre de qualifié·e·s") +
+  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+```
+
+**Conclusions**  
+
+- Ca tendrait à confirmer l'hypothèse : le niveau des candidats monte, le nombre de candidats baisse.
+- Il pourrait aussi y avoir une politique des sections de ne pas passer en-dessous d'un certain nombre de qualifié·e·s, alors que le nombre de candidat·e·s ne cesse de diminuer.
