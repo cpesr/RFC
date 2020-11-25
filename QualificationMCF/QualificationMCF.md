@@ -52,7 +52,7 @@ tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
 
 ![](QualificationMCF_files/figure-gfm/DossiersQualificationMCF-1.png)<!-- -->
 
-# Nombre de qualifiés MCF
+# Nombre de qualifications MCF
 
 ``` r
 tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
@@ -63,11 +63,11 @@ tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
     ##     2013     2014     2015     2016     2017     2018     2019 
     ## 161.1053 160.6491 154.3158 152.1930 143.8947 141.3860 143.5789
 
-## Evolution du nombre de qualifiés de 2005 à 2019
+## Evolution du nombre de qualifications de 2005 à 2019
 
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
-![](QualificationMCF_files/figure-gfm/QualifiesMCF-1.png)<!-- -->
+![](QualificationMCF_files/figure-gfm/QualificationsMCF-1.png)<!-- -->
 
 **Conclusions**
 
