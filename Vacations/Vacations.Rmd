@@ -1,0 +1,108 @@
+---
+title: "Etude sur les vacations/heures complémentaires"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading libraries and data
+
+
+```
+library(ggplot2)
+library(plyr)
+library(tidyverse)
+library(ggrepel)
+library(plotly)
+library(ggthemes)
+
+bs <- read.csv("liste_bilans_sociaux.csv",header=TRUE, sep=";", quote='"') %>%
+        filter(Rentrée>2010) %>%
+        filter(HC.Total != "NA")
+        
+        
+
+m <- merge(select(bs,UAI,Etablissement,Rentrée,HC.Total:HC.Format.HeuresEuros),kpiESR::esr)
+    #filter(Etablissement != "Montpellier")%>%
+   # filter(Rentrée == 2018)
+
+```
+##Et en dessous de quoi faire des visus
+
+On commence par le nb d'heures hors service en fonction du nb de titulaires, en gardant les data à partir de 2014.
+
+```
+test2 <- m %>%
+  filter(Rentrée > 2013)%>%
+  group_by(Etablissement) %>%
+  summarize(hcm=mean(HC.Total, na.rm=TRUE),titmean=mean(kpi.ENS.S.titulaires,na.rm=TRUE))  
+
+
+
+ggplot(data = test2, 
+            aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
+                color=(Etablissement)))#,alpha=hcm))+
+        geom_point() + 
+        ylim(0,450)+
+        xlim(0,3000)+
+        ylab("Nb d'heures comp+vacations / enseignant titulaire")+
+        xlab("Nb d'enseignants titulaires")
+
+```
+On continue en regardant l'évolution entre 2014 et 2018 du nombre d'HComp en relatif pour tous les établissements
+
+```
+test2 <- m %>%
+  filter(Rentrée > 2012)%>%
+            group_by(Etablissement) %>%
+  summarize(Rentrée,HC.Total,hcm=mean(HC.Total, na.rm=TRUE),)  
+  
+  #summarize(Rentrée,HC.Total,kpi.K.titPetu,Titmean=mean(kpi.K.titPetu, na.rm=TRUE),hcm=mean(HC.Total, na.rm=TRUE),)
+  
+df <- test2 %>%
+  mutate(
+    hecPnorm = (HC.Total-hcm)/hcm,
+#    hecPhec = HC.Vacataires / HC.Total,
+#    titPetunorm = (kpi.K.titPetu-Titmean)/Titmean
+  ) %>%
+  filter(Rentrée > 2012)
+
+
+p <- ggplot(data = df, 
+            aes(y = 100*hecPnorm, x = Rentrée,#100*titPetunorm,
+             color=(Etablissement),alpha=hcm))
+p+
+  geom_point()+
+  geom_line()+
+  xlab("Annee")+
+  ylab("Variation du nombre d'heures complémentaires (en %)")+
+scale_alpha(range = c(0.2, 1))
+#guides(color=FALSE)
+
+```  
+
+Et enfin, on essaie de regarder ces trajectoires dans le plan HComp,Nb de titulaires avec des gradients de transparence pour figurer l'année
+
+```
+
+  df <- m %>%
+    mutate(
+      hecPtit = HC.Titulaires / kpi.ENS.S.titulaires,
+      hecPhec = HC.Vacataires / HC.Total,
+      HtPtit = HC.Total/kpi.ENS.S.titulaires
+    ) %>%
+    filter(Rentrée > 2011)
+
+  ggplot(df, aes(x=kpi.ENS.S.titulaires, y=HC.Total/kpi.ENS.S.titulaires, 
+                 alpha=Rentrée, color=as.factor(Libellé))) + 
+    geom_point() + geom_path() +
+    geom_text(data=filter(df, Rentrée == 2018), aes(label=Libellé), hjust=0, angle = 45, size=2.5) +
+    scale_alpha(range = c(0.1, 1))+
+    guides(color=FALSE)+
+    ylim(0,450)+
+    xlim(0,3000)
+  
+
+```
