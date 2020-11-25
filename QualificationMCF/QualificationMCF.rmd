@@ -74,22 +74,14 @@ ggplot(data_CNU, aes(x = QualificationDossiers.MCF, y = GroupeCNU, color=Annee))
   labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
 ```
 
-<<<<<<< HEAD
+
 # Nombre de qualifications MCF
 ```{r MoyenneQualificationsMCF}
 tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
 ```
+
 ## Evolution du nombre de qualifications de 2005 à 2019
 ```{r QualificationsMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
-=======
-## Nombre de qualifiés MCF
-```{r MoyenneQualifiesMCF}
-tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
-```
-
-### Evolution du nombre de qualifiés de 2005 à 2019
-```{r QualifiesMCF, fig.width=12, fig.asp=0.7, echo=FALSE}
->>>>>>> e190f3e3e3ee73a66980ce56ccf3660e329df038
 ggplot(data_CNU, aes(x = QualificationQualifies.MCF, y = GroupeCNU, color=Annee)) +
   geom_jitter(width = 0, height = 0.15) +
   geom_vline(xintercept=167.7500, linetype="dashed", color = "#E69F00", size=0.8) + 
@@ -107,3 +99,6 @@ ggplot(data_CNU, aes(x = QualificationQualifies.MCF, y = GroupeCNU, color=Annee)
 
 - Ca tendrait à confirmer l'hypothèse : le niveau des candidats monte, le nombre de candidats baisse.
 - Il pourrait aussi y avoir une politique des sections de ne pas passer en-dessous d'un certain nombre de qualifié·e·s, alors que le nombre de candidat·e·s ne cesse de diminuer.
+
+
+
