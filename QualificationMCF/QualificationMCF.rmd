@@ -119,35 +119,40 @@ cnu %>%
 
 ### Nombre de dossiers et nombre de qualifiés, toutes sections confondues
 ```{r dossiers.qualifs}
-cnu %>%
+cnu.sum <- cnu %>%
   group_by(Annee) %>%
   summarise(
     nb.dossiers.MCF = sum(QualificationDossiers.MCF, na.rm = TRUE),
     nb.qualifications.MCF = sum(QualificationQualifies.MCF, na.rm = TRUE)
   ) %>%
   pivot_longer(-Annee) %>%
-  ggplot(aes(x=Annee, y=value, color=name, group=name)) +
+  group_by(name) %>%
+  mutate(evolution = value / first(value)) %>%
+  ungroup()
+
+ggplot(cnu.sum, aes(x=Annee, y=value, color=name, group=name)) +
+  geom_line(size=2) +
+  geom_smooth(method="lm", se=FALSE, size=0.3) +
+  theme_hc()
+```
+
+### Evolution du nombre de dossiers et nombre de qualifiés, toutes sections confondues (en valeur de 2005)
+```{r evolutions.dossiers.qualifs}
+  ggplot(cnu.sum, aes(x=Annee, y=evolution, color=name, group=name)) +
     geom_line(size=2) +
     geom_smooth(method="lm", se=FALSE, size=0.3) +
     theme_hc()
 ```
 
-### Evolution du nombre de dossiers et nombre de qualifiés, toutes sections confondues (en valeur de 2005)
-```{r evolutions.dossiers.qualifs}
-cnu %>%
-  group_by(Annee) %>%
-  summarise(
-    nb.dossiers.MCF = sum(QualificationDossiers.MCF, na.rm = TRUE),
-    nb.qualifications.MCF = sum(QualificationQualifies.MCF, na.rm = TRUE),
-  ) %>%
-  transmute(
-    Annee = Annee,
-    evolution.nb.dossiers.MCF = nb.dossiers.MCF / first(nb.dossiers.MCF),
-    evolution.nb.qualifications.MCF = nb.qualifications.MCF / first(nb.qualifications.MCF)
-  ) %>%
-  pivot_longer(-Annee) %>%
-  ggplot(aes(x=Annee, y=value, color=name, group=name)) +
-    geom_line(size=2) +
-    geom_smooth(method="lm", se=FALSE, size=0.3) +
-    theme_hc()
+```{r textes}
+annee1 = head(cnu.sum$Annee, 1)
+annee2 = tail(cnu.sum$Annee, 1)
+dossiers1 = subset(cnu.sum,name=="nb.dossiers.MCF",value) %>% head(1)
+dossiers2 = subset(cnu.sum,name=="nb.dossiers.MCF",value) %>% tail(1)
+ddossiers = scales::percent((subset(cnu.sum,name=="nb.dossiers.MCF",evolution) %>% tail(1)-1)[[1]])
+qualifs1 = subset(cnu.sum,name=="nb.qualifications.MCF",value) %>% head(1)
+qualifs2 = subset(cnu.sum,name=="nb.qualifications.MCF",value) %>% tail(1)
+dqualifs = scales::percent((subset(cnu.sum,name=="nb.qualifications.MCF",evolution) %>% tail(1)-1)[[1]])
 ```
+
+Entre `r annee1` et `r annee2`, le nombre de dossiers de qualification est passé de `r dossiers1` à `r dossiers1` (soit `r ddossiers`), pendant que le nombre de qualifications passait de `r qualifs1` à `r qualifs2` (soit `r dqualifs`).
