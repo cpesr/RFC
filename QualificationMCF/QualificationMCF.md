@@ -1,23 +1,12 @@
 Qualification MCF
 ================
 
-``` r
-library(ggplot2)
-library(ggbeeswarm)
-library("gridExtra")
-data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
-```
-
 ## Description des données
 
   - Nombre d’observations : 855
   - Variables :
 
 <!-- end list -->
-
-``` r
-colnames(data_CNU)
-```
 
     ##  [1] "TypeRecrutement"            "GrandeDisciplineCNU"       
     ##  [3] "GroupeCNU"                  "SectionCNU"                
@@ -34,10 +23,6 @@ colnames(data_CNU)
 ## Pourcentage de réussite à la qualification
 
 ### Moyenne toutes sections confondues de 2005 à 2019
-
-``` r
-tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
-```
 
     ##      2005      2006      2007      2008      2009      2010      2011      2012 
     ## 0.5588368 0.5685157 0.5910385 0.6387567 0.6222343 0.6266630 0.6447297 0.6809704 
@@ -60,10 +45,6 @@ tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, d
 
 ## Nombre de dossiers de qualification MCF
 
-``` r
-tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
-```
-
     ##     2005     2006     2007     2008     2009     2010     2011     2012 
     ## 297.5357 271.1754 268.5893 260.2500 274.7193 228.3684 238.7368 236.4912 
     ##     2013     2014     2015     2016     2017     2018     2019 
@@ -76,10 +57,6 @@ tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
 ![](QualificationMCF_files/figure-gfm/DossiersQualificationMCF-1.png)<!-- -->
 
 # Nombre de qualifications MCF
-
-``` r
-tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
-```
 
     ##     2005     2006     2007     2008     2009     2010     2011     2012 
     ## 167.7500 156.7895 159.9286 166.6071 172.1228 143.6140 154.3158 160.6491 
@@ -99,3 +76,27 @@ tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
   - Il pourrait aussi y avoir une politique des sections de ne pas
     passer en-dessous d’un certain nombre de qualifié·e·s, alors que le
     nombre de candidat·e·s ne cesse de diminuer.
+
+## Autres dataviz
+
+### Taux de qualification MCF
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_boxplot).
+
+![](QualificationMCF_files/figure-gfm/taux.de.qualification.MCF-1.png)<!-- -->
+
+### Nombre de dossiers et nombre de qualifiés, toutes sections confondues
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](QualificationMCF_files/figure-gfm/dossiers.qualifs-1.png)<!-- -->
+
+### Evolution du nombre de dossiers et nombre de qualifiés, toutes sections confondues (en valeur de 2005)
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](QualificationMCF_files/figure-gfm/evolutions.dossiers.qualifs-1.png)<!-- -->

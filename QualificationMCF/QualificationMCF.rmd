@@ -4,11 +4,10 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+knitr::opts_chunk$set(echo = FALSE)
 
-```{r cars}
-library(ggplot2)
+library(tidyverse)
+library(ggthemes)
 library(ggbeeswarm)
 library("gridExtra")
 data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
@@ -101,4 +100,54 @@ ggplot(data_CNU, aes(x = QualificationQualifies.MCF, y = GroupeCNU, color=Annee)
 - Il pourrait aussi y avoir une politique des sections de ne pas passer en-dessous d'un certain nombre de qualifié·e·s, alors que le nombre de candidat·e·s ne cesse de diminuer.
 
 
+## Autres dataviz
+```{r datasetup}
+cnu <- data_CNU %>%
+  mutate(
+    Annee = as.factor(Annee),
+    taux.de.qualification.MCF = QualificationQualifies.MCF / QualificationDossiers.MCF)
+```
 
+### Taux de qualification MCF
+```{r taux.de.qualification.MCF}
+cnu %>%
+  ggplot(aes(x=Annee, y=taux.de.qualification.MCF)) +
+    geom_boxplot() +
+    scale_y_continuous(labels=scales::percent) +
+  theme_hc()
+```
+
+### Nombre de dossiers et nombre de qualifiés, toutes sections confondues
+```{r dossiers.qualifs}
+cnu %>%
+  group_by(Annee) %>%
+  summarise(
+    nb.dossiers.MCF = sum(QualificationDossiers.MCF, na.rm = TRUE),
+    nb.qualifications.MCF = sum(QualificationQualifies.MCF, na.rm = TRUE)
+  ) %>%
+  pivot_longer(-Annee) %>%
+  ggplot(aes(x=Annee, y=value, color=name, group=name)) +
+    geom_line(size=2) +
+    geom_smooth(method="lm", se=FALSE, size=0.3) +
+    theme_hc()
+```
+
+### Evolution du nombre de dossiers et nombre de qualifiés, toutes sections confondues (en valeur de 2005)
+```{r evolutions.dossiers.qualifs}
+cnu %>%
+  group_by(Annee) %>%
+  summarise(
+    nb.dossiers.MCF = sum(QualificationDossiers.MCF, na.rm = TRUE),
+    nb.qualifications.MCF = sum(QualificationQualifies.MCF, na.rm = TRUE),
+  ) %>%
+  transmute(
+    Annee = Annee,
+    evolution.nb.dossiers.MCF = nb.dossiers.MCF / first(nb.dossiers.MCF),
+    evolution.nb.qualifications.MCF = nb.qualifications.MCF / first(nb.qualifications.MCF)
+  ) %>%
+  pivot_longer(-Annee) %>%
+  ggplot(aes(x=Annee, y=value, color=name, group=name)) +
+    geom_line(size=2) +
+    geom_smooth(method="lm", se=FALSE, size=0.3) +
+    theme_hc()
+```
