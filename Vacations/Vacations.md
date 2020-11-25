@@ -10,13 +10,13 @@ titulaires, en gardant les data à partir de 2014.
 
 ![](Vacations_files/figure-gfm/hcompPtit-1.png)<!-- -->
 
-On continue en regardant l’évolution entre 2014 et 2018 du nombre
-d’HComp par étudiant pour tous les établissements, par rapport à la
-moyenne.
+On continue en regardant la variation (en %) du nombre d’HComp par tous
+les établissements. Cette variation est obtenue, pour chaque
+établissement, en regardant l’écart à la moyenne sur la période
+2014-2018. La transparence représente cette valeur moyenne (moins c’est
+transparent, plus le nombre d’heures moyen est élevé)
 
-    ## Warning: Removed 7 rows containing missing values (geom_point).
-
-    ## Warning: Removed 7 row(s) containing missing values (geom_path).
+    ## `summarise()` regrouping output by 'Etablissement' (override with `.groups` argument)
 
 ![](Vacations_files/figure-gfm/evol.hcomp-1.png)<!-- -->
 

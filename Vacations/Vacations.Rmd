@@ -49,24 +49,32 @@ ggplot(aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
 
 ```
 
-On continue en regardant l'évolution entre 2014 et 2018 du nombre d'HComp par étudiant pour tous les établissements, par rapport à la moyenne.
+On continue en regardant la variation (en %) du nombre d'HComp par tous les établissements. Cette variation est obtenue, pour chaque établissement, en regardant l'écart à la moyenne sur la période 2014-2018.
+La transparence représente cette valeur moyenne (moins c'est transparent, plus le nombre d'heures moyen est élevé)
+
+
+
+
 
 ```{r evol.hcomp}
 df <- hec %>%
+  filter(Rentrée > 2012)%>%
+            group_by(Etablissement) %>%
+  summarize(Rentrée,HC.Total,hcm=mean(HC.Total, na.rm=TRUE),)%>%
   mutate(
-    hecPetu = HC.Total / (kpi.ETU.S.cycle.1.L + kpi.ETU.S.cycle.2.M),
-    hecPetu.norm = hecPetu / mean(hecPetu, na.rm=TRUE)
-  ) %>%
-  filter(Rentrée > 2012)
+    hecPnorm = (HC.Total-hcm)/hcm)
+  
 
-ggplot(df, aes(y = hecPetu.norm, x = Rentrée,
-           color=(Etablissement),alpha=Rentrée)) +
+
+ggplot(df, aes(y = 100*hecPnorm, x = Rentrée,
+           color=(Etablissement),alpha=hcm)) +
   geom_point()+
   geom_line()+
-  geom_text_repel(data=filter(df,Rentrée == 2018), aes(label=Etablissement), hjust=0, direction="y") +
+  geom_text_repel(data=filter(df,Rentrée == 2018), aes(label=Etablissement), hjust=0, direction="y", size=2) +
   xlab("Annee")+
   ylab("Variation du nombre d'heures complémentaires (en %)")+
-  scale_alpha(range = c(0.2, 1)) +
+  xlim(2013,2019)+
+  scale_alpha(range = c(0.2, 1))+
   guides(color=FALSE)
 ```  
 
@@ -87,6 +95,8 @@ Et enfin, on essaie de regarder ces trajectoires dans le plan HComp,Nb de titula
     geom_text(data=filter(df, Rentrée == 2018), aes(label=Libellé), hjust=0, angle = 45, size=2.5) +
     scale_alpha(range = c(0.1, 1))+
     guides(color=FALSE)+
+     xlab("Nombre d'enseignants titulaires")+
+  ylab("Nombre d'heures compl. + vacations / enseignant titulaire")+
     ylim(0,450)+
     xlim(0,3000)
 ```
