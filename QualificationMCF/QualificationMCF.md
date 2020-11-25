@@ -27,6 +27,14 @@ tapply(data_CNU$QualificationQualifies.MCF/data_CNU$QualificationDossiers.MCF, d
 
 ![](QualificationMCF_files/figure-gfm/ReussiteQualificationMCF-1.png)<!-- -->
 
+**Hypothèses**
+
+  - la qualification devient de plus en plus facile à avoir ;
+  - augmentation du niveau des candidats ;
+      - soit par l’augmentation des standards ;
+      - soit par une baisse éventuellement relative du nombre de
+        candidats.
+
 # Nombre de dossiers de qualification MCF
 
 ``` r
@@ -60,3 +68,11 @@ tapply(data_CNU$QualificationQualifies.MCF, data_CNU$Annee, mean, na.rm=T)
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 ![](QualificationMCF_files/figure-gfm/QualifiesMCF-1.png)<!-- -->
+
+**Conclusions**
+
+  - Ca tendrait à confirmer l’hypothèse : le niveau des candidats monte,
+    le nombre de candidats baisse.
+  - Il pourrait aussi y avoir une politique des sections de ne pas
+    passer en-dessous d’un certain nombre de qualifié·e·s, alors que le
+    nombre de candidat·e·s ne cesse de diminuer.

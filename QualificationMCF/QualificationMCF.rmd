@@ -34,6 +34,13 @@ ggplot(data_CNU, aes(x = (QualificationQualifies.MCF/QualificationDossiers.MCF)*
   labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
 ```
 
+**Hypothèses**
+
+- la qualification devient de plus en plus facile à avoir ;
+- augmentation du niveau des candidats ;
+  + soit par l'augmentation des standards ;
+  + soit par une baisse éventuellement relative du nombre de candidats.
+
 # Nombre de dossiers de qualification MCF
 ```{r MoyenneDossiersQualificationMCF}
 tapply(data_CNU$QualificationDossiers.MCF, data_CNU$Annee, mean, na.rm=T)
@@ -71,3 +78,8 @@ ggplot(data_CNU, aes(x = QualificationQualifies.MCF, y = GroupeCNU, color=Annee)
   labs(title="Qualifications MCF, de 2005 à 2019", y ="Grandes disciplines CNU", x = "Nombre de qualifié·e·s") +
   labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
 ```
+
+**Conclusions**  
+
+- Ca tendrait à confirmer l'hypothèse : le niveau des candidats monte, le nombre de candidats baisse.
+- Il pourrait aussi y avoir une politique des sections de ne pas passer en-dessous d'un certain nombre de qualifié·e·s, alors que le nombre de candidat·e·s ne cesse de diminuer.
