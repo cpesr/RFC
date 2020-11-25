@@ -28,7 +28,7 @@ hec <- merge(select(bs,-Type),kpiESR::esr)
 
 ## Quelques dataviz
 
-On commence par le nb d'heures hors service en fonction du nb de titulaires, en gardant les data à partir de 2014.
+On commence par le nb d'heures hors service (=heures complémentaires + vacations d'enseignement) en fonction du nb de titulaires, en gardant les data moyen à partir de 2014 et pour chaque établissement.
 
 ```{r hcompPtit}
 hec %>%
@@ -42,14 +42,14 @@ ggplot(aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
   geom_point() + geom_text_repel() + 
   ylim(0,450)+
   xlim(0,3000)+
-  ylab("Nb d'heures comp+vacations / enseignant titulaire") +
+  ylab("Nb d'heures hors service / enseignant titulaire") +
   xlab("Nb d'enseignants titulaires") +
   guides(color=FALSE)
 
 
 ```
 
-On continue en regardant la variation (en %) du nombre d'HComp par tous les établissements. Cette variation est obtenue, pour chaque établissement, en regardant l'écart à la moyenne sur la période 2014-2018.
+On continue en regardant la variation (en %) du nombre d'heures hors service par tous les établissements. Cette variation est obtenue, pour chaque établissement, en regardant l'écart à la moyenne sur la période 2014-2018.
 La transparence représente cette valeur moyenne (moins c'est transparent, plus le nombre d'heures moyen est élevé)
 
 
@@ -72,7 +72,7 @@ ggplot(df, aes(y = 100*hecPnorm, x = Rentrée,
   geom_line()+
   geom_text_repel(data=filter(df,Rentrée == 2018), aes(label=Etablissement), hjust=0, direction="y", size=2) +
   xlab("Annee")+
-  ylab("Variation du nombre d'heures complémentaires (en %)")+
+  ylab("Variation du nombre d'heures hors service (en %)")+
   xlim(2013,2019)+
   scale_alpha(range = c(0.2, 1))+
   guides(color=FALSE)
