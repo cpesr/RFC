@@ -121,8 +121,16 @@ chacune voit son nb de dossiers diminuer ou pas.
 
     ## Warning: Removed 15 rows containing non-finite values (stat_smooth).
 
-![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection-2.png)<!-- -->
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection.2-1.png)<!-- -->
 
     ## Warning: Removed 15 rows containing non-finite values (stat_boxplot).
 
-![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection-3.png)<!-- -->
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection.3-1.png)<!-- -->
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_boxplot).
+
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection.4-1.png)<!-- -->
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_ydensity).
+
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection.5-1.png)<!-- -->

@@ -176,18 +176,47 @@ ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=SectionCNU, color=Section
   facet_wrap(.~GrandeDisciplineCNU, scale="free") +
   labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification") +
   labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+```
 
+```{r evolutionsRelatives.dossiers.qualifs.parSection.2, fig.width=12, fig.asp=0.7, echo=FALSE}
 ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=SectionCNU, color=SectionCNU)) +
   geom_smooth(method="lm", se=F, size=0.3) +
   theme(legend.position="none") +
   facet_wrap(.~GrandeDisciplineCNU, scale="free") +
   labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Régression linéaire du nombre relatif (vs 2005 par section) de dossiers de qualification") +
   labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+```
 
+```{r evolutionsRelatives.dossiers.qualifs.parSection.3, fig.width=12, fig.asp=0.7, echo=FALSE}
 ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=Annee)) +
     geom_boxplot() +
     theme(legend.position="none") +
-    facet_wrap(.~GrandeDisciplineCNU, scale="free") +
+    facet_wrap(.~GrandeDisciplineCNU) +
     labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification") +
-    labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+    labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI") +
+    theme_hc()
+```
+
+```{r evolutionsRelatives.dossiers.qualifs.parSection.4, fig.width=12, fig.asp=0.7, echo=FALSE}
+ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=Annee)) +
+    geom_hline(yintercept = 1.0) +
+    geom_boxplot() +
+    theme(legend.position="none") +
+    facet_wrap(.~GrandeDisciplineCNU) +
+    coord_cartesian(ylim=c(0,2)) +
+    labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification") +
+    labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI") +
+  theme_hc()
+```
+
+```{r evolutionsRelatives.dossiers.qualifs.parSection.5, fig.width=12, fig.asp=0.7, echo=FALSE}
+ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=Annee, fill=GrandeDisciplineCNU)) +
+    geom_hline(yintercept = 1.0) +
+    geom_violin() +
+    theme(legend.position="none") +
+    facet_wrap(.~GrandeDisciplineCNU) +
+    coord_cartesian(ylim=c(0,2)) +
+    labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification") +
+    labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI") +
+  theme_hc()
 ```
