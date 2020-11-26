@@ -108,6 +108,13 @@ passait de 9394 à 8184 (soit -13%).
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
 ![](QualificationMCF_files/figure-gfm/evolutionsAbsolues.dossiers.qualifs.parSection-1.png)<!-- -->
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_summary).
+
+![](QualificationMCF_files/figure-gfm/evolutionsAbsolues.dossiers.qualifs.parSection.2-1.png)<!-- -->
+
 Le nombre total de dossiers de qualification semble être écrasé par les
 hautes valeurs en 2005 des sections bio et informatique. On regarde donc
 ce qu’il se passe, en relatif, au niveau de chaque section pour voir si
@@ -134,3 +141,9 @@ chacune voit son nb de dossiers diminuer ou pas.
     ## Warning: Removed 15 rows containing non-finite values (stat_ydensity).
 
 ![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection.5-1.png)<!-- -->
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_ydensity).
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_summary).
+
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection.6-1.png)<!-- -->
