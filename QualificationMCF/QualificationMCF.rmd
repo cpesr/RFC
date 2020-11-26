@@ -170,9 +170,8 @@ Le nombre total de dossiers de qualification semble être écrasé par les haute
 cnu.parSection <- cnu %>% group_by(SectionCNU) %>% arrange(Annee, SectionCNU.ID) %>% mutate(debut = first(QualificationDossiers.MCF)) %>% mutate(evolution = QualificationDossiers.MCF/debut) %>% ungroup()
 
 ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=SectionCNU, color=SectionCNU)) +
-  geom_boxplot() +
+  geom_line() +
   theme(legend.position="none") +
-  ylim(0,2) +
   facet_wrap(.~GrandeDisciplineCNU, scale="free") +
   labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification") +
   labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
