@@ -113,7 +113,7 @@ hautes valeurs en 2005 des sections bio et informatique. On regarde donc
 ce qu’il se passe, en relatif, au niveau de chaque section pour voir si
 chacune voit son nb de dossiers diminuer ou pas.
 
-    ## Warning: Removed 15 row(s) containing missing values (geom_path).
+    ## Warning: Removed 17 rows containing non-finite values (stat_boxplot).
 
 ![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection-1.png)<!-- -->
 
@@ -122,3 +122,7 @@ chacune voit son nb de dossiers diminuer ou pas.
     ## Warning: Removed 15 rows containing non-finite values (stat_smooth).
 
 ![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection-2.png)<!-- -->
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_boxplot).
+
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection-3.png)<!-- -->
