@@ -100,5 +100,25 @@ Qualification MCF
 ![](QualificationMCF_files/figure-gfm/evolutions.dossiers.qualifs-1.png)<!-- -->
 
 Entre 2005 et 2019, le nombre de dossiers de qualification est passé de
-16662 à 16662 (soit -29%), pendant que le nombre de qualifications
+16662 à 11907 (soit -29%), pendant que le nombre de qualifications
 passait de 9394 à 8184 (soit -13%).
+
+### Evolution du nombre relatif de dossiers de qualification par section (en valeur de 2005)
+
+    ## Warning: Removed 1 row(s) containing missing values (geom_path).
+
+![](QualificationMCF_files/figure-gfm/evolutionsAbsolues.dossiers.qualifs.parSection-1.png)<!-- -->
+Le nombre total de dossiers de qualification semble être écrasé par les
+hautes valeurs en 2005 des sections bio et informatique. On regarde donc
+ce qu’il se passe, en relatif, au niveau de chaque section pour voir si
+chacune voit son nb de dossiers diminuer ou pas.
+
+    ## Warning: Removed 15 row(s) containing missing values (geom_path).
+
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_smooth).
+
+![](QualificationMCF_files/figure-gfm/evolutionsRelatives.dossiers.qualifs.parSection-2.png)<!-- -->

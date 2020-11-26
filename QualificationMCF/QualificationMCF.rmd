@@ -155,4 +155,31 @@ qualifs2 = subset(cnu.sum,name=="nb.qualifications.MCF",value) %>% tail(1)
 dqualifs = scales::percent((subset(cnu.sum,name=="nb.qualifications.MCF",evolution) %>% tail(1)-1)[[1]])
 ```
 
-Entre `r annee1` et `r annee2`, le nombre de dossiers de qualification est passé de `r dossiers1` à `r dossiers1` (soit `r ddossiers`), pendant que le nombre de qualifications passait de `r qualifs1` à `r qualifs2` (soit `r dqualifs`).
+Entre `r annee1` et `r annee2`, le nombre de dossiers de qualification est passé de `r dossiers1` à `r dossiers2` (soit `r ddossiers`), pendant que le nombre de qualifications passait de `r qualifs1` à `r qualifs2` (soit `r dqualifs`).
+
+### Evolution du nombre relatif de dossiers de qualification par section (en valeur de 2005)
+```{r evolutionsAbsolues.dossiers.qualifs.parSection, fig.width=12, fig.asp=0.7, echo=FALSE}
+ggplot(data_CNU, aes(x=Annee, y=QualificationDossiers.MCF, group=SectionCNU, color=SectionCNU)) +
+  geom_line() +
+  theme(legend.position="none") +
+  labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre de dossiers de qualification") +
+  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+```
+Le nombre total de dossiers de qualification semble être écrasé par les hautes valeurs en 2005 des sections bio et informatique. On regarde donc ce qu'il se passe, en relatif, au niveau de chaque section pour voir si chacune voit son nb de dossiers diminuer ou pas.
+```{r evolutionsRelatives.dossiers.qualifs.parSection, fig.width=12, fig.asp=0.7, echo=FALSE}
+cnu.parSection <- cnu %>% group_by(SectionCNU) %>% arrange(Annee, SectionCNU.ID) %>% mutate(debut = first(QualificationDossiers.MCF)) %>% mutate(evolution = QualificationDossiers.MCF/debut) %>% ungroup()
+
+ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=SectionCNU, color=SectionCNU)) +
+  geom_line() +
+  theme(legend.position="none") +
+  facet_wrap(.~GrandeDisciplineCNU, scale="free") +
+  labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification") +
+  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+
+ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=SectionCNU, color=SectionCNU)) +
+  geom_smooth(method="lm", se=F, size=0.3) +
+  theme(legend.position="none") +
+  facet_wrap(.~GrandeDisciplineCNU, scale="free") +
+  labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Régression linéaire du nombre relatif (vs 2005 par section) de dossiers de qualification") +
+  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+```
