@@ -26,9 +26,32 @@ hec <- merge(select(bs,-Type),kpiESR::esr)
 
 
 
-## Quelques dataviz
+## Quelques visualisations
 
-## Heures complémentaires et taille des établissement
+On propose ici une première analyse des heures de "vacations" à l'université. Nous avons collecté les bilans sociaux des établissements listés ci-dessous sur une période allant de 2005 à 2018. Le corpus est fragmentaire et nécessite d'être complété, mais constitue une première base d'analyse. Nous restreignons volontairement l'analyse à la période 2014-2018 pour avoir suffisament d'établissements.
+
+Liste des établissements : 
+
+```{r etablissement}
+liste_etab<-hec%>%
+  filter(Rentrée > 2013)%>%
+  group_by(Etablissement) %>%
+  summarize()
+  
+  liste_etab$Etablissement
+  
+```
+
+Définitions : 
+
+- Les heures complémentaires sont les heures réalisées par des employés de l'établissement (titulaires ou contractuels) au delà de leur obligation de service.
+- Les vacations d'enseignement sont les heures d'enseignement réalisées par des extérieurs à l'établissement (fonctionnaires ou non).
+
+- Les volumes horaires sont exprimés en Heures équivalent TD (HETD)
+
+Dans la suite, on considère l'ensemble des heures hors service, à savoir la somme des heures complémentaires et des vacations d'enseignement. Une analyse plus fine pourra être menée dans un second temps.
+
+## Heures hors service et taille des établissement
 
 On commence par le nb d'heures hors service (=heures complémentaires + vacations d'enseignement) en fonction du nb de titulaires, en gardant les data moyen à partir de 2014 et pour chaque établissement.
 
@@ -46,11 +69,12 @@ ggplot(aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
   xlim(0,3000)+
   ylab("Nb d'heures hors service / enseignant titulaire") +
   xlab("Nb d'enseignants titulaires") +
-  labs(caption = "Graphique : Camille Nous et CPESR - Data : Bilans sociaux des établissements") +
+  labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   guides(color=FALSE)
 
 
 ```
+
 On constate graphiquement que les petits établissements font davantage appel à des heures hors service que les gros.
 
 ## Evolution du nb d'heures complémentaires
@@ -58,7 +82,7 @@ On constate graphiquement que les petits établissements font davantage appel à
 
 
 On continue en regardant la variation (en %) du nombre d'heures hors service par tous les établissements. Cette variation est obtenue, pour chaque établissement, en regardant l'écart à la moyenne sur la période 2014-2018.
-La transparence représente cette valeur moyenne (moins c'est transparent, plus le nombre d'heures moyen est élevé)
+La transparence représente cette valeur moyenne (moins c'est transparent, plus le nombre d'heures moyen est élevé).
 
 
 
@@ -83,10 +107,11 @@ ggplot(df, aes(y = 100*hecPnorm, x = Rentrée,
   ylab("Variation du nombre d'heures hors service (en %)")+
   xlim(2013,2019)+
   scale_alpha(range = c(0.2, 1))+
+  labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   guides(color=FALSE)
 ```  
 
-Une autre visualisation qui ne distingue plus les établissements mais qui montre la tendance à l'augmentation des heures hors service sur la période. On crée un boxplot qui agrège les données de tous les établissements.
+Une autre visualisation qui ne distingue plus entre les établissements mais qui montre la tendance à l'augmentation des heures hors service sur la période. On crée un boxplot qui agrège les données de tous les établissements.
 
 ```{r evol.hcomp.2}
 
@@ -103,7 +128,7 @@ df2<- df%>%
     geom_boxplot()+
     scale_y_continuous(labels=scales::percent) +
      labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
-    labs(caption = "Graphique : Camille Nous et CPESR - Data : Bilans sociaux des établissements") +
+   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   theme_hc()
 
 ```
@@ -115,7 +140,7 @@ ggplot(df2, aes(x=Rentrée, y=hecPnorm, group=Rentrée, fill="TRUE")) +
   guides(fill= FALSE)+
     coord_cartesian(ylim=c(-.2,.2)) +
     labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
-    labs(caption = "Graphique : Camille Nous et CPESR - Data : Bilans sociaux des établissements") +
+   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   theme_hc()
 
 ```
@@ -126,7 +151,7 @@ ggplot(df2, aes(x=Rentrée, y=hecPnorm, group=Rentrée, fill="TRUE")) +
 
 On a constaté (figure 1) qu'il existe deux populations d'établissements, avec un recours différent aux heures hors service. Est-ce que cette distinction se traduit également dans l'évolution temporelle observée ?
 
-On commence par séparer les deux populations avec 750 titulaires comme séparation. 
+On commence par séparer les deux populations avec 750 titulaires comme séparation (choix arbitraire). 
 
 
 ```{r evol.hcomp.taille.1}
@@ -139,7 +164,7 @@ ggplot(df2,aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
   xlim(0,3000)+
   ylab("Nb d'heures hors service / enseignant titulaire") +
   xlab("Nb d'enseignants titulaires") +
-  labs(caption = "Graphique : Camille Nous et CPESR - Data : Bilans sociaux des établissements") +
+labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   guides(color=FALSE)
 
 
@@ -162,7 +187,7 @@ ggplot(aes(x=Rentrée, y=hecPnorm)) +
       "1" = ">750 Ens. titulaires")))+
   coord_cartesian(ylim=c(-0.15,.15))+
      labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
-    labs(caption = "Graphique : Camille Nous et CPESR - Data : Bilans sociaux des établissements") +
+labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   theme_hc()
 ```
 
@@ -179,12 +204,12 @@ ggplot(aes(x=Rentrée, y=hecPnorm, fill="TRUE")) +
   guides(fill= FALSE)+
   coord_cartesian(ylim=c(-0.15,.15))+
      labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
-    labs(caption = "Graphique : Camille Nous et CPESR - Data : Bilans sociaux des établissements") +
+    labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   theme_hc()
 ```
 
 
-A première vue, on ne voit pas de différences majeures en fonction de la taille des établissements.
+A première vue, on ne voit pas de différences majeures en fonction de la taille des établissements. Cette analyse doit être confirmée.
 
 
 ## Autres approches
@@ -212,3 +237,10 @@ Enfin, on essaie de regarder les trajectoires suivies par les établissements da
     xlim(0,3000)
 ```
 
+## A venir
+
+Analyse différenciée entre les heures complémentaires et les vacations d'enseignement.
+
+## Crédits
+
+Collecte et mise en forme des données : Antonin Eddi, Florent Figon, Julien Gossa et Camille Noûs pour CPESR 
