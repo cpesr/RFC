@@ -27,6 +27,8 @@ Concours MCF
 
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.MCF.1-1.png)<!-- -->
 
+![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.MCF.2-1.png)<!-- -->
+
 **Remarques :**
 
   - Le nb de candidatures par candidat est borné par le nombre de postes
@@ -74,8 +76,8 @@ plein de candidatures dans certaines disciplines :
 
 ### Evolution de 2013 à 2019 toutes sections confondues
 
-![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.MCF.2-1.png)<!-- -->
+![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.MCF.3-1.png)<!-- -->
 
 ### Evolution de 2013 à 2019 par grande discipline
 
-![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.MCF.3-1.png)<!-- -->
+![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.MCF.4-1.png)<!-- -->
