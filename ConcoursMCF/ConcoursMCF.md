@@ -65,6 +65,19 @@ plein de candidatures dans certaines disciplines :
     sélection.
   - @gaiauniversitas : graphique du nombre moyen de candidatures par
     candidats, en fonction du taux de qualifiés
+  - @snoevpr : données sur 15 ans pour les postes publiés, et mettre en
+    regard le nombre de candidats chaque année et le nombre de qualifiés
+    (par section). Je doute qu on observe une corrélation
+    significative….
+  - @gaiauniversitas : le point initial était l’étude d’une éventuelle
+    corrélation entre le nombre moyen de candidatures par candidats en
+    fonction du taux de qualifiés (section par section, ou groupe par
+    groupe). Là je pense qu’on a des chances de voir une corrélation et
+    ça peut être éclairant.
+  - @snoevpr : Pas si clair que ça soit si bien corrélé : par exemple,
+    suivant les pratiques de fléchage, ça peut donner des choses assez
+    différentes. Et y a un nombre non négligeable de qualifiés qui ne
+    candidatent pas. A voir.
 
 **Visualisation :**
 
