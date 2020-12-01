@@ -141,9 +141,9 @@ vacations/total des heures hors-service.
 
 ## Séries temporelles
 
-Nous disposons fournissent des données sur des périodes plus longues.
-Nous allons regarder l’évolution temporelle de qqs quantités pour 3
-établissements :
+Nous disposons des données sur des périodes plus longues pour quelques
+établissements. Nous allons regarder l’évolution temporelle de qqs
+quantités pour 3 établissements :
 
   - Strasbourg (2011-2019)
 
