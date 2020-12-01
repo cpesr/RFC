@@ -10,9 +10,11 @@ library(tidyverse)
 library(ggthemes)
 library(ggbeeswarm)
 library("gridExtra")
+require("ggrepel")
 library(ggcpesrthemes)
+library(ggpmisc)
 cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";") %>%
-  mutate(Annee = as.factor(Annee),
+  mutate(Annee = as.factor(Annee), SectionCNU.ID = as.factor(SectionCNU.ID),
          candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
          candidatures.par.poste.MCF = Candidatures.MCF / PostesPublies.MCF,
          GrandeDisciplineCNU = as.factor(GrandeDisciplineCNU),
@@ -22,6 +24,7 @@ cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
                                            "Pharmacie" = "Pharma",
                                            "Sciences et techniques" = "ST")
          )
+my.formula <- y ~ x
 ```
 
 _Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
@@ -132,6 +135,25 @@ cnu %>%
       licence="CC BY-SA") + theme(legend.position = "right")
 ```
 
+```{r candidats.candidatures.postes.2, fig.width=12, fig.asp=9/16}
+cnu %>%
+  drop_na(candidatures.par.candidat.MCF) %>%
+    ggplot(aes(x=PostesPublies.MCF, y=candidatures.par.candidat.MCF)) +
+    geom_point(aes(color=SectionCNU
+                   #, alpha=Annee
+                   )) +
+    #geom_text(data=filter(cnu, Annee==2019),
+              #aes(color=SectionCNU, label=SectionCNU.ID)) +
+    geom_label_repel(data=filter(cnu, Annee==2019),
+                    aes(label = SectionCNU.ID, fill = factor(SectionCNU)), color = 'white',
+                    size = 3.5) +
+    scale_color_discrete(name="CNU") + 
+    facet_wrap(.~GrandeDisciplineCNU, scale="free") +
+    theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), 
+      licence="CC BY-SA") + theme(legend.position = "none") #+ 
+    #scale_colour_colorblind()
+```
+
 ```{r candidats.candidatures.postes.DEG}
 cnu %>%
   filter(Code.GrandeDisciplineCNU == "DEG") %>%
@@ -146,6 +168,93 @@ cnu %>%
       licence="CC BY-SA") + theme(legend.position = "right")
 ```
 
+```{r candidats.candidatures.postes.DEG.2, fig.width=12, fig.asp=1/2}
+cnu %>%
+  filter(Code.GrandeDisciplineCNU == "DEG") %>%
+  drop_na(candidatures.par.candidat.MCF) %>%
+    ggplot(aes(x=PostesPublies.MCF, y=candidatures.par.candidat.MCF)) +
+    geom_point(aes(color=SectionCNU)) +
+    geom_smooth(aes(color=SectionCNU), method=lm, se=FALSE, size=0.5) +
+    # geom_label_repel(data=filter(cnu, Annee==2019, Code.GrandeDisciplineCNU == "DEG"),
+    #                 aes(label = SectionCNU.ID, fill = factor(SectionCNU)), color = 'white',
+    #                 size = 3.5) +
+    guides(color=FALSE) +
+    facet_wrap(SectionCNU.ID~., scale="free_x") +
+    theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), 
+      licence="CC BY-SA") + theme(legend.position = "none") +
+    stat_poly_eq(geom = "text_npc", formula = my.formula, 
+                aes(label = paste(..rr.label.., ..p.value.label.., sep ="~~~"), 
+                    color=SectionCNU), parse = TRUE, size=3.5,
+                label.y=1, 
+                label.x=0
+                )
+```
+
+```{r candidats.candidatures.postes.LSHS, fig.width=12, fig.asp=1}
+cnu %>%
+  filter(Code.GrandeDisciplineCNU == "LSHS") %>%
+  drop_na(candidatures.par.candidat.MCF) %>%
+    ggplot(aes(x=PostesPublies.MCF, y=candidatures.par.candidat.MCF)) +
+    geom_point(aes(color=SectionCNU)) +
+    geom_smooth(aes(color=SectionCNU), method=lm, se=FALSE, size=0.5) +
+    # geom_label_repel(data=filter(cnu, Annee==2019, Code.GrandeDisciplineCNU == "LSHS"),
+    #                 aes(label = SectionCNU.ID, fill = factor(SectionCNU)), color = 'white',
+    #                 size = 3.5) +
+    guides(color=FALSE) +
+    facet_wrap(SectionCNU.ID~., scale="free_x") +
+    theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), 
+      licence="CC BY-SA") + theme(legend.position = "none") +
+    stat_poly_eq(geom = "text_npc", formula = my.formula, 
+                aes(label = paste(..rr.label.., ..p.value.label.., sep ="~~~"), 
+                    color=SectionCNU), parse = TRUE, size=3.5,
+                label.y=1, 
+                label.x=0
+                )
+```
+
+```{r candidats.candidatures.postes.Pharma, fig.width=12, fig.asp=1/4}
+cnu %>%
+  filter(Code.GrandeDisciplineCNU == "Pharma") %>%
+  drop_na(candidatures.par.candidat.MCF) %>%
+    ggplot(aes(x=PostesPublies.MCF, y=candidatures.par.candidat.MCF)) +
+    geom_point(aes(color=SectionCNU)) +
+    geom_smooth(aes(color=SectionCNU), method=lm, se=FALSE, size=0.5) +
+    # geom_label_repel(data=filter(cnu, Annee==2019, Code.GrandeDisciplineCNU == "Pharma"),
+    #                 aes(label = SectionCNU.ID, fill = factor(SectionCNU)), color = 'white',
+    #                 size = 3.5) +
+    guides(color=FALSE) +
+    facet_wrap(SectionCNU.ID~., scale="free_x") +
+    theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), 
+      licence="CC BY-SA") + theme(legend.position = "none") +
+    stat_poly_eq(geom = "text_npc", formula = my.formula, 
+                aes(label = paste(..rr.label.., ..p.value.label.., sep ="~~~"), 
+                    color=SectionCNU), parse = TRUE, size=3.5,
+                label.y=1, 
+                label.x=0
+                )
+```
+
+```{r candidats.candidatures.postes.ST, fig.width=12, fig.asp=1}
+cnu %>%
+  filter(Code.GrandeDisciplineCNU == "ST") %>%
+  drop_na(candidatures.par.candidat.MCF) %>%
+    ggplot(aes(x=PostesPublies.MCF, y=candidatures.par.candidat.MCF)) +
+    geom_point(aes(color=SectionCNU)) +
+    geom_smooth(aes(color=SectionCNU), method=lm, se=FALSE, size=0.5) +
+    # geom_label_repel(data=filter(cnu, Annee==2019, Code.GrandeDisciplineCNU == "ST"),
+    #                 aes(label = SectionCNU.ID, fill = factor(SectionCNU)), color = 'white',
+    #                 size = 3.5) +
+    guides(color=FALSE) +
+    facet_wrap(SectionCNU.ID~., scale="free_x") +
+    theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), 
+      licence="CC BY-SA") + theme(legend.position = "none") +
+    stat_poly_eq(geom = "text_npc", formula = my.formula, 
+                 aes(label = paste(..rr.label.., ..p.value.label.., sep ="~~~"), 
+                     color=SectionCNU), parse = TRUE, size=3.5,
+                 label.y=1, 
+                 label.x=0
+                 )
+```
 
 ```{r candidatures.par.poste, fig.width=12, fig.asp=9/16}
 cnu %>%

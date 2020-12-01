@@ -113,9 +113,29 @@ plein de candidatures dans certaines disciplines :
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes-1.png)<!-- -->
 
+    ## Warning: Removed 3 rows containing missing values (geom_label_repel).
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.2-1.png)<!-- -->
+
     ## Warning: Using alpha for a discrete variable is not advised.
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.DEG-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.DEG.2-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.LSHS-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.Pharma-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.ST-1.png)<!-- -->
 
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.poste-1.png)<!-- -->
 
