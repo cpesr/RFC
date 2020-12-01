@@ -7,6 +7,9 @@ output: github_document
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(fig.width = 8, fig.height = 4.5)
 
+options(dplyr.summarise.inform = FALSE)
+options(tidyverse.quiet = TRUE)
+
 library(tidyverse)
 library(ggbeeswarm)
 library(kableExtra)
@@ -21,7 +24,7 @@ _Ce document est un brouillon de différentes visualisations. Il a seulement voc
 
 ## Description des données 
 
-```{r data, cache=TRUE}
+```{r data, cache=TRUE,  include=FALSE}
 etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
                   header=TRUE, sep=';', quote='"') %>%
   select(ETABLISSEMENT, RENTREE, starts_with("Grande.discipline")) %>%

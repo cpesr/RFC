@@ -8,10 +8,6 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 ## Description des données
 
-    ## `summarise()` regrouping output by 'UAI', 'Rentrée' (override with `.groups` argument)
-
-    ## `summarise()` regrouping output by 'UAI', 'Etablissement', 'Type.établissement', 'Rentrée' (override with `.groups` argument)
-
   - Sources :
       - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement/export/>
       - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/table/?disjunctive.annee&q=%22Universit%C3%A9+de+Nantes%22>
@@ -47,13 +43,9 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 ### Evolution globale
 
-    ## `summarise()` regrouping output by 'Rentrée' (override with `.groups` argument)
-
 ![](tauxdencadrement_files/figure-gfm/etab.globale-1.png)<!-- -->
 
 ### Distribution des établissements
-
-    ## `summarise()` regrouping output by 'Rentrée', 'Type.établissement' (override with `.groups` argument)
 
 ![](tauxdencadrement_files/figure-gfm/etab.distrib-1.png)<!-- -->
 
@@ -357,13 +349,9 @@ Chimie ParisTech-PSL
 
 ### Evolution globale
 
-    ## `summarise()` regrouping output by 'Rentrée' (override with `.groups` argument)
-
 ![](tauxdencadrement_files/figure-gfm/disc.globale-1.png)<!-- -->
 
 ### Distribution
-
-    ## `summarise()` regrouping output by 'Rentrée', 'Etablissement' (override with `.groups` argument)
 
 ![](tauxdencadrement_files/figure-gfm/disc.distrib-1.png)<!-- -->
 
