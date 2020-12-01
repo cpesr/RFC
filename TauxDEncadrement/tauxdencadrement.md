@@ -45,6 +45,10 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 ![](tauxdencadrement_files/figure-gfm/etab.globale-1.png)<!-- -->
 
+### Evolution par type d’établissement et discipline
+
+![](tauxdencadrement_files/figure-gfm/etab.disc-1.png)<!-- -->
+
 ### Distribution des établissements
 
 ![](tauxdencadrement_files/figure-gfm/etab.distrib-1.png)<!-- -->
@@ -350,6 +354,12 @@ Chimie ParisTech-PSL
 ### Evolution globale
 
 ![](tauxdencadrement_files/figure-gfm/disc.globale-1.png)<!-- -->
+
+### Evolution par discpline et type d’établissement
+
+![](tauxdencadrement_files/figure-gfm/disc.etab-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/disc.etab.zoom-1.png)<!-- -->
 
 ### Distribution
 
