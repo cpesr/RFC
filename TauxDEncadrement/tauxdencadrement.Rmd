@@ -1,0 +1,240 @@
+---
+title: "Taux d'encadrements"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width = 8, fig.height = 4.5)
+
+library(tidyverse)
+library(ggbeeswarm)
+library(kableExtra)
+
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors=c("Julien Gossa"), 
+                  url="https://github.com/cpesr/RFC")
+```
+
+_Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
+
+## Description des données 
+
+```{r data, cache=TRUE}
+etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  select(ETABLISSEMENT, RENTREE, starts_with("Grande.discipline")) %>%
+  pivot_longer(-c(ETABLISSEMENT, RENTREE),
+               names_to = "Grande.discipline",
+               values_to = "Etudiants") %>%
+  transmute(
+    UAI = ETABLISSEMENT,
+    Rentrée = RENTREE,
+    Grande.discipline = factor(Grande.discipline, 
+                               levels=c("Grande.discipline...Droit..sciences.économiques..AES",
+                                        "Grande.discipline...Lettres..langues.et.sciences.humaines",
+                                        "Grande.discipline...Sciences.et.sciences.de.l.ingénieur",
+                                        "Grande.discipline...STAPS",
+                                        "Grande.discipline...Santé",
+                                        "Grande.discipline...Interdisciplinaire"),
+                               labels=c("DEG",
+                                        "LSHS",
+                                        "ST",
+                                        "ST",
+                                        "Santé",                                        
+                                        "Autre")),
+    Etudiants = Etudiants
+  ) %>% 
+  group_by(UAI, Rentrée, Grande.discipline) %>%
+  summarise(Etudiants = sum(Etudiants, na.rm = TRUE))
+
+ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  transmute(
+    UAI = Identifiant.établissement,
+    Etablissement = Établissement,
+    Type.établissement = factor(Type.établissement,
+                                levels = c("Université",
+                                           "Grand établissement",
+                                           "École nationale supérieure d'ingénieurs",
+                                           "École d'ingénieurs",
+                                           "École normale supérieure",
+                                           "Institut national polytechnique",
+                                           "École habilitée à délivrer un diplôme d'ingénieur",
+                                           "Opérateur du programme 150 - Formations supérieures et recherche universitaire",
+                                           "Institut ou école extérieur aux universités"),
+                                labels = c("Université",
+                                           "Grand étab.",
+                                           "ENSI",
+                                           "Ecole d'ingé.",
+                                           "ENS",
+                                           "Autre",                                         
+                                           "Autre",
+                                           "Autre",
+                                           "Autre")),
+    Rentrée = Rentrée,
+    Grande.discipline = factor(Grandes.disciplines,
+                               levels = c("Droit, économie et gestion",
+                                          "Lettres et sciences humaines",
+                                          "Sciences",
+                                          "Médecine",
+                                          "Odontologie",
+                                          "Pharmacie",
+                                          "Autres Santé",
+                                          "Non spécifiée",
+                                          "Personnel des grands établissements"),
+                                labels=c("DEG",
+                                         "LSHS",
+                                         "ST",                                         
+                                         "Santé",
+                                         "Santé",
+                                         "Santé",
+                                         "Santé",
+                                         "Autre",
+                                         "Autre")),
+    Enseignants = effectif
+  ) %>%
+  group_by(UAI, Etablissement, Type.établissement, Rentrée, Grande.discipline) %>%
+  summarise(Enseignants = sum(Enseignants, na.rm = TRUE))
+
+tde <- merge(ens,etu) %>%
+  mutate(Rentrée = as.factor(Rentrée))
+```
+
+- Sources :
+  - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement/export/
+  - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/table/?disjunctive.annee&q=%22Universit%C3%A9+de+Nantes%22
+- Nombre d'observations : `r nrow(tde)`
+- Variables : 
+```{r vars}
+colnames(tde)
+```
+- Définitions :
+  - `Enseignants` : effectifs enseignants titulaires (EC et 2d degré)
+  - `Etudiants` : effectifs étudiants (L, M et D)
+  - `Taux.d.encadrement` : nombre d'enseignants pour 100 étudiants (`Enseignants / Etudiants * 100`)
+- Période : `r range(as.character(tde$Rentrée))`
+- Limites :
+  - les données ne concernent que le MESRI ;
+  - les correspondances de disciplines sont imparfaites : 
+    - la discipline des enseignants est celle du CNU et non de la composante (UFR) d'affectation ;
+    - la discipline des étudiants est celle de la composante (UFR) ;
+    - l'imperfection est dûe aux enseignants d'une discipline affectés dans une autre, et aux services partagés entre plusieurs composantes.
+    - les étudiant en STAPS on été classés en ST.
+
+
+## Taux d'encadrement par type d'établissement
+
+### Evolution globale
+
+```{r etab.globale}
+tde %>% 
+  group_by(Rentrée,Type.établissement) %>%
+  summarise(Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 ) %>%
+  ggplot(aes(x=Rentrée, y=Taux.d.encadrement, color=Type.établissement, group=Type.établissement)) +
+    geom_line(size=2) +
+    scale_color_discrete(name="") +
+    ggtitle("Evolution des taux d'encadrement par type d'établissement")
+    theme_cpesr_cap()
+```
+
+### Distribution des établissements 
+
+```{r etab.data}
+tde.etab <- tde %>% 
+  filter(Rentrée == 2018) %>%
+  group_by(Rentrée,Type.établissement,Etablissement) %>%
+  summarise(
+    Enseignants = sum(Enseignants, na.rm = TRUE),
+    Etudiants = sum(Etudiants, na.rm = TRUE),
+    Taux.d.encadrement = Enseignants / Etudiants *100 ) 
+```
+
+```{r etab.distrib}
+tde.etab %>% 
+  
+  ggplot(aes(x=Rentrée, y=Taux.d.encadrement, color=Type.établissement)) +
+    geom_boxplot() +
+    ggtitle("Distribution des taux d'encadrement des établissements par type") +  
+    theme_cpesr_cap()
+```
+
+Top 10 :
+
+```{r etab.top}
+tde.etab %>%
+  arrange(desc(Taux.d.encadrement)) %>%
+  head() %>%
+  kable()
+```
+
+```{r etab.distrib.zoom}
+tde.etab %>%
+  ggplot(aes(x=Rentrée, y=Taux.d.encadrement, fill=Type.établissement)) +
+    geom_boxplot() +
+    coord_cartesian(ylim = c(0,15)) +
+    ggtitle("Distribution des taux d'encadrement des établissements par type (15 max)") +
+    theme_cpesr_cap()
+```
+
+
+
+
+## Taux d'encadrement par grande discipline
+
+### Evolution globale
+
+```{r disc.globale}
+tde %>% 
+  filter(Grande.discipline != "Autre") %>%
+  group_by(Rentrée,Grande.discipline) %>%
+  summarise(Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 ) %>%
+  ggplot(aes(x=Rentrée, y=Taux.d.encadrement, color=Grande.discipline, group=Grande.discipline)) +
+    geom_line(size=2) +
+    ylim(0,7) +
+    scale_color_discrete(name="") +
+    ggtitle("Evolution des taux d'encadrement par grande discipline") +
+    theme_cpesr_cap()
+```
+
+### Distribution
+
+```{r disc.data}
+tde.etab <- tde %>% 
+  filter(Rentrée == 2018, Grande.discipline != "Autre") %>%
+  group_by(Rentrée,Etablissement,Grande.discipline) %>%
+  summarise(
+    Enseignants = sum(Enseignants, na.rm = TRUE),
+    Etudiants = sum(Etudiants, na.rm = TRUE),
+    Taux.d.encadrement = Enseignants / Etudiants *100 ) %>%
+  filter(is.finite(Taux.d.encadrement))
+```
+
+```{r disc.distrib}
+tde.etab %>% 
+  
+  ggplot(aes(x=Rentrée, y=Taux.d.encadrement, color=Grande.discipline)) +
+    geom_boxplot() +
+    ggtitle("Distribution des taux d'encadrement des établissements par discipline") +  
+    theme_cpesr_cap()
+```
+
+Top 10 (on y constate la limite disciplinaire expliquée au dessus) :
+
+```{r disc.top}
+tde.etab %>%
+  arrange(desc(Taux.d.encadrement)) %>%
+  head() %>%
+  kable()
+```
+
+```{r disc.distrib.zoom}
+tde.etab %>%
+  ggplot(aes(x=Rentrée, y=Taux.d.encadrement, fill=Grande.discipline)) +
+    geom_boxplot() +
+    coord_cartesian(ylim = c(0,15)) +
+    ggtitle("Distribution des taux d'encadrement des étab. par discipline (15 max)") +
+    theme_cpesr_cap()
+```
+
