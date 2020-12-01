@@ -15,17 +15,29 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 <!-- end list -->
 
-    ##  [1] "TypeRecrutement"               "GrandeDisciplineCNU"          
-    ##  [3] "GroupeCNU"                     "SectionCNU"                   
-    ##  [5] "SectionCNU.ID"                 "Annee"                        
-    ##  [7] "QualificationDossiers.MCF"     "QualificationQualifies.MCF"   
-    ##  [9] "PostesPublies.MCF"             "Candidatures.MCF"             
-    ## [11] "Candidats.MCF"                 "PostesPourvus.MCF"            
-    ## [13] "Candidatures.MCF.F"            "Candidatures.MCF.H"           
-    ## [15] "Candidats.MCF.F"               "Candidats.MCF.H"              
-    ## [17] "Recrutes.MCF.F"                "Recrutes.MCF.H"               
-    ## [19] "candidatures.par.candidat.MCF" "candidatures.par.poste.MCF"   
-    ## [21] "Code.GrandeDisciplineCNU"
+    ##  [1] "TypeRecrutement"                        
+    ##  [2] "GrandeDisciplineCNU"                    
+    ##  [3] "GroupeCNU"                              
+    ##  [4] "SousGroupeCNU"                          
+    ##  [5] "SectionCNU"                             
+    ##  [6] "SectionCNU.ID"                          
+    ##  [7] "Annee"                                  
+    ##  [8] "QualificationDossiers.MCF"              
+    ##  [9] "QualificationQualifies.MCF"             
+    ## [10] "PostesPublies.MCF"                      
+    ## [11] "Candidatures.MCF"                       
+    ## [12] "Candidats.MCF"                          
+    ## [13] "PostesPourvus.MCF"                      
+    ## [14] "Candidatures.MCF.F"                     
+    ## [15] "Candidatures.MCF.H"                     
+    ## [16] "Candidats.MCF.F"                        
+    ## [17] "Candidats.MCF.H"                        
+    ## [18] "Recrutes.MCF.F"                         
+    ## [19] "Recrutes.MCF.H"                         
+    ## [20] "candidatures.par.candidat.MCF"          
+    ## [21] "candidatures.par.poste.MCF"             
+    ## [22] "candidatures.par.candidat.par.poste.MCF"
+    ## [23] "Code.GrandeDisciplineCNU"
 
   - Période : 2005, 2019
 
@@ -113,10 +125,34 @@ plein de candidatures dans certaines disciplines :
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes-1.png)<!-- -->
 
+    ## Warning: Removed 3 rows containing missing values (geom_label_repel).
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.2-1.png)<!-- -->
+
     ## Warning: Using alpha for a discrete variable is not advised.
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.DEG-1.png)<!-- -->
 
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.DEG.2-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.LSHS-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.Pharma-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.ST-1.png)<!-- -->
+
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.poste-1.png)<!-- -->
 
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.poste.2-1.png)<!-- -->
+
+![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste-1.png)<!-- -->
+
+![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste.2-1.png)<!-- -->
