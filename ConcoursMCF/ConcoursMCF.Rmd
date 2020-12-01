@@ -13,7 +13,7 @@ library("gridExtra")
 require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
-cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";") %>%
+cnu <- read.table("DB_CNU_QualificationRecrutements_20212201.csv", h=T, sep=";") %>%
   mutate(Annee = as.factor(Annee), SectionCNU.ID = as.factor(SectionCNU.ID),
          candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
          candidatures.par.poste.MCF = Candidatures.MCF / PostesPublies.MCF,
@@ -290,32 +290,30 @@ cnu %>%
 ```{r candidatures.par.candidat.par.poste, fig.width=12, fig.asp=9/16}
 cnu %>%
   drop_na(candidatures.par.poste.MCF) %>%
-    ggplot(aes(x=candidatures.par.candidat.par.poste.MCF, y=GroupeCNU, fill=GroupeCNU)) +
+    ggplot(aes(x=candidatures.par.candidat.par.poste.MCF, y=SousGroupeCNU, fill=GroupeCNU)) +
     geom_boxplot() +
-    #scale_x_continuous(breaks=seq(0,30,2)) +
     facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
     theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), licence="CC BY-SA") +
     theme(strip.text.y = element_text(size = 7.5)) +
     theme(legend.position = "none") +
-    scale_color_gradient(low="#E69F00", high="#009E73") +
-    scale_x_continuous(labels=scales::percent) +
+    scale_x_continuous(labels=scales::percent, breaks = seq(0,1,0.1)) +
     labs(title="Concours MCF, de 2013 à 2019", 
-         y ="Grandes disciplines CNU", 
+         y ="Sous-groupes CNU", 
          x = "Pourcentage de postes auxquels un·e candidat·e postule (par section et par an)")
 ```
 
 ```{r candidatures.par.candidat.par.poste.2, fig.width=12, fig.asp=9/16}
 cnu %>%
   drop_na(candidatures.par.poste.MCF) %>%
-    ggplot(aes(x=candidatures.par.candidat.par.poste.MCF, y=GroupeCNU, color=Annee)) +
+    ggplot(aes(x=candidatures.par.candidat.par.poste.MCF, y=SousGroupeCNU, color=GroupeCNU)) +
     geom_jitter(width = 0, height = 0.15) +
     facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
     theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), licence="CC BY-SA") +
     theme(strip.text.y = element_text(size = 7.5)) +
-    scale_color_brewer(palette="YlGn") +
-    scale_x_continuous(labels=scales::percent) +
+    theme(legend.position = "none") +
+    scale_x_continuous(labels=scales::percent, breaks = seq(0,1,0.1)) +
     labs(title="Concours MCF, de 2013 à 2019", 
-         y ="Grandes disciplines CNU", 
+         y ="Sous-groupes CNU", 
          x = "Pourcentage de postes auxquels un·e candidat·e postule (par section et par an)")
 ```
 
