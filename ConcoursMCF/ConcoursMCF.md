@@ -1,8 +1,15 @@
 Concours MCF
 ================
 
+*Ce document est un brouillon de différentes visualisations. Il a
+seulement vocation à permettre la discussion. Les observations et
+propositions peuvent être ajoutées [en
+issues](https://github.com/cpesr/RFC/issues).*
+
 ## Description des données
 
+  - Source :
+    <https://www.enseignementsup-recherche.gouv.fr/cid118435/personnels-enseignants-du-superieur-bilans-et-statistiques.html>
   - Nombre d’observations : 855
   - Variables :
 
@@ -18,8 +25,7 @@ Concours MCF
     ## [15] "Candidats.MCF.F"            "Candidats.MCF.H"           
     ## [17] "Recrutes.MCF.F"             "Recrutes.MCF.H"
 
-  - Période : 2005,
-2019
+  - Période : 2005, 2019
 
 ## Nombre de candidatures par candidat aux postes MCF
 
@@ -84,8 +90,7 @@ plein de candidatures dans certaines disciplines :
   - @snoevpr : le meme avec des symboles différents par section dans un
     groupe ?
   - @snoevpr : tracer séparément chaque groupe puis superposer en
-    décalant et sans les axes sauf pour un
-?
+    décalant et sans les axes sauf pour un ?
 
 ### Evolution de 2013 à 2019 toutes sections confondues
 

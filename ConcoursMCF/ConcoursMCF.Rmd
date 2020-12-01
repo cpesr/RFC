@@ -11,18 +11,22 @@ library(ggthemes)
 library(ggbeeswarm)
 library("gridExtra")
 library(ggcpesrthemes)
-data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
+data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";") %>%
+  mutate(Annee = as.factor(Annee))
 ```
+
+_Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
 
 
 ## Description des données 
 
+- Source : https://www.enseignementsup-recherche.gouv.fr/cid118435/personnels-enseignants-du-superieur-bilans-et-statistiques.html
 - Nombre d'observations : `r nrow(data_CNU)`
 - Variables : 
 ```{r vars}
 colnames(data_CNU)
 ```
-- Période : `r range(data_CNU$Annee)`
+- Période : `r range(as.character(data_CNU$Annee))`
 
 
 ## Nombre de candidatures par candidat aux postes MCF
@@ -44,7 +48,7 @@ cnu %>%
     theme_cpesr_cap(authors=c("Florent Figon"), licence="CC BY-SA") +
     theme(strip.text.y = element_text(size = 7.5)) +
     theme(legend.position = "right") +
-    scale_color_gradient(low="#E69F00", high="#009E73") +
+    scale_color_brewer(palette="YlGn") +
     labs(title="Concours MCF, de 2013 à 2019", y ="Grandes disciplines CNU", x = "Nombre moyen de candidatures aux concours MCF par candidat (par section et par an)")
 ```
 
@@ -93,7 +97,7 @@ Pour regarder le potentiel rôle du CNU comme filtre évitant le trop plein de c
 ```{r candidatures.par.candidat.MCF.3}
 cnu %>%
   drop_na(candidatures.par.candidat.MCF) %>%
-    ggplot(aes(x=as.factor(Annee), y=candidatures.par.candidat.MCF)) +
+    ggplot(aes(x=Annee, y=candidatures.par.candidat.MCF)) +
     geom_boxplot() +
     theme_cpesr_cap(authors=c("Florent Figon"), 
       licence="CC BY-SA")
@@ -103,7 +107,7 @@ cnu %>%
 ```{r candidatures.par.candidat.MCF.4}
 cnu %>%
   drop_na(candidatures.par.candidat.MCF) %>%
-    ggplot(aes(x=as.factor(Annee), y=candidatures.par.candidat.MCF)) +
+    ggplot(aes(x=Annee, y=candidatures.par.candidat.MCF)) +
     geom_boxplot() +
     facet_wrap(.~GrandeDisciplineCNU, scale="free") +
     theme_cpesr_cap(authors=c("Florent Figon"), 
