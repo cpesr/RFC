@@ -55,12 +55,12 @@ les data moyen à partir de 2014 et pour chaque établissement.
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
-![](Vacations_files/figure-gfm/hcompPtit-1.png)<!-- -->
+![](Vacations_files/figure-gfm/hcompPtit,-1.png)<!-- -->
 
 On constate graphiquement que les petits établissements font davantage
 appel à des heures hors service que les gros.
 
-## Evolution du nb d’heures complémentaires
+## Evolution du nb d’heures hors service
 
 On continue en regardant la variation (en %) du nombre d’heures hors
 service par tous les établissements. Cette variation est obtenue, pour
@@ -102,6 +102,73 @@ On trace l’évolution pour chacun des groupes sur la période 2014-2018
 A première vue, on ne voit pas de différences majeures en fonction de la
 taille des établissements. Cette analyse doit être confirmée.
 
+## Analyse différenciée entre les heures complémentaires et les vacations d’enseignement.
+
+On va regarder ici le rapport entre vacations d’enseignement et heures
+complémentaires. On choisit de garder le même critère de classification
+des établissement, à savoir le nombre d’enseignants titulaires.
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+    ## Warning: Removed 5 rows containing missing values (geom_point).
+
+    ## Warning: Removed 5 rows containing missing values (geom_text_repel).
+
+![](Vacations_files/figure-gfm/vacatvshcomp-1.png)<!-- --> 2
+établissements font fortement appels à des vacataires et écrasent la
+lecture du graphique. On reprend les mêmes données en "zoomant sur la
+zone centrale :
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+    ## Warning: Removed 8 rows containing missing values (geom_point).
+
+    ## Warning: Removed 8 rows containing missing values (geom_text_repel).
+
+![](Vacations_files/figure-gfm/vacatvshcomp2-1.png)<!-- -->
+
+Il semble que la majorité des établissements évolue dans un tunnel entre
+.75 et 1.5. On propose une seconde visualisation, en regardant le ratio
+vacations/total des heures hors-service.
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+    ## Warning: Removed 5 rows containing missing values (geom_point).
+
+    ## Warning: Removed 5 rows containing missing values (geom_text_repel).
+
+![](Vacations_files/figure-gfm/vacatvshorsservice-1.png)<!-- -->
+
+## Séries temporelles
+
+Nous disposons fournissent des données sur des périodes plus longues.
+Nous allons regarder l’évolution temporelle de qqs quantités pour 3
+établissements :
+
+  - Strasbourg (2011-2019)
+
+<!-- end list -->
+
+    ## Warning: Removed 1 row(s) containing missing values (geom_path).
+
+![](Vacations_files/figure-gfm/Evol_strasbourg-1.png)<!-- -->
+
+  - Saint Etienne (2010-2018)
+
+<!-- end list -->
+
+    ## Warning: Removed 2 row(s) containing missing values (geom_path).
+
+![](Vacations_files/figure-gfm/Evol_stEtienne-1.png)<!-- -->
+
+  - Nantes (2006-2018)
+
+<!-- end list -->
+
+    ## Warning: Removed 6 row(s) containing missing values (geom_path).
+
+![](Vacations_files/figure-gfm/Nantes-1.png)<!-- -->
+
 ## Autres approches
 
 Enfin, on essaie de regarder les trajectoires suivies par les
@@ -109,11 +176,6 @@ Enfin, on essaie de regarder les trajectoires suivies par les
 avec des gradients de transparence pour figurer l’année
 
 ![](Vacations_files/figure-gfm/trajectoires-1.png)<!-- -->
-
-## A venir
-
-Analyse différenciée entre les heures complémentaires et les vacations
-d’enseignement.
 
 ## Crédits
 

@@ -1,6 +1,8 @@
 ---
 title: "Etude sur les vacations/heures complémentaires"
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -12,6 +14,7 @@ library(tidyverse)
 library(ggrepel)
 library(plotly)
 library(ggthemes)
+library(ggcpesrthemes)
 
 bs <- read.csv("Extraction_BS.csv",header=TRUE, sep=";", quote='"') %>%
         filter(Rentrée>2010) %>%
@@ -55,7 +58,7 @@ Dans la suite, on considère l'ensemble des heures hors service, à savoir la so
 
 On commence par le nb d'heures hors service (=heures complémentaires + vacations d'enseignement) en fonction du nb de titulaires, en gardant les data moyen à partir de 2014 et pour chaque établissement.
 
-```{r hcompPtit}
+```{r hcompPtit,,fig.width=12, fig.asp=9/16}
 hec %>%
   filter(Rentrée > 2013)%>%
   group_by(Etablissement) %>%
@@ -70,14 +73,14 @@ ggplot(aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
   ylab("Nb d'heures hors service / enseignant titulaire") +
   xlab("Nb d'enseignants titulaires") +
   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  guides(color=FALSE)
-
+  guides(color=FALSE)+
+  theme_hc() 
 
 ```
 
 On constate graphiquement que les petits établissements font davantage appel à des heures hors service que les gros.
 
-## Evolution du nb d'heures complémentaires
+## Evolution du nb d'heures hors service
 
 
 
@@ -88,7 +91,7 @@ La transparence représente cette valeur moyenne (moins c'est transparent, plus 
 
 
 
-```{r evol.hcomp}
+```{r evol.hcomp,fig.width=12, fig.asp=9/16}
 df <- hec %>%
   filter(Rentrée > 2012)%>%
             group_by(Etablissement) %>%
@@ -108,12 +111,13 @@ ggplot(df, aes(y = 100*hecPnorm, x = Rentrée,
   xlim(2013,2019)+
   scale_alpha(range = c(0.2, 1))+
   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  guides(color=FALSE)
+  guides(color=FALSE)+
+  theme_hc() 
 ```  
 
 Une autre visualisation qui ne distingue plus entre les établissements mais qui montre la tendance à l'augmentation des heures hors service sur la période. On crée un boxplot qui agrège les données de tous les établissements.
 
-```{r evol.hcomp.2}
+```{r evol.hcomp.2,fig.width=12, fig.asp=9/16}
 
 df2<- df%>%  
   group_by(Rentrée) %>%
@@ -132,7 +136,7 @@ df2<- df%>%
   theme_hc()
 
 ```
-```{r evol.hcomp.3}
+```{r evol.hcomp.3,fig.width=12, fig.asp=9/16}
 ggplot(df2, aes(x=Rentrée, y=hecPnorm, group=Rentrée, fill="TRUE")) +
     geom_violin() +
     theme(legend.position="none") +
@@ -141,8 +145,7 @@ ggplot(df2, aes(x=Rentrée, y=hecPnorm, group=Rentrée, fill="TRUE")) +
     coord_cartesian(ylim=c(-.2,.2)) +
     labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
    labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  theme_hc()
-
+  theme_hc() 
 ```
 
 
@@ -154,7 +157,7 @@ On a constaté (figure 1) qu'il existe deux populations d'établissements, avec 
 On commence par séparer les deux populations avec 750 titulaires comme séparation (choix arbitraire). 
 
 
-```{r evol.hcomp.taille.1}
+```{r evol.hcomp.taille.1,fig.width=12, fig.asp=9/16}
 
 ggplot(df2,aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
            color = etabtaill)) +
@@ -165,8 +168,8 @@ ggplot(df2,aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
   ylab("Nb d'heures hors service / enseignant titulaire") +
   xlab("Nb d'enseignants titulaires") +
 labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  guides(color=FALSE)
-
+  guides(color=FALSE)+
+  theme_hc() 
 
 ```
 
@@ -175,7 +178,7 @@ On trace l'évolution pour chacun des groupes sur la période 2014-2018
 
 
 
-```{r evol.hcomp.taille.2}
+```{r evol.hcomp.taille.2,fig.width=12, fig.asp=9/16}
 
 df2%>%
 
@@ -191,7 +194,7 @@ labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des �
   theme_hc()
 ```
 
-```{r evol.hcomp.taille.3}
+```{r evol.hcomp.taille.3,fig.width=12, fig.asp=9/16}
 
 df2%>%
 
@@ -205,18 +208,186 @@ ggplot(aes(x=Rentrée, y=hecPnorm, fill="TRUE")) +
   coord_cartesian(ylim=c(-0.15,.15))+
      labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
     labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  theme_hc()
+  theme_hc() 
 ```
 
 
 A première vue, on ne voit pas de différences majeures en fonction de la taille des établissements. Cette analyse doit être confirmée.
+
+## Analyse différenciée entre les heures complémentaires et les vacations d'enseignement.
+
+On va regarder ici le rapport entre vacations d'enseignement et heures complémentaires. On choisit de garder le même critère de classification des établissement, à savoir le nombre d'enseignants titulaires.
+
+
+```{r vacatvshcomp,fig.width=12, fig.asp=9/16}
+hec %>%
+  filter(Rentrée > 2013)%>%
+  group_by(Etablissement) %>%
+  summarize(hcompm=mean(HC.Titulaires, na.rm=TRUE),vacatm=mean(HC.Vacataires, na.rm=TRUE),titmean=mean(kpi.ENS.S.titulaires,na.rm=TRUE)) %>%
+  mutate(ratio_vacat_hcomp = vacatm/hcompm)%>%
+ggplot(aes(y = ratio_vacat_hcomp, x = titmean,#100*titPetunorm,
+           label = Etablissement,
+           color = Etablissement)) +
+  geom_point() + geom_text_repel() + 
+  ylim(0,5)+
+  xlim(0,3000)+
+  ylab("Ratio vacations/heures complémentaires") +
+  xlab("Nb d'enseignants titulaires") +
+  labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
+  guides(color=FALSE)+
+  theme_hc() 
+```
+2 établissements font fortement appels à des vacataires et écrasent la lecture du graphique. On reprend les mêmes données en "zoomant sur la zone centrale :
+
+```{r vacatvshcomp2,fig.width=12, fig.asp=9/16}
+hec %>%
+  filter(Rentrée > 2013)%>%
+  group_by(Etablissement) %>%
+  summarize(hcompm=mean(HC.Titulaires, na.rm=TRUE),vacatm=mean(HC.Vacataires, na.rm=TRUE),titmean=mean(kpi.ENS.S.titulaires,na.rm=TRUE)) %>%
+  mutate(ratio_vacat_hcomp = vacatm/hcompm)%>%
+ggplot(aes(y = ratio_vacat_hcomp, x = titmean,#100*titPetunorm,
+           label = Etablissement,
+           color = Etablissement)) +
+  geom_point() + geom_text_repel() + 
+  ylim(0,2)+
+  xlim(0,3000)+
+  ylab("Ratio vacations/heures complémentaires") +
+  xlab("Nb d'enseignants titulaires") +
+  labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
+  guides(color=FALSE)
+  
+  
+```
+
+Il semble que la majorité des établissements évolue dans un tunnel entre .75 et 1.5.
+On propose une seconde visualisation, en regardant le ratio vacations/total des heures hors-service.
+
+```{r vacatvshorsservice,fig.width=12, fig.asp=9/16}
+hec %>%
+  filter(Rentrée > 2013)%>%
+  group_by(Etablissement) %>%
+  summarize(hcompm=mean(HC.Titulaires, na.rm=TRUE),vacatm=mean(HC.Vacataires, na.rm=TRUE),titmean=mean(kpi.ENS.S.titulaires,na.rm=TRUE)) %>%
+  mutate(ratio_vacat_hhorservice = vacatm/(hcompm+vacatm))%>%
+ggplot(aes(y = ratio_vacat_hhorservice, x = titmean,#100*titPetunorm,
+           label = Etablissement,
+           color = Etablissement)) +
+  geom_point() + geom_text_repel() + 
+  ylim(0.4,.8)+
+  xlim(0,3000)+
+  ylab("vacations/total des heures hors service") +
+  xlab("Nb d'enseignants titulaires") +
+  labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
+  guides(color=FALSE)
+  
+```
+
+## Séries temporelles
+
+Nous disposons fournissent des données sur des périodes plus longues. Nous allons regarder l'évolution temporelle de qqs quantités pour 3 établissements :
+
+- Strasbourg (2011-2019)
+
+```{r Evol_strasbourg,fig.width=12, fig.asp=9/16}
+
+
+bs <- read.csv("Extraction_BS.csv",header=TRUE, sep=";", quote='"') %>%
+        filter(Rentrée>2005) %>%
+        filter(HC.Total != "NA")
+        
+hec <- merge(select(bs,-Type),kpiESR::esr)
+
+
+
+Strasbourg<-hec%>%filter(Etablissement=="Strasbourg")%>%
+    summarize(Rentrée,HC.Titulaires,kpi.ENS.S.titulaires,HC.Total,HC.Vacataires,)%>%
+   pivot_longer(-Rentrée)
+
+f=c('kpi.ENS.S.titulaires','HC.Total','HC.Vacataires','HC.Titulaires')
+Strasbourg<- within(Strasbourg, name <- factor(name, levels=f))
+  
+
+title_names <- c(
+                    `kpi.ENS.S.titulaires` = "Nb de titulaires",
+                    `HC.Total` = "Heures hors service",
+                    `HC.Vacataires` = "Vacations d'enseignement",
+                    `HC.Titulaires` = "Heures complémentaires"
+                    )
+
+ggplot(Strasbourg,aes(x=Rentrée,y=value)) +
+#  geom_boxplot(alpha=0.5,fill="grey") + 
+  geom_line()+
+facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
+    labs(title="Evolution pour l'université de Strasbourg",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")
+
+```
+
+
+- Saint Etienne (2010-2018)
+
+```{r Evol_stEtienne,fig.width=12, fig.asp=9/16}
+StEtienne<-hec%>%filter(Etablissement=="St Etienne")%>%
+    summarize(Rentrée,HC.Titulaires,kpi.ENS.S.titulaires,HC.Total,HC.Vacataires,)%>%
+   pivot_longer(-Rentrée)
+
+f=c('kpi.ENS.S.titulaires','HC.Total','HC.Vacataires','HC.Titulaires')
+StEtienne<- within(StEtienne, name <- factor(name, levels=f))
+  
+
+title_names <- c(
+                    `kpi.ENS.S.titulaires` = "Nb de titulaires",
+                    `HC.Total` = "Heures hors service",
+                    `HC.Vacataires` = "Vacations d'enseignement",
+                    `HC.Titulaires` = "Heures complémentaires"
+                    )
+
+ggplot(StEtienne,aes(x=Rentrée,y=value)) +
+#  geom_boxplot(alpha=0.5,fill="grey") + 
+  geom_line()+
+facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
+    labs(title="Evolution pour l'université de Saint Etienne",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")
+
+```
+
+
+
+- Nantes (2006-2018)
+
+```{r Nantes,fig.width=12, fig.asp=9/16}
+
+
+
+Nantes<-hec%>%filter(Etablissement=="Nantes")%>%
+    summarize(Rentrée,HC.Titulaires,kpi.ENS.S.titulaires,HC.Total,HC.Vacataires,)%>%
+   pivot_longer(-Rentrée)
+
+f=c('kpi.ENS.S.titulaires','HC.Total','HC.Vacataires','HC.Titulaires')
+Nantes<- within(Nantes, name <- factor(name, levels=f))
+  
+
+title_names <- c(
+                    `kpi.ENS.S.titulaires` = "Nb de titulaires",
+                    `HC.Total` = "Heures hors service",
+                    `HC.Vacataires` = "Vacations d'enseignement",
+                    `HC.Titulaires` = "Heures complémentaires"
+                    )
+
+ggplot(Nantes,aes(x=Rentrée,y=value)) +
+#  geom_boxplot(alpha=0.5,fill="grey") + 
+  geom_line()+
+facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
+    labs(title="Evolution pour l'université de Nantes",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")
+
+
+
+
+```
 
 
 ## Autres approches
 
 Enfin, on essaie de regarder les trajectoires suivies par les établissements dans le plan (Heures hors service ; Nb de titulaires) avec des gradients de transparence pour figurer l'année
 
-```{r trajectoires}
+```{r trajectoires,fig.width=12, fig.asp=9/16}
   df <- hec %>%
     mutate(
       hecPtit = HC.Titulaires / kpi.ENS.S.titulaires,
@@ -234,12 +405,11 @@ Enfin, on essaie de regarder les trajectoires suivies par les établissements da
      xlab("Nombre d'enseignants titulaires")+
   ylab("Nombre d'heures compl. + vacations / enseignant titulaire")+
     ylim(0,450)+
-    xlim(0,3000)
+    xlim(0,3000)+
+    theme_hc() 
 ```
 
-## A venir
 
-Analyse différenciée entre les heures complémentaires et les vacations d'enseignement.
 
 ## Crédits
 
