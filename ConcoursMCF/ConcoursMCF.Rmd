@@ -132,6 +132,20 @@ cnu %>%
       licence="CC BY-SA") + theme(legend.position = "right")
 ```
 
+```{r candidats.candidatures.postes.DEG}
+cnu %>%
+  filter(Code.GrandeDisciplineCNU == "DEG") %>%
+  drop_na(candidatures.par.candidat.MCF) %>%
+    ggplot(aes(x=PostesPublies.MCF, y=candidatures.par.candidat.MCF)) +
+    geom_point(aes(color=SectionCNU, alpha=Annee)) +
+    geom_text(data=filter(cnu,Code.GrandeDisciplineCNU == "DEG", Annee==2019),
+              aes(color=SectionCNU, label=SectionCNU)) +
+    guides(color=FALSE) +
+    #facet_wrap(.~GrandeDisciplineCNU, scale="free") +
+    theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), 
+      licence="CC BY-SA") + theme(legend.position = "right")
+```
+
 
 ```{r candidatures.par.poste, fig.width=12, fig.asp=9/16}
 cnu %>%
@@ -162,3 +176,5 @@ cnu %>%
          y ="Grandes disciplines CNU", 
          x = "Nombre de candidatures par poste aux concours MCF (par section et par an)")
 ```
+
+
