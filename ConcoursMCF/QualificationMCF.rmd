@@ -13,6 +13,7 @@ library("gridExtra")
 data_CNU = read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
 ```
 
+_Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
 
 ## Description des données 
 
@@ -163,7 +164,8 @@ ggplot(data_CNU, aes(x=Annee, y=QualificationDossiers.MCF, group=SectionCNU, col
   geom_line() +
   theme(legend.position="none") +
   labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre de dossiers de qualification") +
-  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI")
+  labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI") +
+  theme_hc(base_family = "Raleway")
 ```
 
 ```{r evolutionsAbsolues.dossiers.qualifs.parSection.2, fig.width=12, fig.asp=0.7, echo=FALSE}

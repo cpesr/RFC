@@ -1,6 +1,11 @@
 Qualification MCF
 ================
 
+*Ce document est un brouillon de différentes visualisations. Il a
+seulement vocation à permettre la discussion. Les observations et
+propositions peuvent être ajoutées [en
+issues](https://github.com/cpesr/RFC/issues).*
+
 ## Description des données
 
   - Nombre d’observations : 855
