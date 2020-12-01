@@ -15,17 +15,28 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 <!-- end list -->
 
-    ##  [1] "TypeRecrutement"               "GrandeDisciplineCNU"          
-    ##  [3] "GroupeCNU"                     "SectionCNU"                   
-    ##  [5] "SectionCNU.ID"                 "Annee"                        
-    ##  [7] "QualificationDossiers.MCF"     "QualificationQualifies.MCF"   
-    ##  [9] "PostesPublies.MCF"             "Candidatures.MCF"             
-    ## [11] "Candidats.MCF"                 "PostesPourvus.MCF"            
-    ## [13] "Candidatures.MCF.F"            "Candidatures.MCF.H"           
-    ## [15] "Candidats.MCF.F"               "Candidats.MCF.H"              
-    ## [17] "Recrutes.MCF.F"                "Recrutes.MCF.H"               
-    ## [19] "candidatures.par.candidat.MCF" "candidatures.par.poste.MCF"   
-    ## [21] "Code.GrandeDisciplineCNU"
+    ##  [1] "TypeRecrutement"                        
+    ##  [2] "GrandeDisciplineCNU"                    
+    ##  [3] "GroupeCNU"                              
+    ##  [4] "SectionCNU"                             
+    ##  [5] "SectionCNU.ID"                          
+    ##  [6] "Annee"                                  
+    ##  [7] "QualificationDossiers.MCF"              
+    ##  [8] "QualificationQualifies.MCF"             
+    ##  [9] "PostesPublies.MCF"                      
+    ## [10] "Candidatures.MCF"                       
+    ## [11] "Candidats.MCF"                          
+    ## [12] "PostesPourvus.MCF"                      
+    ## [13] "Candidatures.MCF.F"                     
+    ## [14] "Candidatures.MCF.H"                     
+    ## [15] "Candidats.MCF.F"                        
+    ## [16] "Candidats.MCF.H"                        
+    ## [17] "Recrutes.MCF.F"                         
+    ## [18] "Recrutes.MCF.H"                         
+    ## [19] "candidatures.par.candidat.MCF"          
+    ## [20] "candidatures.par.poste.MCF"             
+    ## [21] "candidatures.par.candidat.par.poste.MCF"
+    ## [22] "Code.GrandeDisciplineCNU"
 
   - Période : 2005, 2019
 
@@ -140,3 +151,7 @@ plein de candidatures dans certaines disciplines :
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.poste-1.png)<!-- -->
 
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.poste.2-1.png)<!-- -->
+
+![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste-1.png)<!-- -->
+
+![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste.2-1.png)<!-- -->
