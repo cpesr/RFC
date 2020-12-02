@@ -32,6 +32,7 @@ hec <- merge(select(bs,-Type),kpiESR::esr)
 ## Quelques visualisations
 
 On propose ici une première analyse des heures de "vacations" à l'université. Nous avons collecté les bilans sociaux des établissements listés ci-dessous sur une période allant de 2005 à 2018. Le corpus est fragmentaire et nécessite d'être complété, mais constitue une première base d'analyse. Nous restreignons volontairement l'analyse à la période 2014-2018 pour avoir suffisament d'établissements.
+Les données sont complétées par celles fournies par le ministère pour le nombre d'enseignants titulaires.
 
 Liste des établissements : 
 
@@ -74,8 +75,7 @@ ggplot(aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
   xlab("Nb d'enseignants titulaires") +
   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   guides(color=FALSE)+
-  theme_hc() 
-
+ theme_cpesr_cap() 
 ```
 
 On constate graphiquement que les petits établissements font davantage appel à des heures hors service que les gros.
@@ -112,7 +112,7 @@ ggplot(df, aes(y = 100*hecPnorm, x = Rentrée,
   scale_alpha(range = c(0.2, 1))+
   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   guides(color=FALSE)+
-  theme_hc() 
+ theme_cpesr_cap() 
 ```  
 
 Une autre visualisation qui ne distingue plus entre les établissements mais qui montre la tendance à l'augmentation des heures hors service sur la période. On crée un boxplot qui agrège les données de tous les établissements.
@@ -133,7 +133,7 @@ df2<- df%>%
     scale_y_continuous(labels=scales::percent) +
      labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
    labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  theme_hc()
+  theme_cpesr_cap() 
 
 ```
 ```{r evol.hcomp.3,fig.width=12, fig.asp=9/16}
@@ -145,7 +145,7 @@ ggplot(df2, aes(x=Rentrée, y=hecPnorm, group=Rentrée, fill="TRUE")) +
     coord_cartesian(ylim=c(-.2,.2)) +
     labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
    labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  theme_hc() 
+ theme_cpesr_cap() 
 ```
 
 
@@ -169,7 +169,7 @@ ggplot(df2,aes(y = hcm/titmean, x = titmean,#100*titPetunorm,
   xlab("Nb d'enseignants titulaires") +
 labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   guides(color=FALSE)+
-  theme_hc() 
+ theme_cpesr_cap() 
 
 ```
 
@@ -191,7 +191,7 @@ ggplot(aes(x=Rentrée, y=hecPnorm)) +
   coord_cartesian(ylim=c(-0.15,.15))+
      labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
 labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  theme_hc()
+  theme_cpesr_cap() 
 ```
 
 ```{r evol.hcomp.taille.3,fig.width=12, fig.asp=9/16}
@@ -208,7 +208,7 @@ ggplot(aes(x=Rentrée, y=hecPnorm, fill="TRUE")) +
   coord_cartesian(ylim=c(-0.15,.15))+
      labs(title="Evolution relative du nb d'Heures hors service", x ="Année", y = "Variation du nombre d'heures hors service") +
     labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  theme_hc() 
+ theme_cpesr_cap() 
 ```
 
 
@@ -235,7 +235,7 @@ ggplot(aes(y = ratio_vacat_hcomp, x = titmean,#100*titPetunorm,
   xlab("Nb d'enseignants titulaires") +
   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
   guides(color=FALSE)+
-  theme_hc() 
+ theme_cpesr_cap() 
 ```
 2 établissements font fortement appels à des vacataires et écrasent la lecture du graphique. On reprend les mêmes données en "zoomant sur la zone centrale :
 
@@ -254,7 +254,8 @@ ggplot(aes(y = ratio_vacat_hcomp, x = titmean,#100*titPetunorm,
   ylab("Ratio vacations/heures complémentaires") +
   xlab("Nb d'enseignants titulaires") +
   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  guides(color=FALSE)
+  guides(color=FALSE)+
+  theme_cpesr_cap() 
   
   
 ```
@@ -277,13 +278,14 @@ ggplot(aes(y = ratio_vacat_hhorservice, x = titmean,#100*titPetunorm,
   ylab("vacations/total des heures hors service") +
   xlab("Nb d'enseignants titulaires") +
   labs(caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements") +
-  guides(color=FALSE)
+  guides(color=FALSE)+
+  theme_cpesr_cap() 
   
 ```
 
 ## Séries temporelles
 
-Nous disposons des données sur des périodes plus longues pour quelques établissements. Nous allons regarder l'évolution temporelle de qqs quantités pour 3 établissements :
+Nous disposons des données sur des périodes plus longues pour quelques établissements. Nous allons regarder l'évolution temporelle de qqs quantités pour 3 établissements. Les données sur le nombre de titulaires sont celles fournies par le ministère.
 
 - Strasbourg (2011-2019)
 
@@ -317,7 +319,8 @@ ggplot(Strasbourg,aes(x=Rentrée,y=value)) +
 #  geom_boxplot(alpha=0.5,fill="grey") + 
   geom_line()+
 facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
-    labs(title="Evolution pour l'université de Strasbourg",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")
+    labs(title="Evolution pour l'université de Strasbourg",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")+
+  theme_cpesr_cap() 
 
 ```
 
@@ -344,7 +347,8 @@ ggplot(StEtienne,aes(x=Rentrée,y=value)) +
 #  geom_boxplot(alpha=0.5,fill="grey") + 
   geom_line()+
 facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
-    labs(title="Evolution pour l'université de Saint Etienne",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")
+    labs(title="Evolution pour l'université de Saint Etienne",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")+
+  theme_cpesr_cap() 
 
 ```
 
@@ -375,7 +379,8 @@ ggplot(Nantes,aes(x=Rentrée,y=value)) +
 #  geom_boxplot(alpha=0.5,fill="grey") + 
   geom_line()+
 facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
-    labs(title="Evolution pour l'université de Nantes",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")
+    labs(title="Evolution pour l'université de Nantes",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")+
+  theme_cpesr_cap() 
 
 
 
@@ -406,7 +411,7 @@ Enfin, on essaie de regarder les trajectoires suivies par les établissements da
   ylab("Nombre d'heures compl. + vacations / enseignant titulaire")+
     ylim(0,450)+
     xlim(0,3000)+
-    theme_hc() 
+   theme_cpesr_cap() 
 ```
 
 

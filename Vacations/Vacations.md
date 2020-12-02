@@ -8,29 +8,30 @@ l’université. Nous avons collecté les bilans sociaux des
 établissements listés ci-dessous sur une période allant de 2005 à 2018.
 Le corpus est fragmentaire et nécessite d’être complété, mais constitue
 une première base d’analyse. Nous restreignons volontairement l’analyse
-à la période 2014-2018 pour avoir suffisament d’établissements.
+à la période 2014-2018 pour avoir suffisament d’établissements. Les
+données sont complétées par celles fournies par le ministère pour le
+nombre d’enseignants titulaires.
 
 Liste des établissements :
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
     ##  [1] "Angers"                      "Bordeaux"                   
-    ##  [3] "Bourgogne"                   "Caen"                       
-    ##  [5] "Evry"                        "Gustave Eiffel - Paris Est" 
-    ##  [7] "Haute Alsace"                "La Reunion"                 
-    ##  [9] "La Rochelle"                 "Le Havre"                   
-    ## [11] "Le Mans"                     "Lille"                      
-    ## [13] "Limoges"                     "Lorraine"                   
-    ## [15] "Lyon 1"                      "Lyon 3"                     
-    ## [17] "Montpellier"                 "Nantes"                     
-    ## [19] "Nimes"                       "Paris 1 - Pantheon Sorbonne"
-    ## [21] "Paris 3"                     "Paris 8"                    
-    ## [23] "Paris Est Creteil"           "Pau"                        
-    ## [25] "Reims"                       "Rennes 1"                   
-    ## [27] "Savoie Mont-Blanc"           "St Etienne"                 
-    ## [29] "Strasbourg"                  "Toulon"                     
-    ## [31] "Toulouse 1"                  "Tours"                      
-    ## [33] "Univ Artois"
+    ##  [3] "Bourgogne"                   "Evry"                       
+    ##  [5] "Gustave Eiffel - Paris Est"  "Haute Alsace"               
+    ##  [7] "La Reunion"                  "La Rochelle"                
+    ##  [9] "Le Havre"                    "Le Mans"                    
+    ## [11] "Lille"                       "Limoges"                    
+    ## [13] "Lorraine"                    "Lyon 1"                     
+    ## [15] "Lyon 3"                      "Montpellier"                
+    ## [17] "Nantes"                      "Nimes"                      
+    ## [19] "Paris 1 - Pantheon Sorbonne" "Paris 3"                    
+    ## [21] "Paris Est Creteil"           "Pau"                        
+    ## [23] "Reims"                       "Rennes 1"                   
+    ## [25] "Savoie Mont-Blanc"           "St Etienne"                 
+    ## [27] "Strasbourg"                  "Toulon"                     
+    ## [29] "Toulouse 1"                  "Tours"                      
+    ## [31] "Univ Artois"
 
 Définitions :
 
@@ -134,9 +135,9 @@ vacations/total des heures hors-service.
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
-    ## Warning: Removed 6 rows containing missing values (geom_point).
+    ## Warning: Removed 5 rows containing missing values (geom_point).
 
-    ## Warning: Removed 6 rows containing missing values (geom_text_repel).
+    ## Warning: Removed 5 rows containing missing values (geom_text_repel).
 
 ![](Vacations_files/figure-gfm/vacatvshorsservice-1.png)<!-- -->
 
@@ -144,7 +145,8 @@ vacations/total des heures hors-service.
 
 Nous disposons des données sur des périodes plus longues pour quelques
 établissements. Nous allons regarder l’évolution temporelle de qqs
-quantités pour 3 établissements :
+quantités pour 3 établissements. Les données sur le nombre de titulaires
+sont celles fournies par le ministère.
 
   - Strasbourg (2011-2019)
 
