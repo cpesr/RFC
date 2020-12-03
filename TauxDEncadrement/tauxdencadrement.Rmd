@@ -291,3 +291,47 @@ tde.etab %>%
     theme_cpesr_cap()
 ```
 
+
+## Focus ENS
+
+```{r ens.data}
+tde.ens <- tde %>% 
+  filter(Type.établissement == "ENS") %>% 
+  mutate(Etablissement = stringr::str_extract(string = Etablissement,
+                                               pattern = "(?<=\\().*(?=\\))"),
+         Grande.discipline = recode(Grande.discipline, "Santé" = "Autre"))
+```
+
+```{r ens.values}
+tde.ens %>%
+  group_by(Rentrée,Etablissement) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  pivot_longer(-c(Rentrée,Etablissement)) %>%
+  ggplot(aes(x=Rentrée, y=value, color=Etablissement)) + 
+    geom_line(aes(group=Etablissement)) +
+    facet_wrap(.~name, scales="free_y") +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
+
+
+```{r ens.values.disc}
+tde.ens %>%
+  group_by(Rentrée, Etablissement, Grande.discipline) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  pivot_longer(-c(Rentrée,Etablissement, Grande.discipline)) %>%
+  ggplot(aes(x=Rentrée, y=value, color=Etablissement)) + 
+    geom_line(aes(group=Etablissement)) +
+    facet_grid(name~Grande.discipline, scales="free_y", drop = TRUE) +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
+

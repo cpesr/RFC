@@ -660,3 +660,9 @@ LSHS
 </table>
 
 ![](tauxdencadrement_files/figure-gfm/disc.distrib.zoom-1.png)<!-- -->
+
+## Focus ENS
+
+![](tauxdencadrement_files/figure-gfm/ens.values-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/ens.values.disc-1.png)<!-- -->
