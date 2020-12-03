@@ -44,6 +44,16 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 ## Nombre de candidats par poste MCF
 
+### Moyenne toutes sections confondues de 2013 à 2019
+
+    ##      CNU 
+    ## 13.68249
+
+    ##                Droit éco ges Lettres et sciences humaines 
+    ##                     7.906869                    15.884402 
+    ##                    Pharmacie       Sciences et techniques 
+    ##                     9.795386                    13.394962
+
 ### Vision globale par grande discipline et groupes CNU
 
 ![](ConcoursMCF_files/figure-gfm/candidats.par.poste.MCF.1-1.png)<!-- -->
