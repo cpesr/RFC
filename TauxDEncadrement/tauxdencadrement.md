@@ -682,3 +682,7 @@ LSHS
 ![](tauxdencadrement_files/figure-gfm/univ.values.etiquettes-1.png)<!-- -->
 
 ![](tauxdencadrement_files/figure-gfm/univ.evol.etiquettes-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/univ.etab.values.etiquettes-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes-1.png)<!-- -->

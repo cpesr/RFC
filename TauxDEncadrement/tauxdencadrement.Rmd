@@ -458,19 +458,48 @@ tde.univ.etiquettes %>%
     theme_cpesr()
 ```
 
+```{r univ.evol.etiquettes}
+tde.univ.etiquettes %>%
+  ggplot(aes(x=Rentrée, y=evolution, color=name)) + 
+    geom_line(aes(group=name), size=2) +
+    facet_grid(name~étiquettes) +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
 
 
-```{r univ.etabs.values.etiquettes}
-tde.univ.etiquettes <- merge(tde.univ,etiquettes) %>%
+
+
+```{r univ.etab.etiquettes}
+etiquettes <- read.csv("etiquettes.csv")
+
+tde.univ.etab.etiquettes <- merge(tde.univ,etiquettes) %>%
   group_by(Rentrée, Etablissement, étiquettes) %>%
   summarise(
     Etudiants = sum(Etudiants),
     Enseignants = sum(Enseignants),
     Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
   ) %>%
-  ggplot(aes(x=Rentrée, y=value, color=name)) + 
+  pivot_longer(-c(Rentrée, Etablissement, étiquettes)) %>%
+  group_by(name, Etablissement, étiquettes) %>%
+  mutate(evolution = value / first(value))
+```
+
+```{r univ.etab.values.etiquettes}
+tde.univ.etab.etiquettes %>%
+  ggplot(aes(x=Rentrée, y=value, fill=name)) + 
     geom_boxplot() +
     facet_grid(name~étiquettes, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
     theme_cpesr()
 ```
+
+```{r univ.etab.evol.etiquettes}
+tde.univ.etab.etiquettes %>%
+  ggplot(aes(x=Rentrée, y=evolution, fill=name)) + 
+    geom_boxplot() +
+    facet_grid(name~étiquettes, scales="free_y") +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
+
