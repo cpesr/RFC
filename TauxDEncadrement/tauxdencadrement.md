@@ -666,3 +666,15 @@ LSHS
 ![](tauxdencadrement_files/figure-gfm/ens.values-1.png)<!-- -->
 
 ![](tauxdencadrement_files/figure-gfm/ens.values.disc-1.png)<!-- -->
+
+## Focus Universités
+
+![](tauxdencadrement_files/figure-gfm/univ.values.etab-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/univ.values-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/univ.evol-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/univ.values.disc-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/univ.evol.disc-1.png)<!-- -->

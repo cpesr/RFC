@@ -168,7 +168,7 @@ tde.etab <- tde %>%
   summarise(
     Enseignants = sum(Enseignants, na.rm = TRUE),
     Etudiants = sum(Etudiants, na.rm = TRUE),
-    Taux.d.encadrement = Enseignants / Etudiants *100 ) 
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 ) 
 ```
 
 ```{r etab.distrib}
@@ -335,3 +335,99 @@ tde.ens %>%
     theme_cpesr()
 ```
 
+
+
+## Focus Universités
+
+```{r univ.data}
+tde.univ <- tde %>% 
+  filter(Type.établissement == "Université") 
+```
+
+```{r univ.values.etab}
+tde.univ %>%
+  group_by(Rentrée, Etablissement) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  pivot_longer(-c(Rentrée,Etablissement)) %>%
+  ggplot(aes(x=Rentrée, y=value, fill=name)) + 
+    geom_boxplot() +
+    facet_wrap(.~name, scales="free_y") +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
+
+```{r univ.values}
+tde.univ %>%
+  group_by(Rentrée) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  pivot_longer(-c(Rentrée)) %>%
+  ggplot(aes(x=Rentrée, y=value, color=name)) + 
+    geom_line(aes(group=name)) +
+    facet_wrap(.~name, scales="free_y") +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
+
+```{r univ.evol}
+tde.univ %>%
+  group_by(Rentrée) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  pivot_longer(-c(Rentrée)) %>%
+  group_by(name) %>%
+  mutate(evolution = value / first(value)) %>%
+  ggplot(aes(x=Rentrée, y=evolution, color=name)) + 
+    geom_line(aes(group=name), size=2) +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
+
+
+
+
+```{r univ.values.disc}
+tde.univ %>%
+  group_by(Rentrée, Grande.discipline) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  pivot_longer(-c(Rentrée, Grande.discipline)) %>%
+  ggplot(aes(x=Rentrée, y=value, color=name)) + 
+    geom_line(aes(group=name)) +
+    facet_grid(name~Grande.discipline, scales="free_y") +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
+
+
+```{r univ.evol.disc}
+tde.univ %>%
+  filter(Grande.discipline != "Autre") %>%
+  group_by(Rentrée, Grande.discipline) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  pivot_longer(-c(Rentrée, Grande.discipline)) %>%
+  group_by(name, Grande.discipline) %>%
+  mutate(evolution = value / first(value)) %>%
+  ggplot(aes(x=Rentrée, y=evolution, color=name)) + 
+    geom_line(aes(group=name)) +
+    facet_grid(name~Grande.discipline) +
+    scale_x_discrete(breaks=c("2011","2014","2017")) + 
+    theme_cpesr()
+```
