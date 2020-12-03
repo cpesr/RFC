@@ -31,7 +31,7 @@ hec <- merge(select(bs,-Type),kpiESR::esr)
 
 ## Quelques visualisations
 
-On propose ici une première analyse des heures de "vacations" à l'université. Nous avons collecté les bilans sociaux des établissements listés ci-dessous sur une période allant de 2005 à 2018. Le corpus est fragmentaire et nécessite d'être complété, mais constitue une première base d'analyse. Nous restreignons volontairement l'analyse à la période 2014-2018 pour avoir suffisament d'établissements.
+On propose ici une première analyse des heures de "vacations" à l'université. Nous avons collecté les bilans sociaux des établissements listés ci-dessous sur une période allant de 2005 à 2018. Le corpus est fragmentaire et nécessite d'être complété, mais constitue une première base d'analyse. Nous restreignons volontairement l'analyse à la période 2014-2018 pour avoir suffisamment d'établissements.
 Les données sont complétées par celles fournies par le ministère pour le nombre d'enseignants titulaires.
 
 Liste des établissements : 
