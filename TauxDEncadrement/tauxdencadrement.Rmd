@@ -433,6 +433,7 @@ tde.univ %>%
 ```
 
 
+
 ```{r univ.etiquettes}
 etiquettes <- read.csv("etiquettes.csv")
 
@@ -458,11 +459,18 @@ tde.univ.etiquettes %>%
 ```
 
 
-```{r univ.evol.etiquettes}
-tde.univ.etiquettes %>%
-  ggplot(aes(x=Rentrée, y=evolution, color=name)) + 
-    geom_line(aes(group=name), size=2) +
-    facet_grid(name~étiquettes) +
+
+```{r univ.etabs.values.etiquettes}
+tde.univ.etiquettes <- merge(tde.univ,etiquettes) %>%
+  group_by(Rentrée, Etablissement, étiquettes) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  ggplot(aes(x=Rentrée, y=value, color=name)) + 
+    geom_boxplot() +
+    facet_grid(name~étiquettes, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
     theme_cpesr()
 ```
