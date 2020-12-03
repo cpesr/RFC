@@ -13,10 +13,11 @@ library("gridExtra")
 require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
-cnu <- read.table("DB_CNU_QualificationRecrutements_20212201.csv", h=T, sep=";") %>%
-  mutate(Annee = as.factor(Annee), SectionCNU.ID = as.factor(SectionCNU.ID),
+cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";") %>%
+  mutate(SectionCNU.ID = as.factor(SectionCNU.ID),
          candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
          candidatures.par.poste.MCF = Candidatures.MCF / PostesPublies.MCF,
+         candidats.par.poste.MCF = Candidats.MCF / PostesPublies.MCF,
          candidatures.par.candidat.par.poste.MCF = candidatures.par.candidat.MCF / PostesPublies.MCF,
          GrandeDisciplineCNU = as.factor(GrandeDisciplineCNU),
          Code.GrandeDisciplineCNU = recode(GrandeDisciplineCNU, 
@@ -41,6 +42,35 @@ colnames(cnu)
 ```
 - Période : `r range(as.character(cnu$Annee))`
 
+## Nombre de candidats par poste MCF
+
+### Vision globale par grande discipline et groupes CNU
+```{r candidats.par.poste.MCF.1, fig.width=12, fig.asp=9/16}
+cnu %>%
+  drop_na(candidats.par.poste.MCF) %>%
+    ggplot(aes(x=candidats.par.poste.MCF, y=SousGroupeCNU, color=Annee)) +
+    geom_jitter(width = 0, height = 0.15) +
+    #scale_x_continuous(breaks=seq(0,30,2)) +
+    facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
+    theme_cpesr_cap(authors=c("Florent Figon"), licence="CC BY-SA") +
+    theme(strip.text.y = element_text(size = 7.5)) +
+    theme(legend.position = "right") +
+    scale_color_gradient(low="#E69F00", high="#009E73") +
+    labs(title="Concours MCF, de 2013 à 2019", y ="Grandes disciplines CNU", x = "Nombre moyen de candidats par poste MCF (par section et par an)")
+```
+
+```{r candidats.par.poste.MCF.2, fig.width=12, fig.asp=9/16}
+cnu %>%
+  drop_na(candidats.par.poste.MCF) %>%
+    ggplot(aes(x=candidats.par.poste.MCF, y=SousGroupeCNU, fill=GroupeCNU)) +
+    geom_boxplot() +
+    #scale_x_continuous(breaks=seq(0,30,2)) +
+    facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
+    theme_cpesr_cap(authors=c("Florent Figon"), licence="CC BY-SA") +
+    theme(strip.text.y = element_text(size = 7.5)) +
+    theme(legend.position = "none") +
+    labs(title="Concours MCF, de 2013 à 2019", y ="Grandes disciplines CNU", x = "Nombre moyen de candidats par poste MCF (par section et par an)")
+```
 
 ## Nombre de candidatures par candidat aux postes MCF
 
@@ -55,7 +85,7 @@ cnu %>%
     theme_cpesr_cap(authors=c("Florent Figon"), licence="CC BY-SA") +
     theme(strip.text.y = element_text(size = 7.5)) +
     theme(legend.position = "right") +
-    scale_color_brewer(palette="YlGn") +
+    scale_color_gradient(low="#E69F00", high="#009E73") +
     labs(title="Concours MCF, de 2013 à 2019", y ="Grandes disciplines CNU", x = "Nombre moyen de candidatures aux concours MCF par candidat (par section et par an)")
 ```
 
@@ -104,7 +134,7 @@ Pour regarder le potentiel rôle du CNU comme filtre évitant le trop plein de c
 ```{r candidatures.par.candidat.MCF.3}
 cnu %>%
   drop_na(candidatures.par.candidat.MCF) %>%
-    ggplot(aes(x=Annee, y=candidatures.par.candidat.MCF)) +
+    ggplot(aes(x=as.factor(Annee), y=candidatures.par.candidat.MCF)) +
     geom_boxplot() +
     theme_cpesr_cap(authors=c("Florent Figon"), 
       licence="CC BY-SA")
@@ -114,7 +144,7 @@ cnu %>%
 ```{r candidatures.par.candidat.MCF.4}
 cnu %>%
   drop_na(candidatures.par.candidat.MCF) %>%
-    ggplot(aes(x=Annee, y=candidatures.par.candidat.MCF)) +
+    ggplot(aes(x=as.factor(Annee), y=candidatures.par.candidat.MCF)) +
     geom_boxplot() +
     facet_wrap(.~GrandeDisciplineCNU, scale="free") +
     theme_cpesr_cap(authors=c("Florent Figon"), 
@@ -281,7 +311,7 @@ cnu %>%
     facet_grid(GrandeDisciplineCNU~., scales="free", space="free") +
     theme_cpesr_cap(authors=c("Florent Figon", "Julien Gossa"), licence="CC BY-SA") +
     theme(strip.text.y = element_text(size = 7.5)) +
-    scale_color_brewer(palette="YlGn") +
+    scale_color_gradient(low="#E69F00", high="#009E73") +
     labs(title="Concours MCF, de 2013 à 2019", 
          y ="Grandes disciplines CNU", 
          x = "Nombre de candidatures par poste aux concours MCF (par section et par an)")

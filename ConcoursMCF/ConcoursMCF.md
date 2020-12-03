@@ -36,10 +36,19 @@ issues](https://github.com/cpesr/RFC/issues).*
     ## [19] "Recrutes.MCF.H"                         
     ## [20] "candidatures.par.candidat.MCF"          
     ## [21] "candidatures.par.poste.MCF"             
-    ## [22] "candidatures.par.candidat.par.poste.MCF"
-    ## [23] "Code.GrandeDisciplineCNU"
+    ## [22] "candidats.par.poste.MCF"                
+    ## [23] "candidatures.par.candidat.par.poste.MCF"
+    ## [24] "Code.GrandeDisciplineCNU"
 
   - Période : 2005, 2019
+
+## Nombre de candidats par poste MCF
+
+### Vision globale par grande discipline et groupes CNU
+
+![](ConcoursMCF_files/figure-gfm/candidats.par.poste.MCF.1-1.png)<!-- -->
+
+![](ConcoursMCF_files/figure-gfm/candidats.par.poste.MCF.2-1.png)<!-- -->
 
 ## Nombre de candidatures par candidat aux postes MCF
 
@@ -121,15 +130,11 @@ plein de candidatures dans certaines disciplines :
 
 ### Candidats, candidatures et postes
 
-    ## Warning: Using alpha for a discrete variable is not advised.
-
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes-1.png)<!-- -->
 
     ## Warning: Removed 3 rows containing missing values (geom_label_repel).
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.2-1.png)<!-- -->
-
-    ## Warning: Using alpha for a discrete variable is not advised.
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.DEG-1.png)<!-- -->
 
