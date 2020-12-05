@@ -5,20 +5,20 @@ library(htmltools)
 
 # on récupère le code html de la page qui liste l'ensemble des offres CDD
 cnrs.offres = read_html("https://emploi.cnrs.fr/Offres.aspx")
-# on récupère tous les liens du tableau d'offre, et uniquement ceux qui ne sont aps associés à une image (ces derniers sont des doublons de traductions EN/FR)
+# on récupère tous les liens du tableau d'offres, et uniquement ceux qui ne sont pas associés à une image (ces derniers sont des doublons de traductions EN/FR)
 links.offres = cnrs %>% html_nodes(xpath="//table//a[@itemprop='url']") %>% html_attr("href")
 
-# on initiale la data.frame qui contiendra ligne par ligne les offres d'emplois CDD
+# on initialise la data.frame qui contiendra ligne par ligne les offres d'emplois CDD
 data.offres = tibble()
 
-# pour chaque lien qui mène à une fiche de poste CDD, hors contrat doctoral...
+# pour chaque lien qui mène à une fiche de poste CDD, hors contrat doctoral, ...
 for (x in 1:length(grep("(^/Offres/CDD).*(aspx$)", links.offres))) {
   # ... on récupère le code html de la fiche de poste
   short.link.offre = links.offres[grep("(^/Offres/CDD).*(aspx$)", links.offres)[x]]
   link.offre = paste("https://emploi.cnrs.fr", short.link.offre, sep="")
   html.offre = read_html(link.offre)
   
-  # on récupère les infos contenus dans cette fiche de postes :
+  # on récupère les infos contenues dans cette fiche de poste :
   #  1) le lien ;
   #  2) la référence (codée en dur, il faut donc parser le texte brut) ;
   #  3) la ville ;
