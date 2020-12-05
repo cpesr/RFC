@@ -13,6 +13,7 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 library(ggbeeswarm)
 library(kableExtra)
+library(ggrepel)
 
 library(ggcpesrthemes)
 
@@ -503,3 +504,58 @@ tde.univ.etab.etiquettes %>%
     theme_cpesr()
 ```
 
+
+
+
+```{r univ.etab.evol.etiquettes.map}
+merge(tde.univ,etiquettes) %>%
+  group_by(Rentrée, Etablissement, étiquettes) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  filter(Rentrée==2018) %>%
+  ggplot(aes(x=Etudiants, y=Enseignants, color=étiquettes)) + 
+    geom_point() +
+    #geom_text_repel(aes(label=Etablissement)) +
+    theme_cpesr()
+```
+
+```{r univ.etab.etiquettes.rank, fig.height=10}
+merge(tde.univ,etiquettes) %>%
+  group_by(Rentrée, Etablissement, étiquettes) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  filter(Rentrée==2018) %>%
+  ggplot(aes(x=reorder(Etablissement,Taux.d.encadrement), y=Taux.d.encadrement, fill=étiquettes)) + 
+    geom_col() +
+    coord_flip() +
+    xlab("") +
+    #geom_text_repel(aes(label=Etablissement)) +
+    theme_cpesr()
+```
+
+```{r univ.etab.evol.etiquettes.rank, fig.height=10}
+merge(tde.univ,etiquettes) %>%
+  group_by(Rentrée, Etablissement, étiquettes) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  filter(as.character(Rentrée) > "2009") %>%
+  group_by(Etablissement) %>%
+  mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) -1) %>% 
+  filter(Rentrée == 2018) %>%
+  ggplot(aes(x=reorder(Etablissement,Evolution), y=Evolution, fill=étiquettes)) + 
+    geom_col() +
+    coord_flip() +
+    xlab("") + ylab("Evolution du taux d'encadrement 2010-2018") +
+    scale_y_continuous(labels=scales::percent) +
+    #geom_text_repel(aes(label=Etablissement)) +
+    theme_cpesr()
+```
