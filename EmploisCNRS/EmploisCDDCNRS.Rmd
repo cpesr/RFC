@@ -1,0 +1,46 @@
+---
+title: "Emplois CDD CNRS"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(ggthemes)
+library(ggbeeswarm)
+library("gridExtra")
+require("ggrepel")
+library(ggcpesrthemes)
+library(ggpmisc)
+
+CDD.cnrs = read.table("DB_CDD_CNRS_20201205.csv", head=T, sep=";")
+```
+
+_Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
+
+## Description des données 
+
+- Source : https://emploi.cnrs.fr/Offres.aspx
+- Nombre d'observations : `r nrow(CDD.cnrs)`
+- Variables : 
+```{r vars}
+colnames(CDD.cnrs)
+```
+
+## Durée des CDD
+
+### Durée en fonction du niveau d'étude requis
+```{r duree.par.niveau.1, fig.width=12, fig.asp=9/16}
+CDD.cnrs %>% 
+  drop_na(duration.months) %>% 
+  ggplot(aes(x=educationRequirements, y=duration.months)) + 
+    geom_violin() + 
+    geom_jitter(aes(color=employmentType), position = position_jitter(0.1)) +
+    stat_summary(fun.y=mean, geom="point", shape=1,
+                 size=3, color="black") +
+    # stat_summary(fun.data=mean_sdl, mult=1, 
+    #              geom="pointrange", color="red") +
+    theme_cpesr_cap(authors=c("Florent Figon"), 
+                    licence="CC BY-SA", url="https://emploi.cnrs.fr/Offres.aspx") + theme(legend.position = "right")
+```
