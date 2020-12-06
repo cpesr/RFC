@@ -1338,8 +1338,430 @@ Université
 
 La baisse de près d’un quart des enseignants entre 2015 et 2016 est peu
 crédible. Il s’agit probablement d’un changement de périmètre (à
-confirmer)
+confirmer).
 
-### Classement sans Guyanes ni Artois
+### Focus UHA
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+UAI
+
+</th>
+
+<th style="text-align:left;">
+
+Rentrée
+
+</th>
+
+<th style="text-align:left;">
+
+Etablissement
+
+</th>
+
+<th style="text-align:left;">
+
+Type.établissement
+
+</th>
+
+<th style="text-align:right;">
+
+Enseignants
+
+</th>
+
+<th style="text-align:right;">
+
+Etudiants
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2010
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+439
+
+</td>
+
+<td style="text-align:right;">
+
+7947
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2011
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+444
+
+</td>
+
+<td style="text-align:right;">
+
+7743
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2012
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+441
+
+</td>
+
+<td style="text-align:right;">
+
+7536
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2013
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+442
+
+</td>
+
+<td style="text-align:right;">
+
+7436
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2014
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+436
+
+</td>
+
+<td style="text-align:right;">
+
+7688
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2015
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+438
+
+</td>
+
+<td style="text-align:right;">
+
+7923
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2016
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+433
+
+</td>
+
+<td style="text-align:right;">
+
+8064
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2017
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+428
+
+</td>
+
+<td style="text-align:right;">
+
+9376
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0681166Y
+
+</td>
+
+<td style="text-align:left;">
+
+2018
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+434
+
+</td>
+
+<td style="text-align:right;">
+
+10029
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+L’augmentation de 25% des effectifs étudiants entre 2017 et 2018 indique
+un changement de périmètre des inscriptions étudiants, probablement
+après des accord avec d’autres établissements pour délivrer des
+diplômes UHA sans assurer les enseignements.
+
+Ces chiffres ne reflêtent donc pas le taux d’encadrement réel de
+l’université.
+
+### Classement sans : Guyane, Artois et UHA
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank.filter-1.png)<!-- -->

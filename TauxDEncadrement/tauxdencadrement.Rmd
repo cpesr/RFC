@@ -651,18 +651,30 @@ Les données sont courtes et les valeurs très basses, au point de ne pas être 
 
 ### Focus Artois
 
-```{r artois}
+```{r uha}
 tde %>% filter(Etablissement == "Université d'Artois") %>% kable()
 ```
 
 La baisse de près d'un quart des enseignants entre 2015 et 2016 est peu crédible. 
-Il s'agit probablement d'un changement de périmètre (à confirmer)
+Il s'agit probablement d'un changement de périmètre (à confirmer).
 
-### Classement sans Guyanes ni Artois
+### Focus UHA
+
+```{r artois}
+tde %>% filter(Etablissement == "Université de Haute-Alsace (UHA)") %>% kable()
+```
+
+L'augmentation de 25% des effectifs étudiants entre 2017 et 2018 indique un changement de 
+périmètre des inscriptions étudiants, probablement après des accord avec d'autres établissements pour délivrer des diplômes UHA sans assurer les enseignements. 
+
+Ces chiffres ne reflêtent donc pas le taux d'encadrement réel de l'université.
+
+
+### Classement sans : Guyane, Artois et UHA
 
 ```{r univ.etab.evol.etiquettes.rank.filter, fig.height=10}
 merge(tde.univ,etiquettes) %>%
-  filter(!Etablissement %in% c("Université d'Artois", "Université de Guyane")) %>%
+  filter(!Etablissement %in% c("Université d'Artois", "Université de Guyane", "Université de Haute-Alsace (UHA)")) %>%
   group_by(Rentrée, Etablissement, étiquettes) %>%
   summarise(
     Etudiants = sum(Etudiants),
