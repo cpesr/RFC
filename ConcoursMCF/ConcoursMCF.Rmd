@@ -576,3 +576,47 @@ cnu %>%
                 url = "https://github.com/cpesr/RFC",
                 source = "DGRH A1-1/Galaxie")
 ```
+
+### Evolution de 2014 à 2019
+```{r evolution.qualifies.candidats.postes.2013to2019.1, fig.width=12, fig.asp=9/16}
+cnu.2014to2019 <- cnu %>% 
+  filter(Annee > 2013) %>%
+  group_by(SectionCNU.ID) %>% 
+  arrange(Annee, SectionCNU.ID) %>% 
+  mutate(debut.postes = first(PostesPublies.MCF),
+         debut.qualifies = first(QualificationQualifies.MCF),
+         debut.candidats = first(Candidats.MCF)) %>%
+  mutate(evolution.postes = 100*(PostesPublies.MCF - debut.postes)/debut.postes,
+         evolution.qualifies = 100*(QualificationQualifies.MCF - debut.qualifies)/debut.qualifies,
+        evolution.candidats= 100*(Candidats.MCF - debut.candidats)/debut.candidats) %>%
+  ungroup()
+
+cnu.2014to2019 %>%
+  filter(Annee == 2019) %>%
+  drop_na(evolution.postes) %>%
+  ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, evolution.postes))))) +
+    geom_col(aes(y = evolution.candidats), fill = "grey") +
+    geom_col(aes(y = evolution.postes, fill = GrandeDisciplineCNU), alpha = 0.5) +
+    # geom_point(aes(y = evolution.qualifies), color = "black") +
+    # geom_text(aes(y = evolution.postes, label=evolution.postes), 
+    #           vjust=-0, color="white", 
+    #           position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = evolution.qualifies, label=evolution.qualifies), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    # geom_text(aes(y = evolution.candidats, label=evolution.candidats), 
+    #           vjust=-0, color="black", 
+    #           position = position_dodge(0.9), size=3) +
+      geom_text(aes(y = evolution.postes, label=PostesPublies.MCF - debut.postes),
+                vjust=-0, color="black",
+                position = position_dodge(0.9), size=3.5) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(-100, 220), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2019 par rapport à 2014") +
+    xlab("Sections CNU (par évolution du nb de postes décroissante)") + 
+    ylab("Evolutions du nombre de postes (couleurs) et de candidats (gris) en %") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
