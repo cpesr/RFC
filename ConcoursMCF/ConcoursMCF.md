@@ -197,4 +197,7 @@ Ordonné par section
 
 ### Evolution de 2014 à 2019
 
-![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2013to2019.1-1.png)<!-- -->
+![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2014to2019.1-1.png)<!-- -->
+
+Ordonné par section
+![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2014to2019.2-1.png)<!-- -->
