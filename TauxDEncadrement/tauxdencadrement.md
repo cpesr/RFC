@@ -11,14 +11,13 @@ issues](https://github.com/cpesr/RFC/issues).*
   - Sources :
       - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement/export/>
       - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/table/?disjunctive.annee&q=%22Universit%C3%A9+de+Nantes%22>
-  - Nombre d’observations : 3241
+  - Nombre d’observations : 962
   - Variables :
 
 <!-- end list -->
 
-    ## [1] "UAI"                "Rentrée"            "Grande.discipline" 
-    ## [4] "Etablissement"      "Type.établissement" "Enseignants"       
-    ## [7] "Etudiants"
+    ## [1] "UAI"                "Rentrée"            "Etablissement"     
+    ## [4] "Type.établissement" "Enseignants"        "Etudiants"
 
   - Définitions :
       - `Enseignants` : effectifs enseignants titulaires (EC et 2d
@@ -37,7 +36,17 @@ issues](https://github.com/cpesr/RFC/issues).*
           - l’imperfection est dûe aux enseignants d’une discipline
             affectés dans une autre, et aux services partagés entre
             plusieurs composantes.
-          - les étudiant en STAPS on été classés en ST.
+          - les étudiant en STAPS on été classés en ST ;
+      - pour les données disciplinaires, il est impossible de distinguer
+        les doubles inscriptions (CPGE ou inscriptions principales et
+        secondaires).
+
+![](tauxdencadrement_files/figure-gfm/check.doubleinscription-1.png)<!-- -->
+
+*Attention : dans la suite, tous les graphiques avec les disciplines
+comprennent donc les doubles inscriptions. Les tendances sont bonnes,
+mais il peut y avoir un décalage dans les valeurs, et des effets
+locaux.*
 
 ## Taux d’encadrement par type d’établissement
 
@@ -251,13 +260,13 @@ Grand étab.
 
 <td style="text-align:right;">
 
-714
+916
 
 </td>
 
 <td style="text-align:right;">
 
-26.75070
+20.85153
 
 </td>
 
@@ -689,6 +698,648 @@ LSHS
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.map-1.png)<!-- -->
 
+\_Note : dans la suite, la barre verticale indique la valeur nationale
+(donc pas la moyenne des établissements)
+
 ![](tauxdencadrement_files/figure-gfm/univ.etab.etiquettes.rank-1.png)<!-- -->
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank-1.png)<!-- -->
+
+### Focus Guyane
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+UAI
+
+</th>
+
+<th style="text-align:left;">
+
+Rentrée
+
+</th>
+
+<th style="text-align:left;">
+
+Etablissement
+
+</th>
+
+<th style="text-align:left;">
+
+Type.établissement
+
+</th>
+
+<th style="text-align:right;">
+
+Enseignants
+
+</th>
+
+<th style="text-align:right;">
+
+Etudiants
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+9730429D
+
+</td>
+
+<td style="text-align:left;">
+
+2015
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Guyane
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+37
+
+</td>
+
+<td style="text-align:right;">
+
+2185
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+9730429D
+
+</td>
+
+<td style="text-align:left;">
+
+2016
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Guyane
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+57
+
+</td>
+
+<td style="text-align:right;">
+
+2638
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+9730429D
+
+</td>
+
+<td style="text-align:left;">
+
+2017
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Guyane
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+93
+
+</td>
+
+<td style="text-align:right;">
+
+2517
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+9730429D
+
+</td>
+
+<td style="text-align:left;">
+
+2018
+
+</td>
+
+<td style="text-align:left;">
+
+Université de Guyane
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+74
+
+</td>
+
+<td style="text-align:right;">
+
+2868
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+Les données sont courtes et les valeurs très basses, au point de ne pas
+être significatives.
+
+### Focus Artois
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+UAI
+
+</th>
+
+<th style="text-align:left;">
+
+Rentrée
+
+</th>
+
+<th style="text-align:left;">
+
+Etablissement
+
+</th>
+
+<th style="text-align:left;">
+
+Type.établissement
+
+</th>
+
+<th style="text-align:right;">
+
+Enseignants
+
+</th>
+
+<th style="text-align:right;">
+
+Etudiants
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2010
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+642
+
+</td>
+
+<td style="text-align:right;">
+
+11404
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2011
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+635
+
+</td>
+
+<td style="text-align:right;">
+
+10817
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2012
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+625
+
+</td>
+
+<td style="text-align:right;">
+
+11370
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2013
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+614
+
+</td>
+
+<td style="text-align:right;">
+
+10956
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2014
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+615
+
+</td>
+
+<td style="text-align:right;">
+
+10134
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2015
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+624
+
+</td>
+
+<td style="text-align:right;">
+
+10593
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2016
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+484
+
+</td>
+
+<td style="text-align:right;">
+
+10844
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2017
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+470
+
+</td>
+
+<td style="text-align:right;">
+
+11325
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+0623957P
+
+</td>
+
+<td style="text-align:left;">
+
+2018
+
+</td>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Université
+
+</td>
+
+<td style="text-align:right;">
+
+466
+
+</td>
+
+<td style="text-align:right;">
+
+11536
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+La baisse de près d’un quart des enseignants entre 2015 et 2016 est peu
+crédible. Il s’agit probablement d’un changement de périmètre (à
+confirmer)
+
+### Classement sans Guyanes ni Artois
+
+![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank.filter-1.png)<!-- -->

@@ -25,8 +25,53 @@ _Ce document est un brouillon de différentes visualisations. Il a seulement voc
 
 ## Description des données 
 
+
 ```{r data, cache=TRUE,  include=FALSE}
 etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  transmute(
+    UAI = ETABLISSEMENT,
+    Rentrée = RENTREE,
+    Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE)
+
+ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  transmute(
+    UAI = Identifiant.établissement,
+    Etablissement = Établissement,
+    Type.établissement = factor(Type.établissement,
+                                levels = c("Université",
+                                           "Grand établissement",
+                                           "École nationale supérieure d'ingénieurs",
+                                           "École d'ingénieurs",
+                                           "École normale supérieure",
+                                           "Institut national polytechnique",
+                                           "École habilitée à délivrer un diplôme d'ingénieur",
+                                           "Opérateur du programme 150 - Formations supérieures et recherche universitaire",
+                                           "Institut ou école extérieur aux universités"),
+                                labels = c("Université",
+                                           "Grand étab.",
+                                           "ENSI",
+                                           "Ecole d'ingé.",
+                                           "ENS",
+                                           "Autre",                                         
+                                           "Autre",
+                                           "Autre",
+                                           "Autre")),
+    Rentrée = Rentrée,
+    Enseignants = effectif
+  ) %>%
+  group_by(UAI, Etablissement, Type.établissement, Rentrée) %>%
+  summarise(Enseignants = sum(Enseignants, na.rm = TRUE))
+
+tde <- merge(ens,etu) %>%
+  mutate(Rentrée = as.factor(Rentrée))
+```
+
+
+
+```{r data.disciplinaire, cache=TRUE,  include=FALSE}
+etu.disc <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
                   header=TRUE, sep=';', quote='"') %>%
   select(ETABLISSEMENT, RENTREE, starts_with("Grande.discipline")) %>%
   pivot_longer(-c(ETABLISSEMENT, RENTREE),
@@ -53,7 +98,7 @@ etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-pa
   group_by(UAI, Rentrée, Grande.discipline) %>%
   summarise(Etudiants = sum(Etudiants, na.rm = TRUE))
 
-ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
+ens.disc <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
     UAI = Identifiant.établissement,
@@ -102,7 +147,7 @@ ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
   group_by(UAI, Etablissement, Type.établissement, Rentrée, Grande.discipline) %>%
   summarise(Enseignants = sum(Enseignants, na.rm = TRUE))
 
-tde <- merge(ens,etu) %>%
+tde.disc <- merge(ens.disc,etu.disc) %>%
   mutate(Rentrée = as.factor(Rentrée))
 ```
 
@@ -125,8 +170,26 @@ colnames(tde)
     - la discipline des enseignants est celle du CNU et non de la composante (UFR) d'affectation ;
     - la discipline des étudiants est celle de la composante (UFR) ;
     - l'imperfection est dûe aux enseignants d'une discipline affectés dans une autre, et aux services partagés entre plusieurs composantes.
-    - les étudiant en STAPS on été classés en ST.
+    - les étudiant en STAPS on été classés en ST ;
+  - pour les données disciplinaires, il est impossible de distinguer les doubles inscriptions (CPGE ou inscriptions principales et secondaires).
+  
+```{r check.doubleinscription}
+merge(
+  tde.disc %>% filter(Type.établissement == "Université") %>%
+    group_by(Rentrée) %>%
+    summarise(Etudiants.DIC = sum(Etudiants)),
+  tde %>% filter(Type.établissement == "Université") %>%
+    group_by(Rentrée) %>%
+    summarise(Etudiants.HDI = sum(Etudiants))) %>%
+  pivot_longer(-Rentrée) %>%
+  ggplot(aes(x=Rentrée, y=value, color=name)) +
+    geom_line(aes(group=name), size=2) +
+    scale_color_discrete(name="", labels=c("Avec double inscription", "Hors double inscription")) +
+    ylab("Inscriptions étudiantes dans les universités") +
+    theme_cpesr()
+```
 
+_Attention : dans la suite, tous les graphiques avec les disciplines comprennent donc les doubles inscriptions. Les tendances sont bonnes, mais il peut y avoir un décalage dans les valeurs, et des effets locaux._
 
 ## Taux d'encadrement par type d'établissement
 
@@ -146,7 +209,7 @@ tde %>%
 ### Evolution par type d'établissement et discipline
 
 ```{r etab.disc}
-tde %>% 
+tde.disc %>% 
   filter(Grande.discipline != "Autre", Etudiants > 0) %>%
   group_by(Rentrée,Type.établissement, Grande.discipline) %>%
   summarise(Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 ) %>%
@@ -207,7 +270,7 @@ tde.etab %>%
 ### Evolution globale
 
 ```{r disc.globale}
-tde %>% 
+tde.disc %>% 
   filter(Grande.discipline != "Autre") %>%
   group_by(Rentrée,Grande.discipline) %>%
   summarise(Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 ) %>%
@@ -223,7 +286,7 @@ tde %>%
 ### Evolution par discpline et type d'établissement
 
 ```{r disc.etab}
-tde %>% 
+tde.disc %>% 
   filter(Grande.discipline != "Autre", Etudiants > 0) %>%
   group_by(Rentrée,Type.établissement, Grande.discipline) %>%
   summarise(Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 ) %>%
@@ -237,7 +300,7 @@ tde %>%
 ```
 
 ```{r disc.etab.zoom}
-tde %>% 
+tde.disc %>% 
   filter(Grande.discipline != "Autre", Etudiants > 0) %>%
   group_by(Rentrée,Type.établissement, Grande.discipline) %>%
   summarise(Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 ) %>%
@@ -255,7 +318,7 @@ tde %>%
 ### Distribution
 
 ```{r disc.data}
-tde.etab <- tde %>% 
+tde.etab <- tde.disc %>% 
   filter(Rentrée == 2018, Grande.discipline != "Autre") %>%
   group_by(Rentrée,Etablissement,Grande.discipline) %>%
   summarise(
@@ -296,7 +359,7 @@ tde.etab %>%
 ## Focus ENS
 
 ```{r ens.data}
-tde.ens <- tde %>% 
+tde.ens <- tde.disc %>% 
   filter(Type.établissement == "ENS") %>% 
   mutate(Etablissement = stringr::str_extract(string = Etablissement,
                                                pattern = "(?<=\\().*(?=\\))"),
@@ -398,7 +461,8 @@ tde.univ %>%
 
 
 ```{r univ.values.disc}
-tde.univ %>%
+tde.disc %>% 
+  filter(Type.établissement == "Université") %>%
   group_by(Rentrée, Grande.discipline) %>%
   summarise(
     Etudiants = sum(Etudiants),
@@ -415,7 +479,8 @@ tde.univ %>%
 
 
 ```{r univ.evol.disc}
-tde.univ %>%
+tde.disc %>% 
+  filter(Type.établissement == "Université") %>%
   filter(Grande.discipline != "Autre") %>%
   group_by(Rentrée, Grande.discipline) %>%
   summarise(
@@ -522,6 +587,20 @@ merge(tde.univ,etiquettes) %>%
     theme_cpesr()
 ```
 
+```{r univ.etab.etiquettes.stat}
+tde.univ.stat <- tde.univ %>%
+  group_by(Rentrée) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) -1) %>% 
+  filter(Rentrée == 2018)
+```
+
+_Note : dans la suite, la barre verticale indique la valeur nationale (donc pas la moyenne des établissements)
+
 ```{r univ.etab.etiquettes.rank, fig.height=10}
 merge(tde.univ,etiquettes) %>%
   group_by(Rentrée, Etablissement, étiquettes) %>%
@@ -533,6 +612,7 @@ merge(tde.univ,etiquettes) %>%
   filter(Rentrée==2018) %>%
   ggplot(aes(x=reorder(Etablissement,Taux.d.encadrement), y=Taux.d.encadrement, fill=étiquettes)) + 
     geom_col() +
+    geom_hline(yintercept = tde.univ.stat$Taux.d.encadrement, color = "grey") +
     coord_flip() +
     xlab("") +
     #geom_text_repel(aes(label=Etablissement)) +
@@ -553,6 +633,49 @@ merge(tde.univ,etiquettes) %>%
   filter(Rentrée == 2018) %>%
   ggplot(aes(x=reorder(Etablissement,Evolution), y=Evolution, fill=étiquettes)) + 
     geom_col() +
+    geom_hline(yintercept = tde.univ.stat$Evolution, color = "grey") +
+    coord_flip() +
+    xlab("") + ylab("Evolution du taux d'encadrement 2010-2018") +
+    scale_y_continuous(labels=scales::percent) +
+    #geom_text_repel(aes(label=Etablissement)) +
+    theme_cpesr()
+```
+
+### Focus Guyane
+
+```{r guyanes}
+tde %>% filter(Etablissement == "Université de Guyane") %>% kable()
+```
+
+Les données sont courtes et les valeurs très basses, au point de ne pas être significatives.
+
+### Focus Artois
+
+```{r artois}
+tde %>% filter(Etablissement == "Université d'Artois") %>% kable()
+```
+
+La baisse de près d'un quart des enseignants entre 2015 et 2016 est peu crédible. 
+Il s'agit probablement d'un changement de périmètre (à confirmer)
+
+### Classement sans Guyanes ni Artois
+
+```{r univ.etab.evol.etiquettes.rank.filter, fig.height=10}
+merge(tde.univ,etiquettes) %>%
+  filter(!Etablissement %in% c("Université d'Artois", "Université de Guyane")) %>%
+  group_by(Rentrée, Etablissement, étiquettes) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  filter(as.character(Rentrée) > "2009") %>%
+  group_by(Etablissement) %>%
+  mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) -1) %>% 
+  filter(Rentrée == 2018) %>%
+  ggplot(aes(x=reorder(Etablissement,Evolution), y=Evolution, fill=étiquettes)) + 
+    geom_col() +
+    geom_hline(yintercept = tde.univ.stat$Evolution, color = "grey") +
     coord_flip() +
     xlab("") + ylab("Evolution du taux d'encadrement 2010-2018") +
     scale_y_continuous(labels=scales::percent) +
