@@ -686,10 +686,6 @@ rank.2018 %>%
     theme_cpesr()
 ```
 
-### Top 5 
-```{r univ.etab.evol.etiquettes.rank.top5}
-
-
 ### Focus Guyane
 
 ```{r guyanes}
@@ -697,6 +693,7 @@ tde %>% filter(Etablissement == "Université de Guyane") %>% kable()
 ```
 
 Les données sont courtes et les valeurs très basses, au point de ne pas être significatives.
+
 
 ### Focus Artois
 

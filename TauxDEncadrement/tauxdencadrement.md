@@ -714,7 +714,7 @@ LSHS
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank-1.png)<!-- -->
 
-### Top 5
+### Focus Guyane
 
 <table>
 
