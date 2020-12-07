@@ -14,15 +14,13 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 <!-- end list -->
 
-    ##  [1] "link"                   "reference"              "jobLocation"           
-    ##  [4] "datePosted"             "employmentType"         "duration.months"       
-    ##  [7] "workHours"              "baseSalary"             "educationRequirements" 
-    ## [10] "experienceRequirements"
+    ##  [1] "link"                   "reference"              "title"                 
+    ##  [4] "jobLocation"            "datePosted"             "employmentType"        
+    ##  [7] "duration.months"        "workHours"              "baseSalary"            
+    ## [10] "educationRequirements"  "experienceRequirements"
 
 ## Durée des CDD
 
 ### Durée en fonction du niveau d’étude requis
-
-    ## Warning: `fun.y` is deprecated. Use `fun` instead.
 
 ![](EmploisCDDCNRS_files/figure-gfm/duree.par.niveau.1-1.png)<!-- -->

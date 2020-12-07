@@ -13,6 +13,7 @@ library("gridExtra")
 require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
+library(robCompositions)
 cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";") %>%
   mutate(SectionCNU.ID = as.factor(SectionCNU.ID),
          candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
@@ -26,7 +27,52 @@ cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";")
                                            "Pharmacie" = "Pharma",
                                            "Sciences et techniques" = "ST")
          )
+
 my.formula <- y ~ x
+
+# D'après http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization
+#+++++++++++++++++++++++++
+# Function to calculate the mean and the standard deviation
+  # for each group
+#+++++++++++++++++++++++++
+# data : a data frame
+# varname : the name of a column containing the variable
+  #to be summariezed
+# groupnames : vector of column names to be used as
+  # grouping variables
+data_summary <- function(data, varname, groupnames){
+  require(plyr); require(dplyr)
+  summary_func <- function(x, col){
+    c(mean = mean(x[[col]], na.rm=TRUE),
+      sd = sd(x[[col]], na.rm=TRUE))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- rename(data_sum, c("mean" = paste(varname, ".mean", sep=""), "sd" = paste(varname, ".sd", sep="")))
+ return(data_sum)
+}
+
+data_mean <- function(data, varname, groupnames){
+  require(plyr); require(dplyr)
+  summary_func <- function(x, col){
+    c(mean = mean(x[[col]], na.rm=TRUE))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- rename(data_sum, c("mean" = varname, ".mean", sep=""))
+ return(data_sum)
+}
+
+data_sd <- function(data, varname, groupnames){
+  require(plyr); require(dplyr)
+  summary_func <- function(x, col){
+    c(sd = sd(x[[col]], na.rm=TRUE))
+  }
+  data_sum<-ddply(data, groupnames, .fun=summary_func,
+                  varname)
+  data_sum <- rename(data_sum, c("sd" = varname))
+ return(data_sum)
+}
 ```
 
 _Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
@@ -356,3 +402,255 @@ cnu %>%
          x = "Pourcentage de postes auxquels un·e candidat·e postule (par section et par an)")
 ```
 
+## Comparaison nb de postes, candidats et qualifiés par section
+### En 2019
+Ordonné par nb de postes publiés
+```{r qualifies.candidats.postes.2019.1, fig.width=12, fig.asp=9/16}
+cnu %>%
+  filter(Annee == 2019) %>%
+  drop_na(PostesPublies.MCF) %>%
+  ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, PostesPublies.MCF))))) +
+    geom_col(aes(y = Candidats.MCF), fill = "grey") +
+    geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
+    geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
+              vjust=-0, color="white", 
+              position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = QualificationQualifies.MCF, label=QualificationQualifies.MCF), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    geom_text(aes(y = Candidats.MCF, label=Candidats.MCF), 
+              vjust=-0, color="black", 
+              position = position_dodge(0.9), size=3) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(0, 650), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2019") +
+    xlab("Sections CNU (par nombre de postes décroissant)") + 
+    ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+Ordonné par nb de candidats / nb de postes
+```{r qualifies.candidats.postes.2019.2, fig.width=12, fig.asp=9/16}
+cnu %>%
+  filter(Annee == 2019) %>%
+  drop_na(PostesPublies.MCF) %>%
+  ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, candidats.par.poste.MCF))))) +
+    geom_col(aes(y = Candidats.MCF), fill = "grey") +
+    geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
+    geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
+              vjust=-0, color="white", 
+              position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = QualificationQualifies.MCF, label=QualificationQualifies.MCF), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    geom_text(aes(y = Candidats.MCF, label=Candidats.MCF), 
+              vjust=-0, color="black", 
+              position = position_dodge(0.9), size=3) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(0, 650), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2019") +
+    xlab("Sections CNU (par ratio [nb de candidats / nb de postes] décroissant)") + 
+    ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+Ordonné par section
+```{r qualifies.candidats.postes.2019.3, fig.width=12, fig.asp=9/16}
+cnu %>%
+  filter(Annee == 2019) %>%
+  drop_na(PostesPublies.MCF) %>%
+  ggplot(aes(x = as.factor(SectionCNU.ID))) +
+    geom_col(aes(y = Candidats.MCF), fill = "grey") +
+    geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
+    geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
+              vjust=-0, color="white", 
+              position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = QualificationQualifies.MCF, label=QualificationQualifies.MCF), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    geom_text(aes(y = Candidats.MCF, label=Candidats.MCF), 
+              vjust=-0, color="black", 
+              position = position_dodge(0.9), size=3) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(0, 650), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2019") +
+    xlab("Sections CNU") + 
+    ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+### En 2013
+```{r qualifies.candidats.postes.2013.1, fig.width=12, fig.asp=9/16}
+cnu %>%
+  filter(Annee == 2013) %>%
+  drop_na(PostesPublies.MCF) %>%
+  ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, PostesPublies.MCF))))) +
+    geom_col(aes(y = Candidats.MCF), fill = "grey") +
+    geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
+    geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
+              vjust=-0, color="white", 
+              position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = QualificationQualifies.MCF, label=QualificationQualifies.MCF), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    geom_text(aes(y = Candidats.MCF, label=Candidats.MCF), 
+              vjust=-0, color="black", 
+              position = position_dodge(0.9), size=3) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(0, 700), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2013") +
+    xlab("Sections CNU (par nombre de postes décroissant)") + 
+    ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+Ordonné par nb de candidats / nb de postes
+```{r qualifies.candidats.postes.2013.2, fig.width=12, fig.asp=9/16}
+cnu %>%
+  filter(Annee == 2013) %>%
+  drop_na(PostesPublies.MCF) %>%
+  ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, candidats.par.poste.MCF))))) +
+    geom_col(aes(y = Candidats.MCF), fill = "grey") +
+    geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
+    geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
+              vjust=-0, color="white", 
+              position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = QualificationQualifies.MCF, label=QualificationQualifies.MCF), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    geom_text(aes(y = Candidats.MCF, label=Candidats.MCF), 
+              vjust=-0, color="black", 
+              position = position_dodge(0.9), size=3) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(0, 700), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2013") +
+    xlab("Sections CNU (par ratio [nb de candidats / nb de postes] décroissant)") + 
+    ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+Ordonné par section
+```{r qualifies.candidats.postes.2013.3, fig.width=12, fig.asp=9/16}
+cnu %>%
+  filter(Annee == 2013) %>%
+  drop_na(PostesPublies.MCF) %>%
+  ggplot(aes(x = as.factor(SectionCNU.ID))) +
+    geom_col(aes(y = Candidats.MCF), fill = "grey") +
+    geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
+    geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
+              vjust=-0, color="white", 
+              position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = QualificationQualifies.MCF, label=QualificationQualifies.MCF), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    geom_text(aes(y = Candidats.MCF, label=Candidats.MCF), 
+              vjust=-0, color="black", 
+              position = position_dodge(0.9), size=3) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(0, 700), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2013") +
+    xlab("Sections CNU") + 
+    ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+### Evolution de 2014 à 2019
+```{r evolution.qualifies.candidats.postes.2014to2019.1, fig.width=12, fig.asp=9/16}
+cnu.2014to2019 <- cnu %>% 
+  filter(Annee > 2013) %>%
+  group_by(SectionCNU.ID) %>% 
+  arrange(Annee, SectionCNU.ID) %>% 
+  mutate(debut.postes = first(PostesPublies.MCF),
+         debut.qualifies = first(QualificationQualifies.MCF),
+         debut.candidats = first(Candidats.MCF)) %>%
+  mutate(evolution.postes = 100*(PostesPublies.MCF - debut.postes)/debut.postes,
+         evolution.qualifies = 100*(QualificationQualifies.MCF - debut.qualifies)/debut.qualifies,
+        evolution.candidats= 100*(Candidats.MCF - debut.candidats)/debut.candidats) %>%
+  ungroup()
+
+cnu.2014to2019 %>%
+  filter(Annee == 2019) %>%
+  drop_na(evolution.postes) %>%
+  ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, evolution.postes))))) +
+    geom_col(aes(y = evolution.candidats), fill = "grey") +
+    geom_col(aes(y = evolution.postes, fill = GrandeDisciplineCNU), alpha = 0.5) +
+    # geom_point(aes(y = evolution.qualifies), color = "black") +
+    # geom_text(aes(y = evolution.postes, label=evolution.postes), 
+    #           vjust=-0, color="white", 
+    #           position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = evolution.qualifies, label=evolution.qualifies), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    # geom_text(aes(y = evolution.candidats, label=evolution.candidats), 
+    #           vjust=-0, color="black", 
+    #           position = position_dodge(0.9), size=3) +
+      geom_text(aes(y = evolution.postes, label=PostesPublies.MCF - debut.postes),
+                vjust=-0, color="black",
+                position = position_dodge(0.9), size=3.5) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(-100, 220), expand = c(0,0)) +
+    ggtitle("Campagne MCF de 2019 par rapport à 2014") +
+    xlab("Sections CNU (par évolution du nb de postes décroissante)") + 
+    ylab("Evolutions du nombre de postes (couleurs) et de candidats (gris) en %") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+Ordonné par section
+```{r evolution.qualifies.candidats.postes.2014to2019.2, fig.width=12, fig.asp=9/16}
+cnu.2014to2019 %>%
+  filter(Annee == 2019) %>%
+  drop_na(evolution.postes) %>%
+  ggplot(aes(x = as.factor(SectionCNU.ID))) +
+    geom_col(aes(y = evolution.candidats), fill = "grey") +
+    geom_col(aes(y = evolution.postes, fill = GrandeDisciplineCNU), alpha = 0.5) +
+    # geom_point(aes(y = evolution.qualifies), color = "black") +
+    # geom_text(aes(y = evolution.postes, label=evolution.postes), 
+    #           vjust=-0, color="white", 
+    #           position = position_dodge(0.9), size=3.5) +
+    # geom_text(aes(y = evolution.qualifies, label=evolution.qualifies), 
+    #           vjust=-0.5, color="black", 
+    #           position = position_dodge(0.9), size=2) +
+    # geom_text(aes(y = evolution.candidats, label=evolution.candidats), 
+    #           vjust=-0, color="black", 
+    #           position = position_dodge(0.9), size=3) +
+      geom_text(aes(y = evolution.postes, label=PostesPublies.MCF - debut.postes),
+                vjust=-0, color="black",
+                position = position_dodge(0.9), size=3.5) +
+    # coord_flip() +
+    scale_y_continuous(limits = c(-100, 220), expand = c(0,0)) +
+    facet_wrap(SousGroupeCNU~., scales="free") +
+    ggtitle("Campagne MCF de 2019 par rapport à 2014") +
+    xlab("Sections CNU") + 
+    ylab("Evolutions du nombre de postes (couleurs) et de candidats (gris) en %") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```

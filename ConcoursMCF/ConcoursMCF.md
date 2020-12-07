@@ -171,3 +171,33 @@ plein de candidatures dans certaines disciplines :
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste-1.png)<!-- -->
 
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste.2-1.png)<!-- -->
+
+## Comparaison nb de postes, candidats et qualifiés par section
+
+### En 2019
+
+Ordonné par nb de postes publiés
+![](ConcoursMCF_files/figure-gfm/qualifies.candidats.postes.2019.1-1.png)<!-- -->
+
+Ordonné par nb de candidats / nb de postes
+![](ConcoursMCF_files/figure-gfm/qualifies.candidats.postes.2019.2-1.png)<!-- -->
+
+Ordonné par section
+![](ConcoursMCF_files/figure-gfm/qualifies.candidats.postes.2019.3-1.png)<!-- -->
+
+### En 2013
+
+![](ConcoursMCF_files/figure-gfm/qualifies.candidats.postes.2013.1-1.png)<!-- -->
+
+Ordonné par nb de candidats / nb de postes
+![](ConcoursMCF_files/figure-gfm/qualifies.candidats.postes.2013.2-1.png)<!-- -->
+
+Ordonné par section
+![](ConcoursMCF_files/figure-gfm/qualifies.candidats.postes.2013.3-1.png)<!-- -->
+
+### Evolution de 2014 à 2019
+
+![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2014to2019.1-1.png)<!-- -->
+
+Ordonné par section
+![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2014to2019.2-1.png)<!-- -->
