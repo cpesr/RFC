@@ -7,5 +7,12 @@ Chaque sous-dossier contient un travail en cours. Ce travail est un brouillon, a
 
 Lorsqu'un travail d'exploration aboutit, le brouillon est gardé, et un lien est indiqué vers le dépôt qui poursuit la recherche.
 
-Les visiteurs sont invités à utiliser les issues pour faire leurs commentaires et propositions.
+Les visiteurs sont invités à utiliser les [issues](https://github.com/cpesr/RFC/issues) pour faire leurs commentaires et propositions.
 
+## Travaux en cours
+
+- [ ] [Etude des heures complémentaires et de vacations à partir des bilans sociaux des établissements](Vacations/Vacations.md)
+- [ ] [Etude des taux d'encadrement par discipline et établissement du MESRI](TauxDEncadrement/tauxdencadrement.md)
+- [ ] [Etude des emplois contractuels publiés par le CNRS](EmploisCNRS/EmploisCDDCNRS.md)
+- [ ] [Etude des concours MCF](ConcoursMCF/ConcoursMCF.md)
+- [ ] [Etude des qualifications CNU](ConcoursMCF/QualificationMCF.md)
