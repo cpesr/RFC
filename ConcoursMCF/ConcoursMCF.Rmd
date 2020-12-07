@@ -13,6 +13,7 @@ library("gridExtra")
 require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
+library(robCompositions)
 cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";") %>%
   mutate(SectionCNU.ID = as.factor(SectionCNU.ID),
          candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
@@ -410,8 +411,8 @@ cnu %>%
   drop_na(PostesPublies.MCF) %>%
   ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, PostesPublies.MCF))))) +
     geom_col(aes(y = Candidats.MCF), fill = "grey") +
-    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
               vjust=-0, color="white", 
               position = position_dodge(0.9), size=3.5) +
@@ -439,8 +440,8 @@ cnu %>%
   drop_na(PostesPublies.MCF) %>%
   ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, candidats.par.poste.MCF))))) +
     geom_col(aes(y = Candidats.MCF), fill = "grey") +
-    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
               vjust=-0, color="white", 
               position = position_dodge(0.9), size=3.5) +
@@ -468,8 +469,8 @@ cnu %>%
   drop_na(PostesPublies.MCF) %>%
   ggplot(aes(x = as.factor(SectionCNU.ID))) +
     geom_col(aes(y = Candidats.MCF), fill = "grey") +
-    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
               vjust=-0, color="white", 
               position = position_dodge(0.9), size=3.5) +
@@ -497,8 +498,8 @@ cnu %>%
   drop_na(PostesPublies.MCF) %>%
   ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, PostesPublies.MCF))))) +
     geom_col(aes(y = Candidats.MCF), fill = "grey") +
-    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
               vjust=-0, color="white", 
               position = position_dodge(0.9), size=3.5) +
@@ -526,8 +527,8 @@ cnu %>%
   drop_na(PostesPublies.MCF) %>%
   ggplot(aes(x = as.factor(fct_rev(reorder(SectionCNU.ID, candidats.par.poste.MCF))))) +
     geom_col(aes(y = Candidats.MCF), fill = "grey") +
-    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
               vjust=-0, color="white", 
               position = position_dodge(0.9), size=3.5) +
@@ -555,8 +556,8 @@ cnu %>%
   drop_na(PostesPublies.MCF) %>%
   ggplot(aes(x = as.factor(SectionCNU.ID))) +
     geom_col(aes(y = Candidats.MCF), fill = "grey") +
-    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_col(aes(y = PostesPublies.MCF, fill = GrandeDisciplineCNU)) +
+    geom_point(aes(y = QualificationQualifies.MCF), color = "black") +
     geom_text(aes(y = PostesPublies.MCF, label=PostesPublies.MCF), 
               vjust=-0, color="white", 
               position = position_dodge(0.9), size=3.5) +
