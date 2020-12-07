@@ -11,7 +11,7 @@ issues](https://github.com/cpesr/RFC/issues).*
   - Sources :
       - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement/export/>
       - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/table/?disjunctive.annee&q=%22Universit%C3%A9+de+Nantes%22>
-  - Nombre d’observations : 962
+  - Nombre d’observations : 1016
   - Variables :
 
 <!-- end list -->
@@ -28,6 +28,15 @@ issues](https://github.com/cpesr/RFC/issues).*
   - Période : 2010, 2018
   - Limites :
       - les données ne concernent que le MESRI ;
+      - des établissements ont été recollés après des changements
+        d’identifiants ;
+          - Paris Diderot et Paris Descartes sont considérés comme
+            Université de Paris ;
+          - Les données des étudiants de Paris Saclay ne sont pas
+            recollables ;
+          - Globalement, dès qu’il y a eu des transferts d’inscriptions
+            d’étudiants ou d’enseignants avec une COMUE, les données
+            sont sujettes à caution ;
       - les correspondances de disciplines sont imparfaites :
           - la discipline des enseignants est celle du CNU et non de la
             composante (UFR) d’affectation ;
@@ -705,7 +714,7 @@ LSHS
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank-1.png)<!-- -->
 
-### Focus Guyane
+### Top 5
 
 <table>
 

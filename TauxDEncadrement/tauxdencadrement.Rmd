@@ -25,20 +25,38 @@ _Ce document est un brouillon de différentes visualisations. Il a seulement voc
 
 ## Description des données 
 
+```{r fix.data}
+uais.etu <- list(
+  "0062126D" = "0062205P", #Cote d'Azur
+  "0060931E" = "0062205P", #Nice
+  "0951793H" = "0952259P", #Cergy
+  "0383493R" = "0383546Y", #Grenoble
+  #"0911101C" = "0912408Y", #Paris-Sud / Paris-Saclay
+  #"0912330N" = "0912408Y", #Paris-Saclay / Paris-Saclay
+  "0772502B" = "0772894C", #UPEM / Gustave Eiffel
+  "0593279U" = "0597132G", #UPHF
+  "0751721N" = "0755976N", #Descartes / Paris
+  "0751723R" = "0755976N"  #Diderot / Paris
+)
+```
 
-```{r data, cache=TRUE,  include=FALSE}
+
+```{r data}
 etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
-    UAI = ETABLISSEMENT,
+    UAI = recode(ETABLISSEMENT, !!!uais.etu),
     Rentrée = RENTREE,
-    Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE)
+    Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE) %>%
+  group_by(Rentrée,UAI) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  ungroup()
 
 ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
     UAI = Identifiant.établissement,
-    Etablissement = Établissement,
+    Etablissement = as.factor(Établissement),
     Type.établissement = factor(Type.établissement,
                                 levels = c("Université",
                                            "Grand établissement",
@@ -62,15 +80,18 @@ ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
     Enseignants = effectif
   ) %>%
   group_by(UAI, Etablissement, Type.établissement, Rentrée) %>%
-  summarise(Enseignants = sum(Enseignants, na.rm = TRUE))
+  summarise(Enseignants = sum(Enseignants, na.rm = TRUE)) %>%
+  ungroup()
 
 tde <- merge(ens,etu) %>%
   mutate(Rentrée = as.factor(Rentrée))
+
+etiquettes <- read.csv("etiquettes.csv")
 ```
 
 
 
-```{r data.disciplinaire, cache=TRUE,  include=FALSE}
+```{r data.disciplinaire,  include=FALSE}
 etu.disc <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
                   header=TRUE, sep=';', quote='"') %>%
   select(ETABLISSEMENT, RENTREE, starts_with("Grande.discipline")) %>%
@@ -78,7 +99,7 @@ etu.disc <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscri
                names_to = "Grande.discipline",
                values_to = "Etudiants") %>%
   transmute(
-    UAI = ETABLISSEMENT,
+    UAI = recode(ETABLISSEMENT, !!!uais.etu),
     Rentrée = RENTREE,
     Grande.discipline = factor(Grande.discipline, 
                                levels=c("Grande.discipline...Droit..sciences.économiques..AES",
@@ -102,7 +123,7 @@ ens.disc <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
     UAI = Identifiant.établissement,
-    Etablissement = Établissement,
+    Etablissement = as.factor(Établissement),
     Type.établissement = factor(Type.établissement,
                                 levels = c("Université",
                                            "Grand établissement",
@@ -166,6 +187,10 @@ colnames(tde)
 - Période : `r range(as.character(tde$Rentrée))`
 - Limites :
   - les données ne concernent que le MESRI ;
+  - des établissements ont été recollés après des changements d'identifiants ;
+    - Paris Diderot et Paris Descartes sont considérés comme Université de Paris ;
+    - Les données des étudiants de Paris Saclay ne sont pas recollables ;
+    - Globalement, dès qu'il y a eu des transferts d'inscriptions d'étudiants ou d'enseignants avec une COMUE, les données sont sujettes à caution ;
   - les correspondances de disciplines sont imparfaites : 
     - la discipline des enseignants est celle du CNU et non de la composante (UFR) d'affectation ;
     - la discipline des étudiants est celle de la composante (UFR) ;
@@ -190,6 +215,32 @@ merge(
 ```
 
 _Attention : dans la suite, tous les graphiques avec les disciplines comprennent donc les doubles inscriptions. Les tendances sont bonnes, mais il peut y avoir un décalage dans les valeurs, et des effets locaux._
+
+
+```{r detection, include=FALSE}
+etab.ens <-  ens %>%
+    transmute(
+      UAI = UAI,
+      Etablissement = Etablissement,
+      Type = Type.établissement,
+      jeu = "ens") %>%
+    unique()
+
+etab.etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  transmute(
+    UAI = ETABLISSEMENT,
+    Etablissement = Établissement,
+    Type = Type.d.établissement,
+    jeu = "etu") %>%
+  unique()
+
+rbind(
+  etab.etu %>% filter(!UAI %in% etab.ens$UAI),
+  etab.ens %>% filter(!UAI %in% etab.etu$UAI)
+  ) %>% arrange(Type, Etablissement) %>% kable()
+```
+
 
 ## Taux d'encadrement par type d'établissement
 
@@ -501,8 +552,6 @@ tde.disc %>%
 
 
 ```{r univ.etiquettes}
-etiquettes <- read.csv("etiquettes.csv")
-
 tde.univ.etiquettes <- merge(tde.univ,etiquettes) %>%
   group_by(Rentrée, étiquettes) %>%
   summarise(
@@ -537,8 +586,6 @@ tde.univ.etiquettes %>%
 
 
 ```{r univ.etab.etiquettes}
-etiquettes <- read.csv("etiquettes.csv")
-
 tde.univ.etab.etiquettes <- merge(tde.univ,etiquettes) %>%
   group_by(Rentrée, Etablissement, étiquettes) %>%
   summarise(
@@ -597,30 +644,9 @@ tde.univ.stat <- tde.univ %>%
   ) %>%
   mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) -1) %>% 
   filter(Rentrée == 2018)
-```
 
-_Note : dans la suite, la barre verticale indique la valeur nationale (donc pas la moyenne des établissements)
 
-```{r univ.etab.etiquettes.rank, fig.height=10}
-merge(tde.univ,etiquettes) %>%
-  group_by(Rentrée, Etablissement, étiquettes) %>%
-  summarise(
-    Etudiants = sum(Etudiants),
-    Enseignants = sum(Enseignants),
-    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
-  ) %>%
-  filter(Rentrée==2018) %>%
-  ggplot(aes(x=reorder(Etablissement,Taux.d.encadrement), y=Taux.d.encadrement, fill=étiquettes)) + 
-    geom_col() +
-    geom_hline(yintercept = tde.univ.stat$Taux.d.encadrement, color = "grey") +
-    coord_flip() +
-    xlab("") +
-    #geom_text_repel(aes(label=Etablissement)) +
-    theme_cpesr()
-```
-
-```{r univ.etab.evol.etiquettes.rank, fig.height=10}
-merge(tde.univ,etiquettes) %>%
+rank.2018 <- merge(tde.univ,etiquettes) %>%
   group_by(Rentrée, Etablissement, étiquettes) %>%
   summarise(
     Etudiants = sum(Etudiants),
@@ -630,7 +656,26 @@ merge(tde.univ,etiquettes) %>%
   filter(as.character(Rentrée) > "2009") %>%
   group_by(Etablissement) %>%
   mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) -1) %>% 
-  filter(Rentrée == 2018) %>%
+  filter(Rentrée == 2018) 
+```
+
+_Note : dans la suite, la barre verticale indique la valeur nationale (donc pas la moyenne des établissements)
+
+```{r univ.etab.etiquettes.rank, fig.height=10}
+rank.2018 %>%
+  ggplot(aes(x=reorder(Etablissement,Taux.d.encadrement), y=Taux.d.encadrement, fill=étiquettes)) + 
+    geom_col() +
+    geom_hline(yintercept = tde.univ.stat$Taux.d.encadrement, color = "grey") +
+    coord_flip() +
+    xlab("") +
+    #geom_text_repel(aes(label=Etablissement)) +
+    theme_cpesr()
+```
+
+
+
+```{r univ.etab.evol.etiquettes.rank, fig.height=10}
+rank.2018 %>%
   ggplot(aes(x=reorder(Etablissement,Evolution), y=Evolution, fill=étiquettes)) + 
     geom_col() +
     geom_hline(yintercept = tde.univ.stat$Evolution, color = "grey") +
@@ -640,6 +685,10 @@ merge(tde.univ,etiquettes) %>%
     #geom_text_repel(aes(label=Etablissement)) +
     theme_cpesr()
 ```
+
+### Top 5 
+```{r univ.etab.evol.etiquettes.rank.top5}
+
 
 ### Focus Guyane
 
