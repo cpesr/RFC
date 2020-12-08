@@ -229,7 +229,7 @@ ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=Annee, fill=GrandeDiscipl
     theme(legend.position="none") +
     facet_wrap(.~GrandeDisciplineCNU) +
     coord_cartesian(ylim=c(0,2)) +
-    labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification") +
+    labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif (vs 2005 par section) de dossiers de qualification", fill = "Grandes disciplines CNU") +
     labs(caption = "Graphique : Florent Figon (@ffigon) CC BY-SA – Sources : DGRH MESRI") +
   theme_hc()
 ```
@@ -243,6 +243,6 @@ ggplot(cnu.parSection, aes(x=Annee, y=evolution, group=Annee, fill=GrandeDiscipl
     theme(legend.position="none") +
     facet_wrap(.~GrandeDisciplineCNU) +
     coord_cartesian(ylim=c(0,1.5)) +
-    labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif de dossiers de qualification par rapport à l'année 2005 de chaque section") +
+    labs(title="Qualifications MCF, de 2005 à 2019", x ="Année", y = "Nombre relatif de dossiers de qualification par rapport à l'année 2005 de chaque section", fill = "Grandes disciplines CNU") +
     labs(caption = "Analyse : Florent Figon, Julien Gossa, CPESR, Camille Noûs – Sources : DGRH MESRI – Licence : CC BY-SA")
 ```
