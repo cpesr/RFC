@@ -813,21 +813,90 @@ read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etabl
     theme_cpesr_cap()
 ```
 
-```{r bacs.2015}
+```{r 201415.bac}
 read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
                   header=TRUE, sep=';', quote='"') %>%
   filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
   select(RENTREE, starts_with("Bac")) %>% 
-  pivot_longer(-RENTREE, names_to="Bac") %>%
-  mutate(Bac = substr(Bac,7,100)) %>%
-  group_by(RENTREE,Bac) %>%
-  summarise(Etudiants = sum(value)) %>%
-  group_by(Bac) %>%
+  pivot_longer(-RENTREE) %>%
+  mutate(name = substr(name,7,100)) %>%
+  group_by(RENTREE,name) %>%
+  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
+  group_by(name) %>%
   mutate(Evolution = Etudiants - first(Etudiants)) %>%
   filter(RENTREE == 2015) %>%
-  ggplot(aes(x=Bac, y=Evolution, fill=Bac)) +
+  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
     geom_col() +
-    ggtitle("Augmentation des effectifs étudiants par type de bac entre 2014 et 2015") +
-    theme_cpesr_cap()
+    coord_flip() +
+    xlab("") +
+    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
+    theme_cpesr_cap() + guides(fill=FALSE)
 ```
 
+
+Par rapport au diplôme préparé : c'est essentiellement en L.
+
+```{r 201415.Diplôme.préparé}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
+  select(RENTREE, starts_with("Diplôme.préparé")) %>% 
+  pivot_longer(-RENTREE) %>%
+  mutate(name = substr(name,19,100)) %>%
+  group_by(RENTREE,name) %>%
+  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
+  group_by(name) %>%
+  mutate(Evolution = Etudiants - first(Etudiants)) %>%
+  filter(RENTREE == 2015) %>%
+  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
+    geom_col() +
+    coord_flip() +
+    xlab("") +
+    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
+    theme_cpesr_cap() + guides(fill=FALSE)
+```
+
+Par rapport à la discipline :
+
+
+```{r 201415.Discipline}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
+  select(RENTREE, starts_with("Discipline")) %>% 
+  pivot_longer(-RENTREE) %>%
+  mutate(name = substr(name,14,100)) %>%
+  group_by(RENTREE,name) %>%
+  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
+  group_by(name) %>%
+  mutate(Evolution = Etudiants - first(Etudiants)) %>%
+  filter(RENTREE == 2015) %>%
+  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
+    geom_col() +
+    coord_flip() +
+    xlab("") +
+    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
+    theme_cpesr_cap() + guides(fill=FALSE)
+```
+
+Par rapport au secteur disciplinaire :
+
+```{r 201415.Secteur.disciplinaire, fig.height=10}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
+  select(RENTREE, starts_with("Secteur.disciplinaire")) %>% 
+  pivot_longer(-RENTREE) %>%
+  mutate(name = substr(name,25,100)) %>%
+  group_by(RENTREE,name) %>%
+  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
+  group_by(name) %>%
+  mutate(Evolution = Etudiants - first(Etudiants)) %>%
+  filter(RENTREE == 2015) %>%
+  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
+    geom_col() +
+    coord_flip() +
+    xlab("") +
+    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
+    theme_cpesr_cap() + guides(fill=FALSE)
+```

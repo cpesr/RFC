@@ -2113,4 +2113,16 @@ bacheliers](https://www.enseignementsup-recherche.gouv.fr/cid151347/projections-
 
 ![](tauxdencadrement_files/figure-gfm/bacs-1.png)<!-- -->
 
-![](tauxdencadrement_files/figure-gfm/bacs.2015-1.png)<!-- -->
+![](tauxdencadrement_files/figure-gfm/201415.bac-1.png)<!-- -->
+
+Par rapport au diplôme préparé : c’est essentiellement en L.
+
+![](tauxdencadrement_files/figure-gfm/201415.Diplôme.préparé-1.png)<!-- -->
+
+Par rapport à la discipline :
+
+![](tauxdencadrement_files/figure-gfm/201415.Discipline-1.png)<!-- -->
+
+Par rapport au secteur disciplinaire :
+
+![](tauxdencadrement_files/figure-gfm/201415.Secteur.disciplinaire-1.png)<!-- -->
