@@ -825,11 +825,14 @@ delta.angle <- function(angle, anglecut=0) {
     group_by(RENTREE,name) %>%
     summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
     group_by(name) %>%
-    mutate(Evolution = Etudiants - lag(Etudiants)) %>%
+    mutate(
+      Evolution = Etudiants - lag(Etudiants),
+      Evolution.tot = Etudiants - first(Etudiants),
+      ) %>%
     mutate(RENTREE = factor(RENTREE, levels=c("2015","2014","2013"))) %>%
-    #filter(RENTREE == 2015) %>%
-    ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=RENTREE)) +
-      geom_col() +
+    filter(RENTREE != 2013) %>%
+    ggplot(aes(x=reorder(name,Evolution.tot), y=Evolution, fill=RENTREE)) +
+      geom_col(position="dodge") +
       coord_flip() +
       xlab("") +
       ggtitle("Augmentation des effectifs étudiants des universités\nentre 2013 et 2015") +
@@ -863,3 +866,4 @@ delta.angle("Secteur.disciplinaire",25)
 __Conclusion__
 
 La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec un effet de pic dû notamment à une baisse en Master d'enseignement en 2014, conséquente de la formation des maîtres, 'abord par l'annulation de la "masterisation" en 2012, puis la transformation des IUFM en ESPE en 2013.
+
