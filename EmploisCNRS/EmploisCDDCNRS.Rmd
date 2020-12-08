@@ -13,8 +13,14 @@ library("gridExtra")
 require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
+library(scales)
 
-CDD.cnrs = read.table("DB_CDD_CNRS.csv", head=T, sep=";")
+CDD.cnrs = read.table("DB_CDD_CNRS.csv", head=T, sep=";") %>%
+  mutate(datePosted = as.Date(
+    str_remove(
+        str_replace_all(datePosted, c("janvier" = "01", "février" = "02", "mars" = "03", "avril" = "04", "mai" = "05", "juin" = "06", "juillet" = "07", "août" = "08", "septembre" = "09", "octobre" = "10", "novembre" = "11", "décembre" = "12")), 
+        "(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)"), 
+    format = "%d %m %y"))
 ```
 
 _Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
@@ -28,6 +34,22 @@ _Ce document est un brouillon de différentes visualisations. Il a seulement voc
 colnames(CDD.cnrs)
 ```
 
+## Evolution du nombre d'offres de CDD
+### Evolution quotidienne
+```{r evolution.quotidienne.nb.offres.1, fig.width=12, fig.asp=9/16}
+CDD.cnrs %>% 
+  group_by(datePosted) %>% 
+  summarise(offres.quotidiennes = sum(reference!="NA")) %>% 
+  ggplot(aes(x=datePosted, y=offres.quotidiennes)) + 
+  geom_line() +
+  scale_x_date(labels = date_format("%d/%m/%y"), breaks = "days") +
+  theme(axis.text.x = element_text(angle=45)) +
+  theme_cpesr_cap(authors=c("Florent Figon"), 
+                    licence="CC BY-SA", 
+                    url = "https://github.com/cpesr/RFC", 
+                    source="Portail Emploi CNRS") + theme(legend.position = "right")
+```
+
 ## Durée des CDD
 
 ### Durée en fonction du niveau d'étude requis
@@ -38,6 +60,8 @@ CDD.cnrs %>%
     geom_violin() + 
     geom_jitter(aes(color=employmentType), position = position_jitter(0.1)) +
     stat_summary(fun=mean, geom="point", shape=1,
+                 size=3, color="black") +
+    stat_summary(fun=median, geom="point", shape=2,
                  size=3, color="black") +
     # stat_summary(fun.data=mean_sdl, mult=1, 
     #              geom="pointrange", color="red") +
