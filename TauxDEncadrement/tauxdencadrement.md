@@ -707,8 +707,8 @@ LSHS
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.map-1.png)<!-- -->
 
-\_Note : dans la suite, la barre verticale indique la valeur nationale
-(donc pas la moyenne des établissements)
+*Note : dans la suite, la barre verticale indique la valeur nationale
+(donc pas la moyenne des établissements)*
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.etiquettes.rank-1.png)<!-- -->
 
@@ -1768,7 +1768,7 @@ un changement de périmètre des inscriptions étudiants, probablement
 après des accord avec d’autres établissements pour délivrer des
 diplômes UHA sans assurer les enseignements.
 
-Ces chiffres ne reflêtent donc pas le taux d’encadrement réel de
+Ces chiffres ne reflètent donc pas le taux d’encadrement réel de
 l’université.
 
 ### Classement sans : Guyane, Artois et UHA

@@ -659,7 +659,7 @@ rank.2018 <- merge(tde.univ,etiquettes) %>%
   filter(Rentrée == 2018) 
 ```
 
-_Note : dans la suite, la barre verticale indique la valeur nationale (donc pas la moyenne des établissements)
+_Note : dans la suite, la barre verticale indique la valeur nationale (donc pas la moyenne des établissements)_
 
 ```{r univ.etab.etiquettes.rank, fig.height=10}
 rank.2018 %>%
@@ -713,7 +713,7 @@ tde %>% filter(Etablissement == "Université de Haute-Alsace (UHA)") %>% kable()
 L'augmentation de 25% des effectifs étudiants entre 2017 et 2018 indique un changement de 
 périmètre des inscriptions étudiants, probablement après des accord avec d'autres établissements pour délivrer des diplômes UHA sans assurer les enseignements. 
 
-Ces chiffres ne reflêtent donc pas le taux d'encadrement réel de l'université.
+Ces chiffres ne reflètent donc pas le taux d'encadrement réel de l'université.
 
 
 ### Classement sans : Guyane, Artois et UHA
