@@ -767,16 +767,29 @@ merge(tde.univ,etiquettes) %>%
 
 ### Hausse des inscriptions en université entre 2014 et 2015
 
-_Question_ : Que se passe-t-il en 2015 ?
+_Question_ : Que se passe-t-il en 2015 ? 
 
-Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
+Le [CP du MESRI](https://cache.media.enseignementsup-recherche.gouv.fr/file/Rentree_universitaire/51/5/DP_optimise_467515.pdf) confirme l'augmentation, ce qui permet de confirmer la hausse :
+_« Avec ses 65 000 étudiants supplémentaires à l’université, cette année,
+la rentrée revêt une importance toute particulière. Elle est la manifestation
+tangible du succès de nos universités et de nos écoles, et plus généralement,
+la preuve que le double mouvement de démocratisation de notre enseignement
+supérieur et d’élévation des qualifications et des diplômes de la jeunesse,
+est désormais universellement engagé. Cette évolution implique
+des efforts renforcés en matière de qualité des enseignements, de soutien
+à la vie étudiante dans tous ses aspects sociaux, et d’amélioration
+des conditions matérielles et humaines d’accueil des étudiants. »_
+
+Effectifs étudiants entre 2013 et 2015 :
 ```{r univ.evol.controle}
 tde.univ %>%
-  filter(Rentrée %in% c(2014,2015)) %>%
+  filter(Rentrée %in% c(2013,2014,2015)) %>%
   select(Etablissement,Rentrée, Etudiants) %>%
   pivot_wider(names_from=Rentrée, values_from=Etudiants,names_prefix="Rentrée") %>%
-  mutate(delta = Rentrée2015-Rentrée2014) %>%
-  arrange(desc(delta)) %>% head(10) %>% kable()
+  mutate(
+    delta1314 = Rentrée2014-Rentrée2013,
+    delta1415 = Rentrée2015-Rentrée2014) %>% 
+  arrange(desc(delta1314+delta1415)) %>% kable()
 ```
 
 Ce n'est pas l'effet des doubles inscriptions, qui explosent également :
@@ -800,103 +813,53 @@ merge(
 
 Par rapport à [la hausse du nombre de bacheliers](https://www.enseignementsup-recherche.gouv.fr/cid151347/projections-des-effectifs-dans-l-enseignement-superieur-pour-les-rentrees-de-2019-a-2028.html) :
 
-```{r bacs}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
-                  header=TRUE, sep=';', quote='"') %>%
-  filter(Type.d.établissement == "Université") %>%
-  select(RENTREE, starts_with("Bac")) %>% 
-  pivot_longer(-RENTREE, names_to="Bac") %>%
-  group_by(RENTREE,Bac) %>%
-  summarise(Etudiants = sum(value)) %>%
-  ggplot(aes(x=RENTREE, y=Etudiants, color=Bac, group=Bac)) +
-    geom_line() +
-    theme_cpesr_cap()
-```
 
 ```{r 201415.bac}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
-                  header=TRUE, sep=';', quote='"') %>%
-  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
-  select(RENTREE, starts_with("Bac")) %>% 
-  pivot_longer(-RENTREE) %>%
-  mutate(name = substr(name,7,100)) %>%
-  group_by(RENTREE,name) %>%
-  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
-  group_by(name) %>%
-  mutate(Evolution = Etudiants - first(Etudiants)) %>%
-  filter(RENTREE == 2015) %>%
-  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
-    geom_col() +
-    coord_flip() +
-    xlab("") +
-    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
-    theme_cpesr_cap() + guides(fill=FALSE)
+delta.angle <- function(angle, anglecut=0) {
+  read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                    header=TRUE, sep=';', quote='"') %>%
+    filter(Type.d.établissement == "Université", RENTREE %in% c(2013,2014,2015)) %>%
+    select(RENTREE, starts_with(angle)) %>% 
+    pivot_longer(-RENTREE) %>%
+    mutate(name = substr(name,anglecut,100)) %>%
+    group_by(RENTREE,name) %>%
+    summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
+    group_by(name) %>%
+    mutate(Evolution = Etudiants - lag(Etudiants)) %>%
+    mutate(RENTREE = factor(RENTREE, levels=c("2015","2014","2013"))) %>%
+    #filter(RENTREE == 2015) %>%
+    ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=RENTREE)) +
+      geom_col() +
+      coord_flip() +
+      xlab("") +
+      ggtitle("Augmentation des effectifs étudiants des universités\nentre 2013 et 2015") +
+      theme_cpesr_cap() #+ guides(fill=FALSE)
+}
+```
+
+```{r angle.bac}
+delta.angle("Bac",7)
 ```
 
 
 Par rapport au diplôme préparé : c'est essentiellement en L.
 
 ```{r 201415.Diplôme.préparé}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
-                  header=TRUE, sep=';', quote='"') %>%
-  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
-  select(RENTREE, starts_with("Diplôme.préparé")) %>% 
-  pivot_longer(-RENTREE) %>%
-  mutate(name = substr(name,19,100)) %>%
-  group_by(RENTREE,name) %>%
-  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
-  group_by(name) %>%
-  mutate(Evolution = Etudiants - first(Etudiants)) %>%
-  filter(RENTREE == 2015) %>%
-  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
-    geom_col() +
-    coord_flip() +
-    xlab("") +
-    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
-    theme_cpesr_cap() + guides(fill=FALSE)
+delta.angle("Diplôme.préparé",19)
 ```
 
 Par rapport à la discipline :
 
-
 ```{r 201415.Discipline}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
-                  header=TRUE, sep=';', quote='"') %>%
-  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
-  select(RENTREE, starts_with("Discipline")) %>% 
-  pivot_longer(-RENTREE) %>%
-  mutate(name = substr(name,14,100)) %>%
-  group_by(RENTREE,name) %>%
-  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
-  group_by(name) %>%
-  mutate(Evolution = Etudiants - first(Etudiants)) %>%
-  filter(RENTREE == 2015) %>%
-  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
-    geom_col() +
-    coord_flip() +
-    xlab("") +
-    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
-    theme_cpesr_cap() + guides(fill=FALSE)
+delta.angle("Discipline",14)
 ```
 
 Par rapport au secteur disciplinaire :
 
 ```{r 201415.Secteur.disciplinaire, fig.height=10}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
-                  header=TRUE, sep=';', quote='"') %>%
-  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
-  select(RENTREE, starts_with("Secteur.disciplinaire")) %>% 
-  pivot_longer(-RENTREE) %>%
-  mutate(name = substr(name,25,100)) %>%
-  group_by(RENTREE,name) %>%
-  summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
-  group_by(name) %>%
-  mutate(Evolution = Etudiants - first(Etudiants)) %>%
-  filter(RENTREE == 2015) %>%
-  ggplot(aes(x=reorder(name,Evolution), y=Evolution, fill=name)) +
-    geom_col() +
-    coord_flip() +
-    xlab("") +
-    ggtitle("Augmentation des effectifs étudiants des universités\nentre 2014 et 2015") +
-    theme_cpesr_cap() + guides(fill=FALSE)
+delta.angle("Secteur.disciplinaire",25)
 ```
+
+__Conclusion__
+
+La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec un effet de pic dû notamment à une baisse en Master d'enseignement en 2014, conséquente de la formation des maîtres, 'abord par l'annulation de la "masterisation" en 2012, puis la transformation des IUFM en ESPE en 2013.

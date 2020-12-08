@@ -1781,7 +1781,21 @@ l’université.
 
 *Question* : Que se passe-t-il en 2015 ?
 
-Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
+Le [CP du
+MESRI](https://cache.media.enseignementsup-recherche.gouv.fr/file/Rentree_universitaire/51/5/DP_optimise_467515.pdf)
+confirme l’augmentation, ce qui permet de confirmer la hausse : *« Avec
+ses 65 000 étudiants supplémentaires à l’université, cette année, la
+rentrée revêt une importance toute particulière. Elle est la
+manifestation tangible du succès de nos universités et de nos écoles, et
+plus généralement, la preuve que le double mouvement de démocratisation
+de notre enseignement supérieur et d’élévation des qualifications et des
+diplômes de la jeunesse, est désormais universellement engagé. Cette
+évolution implique des efforts renforcés en matière de qualité des
+enseignements, de soutien à la vie étudiante dans tous ses aspects
+sociaux, et d’amélioration des conditions matérielles et humaines
+d’accueil des étudiants. »*
+
+Effectifs étudiants entre 2013 et 2015 :
 
 <table>
 
@@ -1792,6 +1806,12 @@ Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
 <th style="text-align:left;">
 
 Etablissement
+
+</th>
+
+<th style="text-align:right;">
+
+Rentrée2013
 
 </th>
 
@@ -1809,7 +1829,13 @@ Rentrée2015
 
 <th style="text-align:right;">
 
-delta
+delta1314
+
+</th>
+
+<th style="text-align:right;">
+
+delta1415
 
 </th>
 
@@ -1823,35 +1849,13 @@ delta
 
 <td style="text-align:left;">
 
-Université de Lille
-
-</td>
-
-<td style="text-align:right;">
-
-64329
-
-</td>
-
-<td style="text-align:right;">
-
-67344
-
-</td>
-
-<td style="text-align:right;">
-
-3015
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
 Université de Lorraine
+
+</td>
+
+<td style="text-align:right;">
+
+51272
 
 </td>
 
@@ -1864,6 +1868,12 @@ Université de Lorraine
 <td style="text-align:right;">
 
 55207
+
+</td>
+
+<td style="text-align:right;">
+
+1462
 
 </td>
 
@@ -1885,6 +1895,12 @@ Université de Paris
 
 <td style="text-align:right;">
 
+54847
+
+</td>
+
+<td style="text-align:right;">
+
 56225
 
 </td>
@@ -1892,6 +1908,12 @@ Université de Paris
 <td style="text-align:right;">
 
 58193
+
+</td>
+
+<td style="text-align:right;">
+
+1378
 
 </td>
 
@@ -1913,6 +1935,12 @@ Université de Caen Normandie (UNICAEN)
 
 <td style="text-align:right;">
 
+23675
+
+</td>
+
+<td style="text-align:right;">
+
 24384
 
 </td>
@@ -1920,6 +1948,12 @@ Université de Caen Normandie (UNICAEN)
 <td style="text-align:right;">
 
 26105
+
+</td>
+
+<td style="text-align:right;">
+
+709
 
 </td>
 
@@ -1935,7 +1969,53 @@ Université de Caen Normandie (UNICAEN)
 
 <td style="text-align:left;">
 
+Université de Lille
+
+</td>
+
+<td style="text-align:right;">
+
+65296
+
+</td>
+
+<td style="text-align:right;">
+
+64329
+
+</td>
+
+<td style="text-align:right;">
+
+67344
+
+</td>
+
+<td style="text-align:right;">
+
+\-967
+
+</td>
+
+<td style="text-align:right;">
+
+3015
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Université Côte d’Azur (UCA)
+
+</td>
+
+<td style="text-align:right;">
+
+26098
 
 </td>
 
@@ -1953,6 +2033,12 @@ Université Côte d’Azur (UCA)
 
 <td style="text-align:right;">
 
+261
+
+</td>
+
+<td style="text-align:right;">
+
 1642
 
 </td>
@@ -1963,25 +2049,37 @@ Université Côte d’Azur (UCA)
 
 <td style="text-align:left;">
 
-Université de Picardie Jules-Verne (UPJV)
+Aix-Marseille Université (AMU)
 
 </td>
 
 <td style="text-align:right;">
 
-23020
+58935
 
 </td>
 
 <td style="text-align:right;">
 
-24596
+59922
 
 </td>
 
 <td style="text-align:right;">
 
-1576
+60786
+
+</td>
+
+<td style="text-align:right;">
+
+987
+
+</td>
+
+<td style="text-align:right;">
+
+864
 
 </td>
 
@@ -1992,6 +2090,12 @@ Université de Picardie Jules-Verne (UPJV)
 <td style="text-align:left;">
 
 Université de Reims Champagne-Ardenne (URCA)
+
+</td>
+
+<td style="text-align:right;">
+
+21994
 
 </td>
 
@@ -2009,6 +2113,12 @@ Université de Reims Champagne-Ardenne (URCA)
 
 <td style="text-align:right;">
 
+540
+
+</td>
+
+<td style="text-align:right;">
+
 1164
 
 </td>
@@ -2019,25 +2129,237 @@ Université de Reims Champagne-Ardenne (URCA)
 
 <td style="text-align:left;">
 
-Université Jean Moulin - Lyon 3
+Université de Picardie Jules-Verne (UPJV)
 
 </td>
 
 <td style="text-align:right;">
 
-25334
+22892
 
 </td>
 
 <td style="text-align:right;">
 
-26452
+23020
 
 </td>
 
 <td style="text-align:right;">
 
-1118
+24596
+
+</td>
+
+<td style="text-align:right;">
+
+128
+
+</td>
+
+<td style="text-align:right;">
+
+1576
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Grenoble Alpes (UGA)
+
+</td>
+
+<td style="text-align:right;">
+
+38916
+
+</td>
+
+<td style="text-align:right;">
+
+39668
+
+</td>
+
+<td style="text-align:right;">
+
+40583
+
+</td>
+
+<td style="text-align:right;">
+
+752
+
+</td>
+
+<td style="text-align:right;">
+
+915
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Bretagne Occidentale (UBO)
+
+</td>
+
+<td style="text-align:right;">
+
+17370
+
+</td>
+
+<td style="text-align:right;">
+
+17788
+
+</td>
+
+<td style="text-align:right;">
+
+18861
+
+</td>
+
+<td style="text-align:right;">
+
+418
+
+</td>
+
+<td style="text-align:right;">
+
+1073
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Strasbourg
+
+</td>
+
+<td style="text-align:right;">
+
+43955
+
+</td>
+
+<td style="text-align:right;">
+
+44476
+
+</td>
+
+<td style="text-align:right;">
+
+45407
+
+</td>
+
+<td style="text-align:right;">
+
+521
+
+</td>
+
+<td style="text-align:right;">
+
+931
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Rennes 2
+
+</td>
+
+<td style="text-align:right;">
+
+20632
+
+</td>
+
+<td style="text-align:right;">
+
+21225
+
+</td>
+
+<td style="text-align:right;">
+
+22021
+
+</td>
+
+<td style="text-align:right;">
+
+593
+
+</td>
+
+<td style="text-align:right;">
+
+796
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Jean Monnet (UJM)
+
+</td>
+
+<td style="text-align:right;">
+
+16514
+
+</td>
+
+<td style="text-align:right;">
+
+17097
+
+</td>
+
+<td style="text-align:right;">
+
+17799
+
+</td>
+
+<td style="text-align:right;">
+
+583
+
+</td>
+
+<td style="text-align:right;">
+
+702
 
 </td>
 
@@ -2048,6 +2370,12 @@ Université Jean Moulin - Lyon 3
 <td style="text-align:left;">
 
 Université de Poitiers
+
+</td>
+
+<td style="text-align:right;">
+
+22803
 
 </td>
 
@@ -2065,6 +2393,12 @@ Université de Poitiers
 
 <td style="text-align:right;">
 
+168
+
+</td>
+
+<td style="text-align:right;">
+
 1105
 
 </td>
@@ -2075,7 +2409,133 @@ Université de Poitiers
 
 <td style="text-align:left;">
 
+Université Claude Bernard - Lyon 1
+
+</td>
+
+<td style="text-align:right;">
+
+33584
+
+</td>
+
+<td style="text-align:right;">
+
+34049
+
+</td>
+
+<td style="text-align:right;">
+
+34710
+
+</td>
+
+<td style="text-align:right;">
+
+465
+
+</td>
+
+<td style="text-align:right;">
+
+661
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Jean Moulin - Lyon 3
+
+</td>
+
+<td style="text-align:right;">
+
+25340
+
+</td>
+
+<td style="text-align:right;">
+
+25334
+
+</td>
+
+<td style="text-align:right;">
+
+26452
+
+</td>
+
+<td style="text-align:right;">
+
+\-6
+
+</td>
+
+<td style="text-align:right;">
+
+1118
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Toulouse III - Paul Sabatier
+
+</td>
+
+<td style="text-align:right;">
+
+28764
+
+</td>
+
+<td style="text-align:right;">
+
+29483
+
+</td>
+
+<td style="text-align:right;">
+
+29806
+
+</td>
+
+<td style="text-align:right;">
+
+719
+
+</td>
+
+<td style="text-align:right;">
+
+323
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Université de Rouen Normandie
+
+</td>
+
+<td style="text-align:right;">
+
+25315
 
 </td>
 
@@ -2093,7 +2553,1933 @@ Université de Rouen Normandie
 
 <td style="text-align:right;">
 
+\-123
+
+</td>
+
+<td style="text-align:right;">
+
 1096
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Toulouse Capitole (UT1)
+
+</td>
+
+<td style="text-align:right;">
+
+20437
+
+</td>
+
+<td style="text-align:right;">
+
+21074
+
+</td>
+
+<td style="text-align:right;">
+
+21370
+
+</td>
+
+<td style="text-align:right;">
+
+637
+
+</td>
+
+<td style="text-align:right;">
+
+296
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université d’Évry-Val-d’Essonne (UEVE)
+
+</td>
+
+<td style="text-align:right;">
+
+8780
+
+</td>
+
+<td style="text-align:right;">
+
+9044
+
+</td>
+
+<td style="text-align:right;">
+
+9691
+
+</td>
+
+<td style="text-align:right;">
+
+264
+
+</td>
+
+<td style="text-align:right;">
+
+647
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Bordeaux
+
+</td>
+
+<td style="text-align:right;">
+
+46298
+
+</td>
+
+<td style="text-align:right;">
+
+46044
+
+</td>
+
+<td style="text-align:right;">
+
+47116
+
+</td>
+
+<td style="text-align:right;">
+
+\-254
+
+</td>
+
+<td style="text-align:right;">
+
+1072
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université d’Orléans
+
+</td>
+
+<td style="text-align:right;">
+
+14142
+
+</td>
+
+<td style="text-align:right;">
+
+14236
+
+</td>
+
+<td style="text-align:right;">
+
+14933
+
+</td>
+
+<td style="text-align:right;">
+
+94
+
+</td>
+
+<td style="text-align:right;">
+
+697
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Nantes
+
+</td>
+
+<td style="text-align:right;">
+
+34024
+
+</td>
+
+<td style="text-align:right;">
+
+34719
+
+</td>
+
+<td style="text-align:right;">
+
+34810
+
+</td>
+
+<td style="text-align:right;">
+
+695
+
+</td>
+
+<td style="text-align:right;">
+
+91
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Nîmes (UNÎMES)
+
+</td>
+
+<td style="text-align:right;">
+
+3541
+
+</td>
+
+<td style="text-align:right;">
+
+3780
+
+</td>
+
+<td style="text-align:right;">
+
+4293
+
+</td>
+
+<td style="text-align:right;">
+
+239
+
+</td>
+
+<td style="text-align:right;">
+
+513
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Lumière - Lyon 2
+
+</td>
+
+<td style="text-align:right;">
+
+28270
+
+</td>
+
+<td style="text-align:right;">
+
+28851
+
+</td>
+
+<td style="text-align:right;">
+
+28898
+
+</td>
+
+<td style="text-align:right;">
+
+581
+
+</td>
+
+<td style="text-align:right;">
+
+47
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Gustave Eiffel
+
+</td>
+
+<td style="text-align:right;">
+
+10397
+
+</td>
+
+<td style="text-align:right;">
+
+10286
+
+</td>
+
+<td style="text-align:right;">
+
+11010
+
+</td>
+
+<td style="text-align:right;">
+
+\-111
+
+</td>
+
+<td style="text-align:right;">
+
+724
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de La Réunion
+
+</td>
+
+<td style="text-align:right;">
+
+12411
+
+</td>
+
+<td style="text-align:right;">
+
+12136
+
+</td>
+
+<td style="text-align:right;">
+
+13023
+
+</td>
+
+<td style="text-align:right;">
+
+\-275
+
+</td>
+
+<td style="text-align:right;">
+
+887
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Tours
+
+</td>
+
+<td style="text-align:right;">
+
+22907
+
+</td>
+
+<td style="text-align:right;">
+
+23482
+
+</td>
+
+<td style="text-align:right;">
+
+23518
+
+</td>
+
+<td style="text-align:right;">
+
+575
+
+</td>
+
+<td style="text-align:right;">
+
+36
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Toulouse - Jean Jaurès (UT2)
+
+</td>
+
+<td style="text-align:right;">
+
+23274
+
+</td>
+
+<td style="text-align:right;">
+
+23514
+
+</td>
+
+<td style="text-align:right;">
+
+23861
+
+</td>
+
+<td style="text-align:right;">
+
+240
+
+</td>
+
+<td style="text-align:right;">
+
+347
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Polytechnique Hauts-de-France (UPHF)
+
+</td>
+
+<td style="text-align:right;">
+
+10029
+
+</td>
+
+<td style="text-align:right;">
+
+10154
+
+</td>
+
+<td style="text-align:right;">
+
+10608
+
+</td>
+
+<td style="text-align:right;">
+
+125
+
+</td>
+
+<td style="text-align:right;">
+
+454
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+La Rochelle Université
+
+</td>
+
+<td style="text-align:right;">
+
+7317
+
+</td>
+
+<td style="text-align:right;">
+
+7382
+
+</td>
+
+<td style="text-align:right;">
+
+7837
+
+</td>
+
+<td style="text-align:right;">
+
+65
+
+</td>
+
+<td style="text-align:right;">
+
+455
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:right;">
+
+7436
+
+</td>
+
+<td style="text-align:right;">
+
+7688
+
+</td>
+
+<td style="text-align:right;">
+
+7923
+
+</td>
+
+<td style="text-align:right;">
+
+252
+
+</td>
+
+<td style="text-align:right;">
+
+235
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université d’Angers
+
+</td>
+
+<td style="text-align:right;">
+
+21131
+
+</td>
+
+<td style="text-align:right;">
+
+21217
+
+</td>
+
+<td style="text-align:right;">
+
+21590
+
+</td>
+
+<td style="text-align:right;">
+
+86
+
+</td>
+
+<td style="text-align:right;">
+
+373
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Rennes 1
+
+</td>
+
+<td style="text-align:right;">
+
+25657
+
+</td>
+
+<td style="text-align:right;">
+
+25801
+
+</td>
+
+<td style="text-align:right;">
+
+26112
+
+</td>
+
+<td style="text-align:right;">
+
+144
+
+</td>
+
+<td style="text-align:right;">
+
+311
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Panthéon-Assas
+
+</td>
+
+<td style="text-align:right;">
+
+16497
+
+</td>
+
+<td style="text-align:right;">
+
+16570
+
+</td>
+
+<td style="text-align:right;">
+
+16923
+
+</td>
+
+<td style="text-align:right;">
+
+73
+
+</td>
+
+<td style="text-align:right;">
+
+353
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Bordeaux Montaigne (UBM)
+
+</td>
+
+<td style="text-align:right;">
+
+14216
+
+</td>
+
+<td style="text-align:right;">
+
+14563
+
+</td>
+
+<td style="text-align:right;">
+
+14632
+
+</td>
+
+<td style="text-align:right;">
+
+347
+
+</td>
+
+<td style="text-align:right;">
+
+69
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Pau et des Pays de l’Adour (UPPA)
+
+</td>
+
+<td style="text-align:right;">
+
+11003
+
+</td>
+
+<td style="text-align:right;">
+
+11454
+
+</td>
+
+<td style="text-align:right;">
+
+11413
+
+</td>
+
+<td style="text-align:right;">
+
+451
+
+</td>
+
+<td style="text-align:right;">
+
+\-41
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Savoie Mont Blanc (USMB)
+
+</td>
+
+<td style="text-align:right;">
+
+12483
+
+</td>
+
+<td style="text-align:right;">
+
+12482
+
+</td>
+
+<td style="text-align:right;">
+
+12842
+
+</td>
+
+<td style="text-align:right;">
+
+\-1
+
+</td>
+
+<td style="text-align:right;">
+
+360
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Franche-Comté (UFC)
+
+</td>
+
+<td style="text-align:right;">
+
+19544
+
+</td>
+
+<td style="text-align:right;">
+
+19540
+
+</td>
+
+<td style="text-align:right;">
+
+19844
+
+</td>
+
+<td style="text-align:right;">
+
+\-4
+
+</td>
+
+<td style="text-align:right;">
+
+304
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Limoges
+
+</td>
+
+<td style="text-align:right;">
+
+14474
+
+</td>
+
+<td style="text-align:right;">
+
+14582
+
+</td>
+
+<td style="text-align:right;">
+
+14743
+
+</td>
+
+<td style="text-align:right;">
+
+108
+
+</td>
+
+<td style="text-align:right;">
+
+161
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Toulon
+
+</td>
+
+<td style="text-align:right;">
+
+8501
+
+</td>
+
+<td style="text-align:right;">
+
+8545
+
+</td>
+
+<td style="text-align:right;">
+
+8766
+
+</td>
+
+<td style="text-align:right;">
+
+44
+
+</td>
+
+<td style="text-align:right;">
+
+221
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Avignon Université (AU)
+
+</td>
+
+<td style="text-align:right;">
+
+6478
+
+</td>
+
+<td style="text-align:right;">
+
+6519
+
+</td>
+
+<td style="text-align:right;">
+
+6716
+
+</td>
+
+<td style="text-align:right;">
+
+41
+
+</td>
+
+<td style="text-align:right;">
+
+197
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Le Havre Normandie
+
+</td>
+
+<td style="text-align:right;">
+
+7225
+
+</td>
+
+<td style="text-align:right;">
+
+7200
+
+</td>
+
+<td style="text-align:right;">
+
+7376
+
+</td>
+
+<td style="text-align:right;">
+
+\-25
+
+</td>
+
+<td style="text-align:right;">
+
+176
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de la Nouvelle-Calédonie
+
+</td>
+
+<td style="text-align:right;">
+
+2618
+
+</td>
+
+<td style="text-align:right;">
+
+2757
+
+</td>
+
+<td style="text-align:right;">
+
+2757
+
+</td>
+
+<td style="text-align:right;">
+
+139
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Bretagne Sud (UBS)
+
+</td>
+
+<td style="text-align:right;">
+
+8564
+
+</td>
+
+<td style="text-align:right;">
+
+8127
+
+</td>
+
+<td style="text-align:right;">
+
+8547
+
+</td>
+
+<td style="text-align:right;">
+
+\-437
+
+</td>
+
+<td style="text-align:right;">
+
+420
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Bourgogne (uB)
+
+</td>
+
+<td style="text-align:right;">
+
+25882
+
+</td>
+
+<td style="text-align:right;">
+
+25941
+
+</td>
+
+<td style="text-align:right;">
+
+25857
+
+</td>
+
+<td style="text-align:right;">
+
+59
+
+</td>
+
+<td style="text-align:right;">
+
+\-84
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Perpignan Via Domitia (UPVD)
+
+</td>
+
+<td style="text-align:right;">
+
+8636
+
+</td>
+
+<td style="text-align:right;">
+
+8672
+
+</td>
+
+<td style="text-align:right;">
+
+8598
+
+</td>
+
+<td style="text-align:right;">
+
+36
+
+</td>
+
+<td style="text-align:right;">
+
+\-74
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Corse Pasquale Paoli
+
+</td>
+
+<td style="text-align:right;">
+
+3813
+
+</td>
+
+<td style="text-align:right;">
+
+3703
+
+</td>
+
+<td style="text-align:right;">
+
+3693
+
+</td>
+
+<td style="text-align:right;">
+
+\-110
+
+</td>
+
+<td style="text-align:right;">
+
+\-10
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Montpellier
+
+</td>
+
+<td style="text-align:right;">
+
+39439
+
+</td>
+
+<td style="text-align:right;">
+
+38957
+
+</td>
+
+<td style="text-align:right;">
+
+39242
+
+</td>
+
+<td style="text-align:right;">
+
+\-482
+
+</td>
+
+<td style="text-align:right;">
+
+285
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de la Polynésie Française (UPF)
+
+</td>
+
+<td style="text-align:right;">
+
+3415
+
+</td>
+
+<td style="text-align:right;">
+
+3255
+
+</td>
+
+<td style="text-align:right;">
+
+3214
+
+</td>
+
+<td style="text-align:right;">
+
+\-160
+
+</td>
+
+<td style="text-align:right;">
+
+\-41
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paul-Valéry - Montpellier 3 (UPV)
+
+</td>
+
+<td style="text-align:right;">
+
+19107
+
+</td>
+
+<td style="text-align:right;">
+
+18085
+
+</td>
+
+<td style="text-align:right;">
+
+18878
+
+</td>
+
+<td style="text-align:right;">
+
+\-1022
+
+</td>
+
+<td style="text-align:right;">
+
+793
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Sorbonne Paris Nord
+
+</td>
+
+<td style="text-align:right;">
+
+20822
+
+</td>
+
+<td style="text-align:right;">
+
+20283
+
+</td>
+
+<td style="text-align:right;">
+
+20539
+
+</td>
+
+<td style="text-align:right;">
+
+\-539
+
+</td>
+
+<td style="text-align:right;">
+
+256
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Clermont Auvergne (UCA)
+
+</td>
+
+<td style="text-align:right;">
+
+29232
+
+</td>
+
+<td style="text-align:right;">
+
+28584
+
+</td>
+
+<td style="text-align:right;">
+
+28884
+
+</td>
+
+<td style="text-align:right;">
+
+\-648
+
+</td>
+
+<td style="text-align:right;">
+
+300
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université d’Artois
+
+</td>
+
+<td style="text-align:right;">
+
+10956
+
+</td>
+
+<td style="text-align:right;">
+
+10134
+
+</td>
+
+<td style="text-align:right;">
+
+10593
+
+</td>
+
+<td style="text-align:right;">
+
+\-822
+
+</td>
+
+<td style="text-align:right;">
+
+459
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Sorbonne Université (Sorbonne U)
+
+</td>
+
+<td style="text-align:right;">
+
+47540
+
+</td>
+
+<td style="text-align:right;">
+
+46738
+
+</td>
+
+<td style="text-align:right;">
+
+47062
+
+</td>
+
+<td style="text-align:right;">
+
+\-802
+
+</td>
+
+<td style="text-align:right;">
+
+324
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+CY Cergy Paris Université
+
+</td>
+
+<td style="text-align:right;">
+
+13852
+
+</td>
+
+<td style="text-align:right;">
+
+12642
+
+</td>
+
+<td style="text-align:right;">
+
+13264
+
+</td>
+
+<td style="text-align:right;">
+
+\-1210
+
+</td>
+
+<td style="text-align:right;">
+
+622
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris 8 - Vincennes - Saint-Denis
+
+</td>
+
+<td style="text-align:right;">
+
+22298
+
+</td>
+
+<td style="text-align:right;">
+
+21802
+
+</td>
+
+<td style="text-align:right;">
+
+21659
+
+</td>
+
+<td style="text-align:right;">
+
+\-496
+
+</td>
+
+<td style="text-align:right;">
+
+\-143
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Le Mans Université
+
+</td>
+
+<td style="text-align:right;">
+
+9799
+
+</td>
+
+<td style="text-align:right;">
+
+9177
+
+</td>
+
+<td style="text-align:right;">
+
+9144
+
+</td>
+
+<td style="text-align:right;">
+
+\-622
+
+</td>
+
+<td style="text-align:right;">
+
+\-33
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Sorbonne Nouvelle - Paris 3
+
+</td>
+
+<td style="text-align:right;">
+
+16882
+
+</td>
+
+<td style="text-align:right;">
+
+16624
+
+</td>
+
+<td style="text-align:right;">
+
+16196
+
+</td>
+
+<td style="text-align:right;">
+
+\-258
+
+</td>
+
+<td style="text-align:right;">
+
+\-428
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris 1 - Panthéon Sorbonne (Paris 1)
+
+</td>
+
+<td style="text-align:right;">
+
+38031
+
+</td>
+
+<td style="text-align:right;">
+
+37354
+
+</td>
+
+<td style="text-align:right;">
+
+37312
+
+</td>
+
+<td style="text-align:right;">
+
+\-677
+
+</td>
+
+<td style="text-align:right;">
+
+\-42
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris Nanterre
+
+</td>
+
+<td style="text-align:right;">
+
+31404
+
+</td>
+
+<td style="text-align:right;">
+
+30174
+
+</td>
+
+<td style="text-align:right;">
+
+29948
+
+</td>
+
+<td style="text-align:right;">
+
+\-1230
+
+</td>
+
+<td style="text-align:right;">
+
+\-226
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Versailles Saint-Quentin-en-Yvelines (UVSQ)
+
+</td>
+
+<td style="text-align:right;">
+
+16782
+
+</td>
+
+<td style="text-align:right;">
+
+15686
+
+</td>
+
+<td style="text-align:right;">
+
+15286
+
+</td>
+
+<td style="text-align:right;">
+
+\-1096
+
+</td>
+
+<td style="text-align:right;">
+
+\-400
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris-Est Créteil (UPEC)
+
+</td>
+
+<td style="text-align:right;">
+
+26710
+
+</td>
+
+<td style="text-align:right;">
+
+25264
+
+</td>
+
+<td style="text-align:right;">
+
+25118
+
+</td>
+
+<td style="text-align:right;">
+
+\-1446
+
+</td>
+
+<td style="text-align:right;">
+
+\-146
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université du Littoral Côte d’Opale (ULCO)
+
+</td>
+
+<td style="text-align:right;">
+
+10071
+
+</td>
+
+<td style="text-align:right;">
+
+9669
+
+</td>
+
+<td style="text-align:right;">
+
+8256
+
+</td>
+
+<td style="text-align:right;">
+
+\-402
+
+</td>
+
+<td style="text-align:right;">
+
+\-1413
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université des Antilles
+
+</td>
+
+<td style="text-align:right;">
+
+12625
+
+</td>
+
+<td style="text-align:right;">
+
+9701
+
+</td>
+
+<td style="text-align:right;">
+
+10184
+
+</td>
+
+<td style="text-align:right;">
+
+\-2924
+
+</td>
+
+<td style="text-align:right;">
+
+483
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Guyane
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+<td style="text-align:right;">
+
+2185
+
+</td>
+
+<td style="text-align:right;">
+
+NA
+
+</td>
+
+<td style="text-align:right;">
+
+NA
 
 </td>
 
@@ -2111,18 +4497,32 @@ Par rapport à [la hausse du nombre de
 bacheliers](https://www.enseignementsup-recherche.gouv.fr/cid151347/projections-des-effectifs-dans-l-enseignement-superieur-pour-les-rentrees-de-2019-a-2028.html)
 :
 
-![](tauxdencadrement_files/figure-gfm/bacs-1.png)<!-- -->
+    ## Warning: Removed 7 rows containing missing values (position_stack).
 
-![](tauxdencadrement_files/figure-gfm/201415.bac-1.png)<!-- -->
+![](tauxdencadrement_files/figure-gfm/angle.bac-1.png)<!-- -->
 
 Par rapport au diplôme préparé : c’est essentiellement en L.
+
+    ## Warning: Removed 17 rows containing missing values (position_stack).
 
 ![](tauxdencadrement_files/figure-gfm/201415.Diplôme.préparé-1.png)<!-- -->
 
 Par rapport à la discipline :
 
+    ## Warning: Removed 17 rows containing missing values (position_stack).
+
 ![](tauxdencadrement_files/figure-gfm/201415.Discipline-1.png)<!-- -->
 
 Par rapport au secteur disciplinaire :
 
+    ## Warning: Removed 55 rows containing missing values (position_stack).
+
 ![](tauxdencadrement_files/figure-gfm/201415.Secteur.disciplinaire-1.png)<!-- -->
+
+**Conclusion**
+
+La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec
+un effet de pic dû notamment à une baisse en Master d’enseignement en
+2014, conséquente de la formation des maîtres, ’abord par l’annulation
+de la “masterisation” en 2012, puis la transformation des IUFM en ESPE
+en 2013.
