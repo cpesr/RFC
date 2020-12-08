@@ -54,8 +54,8 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 *Attention : dans la suite, tous les graphiques avec les disciplines
 comprennent donc les doubles inscriptions. Les tendances sont bonnes,
-mais il peut y avoir un décalage dans les valeurs, et des effets
-locaux.*
+mais il peut y avoir un décalage dans les valeurs, et des effets locaux.
+Les autres données sont hors double inscriptions.*
 
 ## Taux d’encadrement par type d’établissement
 
@@ -692,330 +692,6 @@ LSHS
 ![](tauxdencadrement_files/figure-gfm/univ.values-1.png)<!-- -->
 
 ![](tauxdencadrement_files/figure-gfm/univ.evol-1.png)<!-- -->
-
-*Question* : Que se passe-t-il en 2015 ?
-
-Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
-
-<table>
-
-<thead>
-
-<tr>
-
-<th style="text-align:left;">
-
-Etablissement
-
-</th>
-
-<th style="text-align:right;">
-
-Rentrée2014
-
-</th>
-
-<th style="text-align:right;">
-
-Rentrée2015
-
-</th>
-
-<th style="text-align:right;">
-
-delta
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Lille
-
-</td>
-
-<td style="text-align:right;">
-
-64329
-
-</td>
-
-<td style="text-align:right;">
-
-67344
-
-</td>
-
-<td style="text-align:right;">
-
-3015
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Lorraine
-
-</td>
-
-<td style="text-align:right;">
-
-52734
-
-</td>
-
-<td style="text-align:right;">
-
-55207
-
-</td>
-
-<td style="text-align:right;">
-
-2473
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Paris
-
-</td>
-
-<td style="text-align:right;">
-
-56225
-
-</td>
-
-<td style="text-align:right;">
-
-58193
-
-</td>
-
-<td style="text-align:right;">
-
-1968
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Caen Normandie (UNICAEN)
-
-</td>
-
-<td style="text-align:right;">
-
-24384
-
-</td>
-
-<td style="text-align:right;">
-
-26105
-
-</td>
-
-<td style="text-align:right;">
-
-1721
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université Côte d’Azur (UCA)
-
-</td>
-
-<td style="text-align:right;">
-
-26359
-
-</td>
-
-<td style="text-align:right;">
-
-28001
-
-</td>
-
-<td style="text-align:right;">
-
-1642
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Picardie Jules-Verne (UPJV)
-
-</td>
-
-<td style="text-align:right;">
-
-23020
-
-</td>
-
-<td style="text-align:right;">
-
-24596
-
-</td>
-
-<td style="text-align:right;">
-
-1576
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Reims Champagne-Ardenne (URCA)
-
-</td>
-
-<td style="text-align:right;">
-
-22534
-
-</td>
-
-<td style="text-align:right;">
-
-23698
-
-</td>
-
-<td style="text-align:right;">
-
-1164
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université Jean Moulin - Lyon 3
-
-</td>
-
-<td style="text-align:right;">
-
-25334
-
-</td>
-
-<td style="text-align:right;">
-
-26452
-
-</td>
-
-<td style="text-align:right;">
-
-1118
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Poitiers
-
-</td>
-
-<td style="text-align:right;">
-
-22971
-
-</td>
-
-<td style="text-align:right;">
-
-24076
-
-</td>
-
-<td style="text-align:right;">
-
-1105
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Université de Rouen Normandie
-
-</td>
-
-<td style="text-align:right;">
-
-25192
-
-</td>
-
-<td style="text-align:right;">
-
-26288
-
-</td>
-
-<td style="text-align:right;">
-
-1096
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
 
 ![](tauxdencadrement_files/figure-gfm/univ.evol.besoinsvsreel-1.png)<!-- -->
 
@@ -2100,3 +1776,341 @@ l’université.
 ### Classement sans : Guyane, Artois et UHA
 
 ![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank.filter-1.png)<!-- -->
+
+### Hausse des inscriptions en université entre 2014 et 2015
+
+*Question* : Que se passe-t-il en 2015 ?
+
+Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Etablissement
+
+</th>
+
+<th style="text-align:right;">
+
+Rentrée2014
+
+</th>
+
+<th style="text-align:right;">
+
+Rentrée2015
+
+</th>
+
+<th style="text-align:right;">
+
+delta
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Lille
+
+</td>
+
+<td style="text-align:right;">
+
+64329
+
+</td>
+
+<td style="text-align:right;">
+
+67344
+
+</td>
+
+<td style="text-align:right;">
+
+3015
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Lorraine
+
+</td>
+
+<td style="text-align:right;">
+
+52734
+
+</td>
+
+<td style="text-align:right;">
+
+55207
+
+</td>
+
+<td style="text-align:right;">
+
+2473
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Paris
+
+</td>
+
+<td style="text-align:right;">
+
+56225
+
+</td>
+
+<td style="text-align:right;">
+
+58193
+
+</td>
+
+<td style="text-align:right;">
+
+1968
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Caen Normandie (UNICAEN)
+
+</td>
+
+<td style="text-align:right;">
+
+24384
+
+</td>
+
+<td style="text-align:right;">
+
+26105
+
+</td>
+
+<td style="text-align:right;">
+
+1721
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Côte d’Azur (UCA)
+
+</td>
+
+<td style="text-align:right;">
+
+26359
+
+</td>
+
+<td style="text-align:right;">
+
+28001
+
+</td>
+
+<td style="text-align:right;">
+
+1642
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Picardie Jules-Verne (UPJV)
+
+</td>
+
+<td style="text-align:right;">
+
+23020
+
+</td>
+
+<td style="text-align:right;">
+
+24596
+
+</td>
+
+<td style="text-align:right;">
+
+1576
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Reims Champagne-Ardenne (URCA)
+
+</td>
+
+<td style="text-align:right;">
+
+22534
+
+</td>
+
+<td style="text-align:right;">
+
+23698
+
+</td>
+
+<td style="text-align:right;">
+
+1164
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Jean Moulin - Lyon 3
+
+</td>
+
+<td style="text-align:right;">
+
+25334
+
+</td>
+
+<td style="text-align:right;">
+
+26452
+
+</td>
+
+<td style="text-align:right;">
+
+1118
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Poitiers
+
+</td>
+
+<td style="text-align:right;">
+
+22971
+
+</td>
+
+<td style="text-align:right;">
+
+24076
+
+</td>
+
+<td style="text-align:right;">
+
+1105
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Rouen Normandie
+
+</td>
+
+<td style="text-align:right;">
+
+25192
+
+</td>
+
+<td style="text-align:right;">
+
+26288
+
+</td>
+
+<td style="text-align:right;">
+
+1096
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+Ce n’est pas l’effet des doubles inscriptions, qui explosent également :
+
+![](tauxdencadrement_files/figure-gfm/check.doubleinscription2-1.png)<!-- -->
+
+Par rapport à [la hausse du nombre de
+bacheliers](https://www.enseignementsup-recherche.gouv.fr/cid151347/projections-des-effectifs-dans-l-enseignement-superieur-pour-les-rentrees-de-2019-a-2028.html)
+:
+
+![](tauxdencadrement_files/figure-gfm/bacs-1.png)<!-- -->
+
+![](tauxdencadrement_files/figure-gfm/bacs.2015-1.png)<!-- -->

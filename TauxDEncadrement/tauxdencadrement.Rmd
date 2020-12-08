@@ -215,7 +215,9 @@ merge(
     theme_cpesr_cap()
 ```
 
-_Attention : dans la suite, tous les graphiques avec les disciplines comprennent donc les doubles inscriptions. Les tendances sont bonnes, mais il peut y avoir un décalage dans les valeurs, et des effets locaux._
+
+
+_Attention : dans la suite, tous les graphiques avec les disciplines comprennent donc les doubles inscriptions. Les tendances sont bonnes, mais il peut y avoir un décalage dans les valeurs, et des effets locaux. Les autres données sont hors double inscriptions._
 
 
 ```{r detection, include=FALSE}
@@ -510,18 +512,6 @@ tde.univ %>%
     theme_cpesr_cap()
 ```
 
-_Question_ : Que se passe-t-il en 2015 ?
-
-Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
-```{r univ.evol.controle}
-tde.univ %>%
-  filter(Rentrée %in% c(2014,2015)) %>%
-  select(Etablissement,Rentrée, Etudiants) %>%
-  pivot_wider(names_from=Rentrée, values_from=Etudiants,names_prefix="Rentrée") %>%
-  mutate(delta = Rentrée2015-Rentrée2014) %>%
-  arrange(desc(delta)) %>% head(10) %>% kable()
-```
-
 ```{r univ.evol.besoinsvsreel}
 tde.univ %>%
   group_by(Rentrée) %>%
@@ -771,6 +761,73 @@ merge(tde.univ,etiquettes) %>%
     xlab("") + ylab("Evolution du taux d'encadrement 2010-2018") +
     scale_y_continuous(labels=scales::percent) +
     #geom_text_repel(aes(label=Etablissement)) +
+    theme_cpesr_cap()
+```
+
+
+### Hausse des inscriptions en université entre 2014 et 2015
+
+_Question_ : Que se passe-t-il en 2015 ?
+
+Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
+```{r univ.evol.controle}
+tde.univ %>%
+  filter(Rentrée %in% c(2014,2015)) %>%
+  select(Etablissement,Rentrée, Etudiants) %>%
+  pivot_wider(names_from=Rentrée, values_from=Etudiants,names_prefix="Rentrée") %>%
+  mutate(delta = Rentrée2015-Rentrée2014) %>%
+  arrange(desc(delta)) %>% head(10) %>% kable()
+```
+
+Ce n'est pas l'effet des doubles inscriptions, qui explosent également :
+
+```{r check.doubleinscription2}
+merge(
+  tde.disc %>% filter(Type.établissement == "Université") %>%
+    group_by(Rentrée) %>%
+    summarise(Etudiants.DIC = sum(Etudiants)),
+  tde %>% filter(Type.établissement == "Université") %>%
+    group_by(Rentrée) %>%
+    summarise(Etudiants.HDI = sum(Etudiants))) %>%
+  pivot_longer(-Rentrée) %>%
+  ggplot(aes(x=Rentrée, y=value, color=name)) +
+    geom_line(aes(group=name), size=2) +
+    scale_color_discrete(name="", labels=c("Avec double inscription", "Hors double inscription")) +
+    ylab("Inscriptions étudiantes dans les universités") +
+    theme_cpesr_cap()
+```
+
+
+Par rapport à [la hausse du nombre de bacheliers](https://www.enseignementsup-recherche.gouv.fr/cid151347/projections-des-effectifs-dans-l-enseignement-superieur-pour-les-rentrees-de-2019-a-2028.html) :
+
+```{r bacs}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(Type.d.établissement == "Université") %>%
+  select(RENTREE, starts_with("Bac")) %>% 
+  pivot_longer(-RENTREE, names_to="Bac") %>%
+  group_by(RENTREE,Bac) %>%
+  summarise(Etudiants = sum(value)) %>%
+  ggplot(aes(x=RENTREE, y=Etudiants, color=Bac, group=Bac)) +
+    geom_line() +
+    theme_cpesr_cap()
+```
+
+```{r bacs.2015}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
+  select(RENTREE, starts_with("Bac")) %>% 
+  pivot_longer(-RENTREE, names_to="Bac") %>%
+  mutate(Bac = substr(Bac,7,100)) %>%
+  group_by(RENTREE,Bac) %>%
+  summarise(Etudiants = sum(value)) %>%
+  group_by(Bac) %>%
+  mutate(Evolution = Etudiants - first(Etudiants)) %>%
+  filter(RENTREE == 2015) %>%
+  ggplot(aes(x=Bac, y=Evolution, fill=Bac)) +
+    geom_col() +
+    ggtitle("Augmentation des effectifs étudiants par type de bac entre 2014 et 2015") +
     theme_cpesr_cap()
 ```
 
