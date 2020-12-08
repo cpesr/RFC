@@ -18,7 +18,8 @@ library(ggrepel)
 library(ggcpesrthemes)
 
 theme_cpesr_setup(authors=c("Julien Gossa"), 
-                  url="https://github.com/cpesr/RFC")
+                  url="https://github.com/cpesr/RFC",
+                  source="https://data.enseignementsup-recherche.gouv.fr")
 ```
 
 _Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
@@ -211,7 +212,7 @@ merge(
     geom_line(aes(group=name), size=2) +
     scale_color_discrete(name="", labels=c("Avec double inscription", "Hors double inscription")) +
     ylab("Inscriptions étudiantes dans les universités") +
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 _Attention : dans la suite, tous les graphiques avec les disciplines comprennent donc les doubles inscriptions. Les tendances sont bonnes, mais il peut y avoir un décalage dans les valeurs, et des effets locaux._
@@ -430,7 +431,7 @@ tde.ens %>%
     geom_line(aes(group=Etablissement)) +
     facet_wrap(.~name, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -447,7 +448,7 @@ tde.ens %>%
     geom_line(aes(group=Etablissement)) +
     facet_grid(name~Grande.discipline, scales="free_y", drop = TRUE) +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -472,7 +473,7 @@ tde.univ %>%
     geom_boxplot() +
     facet_wrap(.~name, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 ```{r univ.values}
@@ -488,7 +489,8 @@ tde.univ %>%
     geom_line(aes(group=name), size=2) +
     facet_wrap(.~name, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    ggtitle("Evolutions des taux d'encadrement dans les universités.") +
+    theme_cpesr_cap()
 ```
 
 ```{r univ.evol}
@@ -501,15 +503,46 @@ tde.univ %>%
   ) %>%
   pivot_longer(-c(Rentrée)) %>%
   group_by(name) %>%
-  mutate(evolution = value / first(value)) %>%
-  ggplot(aes(x=Rentrée, y=evolution, color=name)) + 
+  mutate(Evolution = value / first(value)) %>%
+  ggplot(aes(x=Rentrée, y=Evolution, color=name)) + 
     geom_line(aes(group=name), size=2) +
-    scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    ggtitle("Evolutions des taux d'encadrement dans les universités.") +
+    theme_cpesr_cap()
 ```
 
+_Question_ : Que se passe-t-il en 2015 ?
 
+Top 10 des augmentations des effectifs étudiants entre 2014 et 2015 :
+```{r univ.evol.controle}
+tde.univ %>%
+  filter(Rentrée %in% c(2014,2015)) %>%
+  select(Etablissement,Rentrée, Etudiants) %>%
+  pivot_wider(names_from=Rentrée, values_from=Etudiants,names_prefix="Rentrée") %>%
+  mutate(delta = Rentrée2015-Rentrée2014) %>%
+  arrange(desc(delta)) %>% head(10) %>% kable()
+```
 
+```{r univ.evol.besoinsvsreel}
+tde.univ %>%
+  group_by(Rentrée) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100
+  ) %>%
+  transmute(
+    Rentrée = Rentrée,
+    Enseignants.idéal.delta = round(Etudiants * first(Taux.d.encadrement) / 100 - Enseignants),
+    Enseignants.réel.delta = Enseignants - first(Enseignants),
+  ) %>%
+  pivot_longer(-c(Rentrée)) %>%
+  ggplot(aes(x=Rentrée, y=value, fill=name)) +
+    geom_col(position="identity", alpha=0.5) +
+    ylab("Evolution des effectifs enseignants") +
+    scale_fill_discrete(labels=c("Evolutions nécessaires", "Evolutions réelles"), name="") +
+    ggtitle("Evolutions nécessaires et réelles des effectifs enseignants\npour conserver le taux d'encadrement de 2010 dans les universités") +
+    theme_cpesr_cap()
+```
 
 ```{r univ.values.disc}
 tde.disc %>% 
@@ -525,7 +558,7 @@ tde.disc %>%
     geom_line(aes(group=name), size=2) +
     facet_grid(name~Grande.discipline, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -546,7 +579,7 @@ tde.disc %>%
     geom_line(aes(group=name), size=2) +
     facet_grid(name~Grande.discipline) +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -570,7 +603,7 @@ tde.univ.etiquettes %>%
     geom_line(aes(group=name), size=2) +
     facet_grid(name~étiquettes, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 ```{r univ.evol.etiquettes}
@@ -579,7 +612,7 @@ tde.univ.etiquettes %>%
     geom_line(aes(group=name), size=2) +
     facet_grid(name~étiquettes) +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -604,7 +637,7 @@ tde.univ.etab.etiquettes %>%
     geom_boxplot() +
     facet_grid(name~étiquettes, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 ```{r univ.etab.evol.etiquettes}
@@ -613,7 +646,7 @@ tde.univ.etab.etiquettes %>%
     geom_boxplot() +
     facet_grid(name~étiquettes, scales="free_y") +
     scale_x_discrete(breaks=c("2011","2014","2017")) + 
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -631,7 +664,7 @@ merge(tde.univ,etiquettes) %>%
   ggplot(aes(x=Etudiants, y=Enseignants, color=étiquettes)) + 
     geom_point() +
     #geom_text_repel(aes(label=Etablissement)) +
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 ```{r univ.etab.etiquettes.stat}
@@ -669,7 +702,7 @@ rank.2018 %>%
     coord_flip() +
     xlab("") +
     #geom_text_repel(aes(label=Etablissement)) +
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -683,7 +716,7 @@ rank.2018 %>%
     xlab("") + ylab("Evolution du taux d'encadrement 2010-2018") +
     scale_y_continuous(labels=scales::percent) +
     #geom_text_repel(aes(label=Etablissement)) +
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 ### Focus Guyane
@@ -738,5 +771,6 @@ merge(tde.univ,etiquettes) %>%
     xlab("") + ylab("Evolution du taux d'encadrement 2010-2018") +
     scale_y_continuous(labels=scales::percent) +
     #geom_text_repel(aes(label=Etablissement)) +
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
+
