@@ -5,6 +5,9 @@ Recrutements par académie
 
   - Source :
     <https://www.enseignementsup-recherche.gouv.fr/cid118435/personnels-enseignants-du-superieur-bilans-et-statistiques.html>
+
+### Recrutements par académies
+
   - Nombre d’observations : 474
   - Variables :
 
@@ -14,6 +17,18 @@ Recrutements par académie
     ## [4] "Solde.mutation.MCF"   "Solde.mutation.total"
 
   - Période : 2004, 2019
+
+### Mutations entre académies
+
+  - Nombre d’observations : 8170
+  - Variables :
+
+<!-- end list -->
+
+    ## [1] "Annee"                "Academie.origine"     "Academie.recrutement"
+    ## [4] "Groupe.CNU"           "MCF"
+
+  - Période : 2014, 2019
 
 ## Solde migratoire des mutations
 
@@ -28,3 +43,9 @@ Recrutements par académie
 ### Total EC (MCF + PR)
 
 ![](Academies_files/figure-gfm/solde.mutations.total.1-1.png)<!-- -->
+
+## Flux géographiques des mutations MCF (sommes de 2014 à 2019)
+
+    ## `summarise()` regrouping output by 'Academie.origine' (override with `.groups` argument)
+
+![](Academies_files/figure-gfm/flux.geographique.mutations.MCF.1-1.png)<!-- -->

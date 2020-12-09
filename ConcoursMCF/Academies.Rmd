@@ -14,19 +14,31 @@ require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
 library(robCompositions)
+library(viridis)
 
 academie = read.table("DB_Academies.csv", h=T, sep=";")
+croise = read.table("DB_Academies_croisees.csv", h=T, sep=";")
 ```
 
 ## Description des données 
 
 - Source : https://www.enseignementsup-recherche.gouv.fr/cid118435/personnels-enseignants-du-superieur-bilans-et-statistiques.html
+
+### Recrutements par académies
 - Nombre d'observations : `r nrow(academie)`
 - Variables : 
-```{r vars}
+```{r vars.1}
 colnames(academie)
 ```
 - Période : `r range(as.character(academie$Annee))`
+
+### Mutations entre académies
+- Nombre d'observations : `r nrow(croise)`
+- Variables : 
+```{r vars.2}
+colnames(croise)
+```
+- Période : `r range(as.character(croise$Annee))`
 
 ## Solde migratoire des mutations
 ### MCF
@@ -71,6 +83,22 @@ academie %>%
     theme(strip.text.y = element_text(size = 7.5)) +
     theme(legend.position = "right") +
     labs(title="Mutations EC, de 2004 à 2019", y ="Solde migratoire", x = "Année") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+## Flux géographiques des mutations MCF (sommes de 2014 à 2019)
+```{r flux.geographique.mutations.MCF.1, fig.width=8, fig.asp=16/16}
+croise %>% 
+  group_by(Academie.origine, Academie.recrutement) %>% 
+  summarise(MCF = sum(MCF, na.rm=T)) %>% 
+  ggplot(aes(x=Academie.origine, y=Academie.recrutement, fill=MCF)) + 
+    geom_tile() + theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+    scale_fill_viridis(option="inferno") +
+    theme(legend.position = "right") +
+    labs(title="Flux des mutations MCF, somme des années 2014 à 2019", y ="Académie d'arrivée", x = "Académie de départ") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
