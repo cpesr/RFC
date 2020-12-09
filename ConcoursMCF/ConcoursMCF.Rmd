@@ -427,6 +427,7 @@ cnu %>%
     ggtitle("Campagne MCF de 2019") +
     xlab("Sections CNU (par nombre de postes décroissant)") + 
     ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
@@ -456,6 +457,7 @@ cnu %>%
     ggtitle("Campagne MCF de 2019") +
     xlab("Sections CNU (par ratio [nb de candidats / nb de postes] décroissant)") + 
     ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
@@ -485,6 +487,7 @@ cnu %>%
     ggtitle("Campagne MCF de 2019") +
     xlab("Sections CNU") + 
     ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
@@ -514,6 +517,7 @@ cnu %>%
     ggtitle("Campagne MCF de 2013") +
     xlab("Sections CNU (par nombre de postes décroissant)") + 
     ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
@@ -543,6 +547,7 @@ cnu %>%
     ggtitle("Campagne MCF de 2013") +
     xlab("Sections CNU (par ratio [nb de candidats / nb de postes] décroissant)") + 
     ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
@@ -572,6 +577,7 @@ cnu %>%
     ggtitle("Campagne MCF de 2013") +
     xlab("Sections CNU") + 
     ylab("Nombre de postes, de candidats (barres) et de qualifiés (points)") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
@@ -616,6 +622,7 @@ cnu.2014to2019 %>%
     ggtitle("Campagne MCF de 2019 par rapport à 2014") +
     xlab("Sections CNU (par évolution du nb de postes décroissante)") + 
     ylab("Evolutions du nombre de postes (couleurs) et de candidats (gris) en %") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
@@ -649,6 +656,7 @@ cnu.2014to2019 %>%
     ggtitle("Campagne MCF de 2019 par rapport à 2014") +
     xlab("Sections CNU") + 
     ylab("Evolutions du nombre de postes (couleurs) et de candidats (gris) en %") +
+    labs(fill = "Grandes disciplines CNU") +
     theme_cpesr_cap(authors = c("Florent Figon"), 
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
