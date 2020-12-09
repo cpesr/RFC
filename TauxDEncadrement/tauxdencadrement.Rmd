@@ -832,7 +832,7 @@ delta.angle <- function(angle, anglecut=0) {
     mutate(RENTREE = factor(RENTREE, levels=c("2015","2014","2013"))) %>%
     filter(RENTREE != 2013) %>%
     ggplot(aes(x=reorder(name,Evolution.tot), y=Evolution, fill=RENTREE)) +
-      geom_col(position="dodge") +
+      geom_col(position="stack") +
       coord_flip() +
       xlab("") +
       ggtitle("Augmentation des effectifs étudiants des universités\nentre 2013 et 2015") +

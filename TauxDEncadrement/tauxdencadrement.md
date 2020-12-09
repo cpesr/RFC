@@ -4497,25 +4497,17 @@ Par rapport à [la hausse du nombre de
 bacheliers](https://www.enseignementsup-recherche.gouv.fr/cid151347/projections-des-effectifs-dans-l-enseignement-superieur-pour-les-rentrees-de-2019-a-2028.html)
 :
 
-    ## Warning: Removed 7 rows containing missing values (position_stack).
-
 ![](tauxdencadrement_files/figure-gfm/angle.bac-1.png)<!-- -->
 
 Par rapport au diplôme préparé : c’est essentiellement en L.
-
-    ## Warning: Removed 17 rows containing missing values (position_stack).
 
 ![](tauxdencadrement_files/figure-gfm/201415.Diplôme.préparé-1.png)<!-- -->
 
 Par rapport à la discipline :
 
-    ## Warning: Removed 17 rows containing missing values (position_stack).
-
 ![](tauxdencadrement_files/figure-gfm/201415.Discipline-1.png)<!-- -->
 
 Par rapport au secteur disciplinaire :
-
-    ## Warning: Removed 55 rows containing missing values (position_stack).
 
 ![](tauxdencadrement_files/figure-gfm/201415.Secteur.disciplinaire-1.png)<!-- -->
 
