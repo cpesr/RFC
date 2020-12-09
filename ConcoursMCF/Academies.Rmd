@@ -1,0 +1,78 @@
+---
+title: "Recrutements par académie"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+library(ggthemes)
+library(ggbeeswarm)
+library("gridExtra")
+require("ggrepel")
+library(ggcpesrthemes)
+library(ggpmisc)
+library(robCompositions)
+
+academie = read.table("DB_Academies.csv", h=T, sep=";")
+```
+
+## Description des données 
+
+- Source : https://www.enseignementsup-recherche.gouv.fr/cid118435/personnels-enseignants-du-superieur-bilans-et-statistiques.html
+- Nombre d'observations : `r nrow(academie)`
+- Variables : 
+```{r vars}
+colnames(academie)
+```
+- Période : `r range(as.character(academie$Annee))`
+
+## Solde migratoire des mutations
+### MCF
+```{r solde.mutations.MCF.1, fig.width=12, fig.asp=9/16}
+academie %>%
+  drop_na(Solde.mutation.MCF) %>%
+    ggplot(aes(x=Annee, y=Solde.mutation.MCF)) + 
+    geom_col() + facet_wrap(.~Academie) + 
+    geom_hline(yintercept=0, linetype="dashed", color="red") +
+    theme(strip.text.y = element_text(size = 7.5)) +
+    theme(legend.position = "right") +
+    labs(title="Mutations MCF, de 2004 à 2019", y ="Solde migratoire", x = "Année") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+### PR
+```{r solde.mutations.PR.1, fig.width=12, fig.asp=9/16}
+academie %>%
+  drop_na(Solde.mutation.PR) %>%
+    ggplot(aes(x=Annee, y=Solde.mutation.PR)) + 
+    geom_col() + facet_wrap(.~Academie) + 
+    geom_hline(yintercept=0, linetype="dashed", color="red") +
+    theme(strip.text.y = element_text(size = 7.5)) +
+    theme(legend.position = "right") +
+    labs(title="Mutations PR, de 2004 à 2019", y ="Solde migratoire", x = "Année") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
+
+### Total EC (MCF + PR)
+```{r solde.mutations.total.1, fig.width=12, fig.asp=9/16}
+academie %>%
+  drop_na(Solde.mutation.total) %>%
+    ggplot(aes(x=Annee, y=Solde.mutation.total)) + 
+    geom_col() + facet_wrap(.~Academie) + 
+    geom_hline(yintercept=0, linetype="dashed", color="red") +
+    theme(strip.text.y = element_text(size = 7.5)) +
+    theme(legend.position = "right") +
+    labs(title="Mutations EC, de 2004 à 2019", y ="Solde migratoire", x = "Année") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                licence = "CC BY-SA",
+                url = "https://github.com/cpesr/RFC",
+                source = "DGRH A1-1/Galaxie")
+```
