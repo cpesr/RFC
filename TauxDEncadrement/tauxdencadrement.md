@@ -4511,10 +4511,29 @@ Par rapport au secteur disciplinaire :
 
 ![](tauxdencadrement_files/figure-gfm/201415.Secteur.disciplinaire-1.png)<!-- -->
 
+Evolution 2014 2015 pour les pluridisciplinaires science
+
+    ## # A tibble: 51 x 5
+    ##    Établissement                         R2014 R2015 delta deltap
+    ##    <chr>                                 <int> <int> <int>  <dbl>
+    ##  1 Université de Bourgogne                   9   220   211  24.4 
+    ##  2 Université du Littoral Côte d’Opale       4    69    65  17.2 
+    ##  3 Université de Rennes 1                   65   975   910  15   
+    ##  4 Université de Picardie Jules-Verne      104   605   501   5.82
+    ##  5 Aix-Marseille Université                323  1638  1315   5.07
+    ##  6 Université de Corse Pasquale Paoli        7    22    15   3.14
+    ##  7 Université d'Artois                      48   150   102   3.12
+    ##  8 La Rochelle Université                   42    88    46   2.10
+    ##  9 Université de Reims Champagne-Ardenne   343   694   351   2.02
+    ## 10 Université de Strasbourg                 87   169    82   1.94
+    ## # … with 41 more rows
+
+### Formation des maîtres
+
+![](tauxdencadrement_files/figure-gfm/ESPE-1.png)<!-- -->
+
 **Conclusion**
 
 La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec
 un effet de pic dû notamment à une baisse en Master d’enseignement en
-2014, conséquente de la formation des maîtres, ’abord par l’annulation
-de la “masterisation” en 2012, puis la transformation des IUFM en ESPE
-en 2013.
+2014, conséquente de la formation des maîtres.

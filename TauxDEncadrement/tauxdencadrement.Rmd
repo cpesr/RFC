@@ -863,7 +863,45 @@ Par rapport au secteur disciplinaire :
 delta.angle("Secteur.disciplinaire",25)
 ```
 
+Evolution 2014 2015 pour les pluridisciplinaires science
+```{r pluriscience}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
+  filter(Secteur.disciplinaire...Pluridisciplinaire.sciences>0) %>%
+  select(RENTREE, Établissement, Secteur.disciplinaire...Pluridisciplinaire.sciences) %>%
+  pivot_wider(names_from=RENTREE,
+              values_from=Secteur.disciplinaire...Pluridisciplinaire.sciences,
+              names_prefix="R") %>%
+  mutate(delta=R2015-R2014,deltap=R2015/R2014) %>%
+  arrange(desc(deltap)) 
+```
+
+### Formation des maîtres
+
+```{r ESPE}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(ETABLISSEMENT_TYPE %in% c("IUFM","ESPE") || str_detect(Diplôme.préparé, "Master.enseignement")) %>%
+  mutate(
+    RENTREE = as.factor(RENTREE),
+    Type = case_when(
+      ETABLISSEMENT_TYPE == "IUFM" ~ "IUFM",
+      ETABLISSEMENT_TYPE == "ESPE" ~ "ESPE",
+      TRUE ~ "Autre"
+    )) %>%
+  group_by(RENTREE, Type) %>% 
+  summarise(
+    L = sum(Cycle.universitaire..cursus.LMD....L..1er.cycle.,na.rm=TRUE),
+    M = sum(Cycle.universitaire..cursus.LMD....M..2ème.cycle.,na.rm=TRUE),
+    D = sum(Cycle.universitaire..cursus.LMD....D..3ème.cycle.,na.rm=TRUE)) %>%
+  group_by(Type) %>%
+  mutate(delta = M - first(M)) %>%
+  ggplot(aes(x=RENTREE,y=delta, color=Type, group=Type)) + geom_line(size=2) +
+  theme_cpesr_cap()
+```
+
 __Conclusion__
 
-La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec un effet de pic dû notamment à une baisse en Master d'enseignement en 2014, conséquente de la formation des maîtres, 'abord par l'annulation de la "masterisation" en 2012, puis la transformation des IUFM en ESPE en 2013.
+La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec un effet de pic dû notamment à une baisse en Master d'enseignement en 2014, conséquente de la formation des maîtres.
 
