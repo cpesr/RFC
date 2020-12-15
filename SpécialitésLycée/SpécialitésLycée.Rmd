@@ -1,0 +1,115 @@
+---
+title: "Choix spécialités Lycée "
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+```
+
+## Données sources
+
+Les données accompagnent les notes de la DEPP :
+
+- https://www.education.gouv.fr/choix-de-trois-specialites-en-premiere-generale-la-rentree-2019-15-combinaisons-pour-80-des-eleves-3245
+- https://www.education.gouv.fr/la-rentree-2020-les-eleves-de-terminale-precisent-leur-choix-de-parcours-307016
+
+```{r data}
+spe.2019.1 <- read.csv("Spécialités-2019-Première.csv", na.strings = c("VALEUR MANQUANTE")) %>%
+  transmute(
+    Bac = 2021,
+    Niveau = "Première",
+    Spécialités = toupper(iconv(Première.2019, from="UTF-8", to="ASCII//TRANSLIT")),
+    Effectifs = Effectifs
+    )
+
+spe.2020.T <- read.csv("Spécialités-2020-Terminale.csv") %>%
+  transmute(
+    Bac = 2021,
+    Niveau = "Terminale",
+    Spécialités = Terminale.2020,
+    Effectifs = Effectifs
+    )
+
+spe.2020.1 <- read.csv("Spécialités-2020-Première.csv") %>%
+  transmute(
+    Bac = 2022,
+    Niveau = "Première",
+    Spécialités = Première.2020,
+    Effectifs = Effectifs
+    )
+
+spe <- bind_rows(spe.2019.1,spe.2020.T,spe.2020.1) %>%
+  mutate(
+    Spécialités.sep = str_split(Spécialités, pattern=" ")
+  )
+
+spe.noms <- unique(c(unlist(spe$Spécialités.sep)))
+
+label_effectifs <- function(x) {
+  paste0(round(x/1000),"k")
+}
+```
+
+### Test MATHS
+
+```{r stat.data}
+bac.cible <- 2021
+discipline.cible <- "MATHS"
+
+spe.disc <- spe %>%
+  filter(Bac == bac.cible) %>%
+  mutate(Discipline = str_detect(Spécialités,discipline.cible))
+```
+
+```{r stat.global}
+spe.disc %>%
+  group_by(Niveau,Discipline) %>%
+  summarise(
+    Effectifs = sum(Effectifs)) %>%
+  mutate(Niveau=recode(Niveau,"Première" = "1ère")) %>%
+  ggplot(aes(x=Niveau,y=Effectifs, fill=Discipline)) + 
+  geom_col(color="black") +
+  geom_text(aes(label=label_effectifs(Effectifs)), position = position_stack(vjust = .5)) +
+  coord_polar(theta = "y") +
+  scale_fill_brewer(
+    palette = "Set1",
+    labels=c(paste("Sans ",discipline.cible),paste("Avec ",discipline.cible))) +
+  geom_text(aes(label=Niveau),y=0,nudge_x =-0.1,color="white",stat = "unique",hjust=-0.1) +
+  # annotate("text", x=1,y=0,label="Terminale") +
+  # annotate("text", x=1,y=0,label="Terminale") +
+  theme_cpesr_cap() + theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.major.y  = element_blank()
+    )
+```
+
+```{r stat.spec}
+spe.disc %>%
+  filter(Discipline) %>%
+  separate_rows(Spécialités, sep=" ") %>%
+  filter(Spécialités != discipline.cible) %>%
+  group_by(Niveau, Spécialités) %>%
+  summarise(Effectifs = sum(Effectifs)) %>% 
+  mutate(
+    Spécialités = case_when(
+      Effectifs < 2000 ~ "Autres",
+      TRUE ~ Spécialités
+    )) %>%
+  group_by(Niveau, Spécialités) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  arrange(desc(Effectifs)) %>%
+  ggplot(aes(x=reorder(Spécialités, Effectifs),y=Effectifs,fill=Niveau)) +
+    geom_col(position="Identity",color="black") +
+    #geom_text(aes(label=label_effectifs(Effectifs)), position = position_stack(vjust = .5)) +
+    coord_flip() +
+    theme_cpesr_cap()
+```
+
+
