@@ -44,15 +44,15 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 ## Nombre de candidats par poste MCF
 
-### Moyenne toutes sections confondues de 2013 à 2019
+### Moyenne toutes sections confondues de 2009 à 2019
 
     ##      CNU 
-    ## 13.68249
+    ## 12.05939
 
     ##                Droit éco ges Lettres et sciences humaines 
-    ##                     7.906869                    15.884402 
+    ##                     7.101895                    14.183739 
     ##                    Pharmacie       Sciences et techniques 
-    ##                     9.795386                    13.394962
+    ##                     8.872608                    11.572956
 
 ### Vision globale par grande discipline et groupes CNU
 
@@ -168,7 +168,11 @@ plein de candidatures dans certaines disciplines :
 
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.poste.2-1.png)<!-- -->
 
+    ## Warning: Removed 4 rows containing non-finite values (stat_boxplot).
+
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste-1.png)<!-- -->
+
+    ## Warning: Removed 4 rows containing missing values (geom_point).
 
 ![](ConcoursMCF_files/figure-gfm/candidatures.par.candidat.par.poste.2-1.png)<!-- -->
 
@@ -201,3 +205,65 @@ Ordonné par section
 
 Ordonné par section
 ![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2014to2019.2-1.png)<!-- -->
+
+### Evolution de 2009 à 2019
+
+    ## Warning: Removed 1 rows containing missing values (position_stack).
+
+![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2009to2019.1-1.png)<!-- -->
+
+Ordonné par section
+
+    ## Warning: Removed 1 rows containing missing values (position_stack).
+
+![](ConcoursMCF_files/figure-gfm/evolution.qualifies.candidats.postes.2009to2019.2-1.png)<!-- -->
+
+### Candidats et postes
+
+#### Nombre de candidats en fonction du nombre de postes
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.postes.DEG.1-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+    ## Warning: Removed 1 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 1 rows containing non-finite values (stat_poly_eq).
+
+    ## Warning: Removed 1 rows containing missing values (geom_point).
+
+![](ConcoursMCF_files/figure-gfm/candidats.postes.LSHS.1-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+    ## Warning: Removed 1 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 1 rows containing non-finite values (stat_poly_eq).
+
+    ## Warning: Removed 1 rows containing missing values (geom_point).
+
+![](ConcoursMCF_files/figure-gfm/candidats.postes.ST.1-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.postes.Pharma.1-1.png)<!-- -->
+
+#### Nombre de candidats par poste en fonction du nombre de postes
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.par.postes.DEG.1-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.par.postes.LSHS.1-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.par.postes.ST.1-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/candidats.par.postes.Pharma.1-1.png)<!-- -->

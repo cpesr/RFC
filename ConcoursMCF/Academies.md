@@ -25,8 +25,10 @@ Recrutements par académie
 
 <!-- end list -->
 
-    ## [1] "Annee"                "Academie.origine"     "Academie.recrutement"
-    ## [4] "Groupe.CNU"           "MCF"
+    ## [1] "Annee"                    "Academie.origine"        
+    ## [3] "Academie.recrutement"     "Groupe.CNU"              
+    ## [5] "MCF"                      "Academie.origine.reg"    
+    ## [7] "Academie.recrutement.reg"
 
   - Période : 2014, 2019
 
@@ -49,3 +51,9 @@ Recrutements par académie
     ## `summarise()` regrouping output by 'Academie.origine' (override with `.groups` argument)
 
 ![](Academies_files/figure-gfm/flux.geographique.mutations.MCF.1-1.png)<!-- -->
+
+En regroupant les académies de Paris, Créteil et Versailles.
+
+    ## `summarise()` regrouping output by 'Academie.origine.reg' (override with `.groups` argument)
+
+![](Academies_files/figure-gfm/flux.geographique.mutations.MCF.2-1.png)<!-- -->

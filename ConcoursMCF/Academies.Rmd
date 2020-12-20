@@ -17,7 +17,12 @@ library(robCompositions)
 library(viridis)
 
 academie = read.table("DB_Academies.csv", h=T, sep=";")
+
 croise = read.table("DB_Academies_croisees.csv", h=T, sep=";")
+croise$Academie.origine.reg = as.character(croise$Academie.origine)
+croise$Academie.origine.reg[croise$Academie.origine %in% c("PARIS", "CRETEIL", "VERSAILLES")] = "PARIS-CRETEIL-VERSAILLES"
+croise$Academie.recrutement.reg = as.character(croise$Academie.recrutement)
+croise$Academie.recrutement.reg[croise$Academie.recrutement %in% c("PARIS", "CRETEIL", "VERSAILLES")] = "PARIS-CRETEIL-VERSAILLES"
 ```
 
 ## Description des données 
@@ -103,4 +108,21 @@ croise %>%
                 licence = "CC BY-SA",
                 url = "https://github.com/cpesr/RFC",
                 source = "DGRH A1-1/Galaxie")
+```
+
+En regroupant les académies de Paris, Créteil et Versailles.
+```{r flux.geographique.mutations.MCF.2, fig.width=8, fig.asp=16/16}
+croise %>% 
+    group_by(Academie.origine.reg, Academie.recrutement.reg) %>% 
+    summarise(MCF = sum(MCF, na.rm=T)) %>% 
+    ggplot(aes(x=Academie.origine.reg, y=Academie.recrutement.reg, fill=MCF)) + 
+    geom_tile() + theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+    geom_text(aes(label = MCF), color = "white", size = 2) +
+    scale_fill_viridis(option="inferno") +
+    theme(legend.position = "right") +
+    labs(title="Flux des mutations MCF, somme des années 2014 à 2019", y ="Académie d'arrivée", x = "Académie de départ") +
+    theme_cpesr_cap(authors = c("Florent Figon"), 
+                    licence = "CC BY-SA",
+                    url = "https://github.com/cpesr/RFC",
+                    source = "DGRH A1-1/Galaxie")
 ```
