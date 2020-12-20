@@ -14,13 +14,16 @@ require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
 library(scales)
+library(zoo)
 
 CDD.cnrs = read.table("DB_CDD_CNRS.csv", head=T, sep=";") %>%
   mutate(datePosted = as.Date(
-    str_remove(
+        str_remove(
         str_replace_all(datePosted, c("janvier" = "01", "février" = "02", "mars" = "03", "avril" = "04", "mai" = "05", "juin" = "06", "juillet" = "07", "août" = "08", "septembre" = "09", "octobre" = "10", "novembre" = "11", "décembre" = "12")), 
         "(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)"), 
-    format = "%d %m %y"))
+    format = "%d %m %y") #,
+    #Salary = mean(as.numeric(gsub("([0-9]+).*$", "\\1", str_split(baseSalary, " ")[[1]]))), na.rm=T)
+    )
 ```
 
 _Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
@@ -38,12 +41,15 @@ colnames(CDD.cnrs)
 ### Evolution quotidienne
 ```{r evolution.quotidienne.nb.offres.1, fig.width=12, fig.asp=9/16}
 CDD.cnrs %>% 
+  filter(datePosted>"2020-11-15") %>%
   group_by(datePosted) %>% 
   summarise(offres.quotidiennes = sum(reference!="NA")) %>% 
-  ggplot(aes(x=datePosted, y=offres.quotidiennes)) + 
-  geom_line() +
+  mutate(roll = rollmean(x = offres.quotidiennes, k=7, fill=NA, align="right")) %>%
+  ggplot(aes(x=datePosted)) + 
+  geom_col(aes(y=offres.quotidiennes)) + 
+  geom_line(aes(y=roll), color="red") +
   scale_x_date(labels = date_format("%d/%m/%y"), breaks = "days") +
-  theme(axis.text.x = element_text(angle=45)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) +
   theme_cpesr_cap(authors=c("Florent Figon"), 
                     licence="CC BY-SA", 
                     url = "https://github.com/cpesr/RFC", 
@@ -57,6 +63,25 @@ CDD.cnrs %>%
 CDD.cnrs %>% 
   drop_na(duration.months) %>% 
   ggplot(aes(x=educationRequirements, y=duration.months)) + 
+    geom_violin() + 
+    geom_jitter(aes(color=employmentType), position = position_jitter(0.1)) +
+    stat_summary(fun=mean, geom="point", shape=1,
+                 size=3, color="black") +
+    stat_summary(fun=median, geom="point", shape=2,
+                 size=3, color="black") +
+    # stat_summary(fun.data=mean_sdl, mult=1, 
+    #              geom="pointrange", color="red") +
+    theme_cpesr_cap(authors=c("Florent Figon"), 
+                    licence="CC BY-SA", 
+                    url = "https://github.com/cpesr/RFC", 
+                    source="Portail Emploi CNRS") + theme(legend.position = "right")
+```
+
+### Durée en fonction de l'expérience requise
+```{r duree.par.experience.1, fig.width=12, fig.asp=9/16}
+CDD.cnrs %>% 
+  drop_na(duration.months) %>% 
+  ggplot(aes(x=experienceRequirements, y=duration.months)) + 
     geom_violin() + 
     geom_jitter(aes(color=employmentType), position = position_jitter(0.1)) +
     stat_summary(fun=mean, geom="point", shape=1,

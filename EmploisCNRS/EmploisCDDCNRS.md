@@ -9,7 +9,7 @@ issues](https://github.com/cpesr/RFC/issues).*
 ## Description des données
 
   - Source : <https://emploi.cnrs.fr/Offres.aspx>
-  - Nombre d’observations : 313
+  - Nombre d’observations : 483
   - Variables :
 
 <!-- end list -->
@@ -25,6 +25,8 @@ issues](https://github.com/cpesr/RFC/issues).*
 
     ## `summarise()` ungrouping output (override with `.groups` argument)
 
+    ## Warning: Removed 6 row(s) containing missing values (geom_path).
+
 ![](EmploisCDDCNRS_files/figure-gfm/evolution.quotidienne.nb.offres.1-1.png)<!-- -->
 
 ## Durée des CDD
@@ -32,3 +34,7 @@ issues](https://github.com/cpesr/RFC/issues).*
 ### Durée en fonction du niveau d’étude requis
 
 ![](EmploisCDDCNRS_files/figure-gfm/duree.par.niveau.1-1.png)<!-- -->
+
+### Durée en fonction de l’expérience requise
+
+![](EmploisCDDCNRS_files/figure-gfm/duree.par.experience.1-1.png)<!-- -->

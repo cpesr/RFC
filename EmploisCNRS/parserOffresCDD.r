@@ -2,14 +2,15 @@ library(dplyr)
 library(rvest)
 library(magrittr)
 library(htmltools)
+library(stringr)
+
+# on récupère la dernière extraction d'offres
+data.offres = read.table("DB_CDD_CNRS.csv", h=T, sep=";")
 
 # on récupère le code html de la page qui liste l'ensemble des offres CDD
 cnrs.offres = read_html("https://emploi.cnrs.fr/Offres.aspx")
 # on récupère tous les liens du tableau d'offres, et uniquement ceux qui ne sont pas associés à une image (ces derniers sont des doublons de traductions EN/FR)
 links.offres = cnrs.offres %>% html_nodes(xpath="//table//a[@itemprop='url']") %>% html_attr("href")
-
-# on récupère la dernière extraction d'offres
-data.offres = read.table("DB_CDD_CNRS.csv", h=T, sep=";")
 
 # pour chaque lien qui mène à une fiche de poste CDD, hors contrat doctoral, ...
 for (x in 1:length(grep("(^/Offres/CDD).*(aspx$)", links.offres))) {
@@ -80,11 +81,26 @@ for (x in 1:length(grep("(^/Offres/CDD).*(aspx$)", links.offres))) {
         html_text())
     )
     
+    date = date %>% 
+      str_replace_all(c("janvier" = "01", 
+                        "février" = "02", 
+                        "mars" = "03", 
+                        "avril" = "04", 
+                        "mai" = "05", 
+                        "juin" = "06", 
+                        "juillet" = "07", 
+                        "août" = "08", 
+                        "septembre" = "09", 
+                        "octobre" = "10", 
+                        "novembre" = "11", 
+                        "décembre" = "12")) %>%
+      str_remove("(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)")
+    
     # on conserve la fiche de poste html comme elles disparaissent au fur et à mesure
-    download_html(link.offre, file = paste("OffresCDD_HTML/", offre$reference, ".html", sep=""))
+    download_html(link.offre, file = paste("OffresCDD_HTML/", offre$reference, "_", date, ".html", sep=""))
     
     data.offres = rbind(offre, data.offres) 
   }
 }
 
-write.csv2(data.offres, "DB_CDD_CNRS_20201206.csv", row.names=F)
+write.csv2(data.offres, "DB_CDD_CNRS_20201219.csv", row.names=F)
