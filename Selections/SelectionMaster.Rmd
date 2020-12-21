@@ -1,0 +1,132 @@
+---
+title: "Sélection en Master"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width = 8, fig.height = 4.5)
+
+options(dplyr.summarise.inform = FALSE)
+options(tidyverse.quiet = TRUE)
+
+library(tidyverse)
+library(ggbeeswarm)
+library(kableExtra)
+library(ggrepel)
+
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors=c("Julien Gossa"), 
+                  url="https://github.com/cpesr/RFC",
+                  source="https://data.enseignementsup-recherche.gouv.fr")
+```
+
+Jeu de donnée : 
+
+- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public/information/?disjunctive.rentree_lib
+
+```{r data, cache=TRUE}
+sise <- read.table("fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv",
+                  header=TRUE, sep=';', quote='"', stringsAsFactors=TRUE, na.strings=c('XX')) %>%
+  group_by(RENTREE, Etablissement, Type.d.établissement, Discipline, Diplôme, CURSUS_LMD, NIVEAU) %>%
+  summarise(Effectifs = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE)) %>%
+  mutate(
+    NIVEAU = case_when(
+      Diplôme == "Licence professionnelle" ~ 3L,
+      TRUE ~ NIVEAU
+    ),
+    Niveau = paste0(CURSUS_LMD,NIVEAU),
+    Rentrée = as.factor(RENTREE)) %>%
+  filter(Effectifs != 0)
+```
+
+
+```{r global}
+sise %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  group_by(Rentrée, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Rentrée, y=Effectifs, fill=forcats::fct_rev(Niveau))) + geom_col() +
+  scale_fill_brewer(palette = "Purples", direction = -1, name="Niveau",  guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Effectifs étudiants globaux par niveau, en Licence et Master (hors Master d'enseignement")+
+  theme_cpesr_cap()
+```
+
+## Focus L3/M1/M2
+
+```{r L3LPM}
+sise %>%
+  #filter(Type.d.établissement == "Université") %>%
+  mutate(Type = ifelse(Type.d.établissement == "Université","Université","Autres")) %>%
+  filter(Diplôme %in% c("Licence","Licence professionnelle","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(Niveau = ifelse(Diplôme == "Licence professionnelle", "LP", Niveau)) %>%
+  group_by(Rentrée,Type.d.établissement,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs, color=Niveau)) +
+    geom_line(aes(group=Niveau)) +
+    #ylim(0,180000) +
+    facet_wrap(.~Type.d.établissement, scales="free_y") +
+    ggtitle("Effectifs étudiants en LP, L3, M1 et M2, par type d'établissement") +
+    theme_cpesr_cap() 
+```
+
+```{r data.L3M.univ}
+sise.L3M <- sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(Niveau = ifelse(Diplôme == "Licence professionnelle", "LP", Niveau)) %>%
+  group_by(Rentrée,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau) %>%
+  mutate(Evolution = Effectifs / first(Effectifs))
+```
+
+```{r L3M.univ}
+sise.L3M %>%
+  ggplot(aes(x=Rentrée,y=Effectifs, color=Niveau)) +
+    geom_line(aes(group=Niveau),size=2) +
+    #ylim(0,180000) +
+    ggtitle("Effectifs étudiants en L3, M1 et M2,\ndans les universités, grands établissements et COMUES") +
+    theme_cpesr_cap() 
+```
+
+
+```{r L3M.univ.evol}
+sise.L3M %>%
+  ggplot(aes(x=Rentrée,y=Evolution, color=Niveau)) +
+    geom_line(aes(group=Niveau),size=2) +
+    #ylim(0,180000) +
+    ggtitle("Evolution des effectifs étudiants en L3, M1 et M2,\ndans les universités, grands établissements et COMUES") +
+    theme_cpesr_cap() 
+```
+
+Le rapport consécutif se calcule comme le rapport entre les effectifs étudiants d'une année à un certain niveau, et les effectifs étudiants de l'année précédente au niveau précédent.
+
+Par exemple, le rapport consécutif M1/L3 en 2017 est le rapport entre les effectifs de M1 en 2017 et les effectifs de L3 en 2016.
+
+Il résulte donc des taux de passage et d'abandon, mais aussi des passerelles et des capacités d'accueil et sélections.
+
+```{r Rapports.consecutifs}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  group_by(Rentrée, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau) %>%
+  mutate(Effectifs2 = lag(Effectifs)) %>%
+  group_by(Rentrée) %>%
+  mutate(
+    Effectifs2 = lag(Effectifs2),
+    Rapports.consécutifs = Effectifs / Effectifs2,
+    Séquence = as.factor(paste0(Niveau,"/",lag(Niveau)))
+      ) %>%
+  filter(!is.na(Rapports.consécutifs)) %>%
+  ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) + geom_line(aes(group=Séquence),size=2) +
+  ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs") +
+  theme_cpesr_cap()
+```
+
+
