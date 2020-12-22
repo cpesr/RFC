@@ -29,7 +29,7 @@ Jeu de donnée :
 ```{r data, cache=TRUE}
 sise <- read.table("fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv",
                   header=TRUE, sep=';', quote='"', stringsAsFactors=TRUE, na.strings=c('XX')) %>%
-  group_by(RENTREE, Etablissement, Type.d.établissement, Discipline, Diplôme, CURSUS_LMD, NIVEAU) %>%
+  group_by(RENTREE, ETABLISSEMENT, Etablissement, Type.d.établissement, Discipline, Diplôme, CURSUS_LMD, NIVEAU) %>%
   summarise(Effectifs = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE)) %>%
   mutate(
     NIVEAU = case_when(
@@ -41,6 +41,9 @@ sise <- read.table("fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv",
   filter(Effectifs != 0)
 ```
 
+```{r colors}
+pal.niveaux = RColorBrewer::brewer.pal(6,"Purples")
+```
 
 ```{r global}
 sise %>%
@@ -68,6 +71,7 @@ sise %>%
     geom_line(aes(group=Niveau)) +
     #ylim(0,180000) +
     facet_wrap(.~Type.d.établissement, scales="free_y") +
+    scale_color_manual(values=pal.niveaux[3:6]) +
     ggtitle("Effectifs étudiants en LP, L3, M1 et M2, par type d'établissement") +
     theme_cpesr_cap() 
 ```
@@ -89,6 +93,7 @@ sise.L3M %>%
   ggplot(aes(x=Rentrée,y=Effectifs, color=Niveau)) +
     geom_line(aes(group=Niveau),size=2) +
     #ylim(0,180000) +
+    scale_color_manual(values=pal.niveaux[3:6]) +
     ggtitle("Effectifs étudiants en L3, M1 et M2,\ndans les universités, grands établissements et COMUES") +
     theme_cpesr_cap() 
 ```
@@ -99,9 +104,37 @@ sise.L3M %>%
   ggplot(aes(x=Rentrée,y=Evolution, color=Niveau)) +
     geom_line(aes(group=Niveau),size=2) +
     #ylim(0,180000) +
+    scale_color_manual(values=pal.niveaux[3:6]) +
     ggtitle("Evolution des effectifs étudiants en L3, M1 et M2,\ndans les universités, grands établissements et COMUES") +
     theme_cpesr_cap() 
 ```
+
+
+```{r data.L3M.etiquettes}
+etiquettes <- read.csv("etiquettes.csv") %>% rename(ETABLISSEMENT = UAI)
+
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  merge(etiquettes) %>%
+  mutate(critere = ifelse(Udice,"Udice","Autres")) %>%
+  group_by(Rentrée,critere,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau,critere) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Evolution, color=Niveau)) +
+    geom_line(aes(group=Niveau)) +
+    #ylim(0,180000) +
+    scale_color_manual(values=pal.niveaux[3:6]) +
+    facet_wrap(critere~.) +
+    ggtitle("Evolution des effectifs étudiants en L3, M1 et M2,\ndans les universités, grands établissements et COMUES\nselon l'appartenance à Udice ") +
+    theme_cpesr_cap() 
+```
+
+
+
+### Rapports consécutifs
 
 Le rapport consécutif se calcule comme le rapport entre les effectifs étudiants d'une année à un certain niveau, et les effectifs étudiants de l'année précédente au niveau précédent.
 
@@ -125,8 +158,33 @@ sise %>%
       ) %>%
   filter(!is.na(Rapports.consécutifs)) %>%
   ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) + geom_line(aes(group=Séquence),size=2) +
-  ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs") +
+  scale_color_brewer(palette="Paired") +
+    ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs") +
   theme_cpesr_cap()
 ```
 
+```{r Rapports.consecutifs.udice}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  merge(etiquettes) %>%
+  mutate(critere = ifelse(Udice,"Udice","Autres")) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(critere, Niveau) %>%
+  mutate(Effectifs2 = lag(Effectifs)) %>%
+  group_by(critere, Rentrée) %>%
+  mutate(
+    Effectifs2 = lag(Effectifs2),
+    Rapports.consécutifs = Effectifs / Effectifs2,
+    Séquence = as.factor(paste0(Niveau,"/",lag(Niveau)))
+      ) %>%
+  filter(!is.na(Rapports.consécutifs)) %>%
+  ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) +
+    geom_line(aes(group=Séquence),size=1) +
+    facet_wrap(critere~.) +
+    scale_color_brewer(palette="Paired") +
+    ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nselon l'appartenance à Udice") +
+  theme_cpesr_cap()
+```
 
