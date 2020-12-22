@@ -18,6 +18,8 @@ Jeu de donnée
 
 ![](SelectionMaster_files/figure-gfm/data.L3M.etiquettes-1.png)<!-- -->
 
+![](SelectionMaster_files/figure-gfm/data.L3M.disc-1.png)<!-- -->
+
 ### Rapports consécutifs
 
 Le rapport consécutif se calcule comme le rapport entre les effectifs
@@ -34,3 +36,7 @@ sélections.
 ![](SelectionMaster_files/figure-gfm/Rapports.consecutifs-1.png)<!-- -->
 
 ![](SelectionMaster_files/figure-gfm/Rapports.consecutifs.udice-1.png)<!-- -->
+
+    ## Warning: Removed 1 row(s) containing missing values (geom_path).
+
+![](SelectionMaster_files/figure-gfm/Rapports.consecutifs.disc-1.png)<!-- -->

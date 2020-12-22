@@ -133,6 +133,25 @@ sise %>%
 ```
 
 
+```{r data.L3M.disc, fig.width=10, fig.height=10}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(critere = Discipline) %>%
+  group_by(Rentrée,critere,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau,critere) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Evolution, color=Niveau)) +
+    geom_line(aes(group=Niveau)) +
+    #ylim(0,180000) +
+    scale_color_manual(values=pal.niveaux[3:6]) +
+    facet_wrap(critere~.) +
+    ylim(0,2) +
+    ggtitle("Evolution des effectifs étudiants en L3, M1 et M2,\ndans les universités, grands établissements et COMUES\nselon la discipline") +
+    theme_cpesr_cap() 
+```
 
 ### Rapports consécutifs
 
@@ -188,3 +207,27 @@ sise %>%
   theme_cpesr_cap()
 ```
 
+```{r Rapports.consecutifs.disc, fig.width=10, fig.height=10}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  mutate(critere = Discipline) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(critere, Niveau) %>%
+  mutate(Effectifs2 = lag(Effectifs)) %>%
+  group_by(critere, Rentrée) %>%
+  mutate(
+    Effectifs2 = lag(Effectifs2),
+    Rapports.consécutifs = Effectifs / Effectifs2,
+    Séquence = as.factor(paste0(Niveau,"/",lag(Niveau)))
+      ) %>%
+  filter(!is.na(Rapports.consécutifs)) %>%
+  ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) +
+    geom_line(aes(group=Séquence),size=0.5) +
+    facet_wrap(critere~.) +
+    ylim(0,2) +
+    scale_color_brewer(palette="Paired") +
+    ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nselon la discipline") +
+  theme_cpesr_cap()
+```
