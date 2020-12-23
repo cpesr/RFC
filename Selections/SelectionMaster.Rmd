@@ -42,7 +42,9 @@ sise <- read.table("fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv",
 ```
 
 ```{r colors}
-pal.niveaux = RColorBrewer::brewer.pal(6,"Purples")
+pal.niveaux = c(
+  RColorBrewer::brewer.pal(4,"Purples")[-1],
+  RColorBrewer::brewer.pal(3,"Oranges")[-1])
 ```
 
 ```{r global}
@@ -51,7 +53,7 @@ sise %>%
   group_by(Rentrée, Niveau) %>%
   summarise(Effectifs = sum(Effectifs)) %>%
   ggplot(aes(x=Rentrée, y=Effectifs, fill=forcats::fct_rev(Niveau))) + geom_col() +
-  scale_fill_brewer(palette = "Purples", direction = -1, name="Niveau",  guide = guide_legend(reverse = TRUE)) +
+  scale_fill_manual(values=rev(pal.niveaux), name="Niveau",  guide = guide_legend(reverse = TRUE)) +
   ggtitle("Effectifs étudiants globaux par niveau, en Licence et Master (hors Master d'enseignement")+
   theme_cpesr_cap()
 ```
@@ -71,7 +73,7 @@ sise %>%
     geom_line(aes(group=Niveau)) +
     #ylim(0,180000) +
     facet_wrap(.~Type.d.établissement, scales="free_y") +
-    scale_color_manual(values=pal.niveaux[3:6]) +
+    scale_color_manual(values=pal.niveaux[2:6]) +
     ggtitle("Effectifs étudiants en LP, L3, M1 et M2, par type d'établissement") +
     theme_cpesr_cap() 
 ```
@@ -177,7 +179,7 @@ sise %>%
       ) %>%
   filter(!is.na(Rapports.consécutifs)) %>%
   ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) + geom_line(aes(group=Séquence),size=2) +
-  scale_color_brewer(palette="Paired") +
+  scale_color_manual(values=pal.niveaux[-1]) +
     ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs") +
   theme_cpesr_cap()
 ```
@@ -202,7 +204,7 @@ sise %>%
   ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) +
     geom_line(aes(group=Séquence),size=1) +
     facet_wrap(critere~.) +
-    scale_color_brewer(palette="Paired") +
+    scale_color_manual(values=pal.niveaux[-1]) +
     ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nselon l'appartenance à Udice") +
   theme_cpesr_cap()
 ```
@@ -211,6 +213,9 @@ sise %>%
 sise %>%
   filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
   filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  mutate(Discipline = ifelse(
+    str_detect(Discipline,"Pluridisciplinaire"),"Pluridisciplinaire",as.character(Discipline)
+  )) %>%
   mutate(critere = Discipline) %>%
   group_by(Rentrée, critere, Niveau) %>%
   summarise(Effectifs = sum(Effectifs)) %>%
@@ -221,13 +226,13 @@ sise %>%
     Effectifs2 = lag(Effectifs2),
     Rapports.consécutifs = Effectifs / Effectifs2,
     Séquence = as.factor(paste0(Niveau,"/",lag(Niveau)))
-      ) %>%
+      ) %>% 
   filter(!is.na(Rapports.consécutifs)) %>%
   ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) +
     geom_line(aes(group=Séquence),size=0.5) +
     facet_wrap(critere~.) +
     ylim(0,2) +
-    scale_color_brewer(palette="Paired") +
+    scale_color_manual(values=pal.niveaux[-1]) +
     ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nselon la discipline") +
   theme_cpesr_cap()
 ```
