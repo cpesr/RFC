@@ -231,3 +231,49 @@ sise %>%
     ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nselon la discipline") +
   theme_cpesr_cap()
 ```
+
+## Séquences
+
+```{r Séquences, fig.height=7}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  group_by(Rentrée, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Niveau,y=Effectifs,fill=Niveau)) +
+    #geom_line(aes(group=Séquence),size=2) +
+    geom_col() +
+    facet_grid(Rentrée~.) +
+    scale_fill_manual(values=pal.niveaux) +
+    ggtitle("Effectifs par niveau et année\ndans les universités, grands établissements et COMUEs") +
+  theme_cpesr_cap()
+```
+
+Une séquence est un ensemble d'effectifs consécutifs commençant à un niveau donnée à une année donnée, et continuant aux niveaux suivants dans les années suivantes.
+
+Par exemple, la séquence qui commencence en L1/2012 se poursuit en L2/2013 et se termine en M2/2016 
+
+```{r Séquences.2}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  group_by(Rentrée, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  mutate(
+    Niveau = as.factor(Niveau),
+    decal = as.integer(Niveau)-1) %>%
+  group_by(Niveau) %>%
+  #ungroup() %>%
+  mutate(Effectifs2 = lead(Effectifs,decal[1])) %>% 
+  ggplot(aes(x=Niveau,y=Effectifs2,color=Rentrée)) +
+    geom_line(aes(group=Rentrée),size=1) +
+    #geom_col() +
+    #facet_grid(Rentrée~.) +
+    scale_color_brewer(palette = "Reds") +
+    #ylim(0,350000) +
+    ggtitle("Séquences de 2012 à 2017 \ndans les universités, grands établissements et COMUEs") +
+  theme_cpesr_cap()
+```
+
+
+

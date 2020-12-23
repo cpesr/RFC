@@ -40,3 +40,18 @@ sélections.
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
 ![](SelectionMaster_files/figure-gfm/Rapports.consecutifs.disc-1.png)<!-- -->
+
+## Séquences
+
+![](SelectionMaster_files/figure-gfm/Séquences-1.png)<!-- -->
+
+Une séquence est un ensemble d’effectifs consécutifs commençant à un
+niveau donnée à une année donnée, et continuant aux niveaux suivants
+dans les années suivantes.
+
+Par exemple, la séquence qui commencence en L1/2012 se poursuit en
+L2/2013 et se termine en M2/2016
+
+    ## Warning: Removed 10 row(s) containing missing values (geom_path).
+
+![](SelectionMaster_files/figure-gfm/Séquences.2-1.png)<!-- -->
