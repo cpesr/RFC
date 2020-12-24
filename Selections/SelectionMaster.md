@@ -8,6 +8,10 @@ Jeu de donnée
 
 ![](SelectionMaster_files/figure-gfm/global-1.png)<!-- -->
 
+![](SelectionMaster_files/figure-gfm/Sequences-1.png)<!-- -->
+
+![](SelectionMaster_files/figure-gfm/Sequences.2-1.png)<!-- -->
+
 ## Focus L3/M1/M2
 
 ![](SelectionMaster_files/figure-gfm/L3LPM-1.png)<!-- -->
@@ -37,21 +41,29 @@ sélections.
 
 ![](SelectionMaster_files/figure-gfm/Rapports.consecutifs.udice-1.png)<!-- -->
 
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
-
 ![](SelectionMaster_files/figure-gfm/Rapports.consecutifs.disc-1.png)<!-- -->
 
-## Séquences
+## Rapports séquentiels
 
-![](SelectionMaster_files/figure-gfm/Séquences-1.png)<!-- -->
+Les rapports séquentiels se calculent comme le rapport entre les
+effectifs étudiants d’une année et d’un niveau de référence, et les
+effectifs étudiants des années précédentes aux niveaux suivants.
 
-Une séquence est un ensemble d’effectifs consécutifs commençant à un
-niveau donnée à une année donnée, et continuant aux niveaux suivants
-dans les années suivantes.
+Par exemple, les rapports séquentiels de L1 en 2012 prennent cet
+effectif en référence pour calculer les rapports avec L2 en 2013, puis
+L3 en 2014, etc.
 
-Par exemple, la séquence qui commencence en L1/2012 se poursuit en
-L2/2013 et se termine en M2/2016
+Il résulte donc des taux de passage et d’abandon, mais aussi des
+passerelles et des capacités d’accueil et sélections.
 
     ## Warning: Removed 10 row(s) containing missing values (geom_path).
 
-![](SelectionMaster_files/figure-gfm/Séquences.2-1.png)<!-- -->
+![](SelectionMaster_files/figure-gfm/rap.seq-1.png)<!-- -->
+
+    ## Warning: Removed 10 row(s) containing missing values (geom_path).
+
+![](SelectionMaster_files/figure-gfm/rap.seq.udice-1.png)<!-- -->
+
+    ## Warning: Removed 10 row(s) containing missing values (geom_path).
+
+![](SelectionMaster_files/figure-gfm/rap.seq.udice.etab-1.png)<!-- -->

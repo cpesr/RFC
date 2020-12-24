@@ -54,9 +54,43 @@ sise %>%
   summarise(Effectifs = sum(Effectifs)) %>%
   ggplot(aes(x=Rentrée, y=Effectifs, fill=forcats::fct_rev(Niveau))) + geom_col() +
   scale_fill_manual(values=rev(pal.niveaux), name="Niveau",  guide = guide_legend(reverse = TRUE)) +
-  ggtitle("Effectifs étudiants globaux par niveau, en Licence et Master (hors Master d'enseignement")+
+  ggtitle("Effectifs étudiants globaux par niveau, en Licence et Master (hors Master d'enseignement)")+
   theme_cpesr_cap()
 ```
+
+
+```{r Sequences, fig.height=7}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  group_by(Rentrée, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Niveau,y=Effectifs,fill=Niveau)) +
+    #geom_line(aes(group=Séquence),size=2) +
+    geom_col() +
+    facet_grid(Rentrée~.) +
+    scale_fill_manual(values=pal.niveaux) +
+    ggtitle("Effectifs par niveau et année\ndans les universités, grands établissements et COMUEs") +
+  theme_cpesr_cap()
+```
+
+```{r Sequences.2}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  group_by(Rentrée, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Niveau,y=Effectifs,fill=Niveau,color=Rentrée)) +
+    #geom_line(aes(group=Séquence),size=2) +
+    geom_col(position = "dodge") +
+    #facet_grid(Rentrée~.) +
+    scale_fill_manual(values=pal.niveaux) +
+    scale_color_brewer(palette = "Reds") +
+    ggtitle("Effectifs par niveau et année\ndans les universités, grands établissements et COMUEs") +
+  theme_cpesr_cap()
+```
+
+
 
 ## Focus L3/M1/M2
 
@@ -237,28 +271,16 @@ sise %>%
   theme_cpesr_cap()
 ```
 
-## Séquences
+## Rapports séquentiels
 
-```{r Séquences, fig.height=7}
-sise %>%
-  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
-  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
-  group_by(Rentrée, Niveau) %>%
-  summarise(Effectifs = sum(Effectifs)) %>%
-  ggplot(aes(x=Niveau,y=Effectifs,fill=Niveau)) +
-    #geom_line(aes(group=Séquence),size=2) +
-    geom_col() +
-    facet_grid(Rentrée~.) +
-    scale_fill_manual(values=pal.niveaux) +
-    ggtitle("Effectifs par niveau et année\ndans les universités, grands établissements et COMUEs") +
-  theme_cpesr_cap()
-```
 
-Une séquence est un ensemble d'effectifs consécutifs commençant à un niveau donnée à une année donnée, et continuant aux niveaux suivants dans les années suivantes.
+Les rapports séquentiels se calculent comme le rapport entre les effectifs étudiants d'une année et d'un niveau de référence, et les effectifs étudiants des années précédentes aux niveaux suivants.
 
-Par exemple, la séquence qui commencence en L1/2012 se poursuit en L2/2013 et se termine en M2/2016 
+Par exemple, les rapports séquentiels de L1 en 2012 prennent cet effectif en référence pour calculer les rapports avec L2 en 2013, puis L3 en 2014, etc.
 
-```{r Séquences.2}
+Il résulte donc des taux de passage et d'abandon, mais aussi des passerelles et des capacités d'accueil et sélections.
+
+```{r rap.seq}
 sise %>%
   filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
   filter(Diplôme %in% c("Licence", "Autres masters")) %>%
@@ -270,15 +292,70 @@ sise %>%
   group_by(Niveau) %>%
   #ungroup() %>%
   mutate(Effectifs2 = lead(Effectifs,decal[1])) %>% 
-  ggplot(aes(x=Niveau,y=Effectifs2,color=Rentrée)) +
+  group_by(Rentrée) %>%
+  mutate(Rapport.séquentiel = Effectifs2 / first(Effectifs2)) %>%
+  ggplot(aes(x=Niveau,y=Rapport.séquentiel,color=Rentrée)) +
     geom_line(aes(group=Rentrée),size=1) +
     #geom_col() +
     #facet_grid(Rentrée~.) +
     scale_color_brewer(palette = "Reds") +
     #ylim(0,350000) +
-    ggtitle("Séquences de 2012 à 2017 \ndans les universités, grands établissements et COMUEs") +
+    ggtitle("Rapports séquentiels de 2012 à 2017 \ndans les universités, grands établissements et COMUEs") +
   theme_cpesr_cap()
 ```
 
 
+```{r rap.seq.udice}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  merge(etiquettes) %>%
+  mutate(critere = ifelse(Udice,"Udice","Autres")) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  mutate(
+    Niveau = as.factor(Niveau),
+    decal = as.integer(Niveau)-1) %>%
+  group_by(critere, Niveau) %>%
+  #ungroup() %>%
+  mutate(Effectifs2 = lead(Effectifs,decal[1])) %>% 
+  group_by(Rentrée, critere) %>%
+  mutate(Rapport.séquentiel = Effectifs2 / first(Effectifs2)) %>%
+  ggplot(aes(x=Niveau,y=Rapport.séquentiel,color=Rentrée)) +
+    geom_line(aes(group=Rentrée),size=1) +
+    #geom_col() +
+    facet_grid(.~critere) +
+    scale_color_brewer(palette = "Reds") +
+    #ylim(0,350000) +
+    ggtitle("Rapports séquentiels de 2012 à 2017 \ndans les universités, grands établissements et COMUEs\nselon l'appartenance à Udice") +
+  theme_cpesr_cap()
+```
+
+
+```{r rap.seq.udice.etab}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  merge(etiquettes) %>%
+  filter(Udice) %>%
+  mutate(critere = Libellé) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  mutate(
+    Niveau = as.factor(Niveau),
+    decal = as.integer(Niveau)-1) %>%
+  group_by(critere, Niveau) %>%
+  #ungroup() %>%
+  mutate(Effectifs2 = lead(Effectifs,decal[1])) %>% 
+  group_by(Rentrée, critere) %>%
+  mutate(Rapport.séquentiel = Effectifs2 / first(Effectifs2)) %>%
+  ggplot(aes(x=Niveau,y=Rapport.séquentiel,color=Rentrée)) +
+    geom_line(aes(group=Rentrée),size=1) +
+    #geom_col() +
+    facet_wrap(.~critere) +
+    scale_color_brewer(palette = "Reds") +
+    ylim(0.4,1) +
+    ggtitle("Rapports séquentiels de 2012 à 2017 \ndans les universités, grands établissements et COMUEs\nappartenant à Udice") +
+  theme_cpesr_cap()
+```
 
