@@ -14,7 +14,7 @@ library(tidyverse)
 library(ggbeeswarm)
 library(kableExtra)
 library(ggrepel)
-
+library(kableExtra)
 library(ggcpesrthemes)
 
 theme_cpesr_setup(authors=c("Julien Gossa"), 
@@ -22,21 +22,43 @@ theme_cpesr_setup(authors=c("Julien Gossa"),
                   source="https://data.enseignementsup-recherche.gouv.fr")
 ```
 
-Jeu de donnée : 
+Jeu de données : 
 
 - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public/information/?disjunctive.rentree_lib
 
 ```{r data, cache=TRUE}
+sise.sample <- read.table("fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv",
+                  header=TRUE, sep=';', quote='"', stringsAsFactors=TRUE, na.strings=c('XX'), nrows=10000)
+
 sise <- read.table("fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv",
                   header=TRUE, sep=';', quote='"', stringsAsFactors=TRUE, na.strings=c('XX')) %>%
-  group_by(RENTREE, ETABLISSEMENT, Etablissement, Type.d.établissement, Discipline, Diplôme, CURSUS_LMD, NIVEAU) %>%
+  mutate(Mobilité = 
+    # factor(paste0(ATTRAC_NAT_DEP_BAC,ATTRAC_NAT_REG_BAC,ATTRAC_INTERN,MOBILITE_INTERN),
+    # levels=c("11FX","11EX","21FX","21EX","22FX","23FX","31FX","32FX","32EX","33FX","33EX","44FX","44FM","44EM","55FX","99FX","99EM"))
+    factor(case_when(
+      Mobilité.internationale == "Etudiants étrangers en mobilité internationale"
+        ~ "Internationale",
+      Attractivité.internationale == "Etudiants de nationalité étrangère issus de systèmes éducatifs étrangers"
+        ~ "Internationale",
+      Attractivité.régionale..région.d.obtention.du.baccalauréat. == "Etranger"
+        ~ "Internationale",
+      Attractivité.régionale..région.d.obtention.du.baccalauréat. == "Autres régions françaises"
+        ~ "Nationale",
+      Attractivité.départementale..département.d.obtention.du.baccalauréat. %in% c("Autres départements français","Départements limitrophes")
+        ~ "Régionale",
+      Attractivité.départementale..département.d.obtention.du.baccalauréat. == "Même département"
+        ~ "Départementale"),
+      levels = c("Départementale","Régionale","Nationale","Non bachelier","Internationale")
+    )
+  ) %>%
+  group_by(RENTREE, ETABLISSEMENT, Etablissement, Type.d.établissement, Discipline, Diplôme, DN_DE, Mobilité, CURSUS_LMD, NIVEAU) %>%
   summarise(Effectifs = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE)) %>%
   mutate(
     NIVEAU = case_when(
       Diplôme == "Licence professionnelle" ~ 3L,
       TRUE ~ NIVEAU
     ),
-    Niveau = paste0(CURSUS_LMD,NIVEAU),
+    Niveau = paste0(CURSUS_LMD,ifelse(is.na(NIVEAU),"x",NIVEAU)),
     Rentrée = as.factor(RENTREE)) %>%
   filter(Effectifs != 0)
 ```
@@ -45,6 +67,8 @@ sise <- read.table("fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv",
 pal.niveaux = c(
   RColorBrewer::brewer.pal(4,"Purples")[-1],
   RColorBrewer::brewer.pal(3,"Oranges")[-1])
+pal.mobilité <- colorRampPalette(RColorBrewer::brewer.pal(11, "Spectral"))(length(levels(sise$Mobilité)))
+
 ```
 
 ```{r global}
@@ -80,17 +104,36 @@ sise %>%
   filter(Diplôme %in% c("Licence", "Autres masters")) %>%
   group_by(Rentrée, Niveau) %>%
   summarise(Effectifs = sum(Effectifs)) %>%
-  ggplot(aes(x=Niveau,y=Effectifs,fill=Niveau,color=Rentrée)) +
+  ggplot(aes(x=Rentrée,y=Effectifs,fill=Niveau)) +
     #geom_line(aes(group=Séquence),size=2) +
     geom_col(position = "dodge") +
-    #facet_grid(Rentrée~.) +
+    facet_grid(.~Niveau) +
     scale_fill_manual(values=pal.niveaux) +
+    scale_x_discrete(breaks=c(2013,2015,2017))+
     scale_color_brewer(palette = "Reds") +
     ggtitle("Effectifs par niveau et année\ndans les universités, grands établissements et COMUEs") +
   theme_cpesr_cap()
 ```
 
+## Mobilité
 
+```{r Mobilite}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  group_by(Rentrée, Niveau, Mobilité) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs,fill=forcats::fct_rev(Mobilité))) +
+    #geom_line(aes(group=Séquence),size=2) +
+    geom_col() +
+    facet_grid(.~Niveau) +
+    scale_color_manual(values=pal.niveaux) +
+    scale_fill_brewer(palette="Spectral", name="Mobilité", na.value="grey50") +
+    scale_x_discrete(breaks=c(2013,2015,2017))+
+    
+    ggtitle("Effectifs par niveau et année\ndans les universités, grands établissements et COMUEs") +
+  theme_cpesr_cap()
+```
 
 ## Focus L3/M1/M2
 
@@ -189,6 +232,29 @@ sise %>%
     theme_cpesr_cap() 
 ```
 
+
+```{r data.L3M.mob}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(critere = Mobilité) %>%
+  group_by(Rentrée,critere,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau,critere) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  filter(!is.na(critere)) %>%
+  ggplot(aes(x=Rentrée,y=Evolution, color=Niveau)) +
+    geom_line(aes(group=Niveau)) +
+    #ylim(0,180000) +
+    scale_color_manual(values=pal.niveaux[3:6]) +
+    scale_x_discrete(breaks=c(2013,2015,2017))+
+    facet_grid(.~critere) +
+    ggtitle("Evolution des effectifs étudiants en L3, M1 et M2,\ndans les universités, grands établissements et COMUES\nselon la mobilité") +
+    theme_cpesr_cap() 
+```
+
+
 ### Rapports consécutifs
 
 Le rapport consécutif se calcule comme le rapport entre les effectifs étudiants d'une année à un certain niveau, et les effectifs étudiants de l'année précédente au niveau précédent.
@@ -243,6 +309,59 @@ sise %>%
   theme_cpesr_cap()
 ```
 
+
+```{r Rapports.consecutifs.udice.etab, fig.height=8}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  merge(etiquettes) %>%
+  filter(Udice) %>%
+  mutate(critere = Etablissement) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(critere, Niveau) %>%
+  mutate(Effectifs2 = lag(Effectifs)) %>%
+  group_by(critere, Rentrée) %>%
+  mutate(
+    Effectifs2 = lag(Effectifs2),
+    Rapports.consécutifs = Effectifs / Effectifs2,
+    Séquence = as.factor(paste0(Niveau,"/",lag(Niveau)))
+      ) %>%
+  filter(!is.na(Rapports.consécutifs)) %>%
+  ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) +
+    geom_line(aes(group=Séquence),size=1) +
+    facet_wrap(critere~.) +
+    coord_cartesian(ylim=c(0,1.5)) +
+    scale_color_manual(values=pal.niveaux[-1]) +
+    ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nappartenant à Udice") +
+  theme_cpesr_cap()
+```
+
+
+Top 10
+
+```{r Rapports.consecutifs.udice.top}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  merge(etiquettes) %>%
+  mutate(critere = Etablissement) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(critere, Niveau) %>%
+  mutate(Effectifs2 = lag(Effectifs)) %>%
+  group_by(critere, Rentrée) %>%
+  mutate(
+    Effectifs2 = lag(Effectifs2),
+    Rapports.consécutifs = Effectifs / Effectifs2,
+    Séquence = as.factor(paste0(Niveau,"/",lag(Niveau)))
+      ) %>%
+  filter(Séquence == "M2/M1", Rentrée == 2018) %>% 
+  arrange(desc(Rapports.consécutifs)) %>% 
+  head() %>% kable()
+```
+
+
 ```{r Rapports.consecutifs.disc, fig.width=10, fig.height=10}
 sise %>%
   filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
@@ -270,6 +389,34 @@ sise %>%
     ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nselon la discipline") +
   theme_cpesr_cap()
 ```
+
+```{r Rapports.consecutifs.mob}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  mutate(critere = Mobilité) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(critere, Niveau) %>%
+  mutate(Effectifs2 = lag(Effectifs)) %>%
+  group_by(critere, Rentrée) %>%
+  mutate(
+    Effectifs2 = lag(Effectifs2),
+    Rapports.consécutifs = Effectifs / Effectifs2,
+    Séquence = as.factor(paste0(Niveau,"/",lag(Niveau)))
+      ) %>% 
+  filter(!is.na(Rapports.consécutifs), !is.na(critere)) %>%
+  ggplot(aes(x=Rentrée,y=Rapports.consécutifs,color=Séquence)) +
+    geom_line(aes(group=Séquence),size=0.5) +
+    facet_grid(.~critere) +
+    ylim(0,2) +
+    scale_color_manual(values=pal.niveaux[-1]) +
+    scale_x_discrete(breaks=c(2013,2015,2017))+
+    ggtitle("Rapports consécutifs dans les Licences et Masters\ndans les universités, grands établissements et COMUEs\nselon la mobilité") +
+  theme_cpesr_cap()
+```
+
+
 
 ## Rapports séquentiels
 
@@ -359,3 +506,104 @@ sise %>%
   theme_cpesr_cap()
 ```
 
+```{r rap.seq.mob}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  mutate(critere = Mobilité) %>%
+  group_by(Rentrée, critere, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  mutate(
+    Niveau = as.factor(Niveau),
+    decal = as.integer(Niveau)-1) %>%
+  group_by(critere, Niveau) %>%
+  #ungroup() %>%
+  mutate(Effectifs2 = lead(Effectifs,decal[1])) %>% 
+  group_by(Rentrée, critere) %>%
+  mutate(Rapport.séquentiel = Effectifs2 / first(Effectifs2)) %>%
+  filter(!is.na(critere)) %>%
+  ggplot(aes(x=Niveau,y=Rapport.séquentiel,color=Rentrée)) +
+    geom_line(aes(group=Rentrée),size=0.5) +
+    #geom_col() +
+    facet_grid(.~critere) +
+    scale_color_brewer(palette = "Reds") +
+    #ylim(0.4,1) +
+    ggtitle("Rapports séquentiels de 2012 à 2017 \ndans les universités, grands établissements et COMUEs\nselon la mobilité") +
+  theme_cpesr_cap()
+```
+
+
+## LM vs. DU
+
+```{r lmdu.colors}
+pal.lmdu = pal.niveaux[c(2,4)]
+```
+
+```{r lmdu.data}
+sise %>%
+    filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters") || DN_DE=="DU", CURSUS_LMD != "D") %>%
+  group_by(Rentrée,CURSUS_LMD,DN_DE) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs,fill=CURSUS_LMD,alpha=DN_DE)) +
+    geom_col() + 
+    facet_grid(CURSUS_LMD~., scales = "free_y") +
+    ggtitle("Effectifs L et M dans les universités, grands établissements et COMUEs\nen diplômes nationnaux et diplômes d'établissement") +
+  scale_fill_manual(values=pal.lmdu) +
+  scale_alpha_manual(values=c(0.6,1)) +
+  theme_cpesr_cap()
+```
+
+```{r lmdu.data.evol}
+sise %>%
+    filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters") || DN_DE=="DU", CURSUS_LMD != "D") %>%
+  group_by(Rentrée,CURSUS_LMD,DN_DE) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(CURSUS_LMD,DN_DE) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=CURSUS_LMD,alpha=DN_DE)) +
+    geom_line(aes(group=paste(CURSUS_LMD,DN_DE)),size=2) +
+    #facet_grid(CURSUS_LMD~., scales = "free_y") +
+    ggtitle("Evolution des effectifs L et M dans les universités, grands établissements et COMUEs\nen diplômes nationnaux et diplômes d'établissement") +
+  scale_color_manual(values=pal.lmdu) +
+  scale_alpha_manual(values=c(0.6,1)) +
+  theme_cpesr_cap()
+```
+
+```{r lmdu.data.evol.udice}
+sise %>%
+    filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters") || DN_DE=="DU", CURSUS_LMD != "D") %>%
+  merge(etiquettes) %>%
+  group_by(Rentrée,CURSUS_LMD,DN_DE,Udice) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(CURSUS_LMD,DN_DE,Udice) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=CURSUS_LMD,alpha=DN_DE)) +
+    geom_line(aes(group=paste(CURSUS_LMD,DN_DE)),size=2) +
+    facet_grid(.~Udice) +
+    ggtitle("Evolution des effectifs L et M dans les universités, grands établissements et COMUEs\nen diplômes nationnaux et diplômes d'établissement") +
+  scale_color_manual(values=pal.lmdu) +
+  scale_alpha_manual(values=c(0.6,1)) +
+  theme_cpesr_cap()
+```
+
+```{r lmdu.data.evol.udice.etab, fig.height=8}
+sise %>%
+    filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters") || DN_DE=="DU", CURSUS_LMD != "D") %>%
+  merge(etiquettes) %>%
+  filter(Udice) %>%
+  group_by(Rentrée,CURSUS_LMD,DN_DE,Etablissement) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(CURSUS_LMD,DN_DE,Etablissement) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=CURSUS_LMD,alpha=DN_DE)) +
+    geom_line(aes(group=paste(CURSUS_LMD,DN_DE))) +
+    facet_wrap(.~Etablissement) +
+    ggtitle("Evolution des effectifs L et M dans les universités, grands établissements et COMUEs\nen diplômes nationnaux et diplômes d'établissement") +
+  scale_color_manual(values=pal.lmdu) +
+  scale_alpha_manual(values=c(0.6,1)) +
+  theme_cpesr_cap()
+```
