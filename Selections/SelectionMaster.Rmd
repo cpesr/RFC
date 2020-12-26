@@ -576,20 +576,21 @@ sise %>%
     filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
   filter(Diplôme %in% c("Licence", "Autres masters") || DN_DE=="DU", CURSUS_LMD != "D") %>%
   merge(etiquettes) %>%
-  group_by(Rentrée,CURSUS_LMD,DN_DE,Udice) %>%
+  mutate(critere=ifelse(Udice,"Udice","Autres")) %>%
+  group_by(Rentrée,CURSUS_LMD,DN_DE,critere) %>%
   summarise(Effectifs = sum(Effectifs)) %>%
-  group_by(CURSUS_LMD,DN_DE,Udice) %>%
+  group_by(CURSUS_LMD,DN_DE,critere) %>%
   mutate(Evolution = Effectifs / first(Effectifs)) %>%
   ggplot(aes(x=Rentrée,y=Evolution,color=CURSUS_LMD,alpha=DN_DE)) +
     geom_line(aes(group=paste(CURSUS_LMD,DN_DE)),size=2) +
-    facet_grid(.~Udice) +
+    facet_grid(.~critere) +
     ggtitle("Evolution des effectifs L et M dans les universités, grands établissements et COMUEs\nen diplômes nationnaux et diplômes d'établissement") +
   scale_color_manual(values=pal.lmdu) +
   scale_alpha_manual(values=c(0.6,1)) +
   theme_cpesr_cap()
 ```
 
-```{r lmdu.data.evol.udice.etab, fig.height=8}
+```{r lmdu.data.evol.udice.etab, fig.height=6}
 sise %>%
     filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
   filter(Diplôme %in% c("Licence", "Autres masters") || DN_DE=="DU", CURSUS_LMD != "D") %>%
@@ -601,7 +602,7 @@ sise %>%
   mutate(Evolution = Effectifs / first(Effectifs)) %>%
   ggplot(aes(x=Rentrée,y=Evolution,color=CURSUS_LMD,alpha=DN_DE)) +
     geom_line(aes(group=paste(CURSUS_LMD,DN_DE))) +
-    facet_wrap(.~Etablissement) +
+    facet_wrap(.~Etablissement, labeller = label_wrap_gen(width=20)) +
     ggtitle("Evolution des effectifs L et M dans les universités, grands établissements et COMUEs\nen diplômes nationnaux et diplômes d'établissement") +
   scale_color_manual(values=pal.lmdu) +
   scale_alpha_manual(values=c(0.6,1)) +
