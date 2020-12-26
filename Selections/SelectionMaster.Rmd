@@ -184,6 +184,31 @@ sise %>%
     ggtitle("Evolution des effectifs par niveau, année et mobilité\ndans les universités, grands établissements et COMUEs") +
   theme_cpesr_cap()
 ```
+
+
+```{r Mobilite.evol.m1}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  filter(Diplôme %in% c("Licence", "Autres masters")) %>%
+  filter(Niveau=="M1") %>%
+  group_by(Rentrée, Niveau, Mobilité) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau,Mobilité) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  filter(!is.na(Mobilité)) %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=forcats::fct_rev(Mobilité))) +
+    geom_vline(xintercept = "2016") +
+    geom_line(aes(group=Mobilité),size=1) +
+    #geom_col() +
+    facet_grid(.~Niveau) +
+    #scale_color_manual(values=pal.niveaux) +
+    scale_color_brewer(palette="Spectral", name="Mobilité", na.value="grey50") +
+    #scale_x_discrete(breaks=c(2013,2015,2017))+
+    
+    ggtitle("Evolution des effectifs en M1, par année et mobilité\ndans les universités, grands établissements et COMUEs") +
+  theme_cpesr_cap()
+```
+
 ## Focus L3/M1/M2
 
 ```{r L3LPM}
