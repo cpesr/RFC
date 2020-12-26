@@ -8,6 +8,8 @@ Jeu de données
 
 ![](SelectionMaster_files/figure-gfm/global-1.png)<!-- -->
 
+![](SelectionMaster_files/figure-gfm/global.prop-1.png)<!-- -->
+
 ![](SelectionMaster_files/figure-gfm/Sequences-1.png)<!-- -->
 
 ![](SelectionMaster_files/figure-gfm/Sequences.2-1.png)<!-- -->

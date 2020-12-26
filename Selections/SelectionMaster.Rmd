@@ -78,7 +78,19 @@ sise %>%
   summarise(Effectifs = sum(Effectifs)) %>%
   ggplot(aes(x=Rentrée, y=Effectifs, fill=forcats::fct_rev(Niveau))) + geom_col() +
   scale_fill_manual(values=rev(pal.niveaux), name="Niveau",  guide = guide_legend(reverse = TRUE)) +
-  ggtitle("Effectifs étudiants globaux par niveau, en Licence et Master (hors Master d'enseignement)")+
+  ggtitle("Effectifs étudiants globaux par niveau,\nen Licence et Master (hors Master d'enseignement)")+
+  theme_cpesr_cap()
+```
+
+
+```{r global.prop}
+sise %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  group_by(Rentrée, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Rentrée, y=Effectifs, fill=forcats::fct_rev(Niveau))) + geom_col(position="fill") +
+  scale_fill_manual(values=rev(pal.niveaux), name="Niveau",  guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Proportion des effectifs étudiants globaux par niveau,\nen Licence et Master (hors Master d'enseignement)")+
   theme_cpesr_cap()
 ```
 
