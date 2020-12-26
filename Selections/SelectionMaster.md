@@ -15,8 +15,10 @@ Jeu de données
 ## Mobilité
 
 ![](SelectionMaster_files/figure-gfm/Mobilite-1.png)<!-- -->
+![](SelectionMaster_files/figure-gfm/Mobilite.prop-1.png)<!-- -->
 
-## Focus L3/M1/M2
+![](SelectionMaster_files/figure-gfm/Mobilite.evol-1.png)<!-- --> \#\#
+Focus L3/M1/M2
 
 ![](SelectionMaster_files/figure-gfm/L3LPM-1.png)<!-- -->
 
