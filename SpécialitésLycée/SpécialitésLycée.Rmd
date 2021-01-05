@@ -6,6 +6,7 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
+library(ggrepel)
 library(ggcpesrthemes)
 ```
 
@@ -53,11 +54,11 @@ label_effectifs <- function(x) {
 }
 ```
 
-### Test MATHS
+### Test
 
 ```{r stat.data}
 bac.cible <- 2021
-discipline.cible <- "MATHS"
+discipline.cible <- "NUMERIQUE_SCIENCES_INFORMATIQUES"
 
 spe.disc <- spe %>%
   filter(Bac == bac.cible) %>%
@@ -71,45 +72,70 @@ spe.disc %>%
     Effectifs = sum(Effectifs)) %>%
   mutate(Niveau=recode(Niveau,"Première" = "1ère")) %>%
   ggplot(aes(x=Niveau,y=Effectifs, fill=Discipline)) + 
-  geom_col(color="black") +
-  geom_text(aes(label=label_effectifs(Effectifs)), position = position_stack(vjust = .5)) +
-  coord_polar(theta = "y") +
-  scale_fill_brewer(
-    palette = "Set1",
-    labels=c(paste("Sans ",discipline.cible),paste("Avec ",discipline.cible))) +
-  geom_text(aes(label=Niveau),y=0,nudge_x =-0.1,color="white",stat = "unique",hjust=-0.1) +
-  # annotate("text", x=1,y=0,label="Terminale") +
-  # annotate("text", x=1,y=0,label="Terminale") +
-  theme_cpesr_cap() + theme(
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank(),
-    axis.text.x = element_blank(),
-    axis.text.y = element_blank(),
-    axis.ticks = element_blank(),
-    panel.grid.major.y  = element_blank()
-    )
+    geom_col(color="black") +
+    geom_text(aes(label=label_effectifs(Effectifs)), position = position_stack(vjust = .5)) +
+    coord_polar(theta = "y") +
+    scale_fill_brewer(
+      palette = "Set1",
+      labels=c(paste("Sans ",discipline.cible),paste("Avec ",discipline.cible))) +
+    geom_text(aes(label=Niveau),y=0,nudge_x =-0.1,color="white",stat = "unique",hjust=-0.1) +
+    # annotate("text", x=1,y=0,label="Terminale") +
+    # annotate("text", x=1,y=0,label="Terminale") +
+    theme_cpesr_cap() + theme(
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid.major.y  = element_blank()
+      )
 ```
 
 ```{r stat.spec}
-spe.disc %>%
+df <- spe.disc %>%
   filter(Discipline) %>%
-  separate_rows(Spécialités, sep=" ") %>%
+  separate_rows(Spécialités, sep=" ") 
+
+df.disc <- df %>%
+  filter(Spécialités == discipline.cible) %>%
+  group_by(Niveau) %>%
+  summarise(Effectifs.disc = sum(Effectifs))
+
+df.rank <- df %>%
+  filter(Spécialités != discipline.cible, Niveau == "Terminale") %>%
+  group_by(Spécialités) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  transmute(
+    Spécialités = Spécialités,
+    Rang = rank(desc(Effectifs)))
+
+df %>%
   filter(Spécialités != discipline.cible) %>%
   group_by(Niveau, Spécialités) %>%
   summarise(Effectifs = sum(Effectifs)) %>% 
-  mutate(
-    Spécialités = case_when(
-      Effectifs < 2000 ~ "Autres",
-      TRUE ~ Spécialités
-    )) %>%
+  merge(df.rank) %>% 
+  mutate(Spécialités = case_when(
+    Rang <= 10 ~ Spécialités,
+    TRUE ~ "Autres"
+  )) %>% 
   group_by(Niveau, Spécialités) %>%
-  summarise(Effectifs = sum(Effectifs)) %>%
-  arrange(desc(Effectifs)) %>%
+  summarise(
+    Effectifs = sum(Effectifs),
+    Rang = min(Rang)) %>% 
+  merge(df.disc) %>%
+  mutate(Ratio = Effectifs/Effectifs.disc) %>%
   ggplot(aes(x=reorder(Spécialités, Effectifs),y=Effectifs,fill=Niveau)) +
-    geom_col(position="Identity",color="black") +
-    #geom_text(aes(label=label_effectifs(Effectifs)), position = position_stack(vjust = .5)) +
-    coord_flip() +
-    theme_cpesr_cap()
+    geom_col(position="identity",color="black") +
+    geom_text(aes(label=scales::percent(Ratio)), position = "identity", direction ="x", hjust=-0.1) +
+    coord_flip(clip="off") +
+    scale_fill_brewer(
+      palette = "Paired",
+      labels=c("Première","Première et Terminale")) +
+    theme_cpesr_cap() + theme(
+      plot.margin = margin(0,10,0,0),
+      axis.title.y = element_blank(),
+      panel.grid.major.y = element_blank(),
+      panel.grid.major.x = element_line(color="grey",size=0.2))
 ```
 
 

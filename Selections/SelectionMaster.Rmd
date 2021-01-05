@@ -146,6 +146,7 @@ sise %>%
     ggtitle("Effectifs par niveau, année et mobilité\ndans les universités, grands établissements et COMUEs") +
   theme_cpesr_cap()
 ```
+
 ```{r Mobilite.prop}
 sise %>%
   filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
@@ -229,6 +230,61 @@ sise %>%
     theme_cpesr_cap() 
 ```
 
+```{r L3LPM.univcomuesge, fig.height=8}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
+  mutate(Type.d.établissement = recode(Type.d.établissement, "Communauté d'universités et établissements" =  "COMUEs" )) %>%
+  mutate(Type = ifelse(Type.d.établissement == "Université","Université","Autres")) %>%
+  filter(Diplôme %in% c("Licence","Licence professionnelle","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(Niveau = ifelse(Diplôme == "Licence professionnelle", "LP", Niveau)) %>%
+  group_by(Rentrée,Type.d.établissement,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs, color=Niveau)) +
+    geom_line(aes(group=Niveau), size=1) +
+    #ylim(0,180000) +
+    facet_grid(Type.d.établissement~., scales="free_y") +
+    scale_color_manual(values=pal.niveaux[2:6]) +
+    ggtitle("Effectifs étudiants en LP, L3, M1 et M2, par type d'établissement") +
+    theme_cpesr_cap() 
+```
+
+```{r L3M.univ.seule}
+sise %>%
+  filter(Type.d.établissement %in% c("Université")) %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(Niveau = ifelse(Diplôme == "Licence professionnelle", "LP", Niveau)) %>%
+  group_by(Rentrée,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs, color=Niveau)) +
+    geom_line(aes(group=Niveau),size=2) +
+    #ylim(0,180000) +
+    scale_color_manual(values=pal.niveaux[3:6]) +
+    ggtitle("Effectifs étudiants en L3, M1 et M2, dans les universités") +
+    theme_cpesr_cap() 
+```
+
+```{r L3M.univ.comues}
+sise %>%
+  filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements")) %>%
+  filter(Diplôme %in% c("Licence","Autres masters")) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(Niveau = ifelse(Diplôme == "Licence professionnelle", "LP", Niveau)) %>%
+  group_by(Rentrée,Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>%
+  group_by(Niveau) %>%
+  mutate(Evolution = Effectifs / first(Effectifs)) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs, color=Niveau)) +
+    geom_line(aes(group=Niveau),size=2) +
+    #ylim(0,180000) +
+    scale_color_manual(values=pal.niveaux[3:6]) +
+    ggtitle("Effectifs étudiants en L3, M1 et M2, dans les universités et COMUEs") +
+    theme_cpesr_cap() 
+```
+
 ```{r data.L3M.univ}
 sise.L3M <- sise %>%
   filter(Type.d.établissement %in% c("Université","Communauté d'universités et établissements","Grand établissement")) %>%
@@ -240,6 +296,7 @@ sise.L3M <- sise %>%
   group_by(Niveau) %>%
   mutate(Evolution = Effectifs / first(Effectifs))
 ```
+
 
 ```{r L3M.univ}
 sise.L3M %>%

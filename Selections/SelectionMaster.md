@@ -1,8 +1,7 @@
 Sélection en Master
 ================
 
-Jeu de données
-    :
+Jeu de données :
 
   - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public/information/?disjunctive.rentree_lib>
 
@@ -17,6 +16,7 @@ Jeu de données
 ## Mobilité
 
 ![](SelectionMaster_files/figure-gfm/Mobilite-1.png)<!-- -->
+
 ![](SelectionMaster_files/figure-gfm/Mobilite.prop-1.png)<!-- -->
 
 ![](SelectionMaster_files/figure-gfm/Mobilite.evol-1.png)<!-- -->
@@ -26,6 +26,12 @@ Jeu de données
 ## Focus L3/M1/M2
 
 ![](SelectionMaster_files/figure-gfm/L3LPM-1.png)<!-- -->
+
+![](SelectionMaster_files/figure-gfm/L3LPM.univcomuesge-1.png)<!-- -->
+
+![](SelectionMaster_files/figure-gfm/L3M.univ.seule-1.png)<!-- -->
+
+![](SelectionMaster_files/figure-gfm/L3M.univ.comues-1.png)<!-- -->
 
 ![](SelectionMaster_files/figure-gfm/L3M.univ-1.png)<!-- -->
 
@@ -47,8 +53,7 @@ Par exemple, le rapport consécutif M1/L3 en 2017 est le rapport entre
 les effectifs de M1 en 2017 et les effectifs de L3 en 2016.
 
 Il résulte donc des taux de passage et d’abandon, mais aussi des
-passerelles et des capacités d’accueil et
-sélections.
+passerelles et des capacités d’accueil et sélections.
 
 ![](SelectionMaster_files/figure-gfm/Rapports.consecutifs-1.png)<!-- -->
 
@@ -352,8 +357,7 @@ M2/M1
 
 <td style="text-align:left;">
 
-Université de Versailles
-Saint-Quentin-en-Yvelines
+Université de Versailles Saint-Quentin-en-Yvelines
 
 </td>
 
@@ -408,8 +412,7 @@ effectif en référence pour calculer les rapports avec L2 en 2013, puis
 L3 en 2014, etc.
 
 Il résulte donc des taux de passage et d’abandon, mais aussi des
-passerelles et des capacités d’accueil et
-sélections.
+passerelles et des capacités d’accueil et sélections.
 
     ## Warning: Removed 10 row(s) containing missing values (geom_path).
 
