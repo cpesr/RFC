@@ -10,16 +10,6 @@ Les données accompagnent les notes de la DEPP :
 
 ### Test Maths
 
-    ## `summarise()` regrouping output by 'Niveau' (override with `.groups` argument)
-
 ![](SpécialitésLycée_files/figure-gfm/maths.global-1.png)<!-- -->
-
-    ## `summarise()` ungrouping output (override with `.groups` argument)
-    ## `summarise()` ungrouping output (override with `.groups` argument)
-
-    ## `summarise()` regrouping output by 'Niveau' (override with `.groups` argument)
-    ## `summarise()` regrouping output by 'Niveau' (override with `.groups` argument)
-
-    ## Warning: Ignoring unknown parameters: direction
 
 ![](SpécialitésLycée_files/figure-gfm/maths.cospe-1.png)<!-- -->
