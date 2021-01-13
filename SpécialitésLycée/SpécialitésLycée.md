@@ -13,3 +13,12 @@ Les données accompagnent les notes de la DEPP :
 ![](SpécialitésLycée_files/figure-gfm/maths.global-1.png)<!-- -->
 
 ![](SpécialitésLycée_files/figure-gfm/maths.cospe-1.png)<!-- -->
+
+### Test SES
+
+*Est-ce que SES est plus adapté que Maths pour présenter les
+visualisations ?*
+
+![](SpécialitésLycée_files/figure-gfm/SES.global-1.png)<!-- -->
+
+![](SpécialitésLycée_files/figure-gfm/SES.cospe-1.png)<!-- -->

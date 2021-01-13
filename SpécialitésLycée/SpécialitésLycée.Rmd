@@ -152,4 +152,26 @@ stat.cospe()
 ```
 
 
+### Test SES
+
+_Est-ce que SES est plus adapté que Maths pour présenter les visualisations ?_
+
+```{r SES.data}
+bac.cible <- 2021
+discipline.cible <- "SES"
+
+spe.disc <- spe %>%
+  filter(Bac == bac.cible) %>%
+  mutate(Discipline = str_detect(Spécialités,discipline.cible))
+```
+
+```{r SES.global}
+stat.global()
+```
+
+```{r SES.cospe}
+stat.cospe()
+```
+
+
 
