@@ -54,19 +54,11 @@ label_effectifs <- function(x) {
 }
 ```
 
-### Test
 
-```{r stat.data}
-bac.cible <- 2021
-discipline.cible <- "NUMERIQUE_SCIENCES_INFORMATIQUES"
+```{r functions}
 
-spe.disc <- spe %>%
-  filter(Bac == bac.cible) %>%
-  mutate(Discipline = str_detect(Spécialités,discipline.cible))
-```
-
-```{r stat.global}
-spe.disc %>%
+stat.global <- function() {
+  spe.disc %>%
   group_by(Niveau,Discipline) %>%
   summarise(
     Effectifs = sum(Effectifs)) %>%
@@ -89,9 +81,9 @@ spe.disc %>%
       axis.ticks = element_blank(),
       panel.grid.major.y  = element_blank()
       )
-```
+}
 
-```{r stat.spec}
+stat.cospe <- function() {
 df <- spe.disc %>%
   filter(Discipline) %>%
   separate_rows(Spécialités, sep=" ") 
@@ -136,6 +128,28 @@ df %>%
       axis.title.y = element_blank(),
       panel.grid.major.y = element_blank(),
       panel.grid.major.x = element_line(color="grey",size=0.2))
+}
 ```
+
+
+### Test Maths
+
+```{r maths.data}
+bac.cible <- 2021
+discipline.cible <- "MATHS"
+
+spe.disc <- spe %>%
+  filter(Bac == bac.cible) %>%
+  mutate(Discipline = str_detect(Spécialités,discipline.cible))
+```
+
+```{r maths.global}
+stat.global()
+```
+
+```{r maths.cospe}
+stat.cospe()
+```
+
 
 
