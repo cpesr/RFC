@@ -510,7 +510,7 @@ tde.univ.global <- tde.univ %>%
     Enseignants.réel.delta = Enseignants - first(Enseignants),
   )
 
-write.csv2(tde.univ.global, "tde_universités.csv", row.names = FALSE)
+write.csv(tde.univ.global, "tde_universités.csv", row.names = FALSE)
 ```
 
 ```{r univ.evol}
@@ -924,6 +924,8 @@ tde.idf <- tde %>%
   ) %>%
   mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) -1) %>%
   ungroup()
+
+write.csv(tde.idf, "tde_idf.csv", row.names = FALSE)
 
 tde.idf %>% 
   select(Etablissement) %>%
