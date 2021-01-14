@@ -17,7 +17,8 @@ issues](https://github.com/cpesr/RFC/issues).*
 <!-- end list -->
 
     ## [1] "UAI"                "Rentrée"            "Etablissement"     
-    ## [4] "Type.établissement" "Enseignants"        "Etudiants"
+    ## [4] "Région"             "Type.établissement" "Enseignants"       
+    ## [7] "Etudiants"
 
   - Définitions :
       - `Enseignants` : effectifs enseignants titulaires (EC et 2d
@@ -744,6 +745,12 @@ Etablissement
 
 <th style="text-align:left;">
 
+Région
+
+</th>
+
+<th style="text-align:left;">
+
 Type.établissement
 
 </th>
@@ -783,6 +790,12 @@ Etudiants
 <td style="text-align:left;">
 
 Université de Guyane
+
+</td>
+
+<td style="text-align:left;">
+
+Guyane
 
 </td>
 
@@ -828,6 +841,12 @@ Université de Guyane
 
 <td style="text-align:left;">
 
+Guyane
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -868,6 +887,12 @@ Université de Guyane
 
 <td style="text-align:left;">
 
+Guyane
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -903,6 +928,12 @@ Université
 <td style="text-align:left;">
 
 Université de Guyane
+
+</td>
+
+<td style="text-align:left;">
+
+Guyane
 
 </td>
 
@@ -961,6 +992,12 @@ Etablissement
 
 <th style="text-align:left;">
 
+Région
+
+</th>
+
+<th style="text-align:left;">
+
 Type.établissement
 
 </th>
@@ -1000,6 +1037,12 @@ Etudiants
 <td style="text-align:left;">
 
 Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Hauts-de-France
 
 </td>
 
@@ -1045,6 +1088,12 @@ Université d’Artois
 
 <td style="text-align:left;">
 
+Hauts-de-France
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1080,6 +1129,12 @@ Université
 <td style="text-align:left;">
 
 Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Hauts-de-France
 
 </td>
 
@@ -1125,6 +1180,12 @@ Université d’Artois
 
 <td style="text-align:left;">
 
+Hauts-de-France
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1160,6 +1221,12 @@ Université
 <td style="text-align:left;">
 
 Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Hauts-de-France
 
 </td>
 
@@ -1205,6 +1272,12 @@ Université d’Artois
 
 <td style="text-align:left;">
 
+Hauts-de-France
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1240,6 +1313,12 @@ Université
 <td style="text-align:left;">
 
 Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Hauts-de-France
 
 </td>
 
@@ -1285,6 +1364,12 @@ Université d’Artois
 
 <td style="text-align:left;">
 
+Hauts-de-France
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1320,6 +1405,12 @@ Université
 <td style="text-align:left;">
 
 Université d’Artois
+
+</td>
+
+<td style="text-align:left;">
+
+Hauts-de-France
 
 </td>
 
@@ -1379,6 +1470,12 @@ Etablissement
 
 <th style="text-align:left;">
 
+Région
+
+</th>
+
+<th style="text-align:left;">
+
 Type.établissement
 
 </th>
@@ -1418,6 +1515,12 @@ Etudiants
 <td style="text-align:left;">
 
 Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Grand Est
 
 </td>
 
@@ -1463,6 +1566,12 @@ Université de Haute-Alsace (UHA)
 
 <td style="text-align:left;">
 
+Grand Est
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1498,6 +1607,12 @@ Université
 <td style="text-align:left;">
 
 Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Grand Est
 
 </td>
 
@@ -1543,6 +1658,12 @@ Université de Haute-Alsace (UHA)
 
 <td style="text-align:left;">
 
+Grand Est
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1578,6 +1699,12 @@ Université
 <td style="text-align:left;">
 
 Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Grand Est
 
 </td>
 
@@ -1623,6 +1750,12 @@ Université de Haute-Alsace (UHA)
 
 <td style="text-align:left;">
 
+Grand Est
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1658,6 +1791,12 @@ Université
 <td style="text-align:left;">
 
 Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Grand Est
 
 </td>
 
@@ -1703,6 +1842,12 @@ Université de Haute-Alsace (UHA)
 
 <td style="text-align:left;">
 
+Grand Est
+
+</td>
+
+<td style="text-align:left;">
+
 Université
 
 </td>
@@ -1738,6 +1883,12 @@ Université
 <td style="text-align:left;">
 
 Université de Haute-Alsace (UHA)
+
+</td>
+
+<td style="text-align:left;">
+
+Grand Est
 
 </td>
 
@@ -4537,3 +4688,176 @@ Evolution 2014 2015 pour les pluridisciplinaires science
 La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec
 un effet de pic dû notamment à une baisse en Master d’enseignement en
 2014, conséquente de la formation des maîtres.
+
+## Focus Ile-de-France
+
+Périmètre : Universités en Ile-de-France + `Université Paris Dauphine -
+PSL`
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+Etablissement
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+CY Cergy Paris Université
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Sorbonne Université (Sorbonne U)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université d’Évry-Val-d’Essonne (UEVE)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Paris
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université de Versailles Saint-Quentin-en-Yvelines (UVSQ)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Gustave Eiffel
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Panthéon-Assas
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris 1 - Panthéon Sorbonne (Paris 1)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris 8 - Vincennes - Saint-Denis
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris Dauphine - PSL
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris Nanterre
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Paris-Est Créteil (UPEC)
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Sorbonne Nouvelle - Paris 3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Université Sorbonne Paris Nord
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+![](tauxdencadrement_files/figure-gfm/tde.idf.evol-1.png)<!-- -->
+
+## Focus Paris 8
+
+![](tauxdencadrement_files/figure-gfm/tde.idf.evol.P8-1.png)<!-- -->

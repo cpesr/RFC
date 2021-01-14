@@ -58,6 +58,7 @@ ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
   transmute(
     UAI = Identifiant.établissement,
     Etablissement = as.factor(Établissement),
+    Région = as.factor(Région),
     Type.établissement = factor(Type.établissement,
                                 levels = c("Université",
                                            "Grand établissement",
@@ -80,7 +81,7 @@ ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
     Rentrée = Rentrée,
     Enseignants = effectif
   ) %>%
-  group_by(UAI, Etablissement, Type.établissement, Rentrée) %>%
+  group_by(UAI, Etablissement, Région, Type.établissement, Rentrée) %>%
   summarise(Enseignants = sum(Enseignants, na.rm = TRUE)) %>%
   ungroup()
 
@@ -495,14 +496,26 @@ tde.univ %>%
     theme_cpesr_cap()
 ```
 
-```{r univ.evol}
-tde.univ %>%
+```{r univ.evol.data}
+tde.univ.global <- tde.univ %>%
   group_by(Rentrée) %>%
   summarise(
     Etudiants = sum(Etudiants),
     Enseignants = sum(Enseignants),
-    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100
   ) %>%
+  mutate(
+    Rentrée = Rentrée,
+    Enseignants.idéal.delta = round(Etudiants * first(Taux.d.encadrement) / 100 - Enseignants),
+    Enseignants.réel.delta = Enseignants - first(Enseignants),
+  )
+
+write.csv2(tde.univ.global, "tde_universités.csv", row.names = FALSE)
+```
+
+```{r univ.evol}
+tde.univ.global %>%
+  select(Rentrée, Etudiants, Enseignants, Taux.d.encadrement) %>%
   pivot_longer(-c(Rentrée)) %>%
   group_by(name) %>%
   mutate(Evolution = value / first(value)) %>%
@@ -513,21 +526,11 @@ tde.univ %>%
 ```
 
 ```{r univ.evol.besoinsvsreel}
-tde.univ %>%
-  group_by(Rentrée) %>%
-  summarise(
-    Etudiants = sum(Etudiants),
-    Enseignants = sum(Enseignants),
-    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100
-  ) %>%
-  transmute(
-    Rentrée = Rentrée,
-    Enseignants.idéal.delta = round(Etudiants * first(Taux.d.encadrement) / 100 - Enseignants),
-    Enseignants.réel.delta = Enseignants - first(Enseignants),
-  ) %>%
+ tde.univ.global %>%
+  select(Rentrée, Enseignants.idéal.delta, Enseignants.réel.delta) %>%
   pivot_longer(-c(Rentrée)) %>%
   ggplot(aes(x=Rentrée, y=value, fill=name)) +
-    geom_col(position="identity", alpha=0.5) +
+    geom_col(position="dodge") +
     ylab("Evolution des effectifs enseignants") +
     scale_fill_discrete(labels=c("Evolutions nécessaires", "Evolutions réelles"), name="") +
     ggtitle("Evolutions nécessaires et réelles des effectifs enseignants\npour conserver le taux d'encadrement de 2010 dans les universités") +
@@ -904,4 +907,65 @@ read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etabl
 __Conclusion__
 
 La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec un effet de pic dû notamment à une baisse en Master d'enseignement en 2014, conséquente de la formation des maîtres.
+
+
+## Focus Ile-de-France
+
+Périmètre : Universités en Ile-de-France + `Université Paris Dauphine - PSL`
+
+```{r tde.idf.data}
+tde.idf <- tde %>% 
+  filter(Type.établissement == "Université" | Etablissement == "Université Paris Dauphine - PSL", Région == "Île-de-France") %>%
+  group_by(Rentrée, Etablissement) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Enseignants = sum(Enseignants),
+    Taux.d.encadrement = sum(Enseignants, na.rm = TRUE) / sum(Etudiants, na.rm = TRUE) *100 
+  ) %>%
+  mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) -1) %>%
+  ungroup()
+
+tde.idf %>% 
+  select(Etablissement) %>%
+  unique() %>%
+  kable()
+```
+
+
+```{r tde.idf.evol, fig.width=10, fig.height=10}
+tde.idf %>%
+  select(Rentrée, Etablissement, Etudiants, Enseignants, Taux.d.encadrement) %>%
+  pivot_longer(-c(Rentrée, Etablissement)) %>%
+  group_by(name, Etablissement) %>%
+  mutate(Evolution = value / first(value)) %>%
+  ggplot(aes(x=Rentrée, y=Evolution, color=name)) + 
+    geom_line(aes(group=name)) +
+    ggtitle("Evolutions des taux d'encadrement dans les universités d'Ile-de-France.") +
+    facet_wrap(Etablissement~., labeller =  label_wrap_gen(width = 30, multi_line = TRUE)) +
+    scale_x_discrete(breaks=c(2011,2013,2015,2017)) +
+    scale_color_discrete(labels=c("Enseignant","Etudiants","Taux d'encadrement"), name="") +
+    theme_cpesr_cap()
+```
+
+## Focus Paris 8
+
+```{r tde.idf.evol.P8}
+tde.idf.long <- tde.idf %>%
+  select(Rentrée, Etablissement, Etudiants, Enseignants, Taux.d.encadrement) %>%
+  pivot_longer(-c(Rentrée, Etablissement)) %>%
+  group_by(name, Etablissement) %>%
+  mutate(Evolution = value / first(value))
+
+tde.idf.long.p8 <- tde.idf.long %>% 
+  filter(Etablissement == "Université Paris 8 - Vincennes - Saint-Denis") 
+  
+  ggplot(tde.idf.long, aes(x=Rentrée, y=Evolution, fill=name)) + 
+    geom_boxplot() +
+    geom_line(data=tde.idf.long.p8, aes(group=Etablissement), size=2) +
+    ggtitle("Evolutions des taux d'encadrement dans les universités d'Ile-de-France\navec focus sur Paris 8") +
+    scale_x_discrete(breaks=c(2011,2013,2015,2017)) +
+    scale_color_discrete(labels=c("Enseignant","Etudiants","Taux d'encadrement"), name="") +
+    facet_grid(.~name) +
+    theme_cpesr_cap()
+```
 
