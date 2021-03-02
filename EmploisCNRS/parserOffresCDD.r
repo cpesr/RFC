@@ -73,6 +73,8 @@ for (x in 1:length(grep("(^/Offres/CDD).*(aspx$)", links.offres))) {
       baseSalary = gsub("'", " ", html.offre %>% 
         html_nodes(xpath = "//span[@itemprop='baseSalary']") %>% 
         html_text()),
+      Salaire.brut.min = "",
+      Salaire.brut.max = "",
       educationRequirements = gsub("'", " ", html.offre %>% 
         html_nodes(xpath = "//span[@itemprop='educationRequirements']") %>% 
         html_text()),
@@ -103,4 +105,4 @@ for (x in 1:length(grep("(^/Offres/CDD).*(aspx$)", links.offres))) {
   }
 }
 
-write.csv2(data.offres, "DB_CDD_CNRS_20201219.csv", row.names=F)
+write.csv2(data.offres, "DB_CDD_CNRS_20210301.csv", row.names=F)
