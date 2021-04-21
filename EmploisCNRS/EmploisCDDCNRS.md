@@ -9,7 +9,7 @@ issues](https://github.com/cpesr/RFC/issues).*
 ## Description des données
 
   - Source : <https://emploi.cnrs.fr/Offres.aspx>
-  - Nombre d’observations : 1199
+  - Nombre d’observations : 1590
   - Variables :
 
 <!-- end list -->
