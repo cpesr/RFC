@@ -1,0 +1,33 @@
+---
+title: "Indicateurs financiers d'établissement"
+output: github_document
+---
+  
+```{r setup.etab, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# `r etab`
+
+```{r etab, fig.width=10, fig.height=30}
+fin.etab <- fin.pivot %>% filter(etablissement == etab)
+grp <- fin.etab$groupe[[1]]
+fin.all <- bind_rows(
+  fin.etab,
+  fin.pivot.groupe %>% filter(groupe==grp) %>%  mutate(Valeur = Moyenne),
+  fin.pivot.total %>%  mutate(Valeur = Moyenne)
+) %>%
+  mutate(
+    etablissement = factor(etablissement, 
+                           levels = c("Global","Groupe",etab),
+                           labels = c("Moyenne globale",paste("Moyenne",grp),etab))
+  )
+
+fin.all %>% 
+  ggplot(aes(x=exercice,y=Valeur,color=etablissement)) +
+  geom_point(size=2) + geom_line(aes(group=etablissement)) +
+  scale_color_brewer(palette="Purples") +
+  facet_wrap(Indicateur~., scales="free", ncol=2) +
+  theme_cpesr() +
+  theme(legend.direction="vertical")
+```

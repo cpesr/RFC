@@ -7,55 +7,8 @@ output: github_document
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(ggcpesrthemes)
-```
 
-
-```{r load}
-fin <- read.csv("fr-esr-operateurs-indicateurs-financiers.csv",sep=";",quote='"') %>%
-  mutate(exercice = as.factor(exercice)) %>%
-  mutate(groupe = case_when(
-    startsWith(groupe,"université") ~ "université",
-    groupe == "école d'ingénieurs" ~ "écoles d'ingénieurs",
-    str_length(groupe) == 0 ~ "autres établissements d'enseignement et de recherche",
-    TRUE ~ groupe
-  )) %>%
-  mutate(etablissement = case_when(
-    str_length(etablissement) == 0 ~ uai...identifiant,
-    TRUE ~ etablissement
-  )) %>%
-  mutate(
-    groupe = as.factor(groupe),
-    etablissement = as.factor(etablissement))
-
-categories <- read.csv("indicateurs-financiers-categories.csv") 
-levels.indicateurs <- categories$Indicateur
-levels.categories <- unique(categories$Catégorie)
-
-fin.pivot <- fin %>%
-  pivot_longer(
-    cols = Acquisitions.d.immobilisations:Valorisation,
-    names_to = "Indicateur",
-    values_to = "Valeur"
-  ) %>%
-  merge(categories) %>%
-  mutate(
-    Indicateur = factor(Indicateur,levels.indicateurs),
-    Catégorie = factor(Catégorie,levels.categories)) %>%
-  arrange(etablissement,Catégorie,Indicateur,exercice)
-
-fin.pivot.groupe <- fin.pivot %>%
-  group_by(groupe,exercice,Catégorie,Indicateur) %>%
-  summarise(
-    Somme = sum(Valeur, na.rm = TRUE),
-    Moyenne = mean(Valeur, na.rm = TRUE)) %>%
-  mutate(etablissement="Groupe")
-
-fin.pivot.total <- fin.pivot %>%
-  group_by(exercice,Catégorie,Indicateur) %>%
-  summarise(
-    Somme = sum(Valeur, na.rm = TRUE),
-    Moyenne = mean(Valeur, na.rm = TRUE)) %>%
-  mutate(groupe="Global", etablissement="Global")
+source("Finances.R")
 ```
 
 Jeu de données :
@@ -89,10 +42,7 @@ fin.pivot.total %>%
     theme(legend.direction="vertical")
 ```
 
-
-
 ## Tous les indicateurs aggrégés par groupe
-
 
 ```{r aggreg.grp, fig.width=10, fig.height=60}
 fin.pivot.groupe %>%
@@ -107,30 +57,41 @@ fin.pivot.groupe %>%
     theme(legend.direction="vertical")
 ```
 
+## Tous les indicateurs par établissement
 
-## Tous les indicateurs par établissement 
 
-```{r etab, fig.width=10, fig.height=30}
-etab = "Université de Strasbourg"
-fin.etab <- fin.pivot %>% filter(etablissement == etab)
-grp <- fin.etab$groupe[[1]]
-fin.all <- bind_rows(
-  fin.etab,
-  fin.pivot.groupe %>% filter(groupe==grp) %>%  mutate(Valeur = Moyenne),
-  fin.pivot.total %>%  mutate(Valeur = Moyenne)
-  ) %>%
-  mutate(
-    etablissement = factor(etablissement, 
-                           levels = c("Global","Groupe",etab),
-                           labels = c("Moyenne globale",paste("Moyenne",grp),etab))
-  )
+```{r production, include=FALSE, eval=TRUE}
 
-fin.all %>% 
-  ggplot(aes(x=exercice,y=Valeur,color=etablissement)) +
-    geom_point(size=2) + geom_line(aes(group=etablissement)) +
-    scale_color_brewer(palette="Purples") +
-    facet_wrap(Indicateur~., scales="free", ncol=2) +
-    theme_cpesr() +
-    theme(legend.direction="vertical")
+slugify <- function(x, alphanum_replace="", space_replace="_", tolower=TRUE) {
+  if(tolower) { x <- tolower(x) }
+
+  return(x)
+}
+
+
+outmd <- function(x) {
+  x <- gsub("[^[:alnum:] ]", "", x)
+  x <- gsub(" ", "_", x)
+  paste0(x,'.md')
+}
+
+etabs = c("Université de Strasbourg")
+etabs = unique(fin$etablissement)
+for(etab in etabs) {
+  rmarkdown::render("Etablissement.Rmd",
+                    output_dir = "Etablissements",
+                    output_file = outmd(etab),
+                    output_format=NULL,
+                    clean = TRUE)
+}
 ```
+
+
+
+```{r production2, results="asis"}
+for(etab in etabs) {
+  cat("- [", etab,"](Etablissements/",outmd(etab),")\n", sep='')
+}
+```
+
 
