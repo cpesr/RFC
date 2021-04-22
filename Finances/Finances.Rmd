@@ -5,7 +5,7 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-library(tidyverse)
+
 library(ggcpesrthemes)
 
 source("Finances.R")
@@ -31,10 +31,6 @@ _Attention_ :
 
 ```{r aggreg, fig.width=10, fig.height=60}
 fin.pivot.total %>%
-  pivot_longer(
-    cols=Somme:Moyenne,
-    names_to="Aggrégation",
-    values_to="Valeur") %>%
   ggplot(aes(x=exercice,y=Valeur,color=groupe)) +
     geom_point(size=2) + geom_line(aes(group=groupe)) +
     facet_wrap(Indicateur~Aggrégation, scales="free", ncol=2) +
@@ -45,11 +41,7 @@ fin.pivot.total %>%
 ## Tous les indicateurs aggrégés par groupe
 
 ```{r aggreg.grp, fig.width=10, fig.height=60}
-fin.pivot.groupe %>%
-  pivot_longer(
-    cols=Somme:Moyenne,
-    names_to="Aggrégation",
-    values_to="Valeur") %>%
+fin.pivot.groupe %>% 
   ggplot(aes(x=exercice,y=Valeur,color=groupe)) +
     geom_point(size=2) + geom_line(aes(group=groupe)) +
     facet_wrap(Indicateur~Aggrégation, scales="free", ncol=2) +
@@ -57,26 +49,86 @@ fin.pivot.groupe %>%
     theme(legend.direction="vertical")
 ```
 
+## Focus Résultat et Solde
+
+```{r focus, fig.width=8, fig.height=4.5}
+fin.pivot.groupe %>% 
+  filter(Indicateur %in% c("Résultat.net.comptable","Solde.budgétaire"), Aggrégation == "Somme") %>%
+  mutate(Valeur = Valeur / 10^6) %>%
+  ggplot(aes(x=exercice,y=Valeur,color=groupe)) +
+    geom_point(size=2) + geom_line(aes(group=groupe)) +
+    facet_wrap(Indicateur~., scales="free", ncol=1) +
+    ylab("Somme pour tous les établissements (M€)") +
+    theme_cpesr() +
+    theme(legend.position="right",legend.direction="vertical")
+```
+
+### Focus universités
+
+```{r focus.univ.data, fig.width=8, fig.height=4.5}
+fin.univ <- fin.pivot %>%
+  filter(groupe == "université") %>%
+  mutate(Valeur = Valeur / 10^6) %>%
+  filter(Indicateur %in% c("Résultat.net.comptable","Solde.budgétaire")) %>%
+  filter(exercice %in% c("2019","2020")) %>%
+  arrange(exercice) %>%
+  group_by(Indicateur,etablissement) %>%
+  mutate(Différence = Valeur - first(Valeur)) %>%
+  filter(!academie %in% c("Guyane","Mayotte"))
+```
+
+```{r focus.univ.vs, fig.width=8, fig.height=4.5}
+  fin.univ %>%
+  filter(exercice == 2020) %>%
+  ggplot(aes(x=Valeur,y=Différence)) +
+    geom_point(size=2) +
+    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0) +
+    facet_wrap(Indicateur~., scales="free", ncol=1) +
+    xlab("Valeur en 2020 (M€)") + 
+    ylab("Différence entre 2019 et 2020 (M€)") +
+    ggtitle("Résultat et solde des universités en 2020") +
+    theme_cpesr() +
+    theme(
+      panel.grid.major.x = element_line(colour = "grey", size=0.2),
+      legend.position="right",legend.direction="vertical")
+```
+
+```{r focus.univ.top, fig.width=10, fig.height=10}
+  fin.univ %>%
+  mutate(etablissement = droplevels(etablissement)) %>%
+  ggplot(aes(x=reorder(etablissement,-Différence,FUN=max),y=Valeur)) +
+    geom_hline(yintercept = 0, size=0.2) +
+    geom_line(aes(group=etablissement)) +
+    geom_point(aes(size=exercice,color=exercice)) + 
+    facet_grid(.~Indicateur, scales="free_x") +
+    coord_flip() +
+    scale_size_manual(values=c(1,2)) +
+    xlab("") + 
+    ylab("valeur (M€)") +
+    ggtitle("Résultat et solde des universités en 2019 et 2020") +
+    theme_cpesr() +
+    theme(
+      panel.grid.major.x = element_line(colour = "grey", size=0.2))
+```
+
 ## Tous les indicateurs par établissement
 
 
-```{r production, include=FALSE, eval=TRUE}
-
-slugify <- function(x, alphanum_replace="", space_replace="_", tolower=TRUE) {
-  if(tolower) { x <- tolower(x) }
-
-  return(x)
-}
-
+```{r production.fun, include=FALSE, eval=TRUE}
 
 outmd <- function(x) {
-  x <- gsub("[^[:alnum:] ]", "", x)
+  x <- gsub("[^[:alnum:] ]", "_", x)
   x <- gsub(" ", "_", x)
+  x <- tolower(x)
   paste0(x,'.md')
 }
+```
 
-etabs = c("Université de Strasbourg")
-etabs = unique(fin$etablissement)
+```{r production, include=FALSE, eval=FALSE}
+
+etabs <- c("Université de Strasbourg")
+etabs <- unique(fin$etablissement)
 for(etab in etabs) {
   rmarkdown::render("Etablissement.Rmd",
                     output_dir = "Etablissements",
@@ -89,8 +141,12 @@ for(etab in etabs) {
 
 
 ```{r production2, results="asis"}
-for(etab in etabs) {
-  cat("- [", etab,"](Etablissements/",outmd(etab),")\n", sep='')
+for(grp in unique(fin$groupe)) {
+  cat("\n\n###", grp,"\n\n")
+  grpdf <- fin %>% filter(groupe == grp)
+  for(etab in unique(grpdf$etablissement)) {
+    cat("- [", etab,"](Etablissements/",outmd(etab),")\n", sep='')
+  }
 }
 ```
 
