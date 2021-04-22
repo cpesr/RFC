@@ -116,25 +116,27 @@ fin.univ <- fin.pivot %>%
 
 
 ```{r production.fun, include=FALSE, eval=TRUE}
-
-outmd <- function(x) {
+outmd <- function(x, ext=".md") {
   x <- gsub("[^[:alnum:] ]", "_", x)
   x <- gsub(" ", "_", x)
   x <- tolower(x)
-  paste0(x,'.md')
+  paste0(x,ext)
 }
 ```
 
-```{r production, include=FALSE, eval=FALSE}
+```{r production, include=FALSE, eval=TRUE}
 
 etabs <- c("Université de Strasbourg")
 etabs <- unique(fin$etablissement)
 for(etab in etabs) {
   rmarkdown::render("Etablissement.Rmd",
-                    output_dir = "Etablissements",
                     output_file = outmd(etab),
                     output_format=NULL,
                     clean = TRUE)
+  unlink(paste0("Etablissements/",outmd(etab,"_files")),recursive=TRUE)
+  file.remove(outmd(etab,".html"))
+  file.rename(outmd(etab), paste0("Etablissements/",outmd(etab)))
+  file.rename(outmd(etab,"_files"), paste0("Etablissements/",outmd(etab,"_files")))
 }
 ```
 

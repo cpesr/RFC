@@ -9,20 +9,42 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # `r etab`
 
-```{r etab, fig.width=10, fig.height=30}
+```{r data}
+#etab <- "Université de Strasbourg"
+
 fin.etab <- fin.pivot %>% filter(etablissement == etab)
 grp <- fin.etab$groupe[[1]]
 fin.all <- bind_rows(
   fin.etab,
-  fin.pivot.groupe %>% filter(groupe==grp) %>%  mutate(Valeur = Moyenne),
-  fin.pivot.total %>%  mutate(Valeur = Moyenne)
+  fin.pivot.groupe %>% filter(groupe==grp, Aggrégation=="Moyenne"),
+  fin.pivot.total %>% filter(Aggrégation=="Moyenne")
 ) %>%
   mutate(
     etablissement = factor(etablissement, 
                            levels = c("Global","Groupe",etab),
-                           labels = c("Moyenne globale",paste("Moyenne",grp),etab))
+                           labels = c("Moyenne globale MESRI",paste("Moyenne du groupe",grp),etab))
   )
+```
 
+
+## Focus Résultat et Solde
+
+```{r etab.focus, fig.width=8, fig.height=4.5}
+fin.all  %>%
+  filter(Indicateur %in% c("Résultat.net.comptable","Solde.budgétaire")) %>%
+  mutate(Valeur = Valeur / 10^6) %>%
+  ggplot(aes(x=exercice,y=Valeur,color=etablissement)) +
+    geom_point(size=2) + geom_line(aes(group=etablissement)) +
+    scale_color_brewer(palette="Purples", name="") +
+    facet_wrap(Indicateur~., scales="free", ncol=1) +
+    ggtitle(paste0("Indicateurs financiers de ",etab)) + 
+    theme_cpesr() 
+    #theme(legend.direction="vertical", legend.position = "right")
+```
+
+## Tous les indicateurs
+
+```{r etab, fig.width=10, fig.height=30}
 fin.all %>% 
   ggplot(aes(x=exercice,y=Valeur,color=etablissement)) +
   geom_point(size=2) + geom_line(aes(group=etablissement)) +

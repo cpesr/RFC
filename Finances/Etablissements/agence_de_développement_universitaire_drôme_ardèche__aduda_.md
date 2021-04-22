@@ -9,7 +9,7 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 4 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/agence_de_développement_universitaire_drôme_ardèche__aduda__files/figure-gfm/etab.focus-1.png)<!-- -->
+![](agence_de_développement_universitaire_drôme_ardèche__aduda__files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
@@ -17,4 +17,4 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 2 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/agence_de_développement_universitaire_drôme_ardèche__aduda__files/figure-gfm/etab-1.png)<!-- -->
+![](agence_de_développement_universitaire_drôme_ardèche__aduda__files/figure-gfm/etab-1.png)<!-- -->

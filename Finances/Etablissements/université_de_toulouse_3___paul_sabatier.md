@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 23 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_de_toulouse_3___paul_sabatier_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](université_de_toulouse_3___paul_sabatier_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 204 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_de_toulouse_3___paul_sabatier_files/figure-gfm/etab-1.png)<!-- -->
+![](université_de_toulouse_3___paul_sabatier_files/figure-gfm/etab-1.png)<!-- -->

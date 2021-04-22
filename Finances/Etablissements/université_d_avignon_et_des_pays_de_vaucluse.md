@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 19 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_d_avignon_et_des_pays_de_vaucluse_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](université_d_avignon_et_des_pays_de_vaucluse_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 165 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_d_avignon_et_des_pays_de_vaucluse_files/figure-gfm/etab-1.png)<!-- -->
+![](université_d_avignon_et_des_pays_de_vaucluse_files/figure-gfm/etab-1.png)<!-- -->

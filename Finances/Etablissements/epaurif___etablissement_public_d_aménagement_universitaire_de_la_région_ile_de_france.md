@@ -9,7 +9,7 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/epaurif___etablissement_public_d_aménagement_universitaire_de_la_région_ile_de_france_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](epaurif___etablissement_public_d_aménagement_universitaire_de_la_région_ile_de_france_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
@@ -17,4 +17,4 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/epaurif___etablissement_public_d_aménagement_universitaire_de_la_région_ile_de_france_files/figure-gfm/etab-1.png)<!-- -->
+![](epaurif___etablissement_public_d_aménagement_universitaire_de_la_région_ile_de_france_files/figure-gfm/etab-1.png)<!-- -->

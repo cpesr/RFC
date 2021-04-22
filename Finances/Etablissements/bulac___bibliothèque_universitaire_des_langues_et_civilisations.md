@@ -9,7 +9,7 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/bulac___bibliothèque_universitaire_des_langues_et_civilisations_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](bulac___bibliothèque_universitaire_des_langues_et_civilisations_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
@@ -17,4 +17,4 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 2 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/bulac___bibliothèque_universitaire_des_langues_et_civilisations_files/figure-gfm/etab-1.png)<!-- -->
+![](bulac___bibliothèque_universitaire_des_langues_et_civilisations_files/figure-gfm/etab-1.png)<!-- -->

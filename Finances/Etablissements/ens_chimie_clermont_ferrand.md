@@ -9,7 +9,7 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 8 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/ens_chimie_clermont_ferrand_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](ens_chimie_clermont_ferrand_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
@@ -17,4 +17,4 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 6 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/ens_chimie_clermont_ferrand_files/figure-gfm/etab-1.png)<!-- -->
+![](ens_chimie_clermont_ferrand_files/figure-gfm/etab-1.png)<!-- -->

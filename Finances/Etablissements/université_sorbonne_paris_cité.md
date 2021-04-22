@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 7 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_sorbonne_paris_cité_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](université_sorbonne_paris_cité_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 140 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_sorbonne_paris_cité_files/figure-gfm/etab-1.png)<!-- -->
+![](université_sorbonne_paris_cité_files/figure-gfm/etab-1.png)<!-- -->

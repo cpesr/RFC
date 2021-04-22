@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 8 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_fédérale_de_toulouse_midi_pyrénées_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](université_fédérale_de_toulouse_midi_pyrénées_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 137 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_fédérale_de_toulouse_midi_pyrénées_files/figure-gfm/etab-1.png)<!-- -->
+![](université_fédérale_de_toulouse_midi_pyrénées_files/figure-gfm/etab-1.png)<!-- -->

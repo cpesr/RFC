@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 22 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/le_mans_université_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](le_mans_université_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 195 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/le_mans_université_files/figure-gfm/etab-1.png)<!-- -->
+![](le_mans_université_files/figure-gfm/etab-1.png)<!-- -->

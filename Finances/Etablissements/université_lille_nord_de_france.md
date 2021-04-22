@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 6 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_lille_nord_de_france_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](université_lille_nord_de_france_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 129 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/université_lille_nord_de_france_files/figure-gfm/etab-1.png)<!-- -->
+![](université_lille_nord_de_france_files/figure-gfm/etab-1.png)<!-- -->

@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 20 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/institut_polytechnique_de_bordeaux_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](institut_polytechnique_de_bordeaux_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 174 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/institut_polytechnique_de_bordeaux_files/figure-gfm/etab-1.png)<!-- -->
+![](institut_polytechnique_de_bordeaux_files/figure-gfm/etab-1.png)<!-- -->

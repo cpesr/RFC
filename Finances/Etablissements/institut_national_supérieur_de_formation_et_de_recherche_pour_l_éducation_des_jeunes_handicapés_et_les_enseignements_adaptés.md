@@ -9,7 +9,7 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/institut_national_supérieur_de_formation_et_de_recherche_pour_l_éducation_des_jeunes_handicapés_et_les_enseignements_adaptés_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](institut_national_supérieur_de_formation_et_de_recherche_pour_l_éducation_des_jeunes_handicapés_et_les_enseignements_adaptés_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
@@ -17,4 +17,4 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/institut_national_supérieur_de_formation_et_de_recherche_pour_l_éducation_des_jeunes_handicapés_et_les_enseignements_adaptés_files/figure-gfm/etab-1.png)<!-- -->
+![](institut_national_supérieur_de_formation_et_de_recherche_pour_l_éducation_des_jeunes_handicapés_et_les_enseignements_adaptés_files/figure-gfm/etab-1.png)<!-- -->

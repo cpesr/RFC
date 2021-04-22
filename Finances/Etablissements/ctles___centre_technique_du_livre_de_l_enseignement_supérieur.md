@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 16 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/ctles___centre_technique_du_livre_de_l_enseignement_supérieur_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](ctles___centre_technique_du_livre_de_l_enseignement_supérieur_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 198 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/ctles___centre_technique_du_livre_de_l_enseignement_supérieur_files/figure-gfm/etab-1.png)<!-- -->
+![](ctles___centre_technique_du_livre_de_l_enseignement_supérieur_files/figure-gfm/etab-1.png)<!-- -->

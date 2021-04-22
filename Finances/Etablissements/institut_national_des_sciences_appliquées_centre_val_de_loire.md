@@ -7,7 +7,7 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 16 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/institut_national_des_sciences_appliquées_centre_val_de_loire_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](institut_national_des_sciences_appliquées_centre_val_de_loire_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
@@ -15,4 +15,4 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/institut_national_des_sciences_appliquées_centre_val_de_loire_files/figure-gfm/etab-1.png)<!-- -->
+![](institut_national_des_sciences_appliquées_centre_val_de_loire_files/figure-gfm/etab-1.png)<!-- -->

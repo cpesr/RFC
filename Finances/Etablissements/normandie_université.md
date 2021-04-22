@@ -7,10 +7,10 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 6 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/normandie_université_files/figure-gfm/etab.focus-1.png)<!-- -->
+![](normandie_université_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
 
     ## Warning: Removed 134 rows containing missing values (geom_point).
 
-![](/home/julien/repo/cpesr/RFC/Finances/Etablissements/normandie_université_files/figure-gfm/etab-1.png)<!-- -->
+![](normandie_université_files/figure-gfm/etab-1.png)<!-- -->
