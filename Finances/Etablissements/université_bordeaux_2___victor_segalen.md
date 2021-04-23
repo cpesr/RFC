@@ -7,7 +7,7 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 19 rows containing missing values (geom_point).
 
-    ## Warning: Removed 7 row(s) containing missing values (geom_path).
+    ## Warning: Removed 4 row(s) containing missing values (geom_path).
 
 ![](université_bordeaux_2___victor_segalen_files/figure-gfm/etab.focus-1.png)<!-- -->
 

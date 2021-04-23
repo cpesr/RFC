@@ -5,7 +5,7 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 8 rows containing missing values (geom_point).
+    ## Warning: Removed 9 rows containing missing values (geom_point).
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 

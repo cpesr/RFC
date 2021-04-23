@@ -7,8 +7,6 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 20 rows containing missing values (geom_point).
 
-    ## Warning: Removed 2 row(s) containing missing values (geom_path).
-
 ![](université_de_pau_et_des_pays_de_l_adour_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs

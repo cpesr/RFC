@@ -47,6 +47,8 @@ Problèmes détectés :
 
 ![](Finances_files/figure-gfm/focus.univ.top-1.png)<!-- -->
 
+![](Finances_files/figure-gfm/focus.univ.diff.vs-1.png)<!-- -->
+
 ## Tous les indicateurs par établissement
 
 ### université

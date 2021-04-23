@@ -69,7 +69,7 @@ fin.pivot.groupe %>%
 fin.univ <- fin.pivot %>%
   filter(groupe == "université") %>%
   mutate(Valeur = Valeur / 10^6) %>%
-  filter(Indicateur %in% c("Résultat.net.comptable","Solde.budgétaire")) %>%
+  filter(Indicateur %in% c("Résultat.net.comptable","Solde.budgétaire","Acquisitions.d.immobilisations")) %>%
   filter(exercice %in% c("2019","2020")) %>%
   arrange(exercice) %>%
   group_by(Indicateur,etablissement) %>%
@@ -87,7 +87,7 @@ fin.univ <- fin.pivot %>%
     facet_wrap(Indicateur~., scales="free", ncol=1) +
     xlab("Valeur en 2020 (M€)") + 
     ylab("Différence entre 2019 et 2020 (M€)") +
-    ggtitle("Résultat et solde des universités en 2020") +
+    ggtitle("Différence entre 2019 et 2020 selon la valeur en 2020") +
     theme_cpesr() +
     theme(
       panel.grid.major.x = element_line(colour = "grey", size=0.2),
@@ -107,6 +107,25 @@ fin.univ <- fin.pivot %>%
     xlab("") + 
     ylab("valeur (M€)") +
     ggtitle("Résultat et solde des universités en 2019 et 2020") +
+    theme_cpesr() +
+    theme(
+      panel.grid.major.x = element_line(colour = "grey", size=0.2))
+```
+
+```{r focus.univ.diff.vs, fig.width=8, fig.height=7}
+  fin.univ %>%
+  select(-Valeur, -Catégorie) %>%
+  pivot_wider(
+    names_from = Indicateur,
+    values_from = Différence
+  ) %>%
+  mutate(etablissement = droplevels(etablissement)) %>%
+  ggplot(aes(x=Solde.budgétaire,y=Acquisitions.d.immobilisations)) +
+    geom_abline(slope=-1, size=0.3) +
+    geom_point() + 
+    #ggrepel::geom_text_repel(aes(label=etablissement)) +
+
+    ggtitle("Différences entre 2019 et 2020 pour les universités") +
     theme_cpesr() +
     theme(
       panel.grid.major.x = element_line(colour = "grey", size=0.2))

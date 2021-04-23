@@ -5,9 +5,9 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 20 rows containing missing values (geom_point).
+    ## Warning: Removed 23 rows containing missing values (geom_point).
 
-    ## Warning: Removed 2 row(s) containing missing values (geom_path).
+    ## Warning: Removed 3 row(s) containing missing values (geom_path).
 
 ![](université_de_la_réunion_files/figure-gfm/etab.focus-1.png)<!-- -->
 

@@ -7,8 +7,6 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 19 rows containing missing values (geom_point).
 
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
-
 ![](école_normale_supérieure_de_cachan_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs

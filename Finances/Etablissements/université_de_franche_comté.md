@@ -5,7 +5,7 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 20 rows containing missing values (geom_point).
+    ## Warning: Removed 21 rows containing missing values (geom_point).
 
 ![](université_de_franche_comté_files/figure-gfm/etab.focus-1.png)<!-- -->
 

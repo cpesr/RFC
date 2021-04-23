@@ -5,7 +5,7 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 18 rows containing missing values (geom_point).
+    ## Warning: Removed 20 rows containing missing values (geom_point).
 
 ![](académie_des_sciences_d_outre_mer_files/figure-gfm/etab.focus-1.png)<!-- -->
 

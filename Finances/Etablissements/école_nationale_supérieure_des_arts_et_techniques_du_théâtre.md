@@ -7,8 +7,6 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 20 rows containing missing values (geom_point).
 
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
-
 ![](école_nationale_supérieure_des_arts_et_techniques_du_théâtre_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs

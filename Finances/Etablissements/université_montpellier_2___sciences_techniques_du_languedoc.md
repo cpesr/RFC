@@ -5,9 +5,9 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 18 rows containing missing values (geom_point).
+    ## Warning: Removed 20 rows containing missing values (geom_point).
 
-    ## Warning: Removed 5 row(s) containing missing values (geom_path).
+    ## Warning: Removed 6 row(s) containing missing values (geom_path).
 
 ![](université_montpellier_2___sciences_techniques_du_languedoc_files/figure-gfm/etab.focus-1.png)<!-- -->
 

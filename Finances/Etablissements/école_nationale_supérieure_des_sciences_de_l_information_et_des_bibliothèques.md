@@ -5,7 +5,7 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 20 rows containing missing values (geom_point).
+    ## Warning: Removed 22 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_des_sciences_de_l_information_et_des_bibliothèques_files/figure-gfm/etab.focus-1.png)<!-- -->
 

@@ -5,7 +5,7 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 15 rows containing missing values (geom_point).
+    ## Warning: Removed 16 rows containing missing values (geom_point).
 
 ![](musée_du_quai_branly_files/figure-gfm/etab.focus-1.png)<!-- -->
 

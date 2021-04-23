@@ -7,8 +7,6 @@ Indicateurs financiers d’établissement
 
     ## Warning: Removed 17 rows containing missing values (geom_point).
 
-    ## Warning: Removed 2 row(s) containing missing values (geom_path).
-
 ![](institut_français_d_archéologie_orientale_du_caire_files/figure-gfm/etab.focus-1.png)<!-- -->
 
 ## Tous les indicateurs
