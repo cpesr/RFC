@@ -173,6 +173,12 @@ sont celles fournies par le ministère.
 
 ![](Vacations_files/figure-gfm/Nantes-1.png)<!-- -->
 
+## Répartitions
+
+  - Paris 3 en 2016
+
+![](Vacations_files/figure-gfm/Date_Paris3-1.png)<!-- -->
+
 ## Autres approches
 
 Enfin, on essaie de regarder les trajectoires suivies par les

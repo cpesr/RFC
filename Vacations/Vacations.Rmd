@@ -358,8 +358,6 @@ facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
 
 ```{r Nantes,fig.width=12, fig.asp=9/16}
 
-
-
 Nantes<-hec%>%filter(Etablissement=="Nantes")%>%
     summarize(Rentrée,HC.Titulaires,kpi.ENS.S.titulaires,HC.Total,HC.Vacataires,)%>%
    pivot_longer(-Rentrée)
@@ -382,11 +380,48 @@ facet_wrap(name~.,scales="free_y",labeller = as_labeller(title_names))+
     labs(title="Evolution pour l'université de Nantes",y="",caption = "Graphique : Camille Noûs et CPESR - Data : Bilans sociaux des établissements")+
   theme_cpesr_cap() 
 
-
-
-
 ```
 
+
+## Répartitions
+
+- Paris 3 en 2016
+
+```{r Date_Paris3, fig.width=8, fig.asp=9/16}
+rentrées = c(2015,2016)
+p3.bs <- read.csv("Extraction_BS.csv",header=TRUE, sep=";", quote='"') %>%
+  filter(Etablissement=="Paris 3", Rentrée %in% rentrées) 
+        
+p3.esr <- kpiESR::esr %>%
+  filter(Libellé=="Université Sorbonne Nouvelle - Paris 3", Rentrée %in% rentrées) %>%
+  transmute(
+    Rentrée = Rentrée,
+    EC = kpi.ENS.S.ECtitulaires,
+    AM2D = kpi.ENS.S.titulaires - kpi.ENS.S.ECtitulaires,
+    HS.Titulaires = EC*192+AM2D*384 )
+
+merge(p3.bs,p3.esr) %>%
+  mutate(Rentrée = as.factor(Rentrée)) %>%
+  pivot_longer(
+    cols=c(HS.Titulaires,HC.Titulaires,HC.Vacataires)
+  ) %>%
+  ggplot(aes(x=Rentrée,y=value, fill=name)) +
+    geom_col(position="stack", color="white") +
+    geom_text(aes(label=value), position=position_stack(vjust = .5), 
+              color = "white", fontface="bold", size=6) +
+    #coord_polar(theta="y") +
+    #facet_wrap(.~Rentrée) +
+    #xlim(1,2.5) +
+    coord_flip() +
+    scale_fill_brewer(palette = "Dark2", name="", 
+                      labels=c("Heures de service Titulaires (calculé)","Heures complémentaires Vacataires (BS)","Heures complémentaires Titulaires (BS)"))+
+    ggtitle("Répartition des heures d'enseignement à Paris 3") +
+    theme_cpesr_cap() + theme(
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(), 
+      #panel.grid.major.y = element_blank(),
+      legend.direction = "vertical", legend.position = "bottom")
+```
 
 ## Autres approches
 
