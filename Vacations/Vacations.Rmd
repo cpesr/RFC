@@ -414,7 +414,7 @@ merge(p3.bs,p3.esr) %>%
     #xlim(1,2.5) +
     coord_flip() +
     scale_fill_brewer(palette = "Dark2", name="", 
-                      labels=c("Heures de service Titulaires (calculé)","Heures complémentaires Vacataires (BS)","Heures complémentaires Titulaires (BS)"))+
+                      labels=c("Heures complémentaires Titulaires (BS)","Heures complémentaires Vacataires (BS)","Heures de service Titulaires (calculé)"))+
     ggtitle("Répartition des heures d'enseignement à Paris 3") +
     theme_cpesr_cap() + theme(
       axis.title.x = element_blank(),
