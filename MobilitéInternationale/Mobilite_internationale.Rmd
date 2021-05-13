@@ -1,0 +1,59 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(kableExtra)
+library(ggcpesrthemes)
+```
+
+```{r data.check}
+knitr::opts_chunk$set(echo = FALSE)
+
+sise <- read.csv("sise_mobilite.csv", stringsAsFactors=TRUE)
+
+read.csv("sise_sample.csv", stringsAsFactors=TRUE) %>%
+  group_by(across(starts_with("Mobilité") | starts_with("Attractivité"))) %>%
+  summarise(compte = n()) %>%
+  ungroup() %>%
+  mutate(compte = compte/sum(compte)) %>%
+  arrange(desc(compte)) %>% 
+  kable()
+```
+
+
+## Par niveaux
+```{r Niveaux}
+sise %>% 
+  group_by(Rentrée, Mobilité, CURSUS_LMD) %>%
+  summarise(Effectifs = sum(Effectifs)) %>% 
+  ggplot(aes(x=Rentrée,y=Effectifs, fill=Mobilité)) +
+  geom_area() +
+  facet_grid(.~CURSUS_LMD) +
+  scale_x_discrete(breaks=c("2011","2016")) +
+  theme_cpesr()
+```
+
+```{r Niveaux.details}
+sise %>% 
+  group_by(Rentrée, Mobilité, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>% 
+  ggplot(aes(x=Rentrée,y=Effectifs, fill=Mobilité)) +
+  geom_area() +
+  facet_grid(.~Niveau) +
+  scale_x_discrete(breaks=c("2011","2016")) +
+  theme_cpesr()
+```
+```{r prop}
+sise %>% 
+  group_by(RENTREE, Mobilité, Niveau) %>%
+  summarise(Effectifs = sum(Effectifs)) %>% 
+  ggplot(aes(x=RENTREE,y=Effectifs, fill=Mobilité)) +
+  geom_area() +
+  facet_grid(.~Niveau) +
+  scale_x_discrete(breaks=c("2011","2016")) +
+  theme_cpesr()
+```
