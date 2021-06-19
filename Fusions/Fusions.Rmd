@@ -4,7 +4,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(kpiESR)
 library(ggcpesrthemes)
@@ -60,6 +60,28 @@ fusions %>%
 
 ```{r kpis.val100, fig.width=8, fig.height=12}
 fusions %>%
+  ggplot(aes(x=Rentrée,y=val100,color=Fusionné)) +
+  geom_line(aes(group=Libellé)) +
+  facet_wrap(kpi~., scales = "free_y", ncol=2) +
+  theme_cpesr_cap()
+```
+
+
+## Juste Bordeaux 
+
+
+```{r kpis.bor, fig.width=8, fig.height=12}
+fusions %>%
+  filter(str_detect(Libellé,"Bordeaux")) %>%
+  ggplot(aes(x=Rentrée,y=norm,color=Fusionné)) +
+  geom_line(aes(group=Libellé)) +
+  facet_wrap(kpi~., scales = "free_y", ncol=2) +
+  theme_cpesr_cap()
+```
+
+```{r kpis.bor.val100, fig.width=8, fig.height=12}
+fusions %>%
+  filter(str_detect(Libellé,"Bordeaux")) %>%
   ggplot(aes(x=Rentrée,y=val100,color=Fusionné)) +
   geom_line(aes(group=Libellé)) +
   facet_wrap(kpi~., scales = "free_y", ncol=2) +
