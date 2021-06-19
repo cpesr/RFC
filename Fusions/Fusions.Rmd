@@ -1,0 +1,67 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(kpiESR)
+library(ggcpesrthemes)
+```
+
+```{r data}
+libs.fusion <- unique(filter(esr,Fusion)$Libellé)
+libs.nonfusion <- c(
+          "Université Toulouse 1 - Capitole",
+          "Université Toulouse - Jean Jaurès",
+          "Université de Toulouse 3 - Paul Sabatier",
+          #"Université fédérale de Toulouse Midi-Pyrénées",
+          "Université Bordeaux-Montaigne"
+          )
+libs = c(libs.fusion,libs.nonfusion)
+
+
+fusions <- esr.pnl %>%
+  filter(Libellé %in% libs) %>%
+  filter(as.character(Rentrée) > "2011") %>%
+  filter(!str_detect(kpi,"ADM") & !str_detect(kpi,"K.sel")) %>%
+  mutate(
+    Fusionné = Libellé %in% libs.fusion,
+    Etab = case_when(
+      Libellé %in% libs.fusion ~ "Fusionné",
+      TRUE ~ Libellé)) %>%
+  arrange(Rentrée) %>%
+  group_by(Libellé, kpi) %>%
+  mutate(val100 = valeur / first(valeur) * 100)
+
+```
+
+Fusionné :
+```{r}
+libs.fusion
+```
+
+Non fusionné : 
+```{r}
+libs.nonfusion
+```
+
+
+## Tous les indicateurs
+
+```{r kpis, fig.width=8, fig.height=12}
+fusions %>%
+  ggplot(aes(x=Rentrée,y=norm,color=Fusionné)) +
+  geom_line(aes(group=Libellé)) +
+  facet_wrap(kpi~., scales = "free_y", ncol=2) +
+  theme_cpesr_cap()
+```
+
+```{r kpis.val100, fig.width=8, fig.height=12}
+fusions %>%
+  ggplot(aes(x=Rentrée,y=val100,color=Fusionné)) +
+  geom_line(aes(group=Libellé)) +
+  facet_wrap(kpi~., scales = "free_y", ncol=2) +
+  theme_cpesr_cap()
+```
