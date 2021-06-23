@@ -14,7 +14,7 @@ require("ggrepel")
 library(ggcpesrthemes)
 library(ggpmisc)
 library(robCompositions)
-cnu <- read.table("DB_CNU_QualificationRecrutements_20201123.csv", h=T, sep=";") %>%
+cnu <- read.table("DB_CNU_QualificationRecrutements.csv", h=T, sep=";") %>%
   mutate(SectionCNU.ID = as.factor(SectionCNU.ID),
          candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
          candidatures.par.poste.MCF = Candidatures.MCF / PostesPublies.MCF,
@@ -919,4 +919,50 @@ cnu %>%
                 label.y=1, 
                 label.x=0
                 )
+```
+
+#### Evolution du nombre de postes
+
+**Remarque** 
+
+* Entre 2002 et 2005, les postes ouverts réservés aux assistants titulaires (sur liste d'aptitude = article 62 pour fusion des corps depuis le décret de 1984) ne sont pas comptabilisés. Il y en avait 250 par an. Les postes prennent par contre en compte les mutations et détachements. On retrouve la dynamique observée sur les « nouveaux postes » de Guillaume Miquelard (soit une stagnation entre 2000 et 2007) alors que si on prend en compte tous les articles de recrutement MCF, la chute est (globalement) continue depuis au moins 1998.
+
+```{r total.postes.MCF}
+tapply(cnu$PostesPublies.MCF, cnu$Annee, sum, na.rm=T)
+```
+
+Sources : 
+
+* démographie CNU (session synchro + fil de l'eau + mutation/détachement)
+* recrutements (variable, sur les dernières années en excel : session synchro + fil de l'eau + mutation/détachement)
+
+Dans la base de données utilisées ici :
+
+* 2019, 2017 : OK (session synchro + fil de l'eau + mutation/détachement)
+* 2018 : 6 postes manquant dans les rapports sur les recrutements par rapport aux fiches démographiques CNU
+* 2016 : 5 postes en trop : OK (pb en 77 : OK)
+* 2010 : 5 postes manquant dans les fiches démographiques CNU par rapport aux rapports de recrutement
+* 2009 : 2 postes manquant : OK
+
+* 2008 : les postes 2nde session pour 2008 ne sont pas ventilés par discipline
+* 2015 (OK), 2014 (OK), 2013 (OK), 2008 (OK), 2007 (OK), 2006 (OK), 2005 (OK), 2004 (OK), 2003 (OK), 2002 (OK) : chiffres sans session fil de l'eau (OK) ou sans mutation/détachement (OK), à corriger.
+
+```{r evolution.postes.MCF.0, fig.width=12, fig.asp=9/16}
+cnu %>% drop_na(PostesPublies.MCF) %>% ggplot(aes(x=as.factor(Annee), y=PostesPublies.MCF, fill=GrandeDisciplineCNU)) + geom_bar(stat='identity')
+```
+
+```{r evolution.postes.MCF.1, fig.width=12, fig.asp=9/16}
+cnu %>% drop_na(PostesPublies.MCF) %>% ggplot(aes(x=as.factor(Annee), y=PostesPublies.MCF, fill=GroupeCNU)) + geom_bar(stat='identity') + facet_grid(.~GrandeDisciplineCNU, scales="free", space="free")
+```
+
+```{r evolution.postes.MCF.2, fig.width=12, fig.asp=9/16}
+cnu %>% drop_na(PostesPublies.MCF) %>% filter(GrandeDisciplineCNU=="Sciences et techniques") %>% ggplot(aes(x=Annee, y=PostesPublies.MCF, col=SectionCNU.ID)) + geom_line() + geom_smooth(se=F) + facet_wrap(.~GroupeCNU, scales="free")
+```
+
+```{r evolution.postes.MCF.3, fig.width=12, fig.asp=9/16}
+cnu %>% drop_na(PostesPublies.MCF) %>% filter(GrandeDisciplineCNU=="Lettres et sciences humaines") %>% ggplot(aes(x=Annee, y=PostesPublies.MCF, col=SectionCNU.ID)) + geom_line() + geom_smooth(se=F) + facet_wrap(.~GroupeCNU, scales="free")
+```
+
+```{r evolution.postes.MCF.4, fig.width=12, fig.asp=9/16}
+cnu %>% drop_na(PostesPublies.MCF) %>% filter(GrandeDisciplineCNU=="Droit éco ges") %>% ggplot(aes(x=Annee, y=PostesPublies.MCF, col=SectionCNU.ID)) + geom_line() + geom_smooth(se=F) + facet_wrap(.~GroupeCNU, scales="free")
 ```
