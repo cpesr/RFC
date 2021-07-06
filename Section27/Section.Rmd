@@ -1,0 +1,108 @@
+---
+title: "Section27"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.width = 8, fig.height = 4.5)
+
+options(dplyr.summarise.inform = FALSE)
+options(tidyverse.quiet = TRUE)
+
+library(tidyverse)
+library(ggbeeswarm)
+library(kableExtra)
+library(ggrepel)
+
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors=c("Julien Gossa"), 
+                  url="https://github.com/cpesr/RFC",
+                  source="https://data.enseignementsup-recherche.gouv.fr")
+
+ens.raw <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
+                  header=TRUE, sep=';', quote='"')
+```
+
+
+
+```{r check}
+ens.raw %>% 
+  filter(code_section_cnu == 61) %>%
+  group_by(Rentrée,Établissement) %>%
+  summarise(Enseignants = sum(effectif)) %>%
+  filter(Rentrée %in% c(2017,2018)) %>%
+  group_by(Établissement) %>%
+  mutate(evol = Enseignants / first(Enseignants)) %>% 
+  arrange(desc(evol)) %>%
+  head(10) %>% kableExtra::kable()
+
+```
+
+```{r data}
+ens <- ens.raw %>% 
+  transmute(
+    UAI = Identifiant.établissement,
+    Etablissement = as.factor(Établissement),
+    Région = as.factor(Région),
+    # Type.établissement = factor(Type.établissement,
+    #                             levels = c("Université",
+    #                                        "Grand établissement",
+    #                                        "École nationale supérieure d'ingénieurs",
+    #                                        "École d'ingénieurs",
+    #                                        "École normale supérieure",
+    #                                        "Institut national polytechnique",
+    #                                        "École habilitée à délivrer un diplôme d'ingénieur",
+    #                                        "Opérateur du programme 150 - Formations supérieures et recherche universitaire",
+    #                                        "Institut ou école extérieur aux universités"),
+    #                             labels = c("Université",
+    #                                        "Grand étab.",
+    #                                        "ENSI",
+    #                                        "Ecole d'ingé.",
+    #                                        "ENS",
+    #                                        "Autre",                                         
+    #                                        "Autre",
+    #                                        "Autre",
+    #                                        "Autre")),
+    Section.CNU = Sections.CNU,
+    Code.CNU = code_section_cnu,
+    Rentrée = as.factor(Rentrée),
+    Enseignants = effectif
+  ) %>%
+  group_by(Rentrée,Code.CNU,Section.CNU) %>%
+  summarise(Enseignants = sum(Enseignants))
+```
+
+
+
+```{r section27}
+ens %>%
+  filter(Code.CNU %in% c(27,61)) %>%
+  ggplot(aes(x=Rentrée,y=Enseignants,color=Section.CNU)) +
+  geom_point() +
+  geom_line(aes(group=Section.CNU)) +
+  expand_limits(y=0) +
+  theme_cpesr_cap()
+```
+
+```{r all}
+ens %>%
+  group_by(Rentrée) %>% summarise(Enseignants = sum(Enseignants)) %>% mutate(Code.CNU = 00, Section.CNU = "Toutes") %>%
+  bind_rows(
+    ens %>% filter(Code.CNU %in% c(27,61))
+  ) %>%
+  arrange(Rentrée) %>%
+  group_by(Section.CNU) %>%
+  mutate(Evolution = Enseignants / first(Enseignants) * 100) %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=Section.CNU)) +
+  geom_point() +
+  geom_line(aes(group=Section.CNU)) +
+  expand_limits(y=95) +
+  theme_cpesr_cap()  
+```
+
+
+```{r save}
+write.csv(ens,"sectionsCNU.csv", row.names = FALSE)
+```
