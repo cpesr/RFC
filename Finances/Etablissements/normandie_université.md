@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 134 rows containing missing values (geom_point).
+    ## Warning: Removed 158 rows containing missing values (geom_point).
 
 ![](normandie_université_files/figure-gfm/etab-1.png)<!-- -->

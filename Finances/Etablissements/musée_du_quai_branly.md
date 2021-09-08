@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 194 rows containing missing values (geom_point).
+    ## Warning: Removed 212 rows containing missing values (geom_point).
 
 ![](musée_du_quai_branly_files/figure-gfm/etab-1.png)<!-- -->

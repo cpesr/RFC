@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 264 rows containing missing values (geom_point).
+    ## Warning: Removed 275 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_louis_lumière_files/figure-gfm/etab-1.png)<!-- -->

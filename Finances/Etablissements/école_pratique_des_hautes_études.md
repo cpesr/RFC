@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 166 rows containing missing values (geom_point).
+    ## Warning: Removed 181 rows containing missing values (geom_point).
 
 ![](école_pratique_des_hautes_études_files/figure-gfm/etab-1.png)<!-- -->

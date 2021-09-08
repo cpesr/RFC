@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 174 rows containing missing values (geom_point).
+    ## Warning: Removed 181 rows containing missing values (geom_point).
 
 ![](institut_polytechnique_de_bordeaux_files/figure-gfm/etab-1.png)<!-- -->

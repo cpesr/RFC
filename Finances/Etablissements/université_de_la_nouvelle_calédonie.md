@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 209 rows containing missing values (geom_point).
+    ## Warning: Removed 218 rows containing missing values (geom_point).
 
 ![](université_de_la_nouvelle_calédonie_files/figure-gfm/etab-1.png)<!-- -->

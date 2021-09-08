@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 165 rows containing missing values (geom_point).
+    ## Warning: Removed 174 rows containing missing values (geom_point).
 
 ![](université_d_avignon_et_des_pays_de_vaucluse_files/figure-gfm/etab-1.png)<!-- -->

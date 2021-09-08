@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 130 rows containing missing values (geom_point).
+    ## Warning: Removed 143 rows containing missing values (geom_point).
 
 ![](université_grenoble_alpes_files/figure-gfm/etab-1.png)<!-- -->

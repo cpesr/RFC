@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 167 rows containing missing values (geom_point).
+    ## Warning: Removed 177 rows containing missing values (geom_point).
 
 ![](université_d_angers_files/figure-gfm/etab-1.png)<!-- -->

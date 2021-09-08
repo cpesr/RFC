@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 142 rows containing missing values (geom_point).
+    ## Warning: Removed 148 rows containing missing values (geom_point).
 
 ![](université_clermont_ferrand_2___blaise_pascal_files/figure-gfm/etab-1.png)<!-- -->

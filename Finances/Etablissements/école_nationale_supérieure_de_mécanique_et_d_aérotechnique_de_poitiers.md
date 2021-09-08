@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 172 rows containing missing values (geom_point).
+    ## Warning: Removed 181 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_de_mécanique_et_d_aérotechnique_de_poitiers_files/figure-gfm/etab-1.png)<!-- -->

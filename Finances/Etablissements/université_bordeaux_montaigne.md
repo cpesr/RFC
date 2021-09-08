@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 171 rows containing missing values (geom_point).
+    ## Warning: Removed 180 rows containing missing values (geom_point).
 
 ![](université_bordeaux_montaigne_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 168 rows containing missing values (geom_point).
+    ## Warning: Removed 177 rows containing missing values (geom_point).
 
 ![](université_de_reims_champagne_ardenne_files/figure-gfm/etab-1.png)<!-- -->

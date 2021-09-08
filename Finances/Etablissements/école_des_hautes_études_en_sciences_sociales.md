@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 172 rows containing missing values (geom_point).
+    ## Warning: Removed 184 rows containing missing values (geom_point).
 
 ![](école_des_hautes_études_en_sciences_sociales_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 212 rows containing missing values (geom_point).
+    ## Warning: Removed 226 rows containing missing values (geom_point).
 
 ![](collège_de_france_files/figure-gfm/etab-1.png)<!-- -->

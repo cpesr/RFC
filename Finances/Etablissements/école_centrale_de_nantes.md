@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 208 rows containing missing values (geom_point).
+    ## Warning: Removed 218 rows containing missing values (geom_point).
 
 ![](école_centrale_de_nantes_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 122 rows containing missing values (geom_point).
+    ## Warning: Removed 129 rows containing missing values (geom_point).
 
 ![](comue_université_de_champagne_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 138 rows containing missing values (geom_point).
+    ## Warning: Removed 145 rows containing missing values (geom_point).
 
 ![](université_de_recherche_paris_sciences_et_lettres___psl_research_university_files/figure-gfm/etab-1.png)<!-- -->

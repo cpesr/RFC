@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 157 rows containing missing values (geom_point).
+    ## Warning: Removed 166 rows containing missing values (geom_point).
 
 ![](aix_marseille_université_files/figure-gfm/etab-1.png)<!-- -->

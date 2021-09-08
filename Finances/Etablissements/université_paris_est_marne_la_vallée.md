@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 172 rows containing missing values (geom_point).
+    ## Warning: Removed 178 rows containing missing values (geom_point).
 
 ![](université_paris_est_marne_la_vallée_files/figure-gfm/etab-1.png)<!-- -->

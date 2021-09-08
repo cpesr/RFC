@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 212 rows containing missing values (geom_point).
+    ## Warning: Removed 233 rows containing missing values (geom_point).
 
 ![](académie_des_sciences_d_outre_mer_files/figure-gfm/etab-1.png)<!-- -->

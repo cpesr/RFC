@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 172 rows containing missing values (geom_point).
+    ## Warning: Removed 181 rows containing missing values (geom_point).
 
 ![](université_paris_13___paris_nord_files/figure-gfm/etab-1.png)<!-- -->

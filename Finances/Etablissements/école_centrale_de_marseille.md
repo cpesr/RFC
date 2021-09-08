@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 172 rows containing missing values (geom_point).
+    ## Warning: Removed 183 rows containing missing values (geom_point).
 
 ![](école_centrale_de_marseille_files/figure-gfm/etab-1.png)<!-- -->

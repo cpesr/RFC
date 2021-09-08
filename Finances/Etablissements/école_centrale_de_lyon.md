@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 165 rows containing missing values (geom_point).
+    ## Warning: Removed 173 rows containing missing values (geom_point).
 
 ![](école_centrale_de_lyon_files/figure-gfm/etab-1.png)<!-- -->

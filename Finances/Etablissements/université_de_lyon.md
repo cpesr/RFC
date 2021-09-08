@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 142 rows containing missing values (geom_point).
+    ## Warning: Removed 147 rows containing missing values (geom_point).
 
 ![](université_de_lyon_files/figure-gfm/etab-1.png)<!-- -->

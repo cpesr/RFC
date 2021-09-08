@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 208 rows containing missing values (geom_point).
+    ## Warning: Removed 209 rows containing missing values (geom_point).
 
 ![](cines___centre_informatique_national_de_l_enseignement_supérieur_files/figure-gfm/etab-1.png)<!-- -->

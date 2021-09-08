@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 164 rows containing missing values (geom_point).
+    ## Warning: Removed 175 rows containing missing values (geom_point).
 
 ![](école_normale_supérieure_de_rennes_files/figure-gfm/etab-1.png)<!-- -->

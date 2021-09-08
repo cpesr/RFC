@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 192 rows containing missing values (geom_point).
+    ## Warning: Removed 206 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_des_sciences_de_l_information_et_des_bibliothèques_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 159 rows containing missing values (geom_point).
+    ## Warning: Removed 165 rows containing missing values (geom_point).
 
 ![](université_de_valenciennes_et_du_hainaut_cambrésis_files/figure-gfm/etab-1.png)<!-- -->

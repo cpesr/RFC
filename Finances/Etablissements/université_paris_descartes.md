@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 163 rows containing missing values (geom_point).
+    ## Warning: Removed 169 rows containing missing values (geom_point).
 
 ![](université_paris_descartes_files/figure-gfm/etab-1.png)<!-- -->

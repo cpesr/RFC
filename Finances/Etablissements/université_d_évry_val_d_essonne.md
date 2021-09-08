@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 221 rows containing missing values (geom_point).
+    ## Warning: Removed 231 rows containing missing values (geom_point).
 
 ![](université_d_évry_val_d_essonne_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 237 rows containing missing values (geom_point).
+    ## Warning: Removed 264 rows containing missing values (geom_point).
 
 ![](bnu_de_strasbourg_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 165 rows containing missing values (geom_point).
+    ## Warning: Removed 176 rows containing missing values (geom_point).
 
 ![](université_du_littoral_côte_d_opale_files/figure-gfm/etab-1.png)<!-- -->

@@ -16,7 +16,10 @@ fin <- read.csv("fr-esr-operateurs-indicateurs-financiers.csv",sep=";",quote='"'
   )) %>%
   mutate(
     groupe = as.factor(groupe),
-    etablissement = as.factor(etablissement))
+    etablissement = as.factor(etablissement)) %>%
+  mutate(
+    SCSP = Produits.de.fonctionnement.encaissables - Ressources.propres.encaissables
+  )
 
 categories <- read.csv("indicateurs-financiers-categories.csv") 
 levels.indicateurs <- categories$Indicateur
@@ -24,7 +27,7 @@ levels.categories <- unique(categories$Catégorie)
 
 fin.pivot <- fin %>%
   pivot_longer(
-    cols = Acquisitions.d.immobilisations:Valorisation,
+    cols = all_of(levels.indicateurs),
     names_to = "Indicateur",
     values_to = "Valeur"
   ) %>%
@@ -59,7 +62,7 @@ fin.pivot.groupe <- fin.pivot %>%
         Charges.décaissables...Produits.encaissables = sum(Charges.de.fonctionnement.décaissables,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE),
         Charges.externes...Produits.encaissables = sum(Charges.externes,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE),
         Dépenses.de.personnel...Produits.encaissables = sum(Dépenses.de.personnel,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE),
-        Ressources.propres...Produits.encaissables = sum(Ressources.propres,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE)
+        Ressources.propres...Produits.encaissables = sum(Ressources.propres.encaissables,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE)
       ) %>%
       pivot_longer(
         cols = -c(exercice,groupe),
@@ -102,7 +105,7 @@ fin.pivot.total <- fin.pivot %>%
         Charges.décaissables...Produits.encaissables = sum(Charges.de.fonctionnement.décaissables,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE),
         Charges.externes...Produits.encaissables = sum(Charges.externes,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE),
         Dépenses.de.personnel...Produits.encaissables = sum(Dépenses.de.personnel,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE),
-        Ressources.propres...Produits.encaissables = sum(Ressources.propres,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE)
+        Ressources.propres...Produits.encaissables = sum(Ressources.propres.encaissables,na.rm=TRUE) / sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE)
       ) %>%
       pivot_longer(
         cols = -c(exercice),

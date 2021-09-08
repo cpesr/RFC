@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 203 rows containing missing values (geom_point).
+    ## Warning: Removed 213 rows containing missing values (geom_point).
 
 ![](école_nationale_des_chartes_files/figure-gfm/etab-1.png)<!-- -->

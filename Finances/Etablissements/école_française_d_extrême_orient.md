@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 308 rows containing missing values (geom_point).
+    ## Warning: Removed 325 rows containing missing values (geom_point).
 
 ![](école_française_d_extrême_orient_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 163 rows containing missing values (geom_point).
+    ## Warning: Removed 173 rows containing missing values (geom_point).
 
 ![](université_de_bretagne_occidentale_files/figure-gfm/etab-1.png)<!-- -->

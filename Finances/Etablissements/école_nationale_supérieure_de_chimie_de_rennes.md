@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 187 rows containing missing values (geom_point).
+    ## Warning: Removed 199 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_de_chimie_de_rennes_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 166 rows containing missing values (geom_point).
+    ## Warning: Removed 181 rows containing missing values (geom_point).
 
 ![](hautes_études_sorbonne_arts_et_métiers_files/figure-gfm/etab-1.png)<!-- -->

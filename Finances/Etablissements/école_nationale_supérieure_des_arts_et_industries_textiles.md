@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 191 rows containing missing values (geom_point).
+    ## Warning: Removed 202 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_des_arts_et_industries_textiles_files/figure-gfm/etab-1.png)<!-- -->

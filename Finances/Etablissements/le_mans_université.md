@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 195 rows containing missing values (geom_point).
+    ## Warning: Removed 205 rows containing missing values (geom_point).
 
 ![](le_mans_université_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 188 rows containing missing values (geom_point).
+    ## Warning: Removed 198 rows containing missing values (geom_point).
 
 ![](université_paris_8___vincennes___saint_denis_files/figure-gfm/etab-1.png)<!-- -->

@@ -1,0 +1,16 @@
+Indicateurs financiers d’établissement
+================
+
+# Université polytechnique Hauts de France
+
+## Focus Résultat et Solde
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+![](université_polytechnique_hauts_de_france_files/figure-gfm/etab.focus-1.png)<!-- -->
+
+## Tous les indicateurs
+
+    ## Warning: Removed 122 rows containing missing values (geom_point).
+
+![](université_polytechnique_hauts_de_france_files/figure-gfm/etab-1.png)<!-- -->

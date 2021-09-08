@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 167 rows containing missing values (geom_point).
+    ## Warning: Removed 173 rows containing missing values (geom_point).
 
 ![](école_nationale_d_ingénieurs_de_saint_étienne_files/figure-gfm/etab-1.png)<!-- -->

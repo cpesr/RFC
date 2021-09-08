@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 161 rows containing missing values (geom_point).
+    ## Warning: Removed 170 rows containing missing values (geom_point).
 
 ![](université_claude_bernard___lyon_1_files/figure-gfm/etab-1.png)<!-- -->

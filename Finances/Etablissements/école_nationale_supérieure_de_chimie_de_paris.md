@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 226 rows containing missing values (geom_point).
+    ## Warning: Removed 237 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_de_chimie_de_paris_files/figure-gfm/etab-1.png)<!-- -->

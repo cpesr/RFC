@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 252 rows containing missing values (geom_point).
+    ## Warning: Removed 279 rows containing missing values (geom_point).
 
 ![](casa_de_velázquez_de_madrid_files/figure-gfm/etab-1.png)<!-- -->

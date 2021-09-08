@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 173 rows containing missing values (geom_point).
+    ## Warning: Removed 182 rows containing missing values (geom_point).
 
 ![](institut_national_des_sciences_appliquées_de_strasbourg_files/figure-gfm/etab-1.png)<!-- -->

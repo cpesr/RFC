@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 190 rows containing missing values (geom_point).
+    ## Warning: Removed 201 rows containing missing values (geom_point).
 
 ![](institut_d_études_politiques_d_aix_en_provence_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 147 rows containing missing values (geom_point).
+    ## Warning: Removed 156 rows containing missing values (geom_point).
 
 ![](sigma_clermont_files/figure-gfm/etab-1.png)<!-- -->

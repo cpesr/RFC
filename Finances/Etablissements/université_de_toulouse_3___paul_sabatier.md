@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 204 rows containing missing values (geom_point).
+    ## Warning: Removed 214 rows containing missing values (geom_point).
 
 ![](université_de_toulouse_3___paul_sabatier_files/figure-gfm/etab-1.png)<!-- -->

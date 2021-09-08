@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 186 rows containing missing values (geom_point).
+    ## Warning: Removed 195 rows containing missing values (geom_point).
 
 ![](grenoble_inp_files/figure-gfm/etab-1.png)<!-- -->

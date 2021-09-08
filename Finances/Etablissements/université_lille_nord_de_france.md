@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 129 rows containing missing values (geom_point).
+    ## Warning: Removed 136 rows containing missing values (geom_point).
 
 ![](université_lille_nord_de_france_files/figure-gfm/etab-1.png)<!-- -->

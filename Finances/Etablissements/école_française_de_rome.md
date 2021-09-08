@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 275 rows containing missing values (geom_point).
+    ## Warning: Removed 293 rows containing missing values (geom_point).
 
 ![](école_française_de_rome_files/figure-gfm/etab-1.png)<!-- -->

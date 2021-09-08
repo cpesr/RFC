@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 190 rows containing missing values (geom_point).
+    ## Warning: Removed 203 rows containing missing values (geom_point).
 
 ![](université_paris_dauphine_files/figure-gfm/etab-1.png)<!-- -->

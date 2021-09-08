@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 179 rows containing missing values (geom_point).
+    ## Warning: Removed 188 rows containing missing values (geom_point).
 
 ![](université_panthéon_assas_files/figure-gfm/etab-1.png)<!-- -->

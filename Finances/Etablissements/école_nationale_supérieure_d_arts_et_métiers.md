@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 183 rows containing missing values (geom_point).
+    ## Warning: Removed 193 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_d_arts_et_métiers_files/figure-gfm/etab-1.png)<!-- -->

@@ -43,7 +43,7 @@ uais.etu <- list(
 
 
 ```{r data}
-etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
     UAI = recode(ETABLISSEMENT, !!!uais.etu),

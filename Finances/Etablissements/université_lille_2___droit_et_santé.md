@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 186 rows containing missing values (geom_point).
+    ## Warning: Removed 193 rows containing missing values (geom_point).
 
 ![](université_lille_2___droit_et_santé_files/figure-gfm/etab-1.png)<!-- -->

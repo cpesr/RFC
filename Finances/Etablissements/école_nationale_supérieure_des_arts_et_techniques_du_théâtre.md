@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 205 rows containing missing values (geom_point).
+    ## Warning: Removed 218 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_des_arts_et_techniques_du_théâtre_files/figure-gfm/etab-1.png)<!-- -->

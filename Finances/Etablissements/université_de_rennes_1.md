@@ -13,7 +13,7 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 193 rows containing missing values (geom_point).
+    ## Warning: Removed 204 rows containing missing values (geom_point).
 
     ## Warning: Removed 1 row(s) containing missing values (geom_path).
 

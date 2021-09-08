@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 133 rows containing missing values (geom_point).
+    ## Warning: Removed 146 rows containing missing values (geom_point).
 
 ![](université_côte_d_azur_files/figure-gfm/etab-1.png)<!-- -->

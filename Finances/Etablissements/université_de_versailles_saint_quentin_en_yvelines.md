@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 169 rows containing missing values (geom_point).
+    ## Warning: Removed 178 rows containing missing values (geom_point).
 
 ![](université_de_versailles_saint_quentin_en_yvelines_files/figure-gfm/etab-1.png)<!-- -->

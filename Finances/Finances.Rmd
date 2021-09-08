@@ -9,6 +9,8 @@ knitr::opts_chunk$set(echo = FALSE)
 library(ggcpesrthemes)
 
 source("Finances.R")
+
+theme_cpesr_setup(authors = "Julien Gossa")
 ```
 
 Jeu de données :
@@ -54,7 +56,7 @@ fin.pivot.groupe %>%
 ```{r focus, fig.width=8, fig.height=4.5}
 fin.pivot.groupe %>% 
   filter(Indicateur %in% c("Résultat.net.comptable","Solde.budgétaire"), Aggrégation == "Somme") %>%
-  mutate(Valeur = Valeur / 10^6) %>%
+  mutate(Valeur = Valeur / 10^6) %>% 
   ggplot(aes(x=exercice,y=Valeur,color=groupe)) +
     geom_point(size=2) + geom_line(aes(group=groupe)) +
     facet_wrap(Indicateur~., scales="free", ncol=1) +
@@ -94,6 +96,7 @@ fin.univ <- fin.pivot %>%
       legend.position="right",legend.direction="vertical")
 ```
 
+
 ```{r focus.univ.top, fig.width=10, fig.height=10}
   fin.univ %>%
   mutate(etablissement = droplevels(etablissement)) %>%
@@ -131,10 +134,26 @@ fin.univ <- fin.pivot %>%
       panel.grid.major.x = element_line(colour = "grey", size=0.2))
 ```
 
+### Ressources vs. SCSP vs. Masse salariale
+
+```{r focus.univ.scsp.ms, fig.width=8, fig.height=7}
+fin.pivot.groupe %>%
+  filter(groupe == "université") %>%
+  filter(Indicateur %in% c("Produits.de.fonctionnement.encaissables","SCSP","Dépenses.de.personnel")) %>%
+  filter(Aggrégation == "Somme") %>%
+  ggplot(aes(x=exercice, y=Valeur, color=Indicateur)) +
+    geom_point() + geom_line(aes(group=Indicateur)) +
+    expand_limits(y=0) +
+    scale_y_continuous(labels = ~ paste(.x/1e9,"Md€")) +
+    ggtitle("Trois indicateurs financiers pour les universités") +
+    theme_cpesr_cap()
+```
+
+
 ## Tous les indicateurs par établissement
 
 
-```{r production.fun, include=FALSE, eval=TRUE}
+```{r production.fun, include=FALSE, eval=FALSE}
 outmd <- function(x, ext=".md") {
   x <- gsub("[^[:alnum:] ]", "_", x)
   x <- gsub(" ", "_", x)
@@ -143,7 +162,7 @@ outmd <- function(x, ext=".md") {
 }
 ```
 
-```{r production, include=FALSE, eval=TRUE}
+```{r production, include=FALSE, eval=FALSE}
 
 etabs <- c("Université de Strasbourg")
 etabs <- unique(fin$etablissement)
@@ -161,7 +180,7 @@ for(etab in etabs) {
 
 
 
-```{r production2, results="asis"}
+```{r production2, results="asis", eval=FALSE}
 for(grp in unique(fin$groupe)) {
   cat("\n\n###", grp,"\n\n")
   grpdf <- fin %>% filter(groupe == grp)

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 195 rows containing missing values (geom_point).
+    ## Warning: Removed 214 rows containing missing values (geom_point).
 
 ![](abes___agence_bibliographique_de_l_enseignement_supérieur_files/figure-gfm/etab-1.png)<!-- -->

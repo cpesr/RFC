@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 269 rows containing missing values (geom_point).
+    ## Warning: Removed 298 rows containing missing values (geom_point).
 
 ![](école_française_d_athènes_files/figure-gfm/etab-1.png)<!-- -->

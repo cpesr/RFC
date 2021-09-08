@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 186 rows containing missing values (geom_point).
+    ## Warning: Removed 195 rows containing missing values (geom_point).
 
 ![](institut_d_études_politiques_de_bordeaux_files/figure-gfm/etab-1.png)<!-- -->

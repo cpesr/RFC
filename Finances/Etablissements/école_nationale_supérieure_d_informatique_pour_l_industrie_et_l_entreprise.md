@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 235 rows containing missing values (geom_point).
+    ## Warning: Removed 245 rows containing missing values (geom_point).
 
 ![](école_nationale_supérieure_d_informatique_pour_l_industrie_et_l_entreprise_files/figure-gfm/etab-1.png)<!-- -->

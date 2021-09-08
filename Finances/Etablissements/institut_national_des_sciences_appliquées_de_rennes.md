@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 180 rows containing missing values (geom_point).
+    ## Warning: Removed 189 rows containing missing values (geom_point).
 
 ![](institut_national_des_sciences_appliquées_de_rennes_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 137 rows containing missing values (geom_point).
+    ## Warning: Removed 157 rows containing missing values (geom_point).
 
 ![](université_fédérale_de_toulouse_midi_pyrénées_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 215 rows containing missing values (geom_point).
+    ## Warning: Removed 229 rows containing missing values (geom_point).
 
 ![](université_sorbonne_nouvelle___paris_3_files/figure-gfm/etab-1.png)<!-- -->

@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 196 rows containing missing values (geom_point).
+    ## Warning: Removed 205 rows containing missing values (geom_point).
 
 ![](observatoire_de_paris_files/figure-gfm/etab-1.png)<!-- -->

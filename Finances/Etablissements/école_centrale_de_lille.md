@@ -11,6 +11,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 184 rows containing missing values (geom_point).
+    ## Warning: Removed 191 rows containing missing values (geom_point).
 
 ![](école_centrale_de_lille_files/figure-gfm/etab-1.png)<!-- -->
