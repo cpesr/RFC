@@ -136,14 +136,14 @@ fin.univ <- fin.pivot %>%
 
 ### Ressources vs. SCSP vs. Masse salariale
 
-```{r focus.univ.scsp.ms, fig.width=8, fig.height=7}
+```{r focus.univ.scsp.ms, fig.width=8, fig.height=4.5}
 fin.pivot.groupe %>%
   filter(groupe == "université") %>%
   filter(Indicateur %in% c("Produits.de.fonctionnement.encaissables","SCSP","Dépenses.de.personnel")) %>%
   filter(Aggrégation == "Somme") %>%
   ggplot(aes(x=exercice, y=Valeur, color=Indicateur)) +
     geom_point() + geom_line(aes(group=Indicateur)) +
-    expand_limits(y=0) +
+    #expand_limits(y=0) +
     scale_y_continuous(labels = ~ paste(.x/1e9,"Md€")) +
     ggtitle("Trois indicateurs financiers pour les universités") +
     theme_cpesr_cap()
