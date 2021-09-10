@@ -10,7 +10,7 @@ library(ggcpesrthemes)
 
 source("Finances.R")
 
-theme_cpesr_setup(authors = "Julien Gossa")
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-operateurs-indicateurs-financiers/information/")
 ```
 
 Jeu de données :
@@ -149,6 +149,46 @@ fin.pivot.groupe %>%
     theme_cpesr_cap()
 ```
 
+
+## Focus Ressources propres formation
+
+```{r rpf.data}
+rpf <- fin.pivot %>%
+  filter(Indicateur %in% c("Droits.d.inscription","Formation.continue..diplômes.propres.et.VAE", "Taxe.d.apprentissage")) %>%
+  mutate(exercice = as.numeric(as.character(exercice))) %>%
+  left_join(
+    etu <- read.csv2("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv") %>%
+      transmute(
+        exercice = annee,
+        uai...identifiant = Identifiant.s..UAI,
+        etu = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE
+      ) 
+    ) %>%
+  mutate(ValeurParEtudiant = Valeur / etu) %>%
+  filter(!is.na(ValeurParEtudiant)) %>%
+  group_by(exercice,Indicateur) %>%
+  summarise(ValeurParEtudiant = sum(Valeur) / sum(etu)) 
+
+```
+
+```{r rpf.plot, fig.width=8, fig.height=4.5}
+rpf %>%
+  ggplot(aes(x=exercice,y=ValeurParEtudiant,color=Indicateur)) +
+    geom_point() + geom_line(aes(group=Indicateur)) +
+    scale_y_continuous(labels = ~ paste(.x,"€")) +
+    ggtitle("Ressources propres formation par étudiant", subtitle = "Périmètre MESRI") +
+    theme_cpesr_cap()
+```
+
+```{r rpf.plot.norm,  fig.width=8, fig.height=4.5}
+rpf %>%
+  group_by(Indicateur) %>%
+  mutate(ValeurParEtudiant = ValeurParEtudiant / first(ValeurParEtudiant) * 100) %>%
+  ggplot(aes(x=exercice,y=ValeurParEtudiant,color=Indicateur)) +
+    geom_point() + geom_line(aes(group=Indicateur)) +
+    ggtitle("Ressources propres formation par étudiant (valeur 100 en 2010)", subtitle = "Périmètre MESRI") +
+    theme_cpesr_cap()
+```
 
 ## Tous les indicateurs par établissement
 

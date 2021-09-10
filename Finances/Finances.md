@@ -61,4 +61,14 @@ Problèmes détectés :
 
 ![](Finances_files/figure-gfm/focus.univ.scsp.ms-1.png)<!-- -->
 
+## Focus Ressources propres formation
+
+    ## Joining, by = c("uai...identifiant", "exercice")
+
+    ## `summarise()` has grouped output by 'exercice'. You can override using the `.groups` argument.
+
+![](Finances_files/figure-gfm/rpf.plot-1.png)<!-- -->
+
+![](Finances_files/figure-gfm/rpf.plot.norm-1.png)<!-- -->
+
 ## Tous les indicateurs par établissement
