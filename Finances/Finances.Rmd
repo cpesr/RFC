@@ -10,7 +10,13 @@ library(ggcpesrthemes)
 
 source("Finances.R")
 
-etiquettes <- read.csv("etiquettes.csv")
+etiquettes <- read.csv("etiquettes.csv") %>%
+  mutate(étiquettes = factor(case_when(
+    IDEx ~ "IDEx",
+    ISITE ~ "ISITE",
+    TRUE ~ "NINI"),
+    levels=c("IDEx","ISITE","NINI"))
+    ) 
 
 theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-operateurs-indicateurs-financiers/information/")
 ```
