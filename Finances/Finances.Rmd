@@ -10,6 +10,8 @@ library(ggcpesrthemes)
 
 source("Finances.R")
 
+etiquettes <- read.csv("etiquettes.csv")
+
 theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-operateurs-indicateurs-financiers/information/")
 ```
 
@@ -136,19 +138,113 @@ fin.univ <- fin.pivot %>%
 
 ### Ressources vs. SCSP vs. Masse salariale
 
-```{r focus.univ.scsp.ms, fig.width=8, fig.height=4.5}
+```{r focus.univ.scsp.ms.pfe, fig.width=8, fig.height=4.5}
 fin.pivot.groupe %>%
+  filter(as.character(exercice) > "2013") %>%
   filter(groupe == "université") %>%
   filter(Indicateur %in% c("Produits.de.fonctionnement.encaissables","SCSP","Dépenses.de.personnel")) %>%
   filter(Aggrégation == "Somme") %>%
+  mutate(Indicateur = str_replace_all(Indicateur,"\\."," ")) %>%
   ggplot(aes(x=exercice, y=Valeur, color=Indicateur)) +
-    geom_point() + geom_line(aes(group=Indicateur)) +
+    geom_line(aes(color=Indicateur,group=Indicateur), size=1) +
+    geom_point(shape=21, color="white", size=4, stroke = 1, aes(fill=Indicateur)) + 
     #expand_limits(y=0) +
     scale_y_continuous(labels = ~ paste(.x/1e9,"Md€")) +
-    ggtitle("Trois indicateurs financiers pour les universités") +
+    ggtitle("PFE, SCSP et Masse salariale, pour les universités") +
     theme_cpesr_cap()
 ```
 
+```{r focus.univ.scsp.ms, fig.width=8, fig.height=4.5}
+fin.pivot.groupe %>%
+  filter(as.character(exercice) > "2013") %>%
+  filter(groupe == "université") %>%
+  filter(Indicateur %in% c("SCSP","Dépenses.de.personnel")) %>%
+  filter(Aggrégation == "Somme") %>%
+  mutate(Indicateur = str_replace_all(Indicateur,"\\."," ")) %>%
+  ggplot(aes(x=exercice, y=Valeur)) +
+    geom_line(aes(color=Indicateur,group=Indicateur), size=1) +
+    geom_point(shape=21, color="white", size=4, stroke = 1, aes(fill=Indicateur)) + 
+    #expand_limits(y=0) +
+    scale_y_continuous(labels = ~ paste(.x/1e9,"Md€")) +
+    ggtitle("SCSP et Masse salariale, pour les universités") +
+    theme_cpesr_cap()
+```
+
+
+```{r focus.univ.scsp.ms.diff, fig.width=8, fig.height=4.5}
+fin %>%
+  filter(groupe == "université") %>%
+  filter(as.character(exercice) > "2013") %>%
+  group_by(exercice) %>%
+  summarize(
+    SCSP.moins.MS = sum(SCSP - Dépenses.de.personnel, na.rm=TRUE),
+  ) %>%
+  ggplot(aes(x=exercice, y=SCSP.moins.MS, fill=SCSP.moins.MS)) +
+    geom_col() +
+    #expand_limits(y=0) +
+    ylab("") +
+    scale_y_continuous(labels = ~ paste(.x/1e6,"M€")) +
+    scale_fill_distiller(palette="RdYlGn", direction = 0, guide = "none") +
+    ggtitle("Différence entre SCSP et Masse salariale pour les universités") +
+    theme_cpesr_cap()
+```
+
+```{r focus.univ.pfe.ms.diff, fig.width=8, fig.height=4.5}
+fin %>%
+  filter(groupe == "université") %>%
+  filter(as.character(exercice) > "2013") %>%
+  group_by(exercice) %>%
+  summarize(
+    PFE.moins.MS = sum(Produits.de.fonctionnement.encaissables - Dépenses.de.personnel, na.rm=TRUE),
+  ) %>%
+  ggplot(aes(x=exercice, y=PFE.moins.MS, fill=PFE.moins.MS)) +
+    geom_col() +
+    #expand_limits(y=0) +
+    ylab("") +
+    scale_y_continuous(labels = ~ paste(.x/1e6,"M€")) +
+    scale_fill_distiller(palette="RdYlGn", direction = 0, limits = c(-3e9,3e9), guide = "none") +
+    ggtitle("Différence entre PFE et Masse salariale pour les universités") +
+    theme_cpesr_cap()
+```
+```{r focus.univ.ms.vs.pfe, fig.width=8, fig.height=4.5}
+fin %>%
+  filter(groupe == "université") %>%
+  filter(as.character(exercice) > "2013") %>%
+  group_by(exercice) %>%
+  summarize(
+    MS.sur.PFE = mean(Dépenses.de.personnel...Produits.encaissables, na.rm=TRUE),
+  ) %>%
+  ggplot(aes(x=exercice, y=MS.sur.PFE)) +
+    geom_line(aes(color=MS.sur.PFE,group="Indicateur"), size=1) +
+    geom_point(shape=21, color="white", size=4, stroke = 1, aes(fill=MS.sur.PFE)) + 
+    #expand_limits(y=0) +
+    ylab("") +
+    scale_y_continuous(labels = ~ scales::percent(.x, scale=1), limits = c(75,85)) +
+    scale_fill_distiller(palette="Greens", direction = 0, limits = c(0,100), guide = "none") +
+    scale_color_distiller(palette="Greens", direction = 0, limits = c(0,100), guide = "none") +
+    ggtitle("Part moyenne des Masses salariales dans les PFE pour les universités") +
+    theme_cpesr_cap()
+```
+
+```{r focus.univ.taux.vs, fig.width=12, fig.height=6.75}
+fin %>%
+  filter(as.character(exercice) == "2021") %>%
+  filter(groupe == "université") %>%
+  filter(! etablissement %in% c("Institut national universitaire Jean-François Champollion","Centre Universitaire de Mayotte", "Université de Paris sciences et lettres")) %>%
+  left_join(etiquettes, by = c("uai...identifiant" = "UAI")) %>% 
+  mutate(
+    SCSP.sur.PFE = SCSP / Produits.de.fonctionnement.encaissables,
+    MS.sur.SCSP = Dépenses.de.personnel / SCSP  
+  ) %>%
+  ggplot(aes(x=SCSP.sur.PFE, y=MS.sur.SCSP, color=étiquettes)) +
+    geom_point(aes(size=Produits.de.fonctionnement.encaissables)) + geom_smooth(color="grey", method="lm",se=FALSE) +
+    ggrepel::geom_text_repel(aes(label=etab)) +
+    scale_x_continuous(labels = scales::percent, name = "SCSP sur PFE") +
+    scale_y_continuous(labels = scales::percent, name = "MS sur SCSP") +
+    scale_size_continuous(name="PFE",labels = ~ paste(.x/1e6,"M€")) +
+    ggtitle("Masse salariale sur SCSP en fonction du Taux de subvention pour les universités") +
+    theme_cpesr_cap()
+```
 
 ## Focus Ressources propres formation
 

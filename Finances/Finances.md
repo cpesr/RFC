@@ -59,7 +59,27 @@ Problèmes détectés :
 
 ### Ressources vs. SCSP vs. Masse salariale
 
+![](Finances_files/figure-gfm/focus.univ.scsp.ms.pfe-1.png)<!-- -->
+
 ![](Finances_files/figure-gfm/focus.univ.scsp.ms-1.png)<!-- -->
+
+![](Finances_files/figure-gfm/focus.univ.scsp.ms.diff-1.png)<!-- -->
+
+![](Finances_files/figure-gfm/focus.univ.pfe.ms.diff-1.png)<!-- -->
+![](Finances_files/figure-gfm/focus.univ.ms.vs.pfe-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+    ## Warning: Removed 1 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 1 rows containing missing values (geom_point).
+
+    ## Warning: Removed 1 rows containing missing values (geom_text_repel).
+
+    ## Warning: ggrepel: 20 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+![](Finances_files/figure-gfm/focus.univ.taux.vs-1.png)<!-- -->
 
 ## Focus Ressources propres formation
 
