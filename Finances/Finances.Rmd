@@ -155,6 +155,7 @@ fin.pivot.groupe %>%
     geom_line(aes(color=Indicateur,group=Indicateur), size=1) +
     geom_point(shape=21, color="white", size=4, stroke = 1, aes(fill=Indicateur)) + 
     #expand_limits(y=0) +
+    ylab("") + xlab("") +
     scale_y_continuous(labels = ~ paste(.x/1e9,"Md€")) +
     ggtitle("PFE, SCSP et Masse salariale, pour les universités") +
     theme_cpesr_cap()
@@ -171,6 +172,7 @@ fin.pivot.groupe %>%
     geom_line(aes(color=Indicateur,group=Indicateur), size=1) +
     geom_point(shape=21, color="white", size=4, stroke = 1, aes(fill=Indicateur)) + 
     #expand_limits(y=0) +
+    ylab("") + xlab("") +
     scale_y_continuous(labels = ~ paste(.x/1e9,"Md€")) +
     ggtitle("SCSP et Masse salariale, pour les universités") +
     theme_cpesr_cap()
@@ -188,7 +190,7 @@ fin %>%
   ggplot(aes(x=exercice, y=SCSP.moins.MS, fill=SCSP.moins.MS)) +
     geom_col() +
     #expand_limits(y=0) +
-    ylab("") +
+    ylab("") + xlab("") +
     scale_y_continuous(labels = ~ paste(.x/1e6,"M€")) +
     scale_fill_distiller(palette="RdYlGn", direction = 0, guide = "none") +
     ggtitle("Différence entre SCSP et Masse salariale pour les universités") +
@@ -206,7 +208,7 @@ fin %>%
   ggplot(aes(x=exercice, y=PFE.moins.MS, fill=PFE.moins.MS)) +
     geom_col() +
     #expand_limits(y=0) +
-    ylab("") +
+    ylab("") + xlab("") +
     scale_y_continuous(labels = ~ paste(.x/1e6,"M€")) +
     scale_fill_distiller(palette="RdYlGn", direction = 0, limits = c(-3e9,3e9), guide = "none") +
     ggtitle("Différence entre PFE et Masse salariale pour les universités") +
