@@ -153,22 +153,36 @@ plein de candidatures dans certaines disciplines :
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.2-1.png)<!-- -->
 
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
+
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.DEG-1.png)<!-- -->
+
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
 
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.DEG.2-1.png)<!-- -->
 
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
+
     ## `geom_smooth()` using formula 'y ~ x'
 
-    ## Warning: Computation failed in `stat_poly_eq()`:
-    ## argument "x" is missing, with no default
+    ## Warning: Not enough data to perform fit for group 25; computing mean instead.
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.LSHS-1.png)<!-- -->
+
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
 
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.Pharma-1.png)<!-- -->
+
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
 
     ## `geom_smooth()` using formula 'y ~ x'
 
@@ -227,17 +241,29 @@ Ordonné par section
 
 #### Nombre de candidats en fonction du nombre de postes
 
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
+
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.postes.DEG.1-1.png)<!-- -->
+
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
 
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.postes.LSHS.1-1.png)<!-- -->
 
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
+
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.postes.ST.1-1.png)<!-- -->
+
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
 
     ## `geom_smooth()` using formula 'y ~ x'
 
@@ -245,17 +271,29 @@ Ordonné par section
 
 #### Nombre de candidats par poste en fonction du nombre de postes
 
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
+
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.par.postes.DEG.1-1.png)<!-- -->
+
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
 
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.par.postes.LSHS.1-1.png)<!-- -->
 
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
+
     ## `geom_smooth()` using formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/candidats.par.postes.ST.1-1.png)<!-- -->
+
+    ## Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
+    ## "none")` instead.
 
     ## `geom_smooth()` using formula 'y ~ x'
 
@@ -368,3 +406,11 @@ Dans la base de données utilisées ici :
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
 ![](ConcoursMCF_files/figure-gfm/evolution.postes.MCF.4-1.png)<!-- -->
+
+# Séries longues par section : 2002 à 2019
+
+## Section 27 : Informatique
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+![](ConcoursMCF_files/figure-gfm/evolution.postes.MCF.sec27.1-1.png)<!-- -->

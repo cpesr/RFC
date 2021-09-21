@@ -966,3 +966,9 @@ cnu %>% drop_na(PostesPublies.MCF) %>% filter(GrandeDisciplineCNU=="Lettres et s
 ```{r evolution.postes.MCF.4, fig.width=12, fig.asp=9/16}
 cnu %>% drop_na(PostesPublies.MCF) %>% filter(GrandeDisciplineCNU=="Droit éco ges") %>% ggplot(aes(x=Annee, y=PostesPublies.MCF, col=SectionCNU.ID)) + geom_line() + geom_smooth(se=F) + facet_wrap(.~GroupeCNU, scales="free")
 ```
+
+# Séries longues par section : 2002 à 2019
+## Section 27 : Informatique
+```{r evolution.postes.MCF.sec27.1, fig.width=12, fig.asp=9/16}
+cnu %>% drop_na(PostesPublies.MCF) %>% filter(SectionCNU.ID==27) %>% ggplot(aes(x=Annee, y=PostesPublies.MCF)) + geom_point() + geom_smooth(se=F) + theme_cpesr_cap(authors=c("Florent Figon, Julien Gossa"), licence="LO 2.0", source = "DGRH A1-1") + labs(title="Concours MCF section 27, de 2002 à 2019", y ="Postes de MCF publiés", x = "Année")
+```
