@@ -47,9 +47,10 @@ etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-pa
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
     UAI = recode(Identifiant.s..UAI, !!!uais.etu),
+    Type.établissement = Type.d.établissement,
     Rentrée = rentree,
     Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE) %>%
-  group_by(Rentrée,UAI) %>%
+  group_by(Rentrée,UAI,Type.établissement) %>%
   summarise(Etudiants = sum(Etudiants)) %>%
   ungroup()
 
@@ -85,7 +86,7 @@ ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
   summarise(Enseignants = sum(Enseignants, na.rm = TRUE)) %>%
   ungroup()
 
-tde <- merge(ens,etu) %>%
+tde <- merge(ens, etu %>% select(-Type.établissement)) %>%
   mutate(Rentrée = as.factor(Rentrée))
 
 etiquettes <- read.csv("etiquettes.csv")
@@ -200,6 +201,14 @@ colnames(tde)
     - les étudiant en STAPS on été classés en ST ;
   - pour les données disciplinaires, il est impossible de distinguer les doubles inscriptions (CPGE ou inscriptions principales et secondaires).
   
+
+```{r nb.etu}
+etu %>% 
+  group_by(Rentrée) %>% 
+  summarise(Etudiants.MESRI = sum(Etudiants)) %>% 
+  mutate(Evolution = Etudiants.MESRI - min(Etudiants.MESRI)) %>% kable()
+```
+
 ```{r check.doubleinscription}
 merge(
   tde.disc %>% filter(Type.établissement == "Université") %>%
@@ -458,10 +467,22 @@ tde.ens %>%
 
 ## Focus Universités
 
+
+```{r nb.etu.univ}
+etu %>% 
+  filter(Type.établissement == "Université") %>%
+  group_by(Rentrée) %>% 
+  summarise(Etudiants.univ = sum(Etudiants)) %>% 
+  mutate(Evolution = Etudiants.univ - min(Etudiants.univ)) %>% kable()
+```
+
+
 ```{r univ.data}
 tde.univ <- tde %>% 
   filter(Type.établissement == "Université") 
 ```
+
+
 
 ```{r univ.values.etab}
 tde.univ %>%

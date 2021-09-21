@@ -11,7 +11,7 @@ issues](https://github.com/cpesr/RFC/issues).*
 -   Sources :
     -   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement/export/>
     -   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/table/?disjunctive.annee&q=%22Universit%C3%A9+de+Nantes%22>
--   Nombre d’observations : 1133
+-   Nombre d’observations : 1136
 -   Variables :
 
 <!-- -->
@@ -50,6 +50,189 @@ issues](https://github.com/cpesr/RFC/issues).*
     -   pour les données disciplinaires, il est impossible de distinguer
         les doubles inscriptions (CPGE ou inscriptions principales et
         secondaires).
+
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+Rentrée
+</th>
+<th style="text-align:right;">
+Etudiants.MESRI
+</th>
+<th style="text-align:right;">
+Evolution
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2006
+</td>
+<td style="text-align:right;">
+1529623
+</td>
+<td style="text-align:right;">
+50718
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+1493175
+</td>
+<td style="text-align:right;">
+14270
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2008
+</td>
+<td style="text-align:right;">
+1478905
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+1522878
+</td>
+<td style="text-align:right;">
+43973
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:right;">
+1517695
+</td>
+<td style="text-align:right;">
+38790
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2011
+</td>
+<td style="text-align:right;">
+1529764
+</td>
+<td style="text-align:right;">
+50859
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+1545350
+</td>
+<td style="text-align:right;">
+66445
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:right;">
+1584308
+</td>
+<td style="text-align:right;">
+105403
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+1616863
+</td>
+<td style="text-align:right;">
+137958
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:right;">
+1660689
+</td>
+<td style="text-align:right;">
+181784
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+1681236
+</td>
+<td style="text-align:right;">
+202331
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+1696938
+</td>
+<td style="text-align:right;">
+218033
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+1727042
+</td>
+<td style="text-align:right;">
+248137
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2019
+</td>
+<td style="text-align:right;">
+1864823
+</td>
+<td style="text-align:right;">
+385918
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:right;">
+1899708
+</td>
+<td style="text-align:right;">
+420803
+</td>
+</tr>
+</tbody>
+</table>
 
 ![](tauxdencadrement_files/figure-gfm/check.doubleinscription-1.png)<!-- -->
 
@@ -397,6 +580,189 @@ LSHS
 ![](tauxdencadrement_files/figure-gfm/ens.values.disc-1.png)<!-- -->
 
 ## Focus Universités
+
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+Rentrée
+</th>
+<th style="text-align:right;">
+Etudiants.univ
+</th>
+<th style="text-align:right;">
+Evolution
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2006
+</td>
+<td style="text-align:right;">
+1357231
+</td>
+<td style="text-align:right;">
+30571
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2007
+</td>
+<td style="text-align:right;">
+1326660
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2008
+</td>
+<td style="text-align:right;">
+1373949
+</td>
+<td style="text-align:right;">
+47289
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2009
+</td>
+<td style="text-align:right;">
+1412833
+</td>
+<td style="text-align:right;">
+86173
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2010
+</td>
+<td style="text-align:right;">
+1402766
+</td>
+<td style="text-align:right;">
+76106
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2011
+</td>
+<td style="text-align:right;">
+1363498
+</td>
+<td style="text-align:right;">
+36838
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2012
+</td>
+<td style="text-align:right;">
+1376840
+</td>
+<td style="text-align:right;">
+50180
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:right;">
+1406477
+</td>
+<td style="text-align:right;">
+79817
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:right;">
+1429605
+</td>
+<td style="text-align:right;">
+102945
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:right;">
+1467904
+</td>
+<td style="text-align:right;">
+141244
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+1470608
+</td>
+<td style="text-align:right;">
+143948
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+1486692
+</td>
+<td style="text-align:right;">
+160032
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+1512094
+</td>
+<td style="text-align:right;">
+185434
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2019
+</td>
+<td style="text-align:right;">
+1672681
+</td>
+<td style="text-align:right;">
+346021
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:right;">
+1699327
+</td>
+<td style="text-align:right;">
+372667
+</td>
+</tr>
+</tbody>
+</table>
 
 ![](tauxdencadrement_files/figure-gfm/univ.values.etab-1.png)<!-- -->
 
