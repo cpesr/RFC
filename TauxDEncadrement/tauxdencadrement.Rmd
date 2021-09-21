@@ -46,8 +46,8 @@ uais.etu <- list(
 etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
-    UAI = recode(ETABLISSEMENT, !!!uais.etu),
-    Rentrée = RENTREE,
+    UAI = recode(Identifiant.s..UAI, !!!uais.etu),
+    Rentrée = rentree,
     Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE) %>%
   group_by(Rentrée,UAI) %>%
   summarise(Etudiants = sum(Etudiants)) %>%
@@ -94,15 +94,15 @@ etiquettes <- read.csv("etiquettes.csv")
 
 
 ```{r data.disciplinaire,  include=FALSE}
-etu.disc <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+etu.disc <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                   header=TRUE, sep=';', quote='"') %>%
-  select(ETABLISSEMENT, RENTREE, starts_with("Grande.discipline")) %>%
-  pivot_longer(-c(ETABLISSEMENT, RENTREE),
+  select(Identifiant.s..UAI, rentree, starts_with("Grande.discipline")) %>%
+  pivot_longer(-c(Identifiant.s..UAI, rentree),
                names_to = "Grande.discipline",
                values_to = "Etudiants") %>%
   transmute(
-    UAI = recode(ETABLISSEMENT, !!!uais.etu),
-    Rentrée = RENTREE,
+    UAI = recode(Identifiant.s..UAI, !!!uais.etu),
+    Rentrée = rentree,
     Grande.discipline = factor(Grande.discipline, 
                                levels=c("Grande.discipline...Droit..sciences.économiques..AES",
                                         "Grande.discipline...Lettres..langues.et.sciences.humaines",
@@ -230,10 +230,10 @@ etab.ens <-  ens %>%
       jeu = "ens") %>%
     unique()
 
-etab.etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+etab.etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
-    UAI = ETABLISSEMENT,
+    UAI = Identifiant.s..UAI,
     Etablissement = Établissement,
     Type = Type.d.établissement,
     jeu = "etu") %>%
@@ -819,22 +819,22 @@ Par rapport à [la hausse du nombre de bacheliers](https://www.enseignementsup-r
 
 ```{r 201415.bac}
 delta.angle <- function(angle, anglecut=0) {
-  read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+  read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                     header=TRUE, sep=';', quote='"') %>%
-    filter(Type.d.établissement == "Université", RENTREE %in% c(2013,2014,2015)) %>%
-    select(RENTREE, starts_with(angle)) %>% 
-    pivot_longer(-RENTREE) %>%
+    filter(Type.d.établissement == "Université", rentree %in% c(2013,2014,2015)) %>%
+    select(rentree, starts_with(angle)) %>% 
+    pivot_longer(-rentree) %>%
     mutate(name = substr(name,anglecut,100)) %>%
-    group_by(RENTREE,name) %>%
+    group_by(rentree,name) %>%
     summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
     group_by(name) %>%
     mutate(
       Evolution = Etudiants - lag(Etudiants),
       Evolution.tot = Etudiants - first(Etudiants),
       ) %>%
-    mutate(RENTREE = factor(RENTREE, levels=c("2015","2014","2013"))) %>%
-    filter(RENTREE != 2013) %>%
-    ggplot(aes(x=reorder(name,Evolution.tot), y=Evolution, fill=RENTREE)) +
+    mutate(rentree = factor(rentree, levels=c("2015","2014","2013"))) %>%
+    filter(rentree != 2013) %>%
+    ggplot(aes(x=reorder(name,Evolution.tot), y=Evolution, fill=rentree)) +
       geom_col(position="stack") +
       coord_flip() +
       xlab("") +
@@ -868,45 +868,17 @@ delta.angle("Secteur.disciplinaire",25)
 
 Evolution 2014 2015 pour les pluridisciplinaires science
 ```{r pluriscience}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                   header=TRUE, sep=';', quote='"') %>%
-  filter(Type.d.établissement == "Université", RENTREE %in% c(2014,2015)) %>%
+  filter(Type.d.établissement == "Université", rentree %in% c(2014,2015)) %>%
   filter(Secteur.disciplinaire...Pluridisciplinaire.sciences>0) %>%
-  select(RENTREE, Établissement, Secteur.disciplinaire...Pluridisciplinaire.sciences) %>%
-  pivot_wider(names_from=RENTREE,
+  select(rentree, Établissement, Secteur.disciplinaire...Pluridisciplinaire.sciences) %>%
+  pivot_wider(names_from=rentree,
               values_from=Secteur.disciplinaire...Pluridisciplinaire.sciences,
               names_prefix="R") %>%
   mutate(delta=R2015-R2014,deltap=R2015/R2014) %>%
   arrange(desc(deltap)) 
 ```
-
-### Formation des maîtres
-
-```{r ESPE}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement.csv",
-                  header=TRUE, sep=';', quote='"') %>%
-  filter(ETABLISSEMENT_TYPE %in% c("IUFM","ESPE") || str_detect(Diplôme.préparé, "Master.enseignement")) %>%
-  mutate(
-    RENTREE = as.factor(RENTREE),
-    Type = case_when(
-      ETABLISSEMENT_TYPE == "IUFM" ~ "IUFM",
-      ETABLISSEMENT_TYPE == "ESPE" ~ "ESPE",
-      TRUE ~ "Autre"
-    )) %>%
-  group_by(RENTREE, Type) %>% 
-  summarise(
-    L = sum(Cycle.universitaire..cursus.LMD....L..1er.cycle.,na.rm=TRUE),
-    M = sum(Cycle.universitaire..cursus.LMD....M..2ème.cycle.,na.rm=TRUE),
-    D = sum(Cycle.universitaire..cursus.LMD....D..3ème.cycle.,na.rm=TRUE)) %>%
-  group_by(Type) %>%
-  mutate(delta = M - first(M)) %>%
-  ggplot(aes(x=RENTREE,y=delta, color=Type, group=Type)) + geom_line(size=2) +
-  theme_cpesr_cap()
-```
-
-__Conclusion__
-
-La hausse des effectifs étudiants entre 2010 et 2015 semble réelle, avec un effet de pic dû notamment à une baisse en Master d'enseignement en 2014, conséquente de la formation des maîtres.
 
 
 ## Focus Ile-de-France
@@ -968,6 +940,29 @@ tde.idf.long.p8 <- tde.idf.long %>%
     scale_x_discrete(breaks=c(2011,2013,2015,2017)) +
     scale_color_discrete(labels=c("Enseignant","Etudiants","Taux d'encadrement"), name="") +
     facet_grid(.~name) +
+    theme_cpesr_cap()
+```
+
+
+## Focus Strasbourg
+
+```{r tde.idf.evol.unistra}
+tde.strasbourg <- tde %>%
+  filter(Etablissement == "Université de Strasbourg") %>%
+  mutate(Taux.d.encadrement = Enseignants / Etudiants *100) %>%
+  select(Rentrée, Etablissement, Etudiants, Enseignants, Taux.d.encadrement) %>%
+  pivot_longer(-c(Rentrée, Etablissement)) %>%
+  group_by(name, Etablissement) %>%
+  mutate(Evolution = value / first(value))
+
+  ggplot(tde.strasbourg, aes(x=Rentrée, y=Evolution, color=name)) + 
+    geom_point(size=2) +
+    geom_line(aes(group=Etablissement), size=1) +
+    ggtitle("Evolutions du taux d'encadrement à l'Université de Strasbourg", subtitle = "Taux d'encadrement = nombre d'enseignants pour 100 étudiants") +
+    scale_x_discrete(breaks=c(2011,2013,2015,2017)) +
+    scale_y_continuous(labels=scales::percent) +
+    scale_color_discrete(labels=c("Enseignant","Etudiants","Taux d'encadrement"), name="") +
+    facet_wrap(.~name) +
     theme_cpesr_cap()
 ```
 
