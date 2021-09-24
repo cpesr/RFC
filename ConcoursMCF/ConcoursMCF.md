@@ -148,7 +148,7 @@ plein de candidatures dans certaines disciplines :
     ## Warning: ggrepel: 5 unlabeled data points (too many overlaps). Consider
     ## increasing max.overlaps
 
-    ## Warning: ggrepel: 13 unlabeled data points (too many overlaps). Consider
+    ## Warning: ggrepel: 12 unlabeled data points (too many overlaps). Consider
     ## increasing max.overlaps
 
 ![](ConcoursMCF_files/figure-gfm/candidats.candidatures.postes.2-1.png)<!-- -->
@@ -399,7 +399,7 @@ Dans la base de données utilisées ici :
     ## parametric, : zero-width neighborhood. make span bigger
 
     ## Warning: Computation failed in `stat_smooth()`:
-    ## NA/NaN/Inf in foreign function call (arg 5)
+    ## NA/NaN/Inf dans un appel à une fonction externe (argument 5)
 
 ![](ConcoursMCF_files/figure-gfm/evolution.postes.MCF.3-1.png)<!-- -->
 
