@@ -213,15 +213,15 @@ Nombre de postes depuis 2002 pour les sections CNU
 
 ![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-53.png)<!-- -->
 
-## Section 85/39 Sciences physico-chimiques et ingénierie appliquée à la santé
+## Section 85 Sciences physico-chimiques et ingénierie appliquée à la santé
 
 ![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-54.png)<!-- -->
 
-## Section 86/40 Sciences du médicament et des autres produits de santé
+## Section 86 Sciences du médicament et des autres produits de santé
 
 ![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-55.png)<!-- -->
 
-## Section 87/41 Sciences biologiques, fondamentales et cliniques
+## Section 87 Sciences biologiques, fondamentales et cliniques
 
 ![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-56.png)<!-- -->
 
@@ -232,15 +232,3 @@ Nombre de postes depuis 2002 pour les sections CNU
 ## Section 77 Théologie protestante
 
 ![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-58.png)<!-- -->
-
-## Section 85 Sciences physico-chimiques et ingénierie appliquée à la santé
-
-![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-59.png)<!-- -->
-
-## Section 86 Sciences du médicament et des autres produits de santé
-
-![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-60.png)<!-- -->
-
-## Section 87 Sciences biologiques, fondamentales et cliniques
-
-![](ConcoursMCF-sections_files/figure-gfm/evolution.postes.MCF-61.png)<!-- -->

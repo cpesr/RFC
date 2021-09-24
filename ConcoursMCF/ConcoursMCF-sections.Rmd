@@ -11,18 +11,22 @@ library(ggcpesrthemes)
 theme_cpesr_setup(authors=c("Florent Figon, Julien Gossa"), licence="LO 2.0", source = "DGRH A1-1")
 
 cnu <- read.table("DB_CNU_QualificationRecrutements.csv", h=T, sep=";") %>%
-  mutate(SectionCNU.ID = as.factor(SectionCNU.ID),
-         candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
-         candidatures.par.poste.MCF = Candidatures.MCF / PostesPublies.MCF,
-         candidats.par.poste.MCF = Candidats.MCF / PostesPublies.MCF,
-         candidatures.par.candidat.par.poste.MCF = candidatures.par.candidat.MCF / PostesPublies.MCF,
-         GrandeDisciplineCNU = as.factor(GrandeDisciplineCNU),
-         Code.GrandeDisciplineCNU = recode(GrandeDisciplineCNU, 
-                                           "Droit éco ges" ="DEG",
-                                           "Lettres et sciences humaines" = "LSHS",
-                                           "Pharmacie" = "Pharma",
-                                           "Sciences et techniques" = "ST")
-         )
+    mutate(SectionCNU.ID = as.factor(SectionCNU.ID),
+           candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
+           candidatures.par.poste.MCF = Candidatures.MCF / PostesPublies.MCF,
+           candidats.par.poste.MCF = Candidats.MCF / PostesPublies.MCF,
+           candidatures.par.candidat.par.poste.MCF = candidatures.par.candidat.MCF / PostesPublies.MCF,
+           GrandeDisciplineCNU = as.factor(GrandeDisciplineCNU),
+           Code.GrandeDisciplineCNU = recode(GrandeDisciplineCNU, 
+                                             "Droit éco ges" ="DEG",
+                                             "Lettres et sciences humaines" = "LSHS",
+                                             "Pharmacie" = "Pharma",
+                                             "Sciences et techniques" = "ST"),
+           SectionCNU = recode(SectionCNU, 
+                               "87/41 Sciences biologiques, fondamentales et cliniques"="87 Sciences biologiques, fondamentales et cliniques",
+                               "86/40 Sciences du médicament et des autres produits de santé"="86 Sciences du médicament et des autres produits de santé",
+                               "85/39 Sciences physico-chimiques et ingénierie appliquée à la santé"="85 Sciences physico-chimiques et ingénierie appliquée à la santé")
+    )
 ```
 
 ```{r funs}
