@@ -31,7 +31,7 @@ cnu <- read.table("DB_CNU_QualificationRecrutements.csv", h=T, sep=";") %>%
 
 ```
 - twtexte:[#DataESR] Evolution du nombre de postes de Maître de conférences
-- twauteurs:@ffigon @juliengossa
+- twalt:LO 2.0 @ffigon @juliengossa
 - twurl:https://twitter.com/CPESR_/status/1442047467042877442
 ```
 

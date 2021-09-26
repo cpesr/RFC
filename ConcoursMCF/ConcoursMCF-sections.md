@@ -2,7 +2,7 @@ Nombre de postes depuis 2002 pour les sections CNU
 ================
 
     - twtexte:[#DataESR] Evolution du nombre de postes de Maître de conférences
-    - twauteurs:@ffigon @juliengossa
+    - twalt:LO 2.0 @ffigon @juliengossa
     - twurl:https://twitter.com/CPESR_/status/1442047467042877442
 
 ## Section 01 Droit privé et sciences criminelles
