@@ -1,0 +1,86 @@
+---
+title: "Compte de l'Etat"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+knitr::opts_chunk$set(fig.retina = TRUE, fig.width = 8, fig.height = 4.5)
+
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors = "Julien Gossa", source="https://www.data.gouv.fr/fr/datasets/donnees-de-comptabilite-generale-de-letat/")
+```
+
+Source : https://www.data.gouv.fr/fr/datasets/donnees-de-comptabilite-generale-de-letat/
+
+- `2012-2020-balances-des-comptes-de-letat.csv`
+
+```{r load}
+comptes <- read.csv2("../data/2012-2020-balances-des-comptes-de-letat-utf8.csv") %>%
+  pivot_longer(
+    cols = starts_with("Balance.Sortie."),
+    names_to = "Année",
+    names_prefix = "Balance.Sortie.",
+    values_to = "Balance.Sortie"
+  ) %>%
+  mutate(Balance.Sortie = readr::parse_number(Balance.Sortie, locale=locale(decimal_mark = ",", grouping_mark = " ")))
+
+scsp.esr <- comptes %>%
+  filter(Programme %in% c("0150","0172","0192"), Sous.postes==" Subventions pour charges de service public ") %>%
+  group_by(Année, Programme) %>%
+  summarise(SCSP = sum(Balance.Sortie,na.rm = TRUE)) %>%
+  group_by(Programme) %>%
+  arrange(Année) %>%
+  mutate(Evolution = SCSP / first(SCSP) * 100)
+  
+write.csv(scsp.esr,"scsp-esr.csv", row.names = F)
+```
+
+## Données
+
+- variables : 
+
+```{r var}
+colnames(comptes)
+```
+
+- Postes :
+
+```{r var.poste}
+unique(comptes$Postes)
+```
+
+- Sous.postes :
+
+```{r var.sous.postes}
+unique(comptes$Sous.postes)
+```
+
+## SCSP ESR
+
+[SCSP pour l'ESR](scsp-esr.csv)
+
+```{r scsp.esr.data}
+scsp.esr %>% kableExtra::kable()
+```
+
+
+```{r scsp.esr.abs}
+scsp.esr %>%
+  ggplot(aes(x=Année,y=SCSP,color=Programme)) +
+  geom_point() + geom_line(aes(group=Programme)) +
+  scale_y_continuous(labels = ~ paste(.x / 1e9,"M€")) +
+  ggtitle("SCSP des programmes 150, 172 et 192") +
+  theme_cpesr_cap()
+```
+
+
+```{r scsp.esr.evol}
+scsp.esr %>%
+  ggplot(aes(x=Année,y=Evolution,color=Programme)) +
+  geom_point() + geom_line(aes(group=Programme)) +
+  ggtitle("SCSP des programmes 150, 172 et 192", subtitle = "En valeur 100 pour 2012") +
+  theme_cpesr_cap()
+```
