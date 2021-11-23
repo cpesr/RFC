@@ -1,0 +1,41 @@
+---
+title: "STAPS"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggcpesrthemes)
+
+
+tit.74 <- read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv") %>%
+  filter(code_section_cnu==74) %>% 
+  group_by(Rentrée,UAI=etablissement_id_uai,Etablissement=etablissement_actuel_lib) %>% 
+  summarize(enseignants = sum(effectif))
+
+etu.74 <- read.csv2("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv") %>%
+  group_by(Rentrée=rentree, UAI=Identifiant.s..UAI) %>% 
+  summarize(étudiants = sum(Discipline...STAPS,na.rm = TRUE))
+
+staps <- full_join(tit.74,etu.74) %>% 
+  filter(Rentrée >= 2015, str_detect(Etablissement,"niversité"), étudiants > 100) %>%
+  mutate(taux.d.encadrement = enseignants / étudiants * 100) %>%
+  arrange(Etablissement,Rentrée) %>%
+  group_by(Etablissement) %>%
+  mutate(across(c(étudiants,enseignants,taux.d.encadrement),
+                list(val100 = ~ .x / first(.x) * 100)))
+```
+```{r megaplot, fig.width=16, fig.height=9}
+lvl <- staps %>% filter(Rentrée==2019) %>% arrange(taux.d.encadrement_val100) %>% pull(Etablissement) %>% unique()
+
+staps %>%
+  mutate(Etablissement = factor(Etablissement,levels=lvl)) %>%
+  filter(!is.na(Etablissement)) %>%
+  pivot_longer(ends_with("_val100"),names_to="indicateur",values_to = "valeur") %>%
+  ggplot(aes(x=Rentrée,y=valeur,color=indicateur)) +
+  geom_line(aes(group=indicateur)) +
+  facet_wrap(.~Etablissement) +
+  theme_cpesr_cap()
+```
+
