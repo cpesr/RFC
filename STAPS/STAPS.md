@@ -10,7 +10,8 @@ staps %>%
   pivot_longer(ends_with("_val100"),names_to="indicateur",values_to = "valeur") %>%
   ggplot(aes(x=Rentrée,y=valeur,color=indicateur)) +
   geom_line(aes(group=indicateur)) +
-  facet_wrap(.~Etablissement) +
+  facet_wrap(.~Etablissement, ncol = 10) +
+  scale_y_continuous(breaks=c(50,75,100,125,150)) +
   theme_cpesr_cap()
 ```
 
