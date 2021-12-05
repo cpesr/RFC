@@ -1,27 +1,23 @@
 library(tidyverse)
 
-fin <- read.csv("fr-esr-operateurs-indicateurs-financiers.csv",sep=";",quote='"') %>%
+fin <- read.csv("../data/fr-esr-operateurs-indicateurs-financiers.csv",sep=";",quote='"') %>% 
+  left_join(
+    read.csv("../data/fr-esr-principaux-etablissements-enseignement-superieur.csv",sep=";",quote='"') %>%
+      mutate(groupe = ifelse(Libellé == "Université de Lorraine", "Université", type.d.établissement)) %>%
+      select(uai...identifiant, nom_court, groupe) ) %>%
   mutate(exercice = as.factor(exercice)) %>%
-  mutate(groupe = case_when(
-    startsWith(groupe,"université") ~ "université",
-    groupe == "école d'ingénieurs" ~ "écoles d'ingénieurs",
-    groupe == "communauté d'universités et établissements" ~ "COMUE",
-    groupe == "autres établissements d'enseignement et de recherche" ~ "autres",
-    str_length(groupe) == 0 ~ "autres",
-    TRUE ~ groupe
-  )) %>%
   mutate(etablissement = case_when(
-    str_length(etablissement) == 0 ~ uai...identifiant,
-    TRUE ~ etablissement
+    str_length(Etablissement) == 0 ~ uai...identifiant,
+    TRUE ~ Etablissement
   )) %>%
   mutate(
-    groupe = as.factor(groupe),
     etablissement = as.factor(etablissement)) %>%
   mutate(
-    SCSP = Produits.de.fonctionnement.encaissables - Ressources.propres.encaissables
+    SCSP = Produits.de.fonctionnement.encaissables - Recettes.propres
   )
 
-categories <- read.csv("indicateurs-financiers-categories.csv") 
+
+categories <- read.csv("../data/indicateurs-financiers-categories.csv") 
 levels.indicateurs <- categories$Indicateur
 levels.categories <- unique(categories$Catégorie)
 

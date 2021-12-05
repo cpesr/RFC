@@ -1,7 +1,7 @@
 Indicateurs financiers d’établissement
 ================
 
-# Université Paris 13 - Paris Nord
+# Université PARIS 13 - PARIS NORD
 
 ## Focus Résultat et Solde
 
@@ -9,8 +9,14 @@ Indicateurs financiers d’établissement
 
 ![](université_paris_13___paris_nord_files/figure-gfm/etab.focus-1.png)<!-- -->
 
+## Focus Masse salariale
+
+![](université_paris_13___paris_nord_files/figure-gfm/etab.focus.ms.et.pfe-1.png)<!-- -->
+
+![](université_paris_13___paris_nord_files/figure-gfm/etab.focus.ms.vs.pfe-1.png)<!-- -->
+
 ## Tous les indicateurs
 
-    ## Warning: Removed 181 rows containing missing values (geom_point).
+    ## Warning: Removed 199 rows containing missing values (geom_point).
 
 ![](université_paris_13___paris_nord_files/figure-gfm/etab-1.png)<!-- -->

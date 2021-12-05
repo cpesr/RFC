@@ -9,8 +9,14 @@ Indicateurs financiers d’établissement
 
 ![](cy_cergy_paris_université_files/figure-gfm/etab.focus-1.png)<!-- -->
 
+## Focus Masse salariale
+
+![](cy_cergy_paris_université_files/figure-gfm/etab.focus.ms.et.pfe-1.png)<!-- -->
+
+![](cy_cergy_paris_université_files/figure-gfm/etab.focus.ms.vs.pfe-1.png)<!-- -->
+
 ## Tous les indicateurs
 
-    ## Warning: Removed 125 rows containing missing values (geom_point).
+    ## Warning: Removed 139 rows containing missing values (geom_point).
 
 ![](cy_cergy_paris_université_files/figure-gfm/etab-1.png)<!-- -->

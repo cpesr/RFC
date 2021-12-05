@@ -45,12 +45,13 @@ uais.etu <- list(
 ```{r data}
 etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                   header=TRUE, sep=';', quote='"') %>%
+  filter(Attention != "* Attention : doubles comptes, établissement-composante") %>%
   transmute(
     UAI = recode(Identifiant.s..UAI, !!!uais.etu),
-    Type.établissement = Type.d.établissement,
+    Type.établissement.etu = Type.d.établissement,
     Rentrée = rentree,
     Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE) %>%
-  group_by(Rentrée,UAI,Type.établissement) %>%
+  group_by(Rentrée,UAI,Type.établissement.etu) %>%
   summarise(Etudiants = sum(Etudiants)) %>%
   ungroup()
 
@@ -60,34 +61,22 @@ ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
     UAI = Identifiant.établissement,
     Etablissement = as.factor(Établissement),
     Région = as.factor(Région),
-    Type.établissement = factor(Type.établissement,
-                                levels = c("Université",
-                                           "Grand établissement",
-                                           "École nationale supérieure d'ingénieurs",
-                                           "École d'ingénieurs",
-                                           "École normale supérieure",
-                                           "Institut national polytechnique",
-                                           "École habilitée à délivrer un diplôme d'ingénieur",
-                                           "Opérateur du programme 150 - Formations supérieures et recherche universitaire",
-                                           "Institut ou école extérieur aux universités"),
-                                labels = c("Université",
-                                           "Grand étab.",
-                                           "ENSI",
-                                           "Ecole d'ingé.",
-                                           "ENS",
-                                           "Autre",                                         
-                                           "Autre",
-                                           "Autre",
-                                           "Autre")),
+    Type.établissement.ens = factor(case_when(
+      Type.établissement == "Université" ~ "Université",
+      Type.établissement == "Grand établissement" ~ "Grand établissement",
+      Type.établissement %in% c("École habilitée à délivrer un diplôme d'ingénieur", "École nationale supérieure d'ingénieurs", "École d'ingénieurs", "École de formation artistique","Institut national polytechnique","École normale supérieure") ~ "École",
+      TRUE ~ "Autre établissement")),
     Rentrée = Rentrée,
     Enseignants = effectif
   ) %>%
-  group_by(UAI, Etablissement, Région, Type.établissement, Rentrée) %>%
+  group_by(UAI, Etablissement, Région, Type.établissement.ens, Rentrée) %>%
   summarise(Enseignants = sum(Enseignants, na.rm = TRUE)) %>%
   ungroup()
 
-tde <- merge(ens, etu %>% select(-Type.établissement)) %>%
-  mutate(Rentrée = as.factor(Rentrée))
+tde <- full_join(ens, etu) %>%
+  mutate(Rentrée = as.factor(Rentrée)) %>%
+  mutate(Type.établissement = ifelse(is.na(Type.établissement.etu), Type.établissement.ens, Type.établissement.etu)) %>%
+  select(-Type.établissement.etu, -Type.établissement.ens)
 
 etiquettes <- read.csv("etiquettes.csv")
 ```

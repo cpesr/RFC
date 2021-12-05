@@ -10,7 +10,7 @@ library(ggcpesrthemes)
 
 source("Finances.R")
 
-etiquettes <- read.csv("etiquettes.csv") %>%
+etiquettes <- read.csv("../data/etiquettes.csv") %>%
   mutate(étiquettes = factor(case_when(
     IDEx ~ "IDEx",
     ISITE ~ "ISITE",
@@ -77,7 +77,7 @@ fin.pivot.groupe %>%
 
 ```{r focus.univ.data, fig.width=8, fig.height=4.5}
 fin.univ <- fin.pivot %>%
-  filter(groupe == "université") %>%
+  filter(groupe == "Université") %>%
   mutate(Valeur = Valeur / 10^6) %>%
   filter(Indicateur %in% c("Résultat.net.comptable","Solde.budgétaire","Acquisitions.d.immobilisations")) %>%
   filter(exercice %in% c("2019","2020")) %>%
@@ -147,7 +147,7 @@ fin.univ <- fin.pivot %>%
 ```{r focus.univ.scsp.ms.pfe, fig.width=8, fig.height=4.5}
 fin.pivot.groupe %>%
   filter(as.character(exercice) > "2013") %>%
-  filter(groupe == "université") %>%
+  filter(groupe == "Université") %>%
   filter(Indicateur %in% c("Produits.de.fonctionnement.encaissables","SCSP","Dépenses.de.personnel")) %>%
   filter(Aggrégation == "Somme") %>%
   mutate(Indicateur = str_replace_all(Indicateur,"\\."," ")) %>%
@@ -164,7 +164,7 @@ fin.pivot.groupe %>%
 ```{r focus.univ.scsp.ms, fig.width=8, fig.height=4.5}
 fin.pivot.groupe %>%
   filter(as.character(exercice) > "2013") %>%
-  filter(groupe == "université") %>%
+  filter(groupe == "Université") %>%
   filter(Indicateur %in% c("SCSP","Dépenses.de.personnel")) %>%
   filter(Aggrégation == "Somme") %>%
   mutate(Indicateur = str_replace_all(Indicateur,"\\."," ")) %>%
@@ -181,7 +181,7 @@ fin.pivot.groupe %>%
 
 ```{r focus.univ.scsp.ms.diff, fig.width=8, fig.height=4.5}
 fin %>%
-  filter(groupe == "université") %>%
+  filter(groupe == "Université") %>%
   filter(as.character(exercice) > "2013") %>%
   group_by(exercice) %>%
   summarize(
@@ -199,7 +199,7 @@ fin %>%
 
 ```{r focus.univ.pfe.ms.diff, fig.width=8, fig.height=4.5}
 fin %>%
-  filter(groupe == "université") %>%
+  filter(groupe == "Université") %>%
   filter(as.character(exercice) > "2013") %>%
   group_by(exercice) %>%
   summarize(
@@ -216,7 +216,7 @@ fin %>%
 ```
 ```{r focus.univ.ms.vs.pfe, fig.width=8, fig.height=4.5}
 fin %>%
-  filter(groupe == "université") %>%
+  filter(groupe == "Université") %>%
   filter(as.character(exercice) > "2013") %>%
   group_by(exercice) %>%
   summarize(
@@ -237,7 +237,7 @@ fin %>%
 ```{r focus.univ.taux.vs, fig.width=12, fig.height=6.75}
 fin %>%
   filter(as.character(exercice) == "2021") %>%
-  filter(groupe == "université") %>%
+  filter(groupe == "Université") %>%
   filter(! etablissement %in% c("Institut national universitaire Jean-François Champollion","Centre Universitaire de Mayotte", "Université de Paris sciences et lettres")) %>%
   left_join(etiquettes, by = c("uai...identifiant" = "UAI")) %>% 
   mutate(
@@ -261,7 +261,7 @@ rpf <- fin.pivot %>%
   filter(Indicateur %in% c("Droits.d.inscription","Formation.continue..diplômes.propres.et.VAE", "Taxe.d.apprentissage")) %>%
   mutate(exercice = as.numeric(as.character(exercice))) %>%
   left_join(
-    etu <- read.csv2("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv") %>%
+    etu <- read.csv2("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv") %>%
       transmute(
         exercice = annee,
         uai...identifiant = Identifiant.s..UAI,
@@ -297,7 +297,7 @@ rpf %>%
 ## Tous les indicateurs par établissement
 
 
-```{r production.fun, include=FALSE, eval=FALSE}
+```{r production.fun, include=FALSE, eval=TRUE}
 outmd <- function(x, ext=".md") {
   x <- gsub("[^[:alnum:] ]", "_", x)
   x <- gsub(" ", "_", x)
@@ -306,9 +306,8 @@ outmd <- function(x, ext=".md") {
 }
 ```
 
-```{r production, include=FALSE, eval=FALSE}
-
-etabs <- c("Université de Strasbourg")
+```{r production, eval=TRUE}
+# etabs <- c("Université de Strasbourg")
 etabs <- unique(fin$etablissement)
 for(etab in etabs) {
   rmarkdown::render("Etablissement.Rmd",
@@ -324,7 +323,7 @@ for(etab in etabs) {
 
 
 
-```{r production2, results="asis", eval=FALSE}
+```{r production2, results="asis", eval=TRUE}
 for(grp in unique(fin$groupe)) {
   cat("\n\n###", grp,"\n\n")
   grpdf <- fin %>% filter(groupe == grp)

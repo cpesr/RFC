@@ -5,12 +5,22 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 20 rows containing missing values (geom_point).
+    ## Warning: Removed 14 rows containing missing values (geom_point).
 
 ![](académie_des_sciences_d_outre_mer_files/figure-gfm/etab.focus-1.png)<!-- -->
 
+## Focus Masse salariale
+
+    ## Warning: Removed 4 rows containing missing values (geom_point).
+
+![](académie_des_sciences_d_outre_mer_files/figure-gfm/etab.focus.ms.et.pfe-1.png)<!-- -->
+
+    ## Warning: Removed 2 rows containing missing values (geom_point).
+
+![](académie_des_sciences_d_outre_mer_files/figure-gfm/etab.focus.ms.vs.pfe-1.png)<!-- -->
+
 ## Tous les indicateurs
 
-    ## Warning: Removed 233 rows containing missing values (geom_point).
+    ## Warning: Removed 175 rows containing missing values (geom_point).
 
 ![](académie_des_sciences_d_outre_mer_files/figure-gfm/etab-1.png)<!-- -->

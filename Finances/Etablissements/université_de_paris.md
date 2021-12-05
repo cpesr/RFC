@@ -5,16 +5,18 @@ Indicateurs financiers d’établissement
 
 ## Focus Résultat et Solde
 
-    ## Warning: Removed 15 rows containing missing values (geom_point).
-
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
+    ## Warning: Removed 12 rows containing missing values (geom_point).
 
 ![](université_de_paris_files/figure-gfm/etab.focus-1.png)<!-- -->
 
+## Focus Masse salariale
+
+![](université_de_paris_files/figure-gfm/etab.focus.ms.et.pfe-1.png)<!-- -->
+
+![](université_de_paris_files/figure-gfm/etab.focus.ms.vs.pfe-1.png)<!-- -->
+
 ## Tous les indicateurs
 
-    ## Warning: Removed 150 rows containing missing values (geom_point).
-
-    ## Warning: Removed 1 row(s) containing missing values (geom_path).
+    ## Warning: Removed 146 rows containing missing values (geom_point).
 
 ![](université_de_paris_files/figure-gfm/etab-1.png)<!-- -->

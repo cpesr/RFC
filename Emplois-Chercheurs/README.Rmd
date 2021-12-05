@@ -1,0 +1,322 @@
+---
+title: "Emplois Chercheurs"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+library(tidyverse)
+library(lemon)
+library(ggcpesrthemes)
+
+options(dplyr.summarise.inform = FALSE)
+
+theme_set(theme_cpesr())
+
+```
+
+Données : 
+
+- [Les recrutements externes et départs définitifs des personnels permanents de niveau chercheur au sein des principaux organismes publics de recherche, par discipline d’activité de recherche, corps/catégorie de personnel](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-epst-epic-fondations-chercheurs-recrutements-departs-discipline/export/)
+- 
+[Les personnels titulaires des principaux organismes publics de recherche, par sexe, corps/type de personnel, type de contrat](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_titulaires_epst/export/)
+- [Les personnels des principaux organismes publics de recherche, par type de contrat et type d’emploi](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi/table/)
+- [Les personnels de soutien des principaux organismes publics de recherche, par sexe, corps et BAP](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_les-personnels-de-soutien-des-organismes-par-sexe-corps-et-bap/export/)
+
+```{r funs}
+geom_pointline <- function() {
+   list(geom_line(size=1), geom_point(shape=21, size=4, stroke=2, color="white"))
+}
+
+explore <- function(df, v, titre, facetscales = "fixed", serie = "Valeur", hl = NULL) {
+  df %>% 
+      mutate(Ensemble = "Ensemble") %>%
+      mutate(v = !!sym(v)) %>%
+      group_by(Année, Série, v) %>%
+    summarise(Valeur = sum(Valeur, na.rm = TRUE)) %>%
+    arrange(Année) %>%
+    group_by(Série, v) %>%
+    mutate(Evolution = Valeur / first(Valeur) * 100) %>%
+    
+    ggplot(aes(x=Année,y=!!sym(serie), color=Série,fill=Série)) +
+      { if(!is.null(hl)) geom_hline(yintercept = hl) } +
+      geom_pointline() +
+      facet_wrap(.~v, scales = facetscales) +
+      cpesr_cap() +
+      theme(axis.title.y = element_blank()) +
+      ggtitle(titre)
+}
+
+```
+
+## Recrutements et départs définitifs
+
+```{r ces.fun}
+ggcpesrthemes::theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-epst-epic-fondations-chercheurs-recrutements-departs-discipline/export/")
+
+ces <- read.csv2("../data/fr-esr-epst-epic-fondations-chercheurs-recrutements-departs-discipline.csv", dec = ".")
+
+cesp <- ces %>% 
+  rename(Solde = Solde...Recrutements...Départs) %>%
+  pivot_longer(
+    c(Recrutements.externes,Départs.définitifs,Solde), 
+    names_to = "Série", values_to = "Valeur") 
+```
+
+```{r ces.ensemble}
+explore(cesp,"Ensemble", "Entrée/Sortie et solde des emplois de chercheurs", hl=0)
+```
+
+
+### Par organisme
+
+```{r ces.orga, fig.width=16, fig.height=9}
+explore(cesp, "Organisme", "Entrée/Sortie et solde des emplois de chercheurs par organisme", hl=0)
+```
+
+```{r ces.orga.free, fig.width=16, fig.height=9}
+explore(cesp, "Organisme", "Entrée/Sortie et solde des emplois de chercheurs par organisme", "free_y", hl=0)
+```
+
+
+### Par catégorie de personnels
+
+```{r ces.cat, fig.width=12, fig.height=6.75}
+explore(cesp, "Catégorie.de.personnel.Corps.assimilé", "Entrée/Sortie et solde des emplois de chercheurs par catégorie de personnel", hl=0)
+```
+
+```{r ces.cat.free, fig.width=12, fig.height=6.75}
+explore(cesp, "Catégorie.de.personnel.Corps.assimilé", "Entrée/Sortie et solde des emplois de chercheurs par catégorie de personnel", "free_y", hl=0)
+```
+
+### Par catégorie discipline
+
+```{r ces.disc, fig.width=16, fig.height=9}
+explore(cesp, "Discipline.de.recherche.exercée","Entrée/Sortie et solde des emplois de chercheurs par discipline", hl=0)
+```
+
+```{r ces.disc.free, fig.width=16, fig.height=9}
+explore(cesp, "Discipline.de.recherche.exercée","Entrée/Sortie et solde des emplois de chercheurs par discipline", "free_y", hl=0)
+```
+
+
+## Effectifs titulaires
+
+```{r cet}
+ggcpesrthemes::theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_titulaires_epst/export/")
+
+cet <- read.csv2("../data/fr_esr_tbes_titulaires_epst.csv", dec = ".")
+
+cetp <- cet %>% 
+  rename(
+    ETPT = Effectif.au.31.12..en.ETPT., 
+    PP = Effectifs.au.31.12..en.PP.) %>%
+  pivot_longer(
+    c(ETPT, PP), 
+    names_to = "Série", values_to = "Valeur") 
+```
+
+```{r cet.ensemble}
+explore(cetp, "Ensemble", "Personnels titulaires des principaux organismes publics de recherche")
+```
+
+```{r cet.evol}
+explore(cetp, "Ensemble", "Personnels titulaires des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+
+
+### Effectifs titulaires par organisme
+
+```{r cet.orga, fig.width=12, fig.height=6.75}
+explore(cetp, "Organisme", "Personnels titulaires des principaux organismes publics de recherche par organisme")
+```
+
+```{r cet.orga.evol, fig.width=12, fig.height=6.75}
+explore(cetp, "Organisme", "Personnels titulaires des principaux organismes publics de recherche par organisme(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+
+### Effectifs titulaires par type de contrat
+
+```{r cet.contrat, fig.width=12, fig.height=6.75}
+explore(cetp, "Statut.type.de.contrat","Personnels titulaires des principaux organismes publics de recherche par type de contrat")
+```
+
+```{r cet.contrat.evol, fig.width=12, fig.height=6.75}
+explore(cetp, "Statut.type.de.contrat","Personnels titulaires des principaux organismes publics de recherche par type de contrat(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+### Effectifs titulaires par filière
+
+```{r cet.filiere, fig.width=12, fig.height=6.75}
+explore(cetp, "Filière.EPST","Personnels titulaires des principaux organismes publics de recherche par filière")
+```
+
+```{r cet.filiere.evol, fig.width=12, fig.height=6.75}
+explore(cetp, "Filière.EPST","Personnels titulaires des principaux organismes publics de recherche par filière(valeur 100)", serie = "Evolution", hl=100)
+```
+
+### Effectifs titulaires par sexe
+
+```{r cet.sexe, fig.width=12, fig.height=6.75}
+explore(cetp, "sexe", "Personnels titulaires des principaux organismes publics de recherche par sexe")
+```
+
+```{r cet.sexe.evol, fig.width=12, fig.height=6.75}
+explore(cetp, "sexe", "Personnels titulaires des principaux organismes publics de recherche par sexe(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+
+## Effectifs par contrat/emploi
+
+```{r cec}
+ggcpesrthemes::theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi/table/")
+
+cec <- read.csv2("../data/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi.csv", dec = ".")
+
+cecp <- cec %>% 
+  rename(
+    ETPT = Effectif.au.31.12..en.ETPT., 
+    ) %>%
+  pivot_longer(
+    c(ETPT), 
+    names_to = "Série", values_to = "Valeur") 
+```
+
+```{r cec.ensemble}
+explore(cecp, "Ensemble", "Personnels des principaux organismes publics de recherche")
+```
+
+```{r cec.evol}
+explore(cecp, "Ensemble", "Personnels des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+### Effectifs par permanence
+
+```{r cec.statut}
+explore(cecp, "Statut.regroupé", "Personnels des principaux organismes publics de recherche")
+```
+
+```{r cec.statut.evol}
+explore(cecp, "Statut.regroupé", "Personnels des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+### Effectifs par nature de contrat
+
+```{r cec.contrat, fig.width=12, fig.height=6.75}
+explore(cecp, "Statut.Nature.de.contrat", "Personnels des principaux organismes publics de recherche")
+```
+
+```{r cec.contrat.evol, fig.width=12, fig.height=6.75}
+explore(cecp, "Statut.Nature.de.contrat", "Personnels des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+
+### Effectifs par Type d'emploi
+
+```{r cec.type}
+explore(cecp, "Type.d.emploi", "Personnels des principaux organismes publics de recherche")
+```
+
+```{r cec.type.evol}
+explore(cecp, "Type.d.emploi", "Personnels des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+### Effectifs par permanence
+
+```{r cec2}
+ggcpesrthemes::theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi/table/")
+
+cec2 <- read.csv2("../data/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi.csv", dec = ".")
+
+cecp2 <- cec2 %>% 
+  rename(
+    Série = Statut.regroupé,
+    Valeur = Effectif.au.31.12..en.ETPT., 
+    )
+```
+
+### Effectifs par Type d'emploi
+
+```{r cec2.ensemble}
+explore(cecp2, "Ensemble", "Personnels des principaux organismes publics de recherche")
+```
+
+```{r cec.ensemble.evol}
+explore(cecp2, "Ensemble", "Personnels des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+### Effectifs par Organisme
+
+```{r cec2.orga, fig.width=12, fig.height=6.75}
+explore(cecp2, "Organisme", "Personnels des principaux organismes publics de recherche")
+```
+
+```{r cec.orga.evol, fig.width=12, fig.height=6.75}
+explore(cecp2, "Organisme", "Personnels des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+
+
+## Personnels de soutien
+
+```{r cps}
+ggcpesrthemes::theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_les-personnels-de-soutien-des-organismes-par-sexe-corps-et-bap/export/")
+
+cps <- read.csv2("../data/fr_esr_tbes_les-personnels-de-soutien-des-organismes-par-sexe-corps-et-bap.csv", dec = ".")
+
+cpsp <- cps %>% 
+  mutate(
+    Série = "Effectif.en.PP",
+    Valeur = Effectifs.au.31.12..en.PP.) 
+```
+
+```{r cps.ensemble}
+explore(cpsp, "Ensemble", "Personnels de soutien des principaux organismes publics de recherche")
+```
+
+```{r cps.evol}
+explore(cpsp, "Ensemble", "Personnels de soutien des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+### Personnels de soutien par organisme
+
+```{r cps.orga, fig.width=12, fig.height=6.75}
+explore(cpsp, "Organisme", "Personnels de soutien des principaux organismes publics de recherche")
+```
+
+```{r cps.orga.evol, fig.width=12, fig.height=6.75}
+explore(cpsp, "Organisme", "Personnels de soutien des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+### Personnels de soutien par BAP
+
+```{r cps.bap, fig.width=12, fig.height=6.75}
+explore(cpsp, "Branche.d.activité.professionnelle", "Personnels de soutien des principaux organismes publics de recherche")
+```
+
+```{r cps.bap.evol, fig.width=12, fig.height=6.75}
+explore(cpsp, "Branche.d.activité.professionnelle", "Personnels de soutien des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
+
+
+### Personnels de soutien par sexe
+
+```{r cps.sexe}
+explore(cpsp, "Sexe", "Personnels de soutien des principaux organismes publics de recherche")
+```
+
+```{r cps.sexe.evol}
+explore(cpsp, "Sexe", "Personnels de soutien des principaux organismes publics de recherche(valeur 100)", serie = "Evolution", hl=100)
+```
