@@ -15,6 +15,8 @@ library(ggbeeswarm)
 library(kableExtra)
 library(ggrepel)
 
+library(kpiESR)
+
 library(ggcpesrthemes)
 
 theme_cpesr_setup(authors=c("Julien Gossa"), 
@@ -116,25 +118,6 @@ ens.disc <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
   transmute(
     UAI = Identifiant.établissement,
     Etablissement = as.factor(Établissement),
-    Type.établissement = factor(Type.établissement,
-                                levels = c("Université",
-                                           "Grand établissement",
-                                           "École nationale supérieure d'ingénieurs",
-                                           "École d'ingénieurs",
-                                           "École normale supérieure",
-                                           "Institut national polytechnique",
-                                           "École habilitée à délivrer un diplôme d'ingénieur",
-                                           "Opérateur du programme 150 - Formations supérieures et recherche universitaire",
-                                           "Institut ou école extérieur aux universités"),
-                                labels = c("Université",
-                                           "Grand étab.",
-                                           "ENSI",
-                                           "Ecole d'ingé.",
-                                           "ENS",
-                                           "Autre",                                         
-                                           "Autre",
-                                           "Autre",
-                                           "Autre")),
     Rentrée = Rentrée,
     Grande.discipline = factor(Grandes.disciplines,
                                levels = c("Droit, économie et gestion",
@@ -157,10 +140,10 @@ ens.disc <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
                                          "Autre")),
     Enseignants = effectif
   ) %>%
-  group_by(UAI, Etablissement, Type.établissement, Rentrée, Grande.discipline) %>%
+  group_by(UAI, Etablissement, Rentrée, Grande.discipline) %>%
   summarise(Enseignants = sum(Enseignants, na.rm = TRUE))
 
-tde.disc <- merge(ens.disc,etu.disc) %>%
+tde.disc <- full_join(ens.disc,etu.disc) %>%
   mutate(Rentrée = as.factor(Rentrée))
 ```
 
@@ -224,7 +207,6 @@ etab.ens <-  ens %>%
     transmute(
       UAI = UAI,
       Etablissement = Etablissement,
-      Type = Type.établissement,
       jeu = "ens") %>%
     unique()
 
@@ -233,7 +215,6 @@ etab.etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscri
   transmute(
     UAI = Identifiant.s..UAI,
     Etablissement = Établissement,
-    Type = Type.d.établissement,
     jeu = "etu") %>%
   unique()
 

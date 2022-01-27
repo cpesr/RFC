@@ -1,0 +1,621 @@
+---
+title: "Plongée dans l'INSEE"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(fig.asp=9/16)
+library(tidyverse)
+library(ggthemes)
+```
+
+- T101 Activité, emploi et chômage en 2020 et en séries longues https://www.insee.fr/fr/statistiques/5359497?sommaire=5359511&q=Population+active+au+sens+du+BIT+-%20S%C3%A9ries+longues#consulter
+- chômage/diplome : https://www.insee.fr/fr/statistiques/4498649?sommaire=4498692&q=Taux+de+ch%C3%B4mage+selon+le+niveau+de+dipl%C3%B4me
+- fm.T6 La situation démographique en 2019 https://www.insee.fr/fr/statistiques/5390418?sommaire=5390468
+- NEET : https://www.insee.fr/fr/statistiques/5346969
+- Effectifs d’élèves et d’étudiants : https://www.insee.fr/fr/statistiques/2387291
+
+## chômage des 25-49 par niveau de diplôme
+
+```{r chomage.25.d}
+meta <- read.csv2("meta_sl.csv")
+
+ddipl.levels <- meta %>%
+  filter(COD_VAR == "DDIPL") %>%
+  select(COD_MOD,LIB_MOD1)
+
+read.csv2("t208.csv", dec='.') %>%
+  filter(SEXE == "E", AGEREG == "T25") %>%
+  mutate(DDIPL = factor(DDIPL,labels = ddipl.levels$LIB_MOD1)) %>%
+  ggplot(aes(x=ANNEE5, y=TXEMPBIT, color=DDIPL, group=DDIPL)) +
+    geom_line() +
+    theme_hc() + guides(color=guide_legend(ncol=3, title = ""))
+
+```
+
+## Eleve du secondaire et étudiants du supérieur
+
+```{r eleveetu}
+pop.etu <- read.csv("cond-educ-eleve-etudiant.csv") %>%
+  pivot_longer(
+    -Niveau.d.étude,
+    values_to = "Valeur",
+    names_to = "Année"
+  ) %>%
+  transmute(
+    Année = as.numeric(str_sub(Année,2,5)),
+    Population = Niveau.d.étude,
+    Valeur = as.numeric(gsub("[^0-9\\.]","",gsub(",",".",Valeur)))) 
+
+pop.etu.niveau <- pop.etu %>%
+  filter(str_sub(Population,1,1) %in% c("A","E","P","S")) %>%
+  pull(Population) %>% unique()
+
+pop.etu %>%
+  filter(Population %in% pop.etu.niveau) %>%
+  mutate(Population = factor(Population, levels=pop.etu.niveau)) %>%
+  ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
+    geom_line() +
+    theme_hc() + 
+    guides(color=guide_legend(nrow=4,byrow=TRUE))
+
+pop.etu.1529 <- pop.etu %>%
+  mutate(Population = str_sub(Population,5,100)) %>%
+  filter(Population %in% c("Ensemble élèves du premier degré5","Ensemble élèves et apprentis du second degré5","Ensemble étudiants et apprentis du supérieur","Apprentissage")) 
+
+pop.etu.1529 %>%
+  ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
+    geom_line() +
+    expand_limits(y=0) +
+    theme_hc()
+```
+
+## Population active 15-29 au sens du BIT
+
+```{r bit}
+pop.bit.1529 <- read.csv2("t101.csv", dec=".") %>%
+  filter(SEXE == "E", AGEQ %in% c("T15","T20","T25")) %>% #T15 T25
+  transmute(
+    Année = ANNEE,
+    AGEQ,
+    Population.active = POPACTBIT,
+    Population.active.occupée = POPACTBIT * TACTBIT / 100.0,
+    Population.active.inoccupée = POPACTBIT * (100.0-TACTBIT) / 100.0,
+  ) %>% 
+  pivot_longer(
+    -c(Année,AGEQ),
+    names_to = "Population",
+    values_to = "Valeur"
+  ) %>%
+  group_by(Année,Population) %>%
+  summarise(Valeur = sum(Valeur))
+
+pop.bit.1529 %>%
+  ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
+    geom_line() +
+    expand_limits(y=0) +
+    theme_hc()
+```
+
+
+
+## Population totale des 15-29
+
+```{r fm.t6, warning=FALSE, cache=TRUE}
+read_annee <- function(annee, min=15, max=29) {
+  readxl::read_excel("fm_t6.xlsx", sheet = annee, col_names = FALSE) %>%
+    filter(as.numeric(...2) >= min, as.numeric(...2) <= max) %>%
+    group_by(Année = annee) %>%
+    summarize(Valeur = sum(as.numeric(...3), na.rm=TRUE))
+}
+
+pop.ensemble.1529 <- tibble()
+for(annee in readxl::excel_sheets("fm_t6.xlsx")) {
+  pop.ensemble.1529 <- bind_rows(pop.ensemble.1529,read_annee(annee))
+}
+pop.ensemble.1529 <- pop.ensemble.1529 %>%
+  transmute(
+    Année = as.numeric(Année),
+    Population = "Ensemble des 15-29",
+    Valeur = Valeur / 1000
+  )
+
+pop.ensemble.1529 %>% 
+  ggplot(aes(x=Année,y=Valeur,color=Population,group=Population)) +
+  geom_line() +
+  expand_limits(y=0) +
+  theme_hc()
+```
+
+## Les jeunes
+
+```{r popall}  
+pop.all <- bind_rows(
+  pop.ensemble.1529,
+  pop.bit.1529,
+  pop.etu.1529
+) 
+
+ pop.all %>%
+  ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
+    geom_line() +
+    theme_hc() + guides(color=guide_legend(ncol=2, title = ""))
+```
+
+
+```{r popall.80}  
+ pop.all %>%
+  filter(Année >= 1980) %>%
+  ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
+    geom_line() +
+    expand_limits(y=0) +
+    theme_hc() + guides(color=guide_legend(ncol=2, title = ""))
+```
+
+```{r popall.80.val100}  
+ pop.all %>%
+  filter(Année >= 1980) %>%
+  group_by(Population) %>%
+  mutate(val100 = Valeur / first(Valeur) * 100) %>%
+  ggplot(aes(x=Année, y=val100, color=Population, group=Population)) +
+    geom_line() +
+    theme_hc() + guides(color=guide_legend(ncol=2, title = ""))
+```
+
+```{r popall.80.diff}  
+ pop.all %>%
+  filter(Année >= 1980) %>%
+  group_by(Population) %>%
+  mutate(evolution = Valeur - first(Valeur)) %>%
+  ggplot(aes(x=Année, y=evolution, color=Population, group=Population)) +
+    geom_line() +
+    theme_hc() + guides(color=guide_legend(ncol=2, title = ""))
+```
+
+
+```{r popall.80.stack}  
+annees.etu <- pop.all %>%
+  filter(Population == "Ensemble étudiants et apprentis du supérieur") %>%
+  pull(Année)
+  
+ pop.all %>%
+  filter(Année %in% annees.etu, Année <= 2019) %>%
+  filter(Population != "Ensemble des 15-29", Population != "Population.active") %>%
+  group_by(Population) %>%
+  ggplot(aes(x=Année, y=Valeur, fill=Population, group=Population)) +
+    geom_area(alpha = 0.5) + 
+    scale_fill_brewer(palette = "Paired") +
+    scale_color_brewer(palette = "Paired") +
+   geom_line(data=pop.all %>% filter(Population == "Ensemble des 15-29") ) +
+    theme_hc() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
+```
+
+
+
+
+```{r popall.80.stack.simple}  
+annees.etu <- pop.all %>%
+  filter(Population == "Ensemble étudiants et apprentis du supérieur") %>%
+  pull(Année)
+  
+pop.act.etu <-pop.all %>%
+  filter(Année %in% annees.etu, Année <= 2019) %>%
+  filter(Population %in% c(
+    "Ensemble étudiants et apprentis du supérieur",
+    "Population.active.inoccupée",
+    "Population.active.occupée")) %>%
+  mutate(Population=factor(Population))
+   
+pop.act.etu %>%
+  group_by(Population) %>%
+  ggplot(aes(x=Année, y=Valeur, fill=Population, color=Population, group=Population)) +
+    geom_area(alpha = 0.5) + 
+    scale_fill_brewer(palette = "Paired", direction = -1) +
+    scale_color_brewer(palette = "Paired", direction = -1) +
+    theme_hc() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
+```
+
+## Simulation Transfer etu -> innocupés
+
+```{r popall.80.stack.simu}  
+
+surplus <- pop.act.etu %>% 
+  filter(Population=="Ensemble étudiants et apprentis du supérieur") %>%
+  mutate(surplus = Valeur - first(Valeur))
+
+pop.act.etu %>%
+  pivot_wider(names_from = Population, values_from = Valeur) %>%
+  arrange(Année) %>%
+  mutate(
+   Population.active.inoccupée = Population.active.inoccupée + `Ensemble étudiants et apprentis du supérieur` - first(`Ensemble étudiants et apprentis du supérieur`),
+   `Ensemble étudiants et apprentis du supérieur` = first(`Ensemble étudiants et apprentis du supérieur`)
+  ) %>%
+  pivot_longer(
+    - Année,
+    names_to = "Population",
+    values_to = "Valeur"
+  ) %>%
+
+  ggplot(aes(x=Année, y=Valeur, fill=Population, color=Population, group=Population)) +
+    geom_area(alpha = 0.5) + 
+    scale_fill_brewer(palette = "Paired", direction = -1) +
+    scale_color_brewer(palette = "Paired", direction = -1) +
+    theme_hc() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
+```
+
+## Saphire
+
+https://www.insee.fr/fr/statistiques/4995124?sommaire=2414232
+
+```{r saphire, eval=FALSE}
+
+saphire.var <- read.csv2("Varmod_RP_1968-2017.csv")
+factorize <- function(x,f) {
+  lvl <- saphire.var %>% filter(COD_VAR == f)
+  factor(x, levels = lvl$COD_MOD, labels = lvl$LIB_MOD)
+}
+
+
+saphire <- data.table::fread("FD_RP_1968-2017.csv", header = T) %>%
+  tibble() %>%
+  select(AN_RECENS,AGE_REV,SEXE,DIPL,NES4,NATIO,TYP_ACT,CSP,POND) %>%
+  group_by(AN_RECENS,AGE_REV,SEXE,DIPL,NES4,NATIO,TYP_ACT,CSP) %>%
+  summarise(Population = sum(POND)) %>%
+  ungroup() %>%
+  transmute(
+    Année = AN_RECENS,
+    Age = AGE_REV,
+    Sexe = factorize(SEXE,"SEXE"),
+    Nationalité = factorize(NATIO,"NATIO"),
+    Diplôme = factorize(DIPL,"DIPL"),
+    Secteur.activité = factorize(NES4,"NES4"),
+    Activité = factorize(TYP_ACT,"TYP_ACT"),
+    CSP = factorize(CSP,"CSP"),
+    Population
+  ) %>%
+  ungroup()
+
+save(saphire, file="saphire.RData")
+
+```
+
+```{r saphire.load}
+load("saphire.RData")
+saphire <- saphire %>%
+  mutate(
+    Activité = fct_recode(Activité,
+      "Actifs ayant un emploi" = "Militaires du contingent",
+      "Inactifs" = "Anciens actifs",
+      "Inactifs" = "Autres inactifs"),
+    ) %>%
+  mutate(Activité = factor(Activité,levels=c(
+    "Actifs ayant un emploi","Chômeurs","Inactifs","Étudiants ou élèves"
+  ))) %>%
+  filter(Nationalité %in% c("Français de naissance","Français par acquisition")) %>%
+  group_by(Année,Age,Sexe,Diplôme,Secteur.activité,Activité,CSP) %>%
+  summarise(Population = sum(Population)) %>%
+  ungroup()
+
+saphire.1629 <- saphire %>%
+  filter(Age >=16, Age <= 29) %>%
+  group_by(Année,Diplôme,Secteur.activité,Activité,CSP) %>%
+  summarise(Population = sum(Population))
+
+activités.palette <- RColorBrewer::brewer.pal(8,"Paired")[c(2,8,7,4,3)]
+activités.sim.palette <- RColorBrewer::brewer.pal(10,"Paired")[c(2,8,7,9,4)]
+
+  
+```
+
+
+## Check 
+
+```{r saphire.check1, fig.asp=9/16}
+saphire %>%
+  mutate(Naissance = Année - Age) %>%
+  filter(Naissance>=1945,Naissance<=1960) %>%
+  group_by(Année,Sexe,Activité) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  mutate(Activité=fct_rev(Activité)) %>%
+  ggplot(aes(x=Année,y=Population, fill=Activité, color=Activité, group=Activité)) + 
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  facet_grid(Sexe~.)+
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  ylab("Population née entre 1945 et 1960 (milliers)") +
+  theme_hc()
+```
+
+
+```{r saphire.check2, fig.asp=3/4}
+saphire %>%
+  filter(Age >=15, Age <= 29) %>%
+  group_by(Année,Age, Activité) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  mutate(Année = as.character(Année)) %>%
+  ggplot(aes(x=Age,y=Population, fill=Activité)) + 
+  geom_col() +
+  facet_grid(Année~.)+
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  ylab("Population (milliers)") +
+  theme_hc()
+```
+
+
+```{r saphire.check3}
+saphire %>%
+  filter(Age ==15, Année == 1975) 
+```
+
+
+### Toute la population
+
+```{r saphire.allpop}
+saphire %>%
+  filter(Age >=15) %>%
+  group_by(Année,Activité) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  ggplot(aes(x=as.character(Année),y=Population,fill=Activité,color=Activité)) + 
+  geom_col(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc()
+```
+
+### Toute la population en 2017
+
+```{r saphire.allpop.2017}
+saphire %>%
+  ungroup() %>%
+  filter(Année == max(Année),Age >=15, Age <=100) %>%
+  group_by(Age,Activité) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité)) +
+  annotate("rect",xmin=16,xmax=30,ymin=-50,ymax=850,alpha=0.1,color="grey", fill="black") +
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc()
+```
+```{r saphire.allpop.2017.col}
+saphire %>%
+  ungroup() %>%
+  filter(Année == max(Année),Age >=15, Age <=100) %>%
+  group_by(Age,Activité) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité)) +
+  annotate("rect",xmin=16,xmax=30,ymin=-50,ymax=850,alpha=0.1,color="grey", fill="black") +
+  geom_col(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc()
+```
+
+```{r saphire.tout.facet}
+saphire %>%
+  ungroup() %>%
+  filter(Age >=16, Age <=100) %>%
+  group_by(Année,Age,Activité) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  mutate(Population = ceiling(Population)) %>%
+  mutate(Année = as.character(Année)) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité)) +
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  facet_wrap(.~Année) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc()
+```
+
+```{r saphire.tout.facet.2, fig.asp=4/3}
+saphire %>%
+  ungroup() %>%
+  filter(Age >=16, Age <=100) %>%
+  group_by(Année,Age,Activité) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  mutate(Population = ceiling(Population)) %>%
+  mutate(Activité = fct_rev(Activité)) %>%
+  mutate(Année = as.character(Année)) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité)) +
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  facet_grid(Année~Activité) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc()
+```
+
+### Suivi de cohorte
+
+```{r saphire.cohorte}
+cohorte <- function(naismin, naismax) {
+  saphire %>%
+    mutate(Activité=factor(
+      ifelse(Age < 15,"Moins de 15 ans",as.character(Activité)),
+      levels=c("Actifs ayant un emploi","Chômeurs","Inactifs","Étudiants ou élèves","Moins de 15 ans")
+      )) %>%
+    mutate(Naissance = Année-Age) %>%
+    #filter(Age>=15) %>%
+    filter(Naissance >= naismin, Naissance <= naismax) %>%
+    group_by(Année,Activité) %>%
+    summarise(Population = sum(Population)/1000) %>% 
+    complete(Année,Activité,fill=list(Population=0)) %>% 
+    ggplot(aes(x=Année,y=Population,fill=Activité,color=Activité)) +
+      geom_area(alpha=0.5) +
+      expand_limits(y=0) +
+      scale_fill_manual(values=activités.palette) +
+      scale_color_manual(values=activités.palette) +
+      scale_x_continuous(name="Age",
+                         labels = ~ paste0(.x-naismax,"-",.x-naismin), 
+                         breaks = unique(saphire$Année)) +
+      theme_hc() +
+    ggtitle(paste0("Activité des français nés entre",naismin," et ",naismax))
+}
+
+
+for(a in unique(saphire$Année)-18)
+  print(cohorte(a,a+7))
+
+```
+
+### 16-29
+
+```{r saphire.1629.check}
+saphire.1629 %>%
+  group_by(Année) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  ggplot(aes(x=Année,y=Population)) + 
+  geom_line() +
+  expand_limits(y=0) +
+  theme_hc()
+```
+
+
+```{r saphire.1629}
+saphire %>%
+  filter(Age>=16,Age<=29) %>%
+  group_by(Année,Age,Activité) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité)) +
+  #annotate("rect",xmin=16,xmax=30,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  facet_grid(.~Année) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc()
+```
+
+
+
+```{r saphire.1629.act}
+saphire.1629 %>%
+  group_by(Année,Activité) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  ggplot(aes(x=Année,y=Population, fill=Activité, color=Activité, group=Activité)) + 
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  ylab("Population 16-29 ans (milliers)") +
+  theme_hc()
+```
+
+```{r saphire.1629.act.data}
+saphire.1629 %>%
+  bind_rows(
+    saphire.1629 %>%
+      filter(Activité %in% c("Chômeurs","Inactifs")) %>%
+      group_by(Année) %>%
+      summarise(Activité = "Inactifs et chômeurs", Population=sum(Population))
+  ) %>%
+  mutate(Activité = factor(Activité,levels=c(
+    "Actifs ayant un emploi","Chômeurs","Inactifs","Inactifs et chômeurs", "Étudiants ou élèves"
+  ))) %>%
+  group_by(Année,Activité) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  arrange(Année,Activité) %>%
+  group_by(Activité) %>%
+  mutate(Val100 = round(Population / first(Population) * 100),
+         Différence = round(Population - first(Population))) %>%
+  mutate(Population = format(Population*1000,nsmall=0,big.mark=" ")) %>%
+  kableExtra::kable(format="pipe",align="r")
+```
+
+```{r saphire.1629.sim}
+saphire.sim <- saphire.1629 %>%
+  group_by(Année,Activité) %>%
+  summarise(Population = sum(Population)/1000)
+  #mutate(Activité=fct_rev(Activité)) 
+
+saphire.sim <- bind_rows(
+  saphire.sim %>%
+    filter(!(Activité == "Étudiants ou élèves" & Année >= 1968)),
+  saphire.sim %>% 
+    filter(Activité == "Étudiants ou élèves", Année >= 1968) %>%
+    ungroup() %>%
+    mutate(Population = first(Population)),
+  saphire.sim %>% 
+    filter(Activité == "Étudiants ou élèves", Année >= 1968) %>%
+    ungroup() %>%
+    mutate(Population = Population-first(Population)) %>%
+    mutate(Activité = "?(sim)")) %>%
+  mutate(Activité = factor(Activité, levels=c(
+    "Actifs ayant un emploi","Inactifs","Chômeurs","?(sim)","Étudiants ou élèves")
+  )) 
+
+saphire.sim %>%
+  ggplot(aes(x=Année,y=Population, fill=Activité, color=Activité, group=Activité)) + 
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.sim.palette) +
+  scale_color_manual(values=activités.sim.palette) +
+  ylab("Population 16-29 ans (milliers)") +
+  theme_hc()
+```
+
+```{r saphire.sim.data}
+saphire.sim %>% 
+  arrange(Année,Activité) %>%
+  mutate(Population = format(Population*1000,nsmall=0,big.mark=" ")) %>%
+  kableExtra::kable(format="pipe",align="r")
+```
+
+
+
+### GIF
+
+```{r saphire.allpop.gif, cache=TRUE, fig.asp=9/16}
+library(gganimate)
+
+saphire %>%
+  ungroup() %>%
+  filter(Age >=16, Age <=40) %>%
+  group_by(Année,Age,Activité) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  mutate(Population = ceiling(Population)) %>%
+  mutate(Année = as.character(Année)) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité)) +
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc() +
+  ggtitle("Activité des français entre 15 et 50 ans en {closest_state}") +
+  transition_states(Année) 
+```
+
+
+```{r saphire.allpop.gif.col, cache=TRUE, fig.asp=9/16}
+library(gganimate)
+
+saphire %>%
+  ungroup() %>%
+  filter(Age >=16, Age <=40) %>%
+  group_by(Année,Age,Activité) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  summarise(Population = sum(Population)/1000) %>%
+  mutate(Population = ceiling(Population)) %>%
+  mutate(Année = as.character(Année)) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité)) +
+  geom_col(alpha=0.5, color="white", width=1) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  theme_hc() +
+  ggtitle("Activité des français entre 15 et 40 ans en {closest_state}") +
+  transition_states(Année) 
+```
