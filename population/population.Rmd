@@ -41,7 +41,7 @@ t208 %>%
     geom_line() +
     ylab("Taux d'emploi") +
     ggtitle("Taux d'emploi des français entre 25 et 49 ans par niveau de diplôme") +
-    theme_cpesr() + guides(color=guide_legend(ncol=3, title = "")) +
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=3, title = "")) +
     theme(axis.title.x = element_blank())
 
 ```
@@ -55,7 +55,7 @@ t208 %>%
   mutate(Val100 = TXEMPBIT / first(TXEMPBIT) *100) %>%
   ggplot(aes(x=ANNEE5, y=Val100, color=DDIPL, group=DDIPL)) +
     geom_line() +
-    theme_cpesr() + guides(color=guide_legend(ncol=3, title = ""))
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=3, title = ""))
 ```
 
 
@@ -68,7 +68,7 @@ t208 %>%
   mutate(Val100 = TXEMPBIT / first(TXEMPBIT) *100) %>%
   ggplot(aes(x=ANNEE5, y=TXEMPBIT, color=DDIPL, group=DDIPL)) +
     geom_line() +
-    theme_cpesr() + guides(color=guide_legend(ncol=3, title = ""))
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=3, title = ""))
 ```
 
 ```{r chomage.15.d.val100}
@@ -80,7 +80,7 @@ t208 %>%
   mutate(Val100 = TXEMPBIT / first(TXEMPBIT) *100) %>%
   ggplot(aes(x=ANNEE5, y=Val100, color=DDIPL, group=DDIPL)) +
     geom_line() +
-    theme_cpesr() + guides(color=guide_legend(ncol=3, title = ""))
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=3, title = ""))
 ```
 
 
@@ -124,7 +124,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Valeur, fill=Population, group=Population)) +
     geom_area(alpha=0.7, color = "white") +
-    theme_cpesr() + 
+    theme_cpesr_cap() + 
     guides(fill=guide_legend(ncol=1,byrow=TRUE)) +
     ylab("Population (milliers)") +
     theme(axis.title.x = element_blank()) +
@@ -137,7 +137,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Val100, color=Population, group=Population)) +
     geom_line() + geom_point(size=3) +
-    theme_cpesr() + 
+    theme_cpesr_cap() + 
     guides(color=guide_legend(nrow=3,byrow=TRUE)) +
     ylab("Population (valeur 100 en 1980)") +
     theme(axis.title.x = element_blank()) +
@@ -151,7 +151,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Valeur, fill=Population, group=Population)) +
     geom_area(alpha=0.7, color = "white") +
-    theme_cpesr() +
+    theme_cpesr_cap() +
     guides(fill=guide_legend(ncol=2)) +
     theme(legend.position = "bottom")
 ```
@@ -163,7 +163,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Val100, color=Population, group=Population)) +
     geom_line() +
-    theme_cpesr() +
+    theme_cpesr_cap() +
     guides(color=guide_legend(ncol=2)) +
     theme(legend.position = "bottom")
 ```
@@ -175,7 +175,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Val100, color=Population, group=Population)) +
     geom_line() + geom_point(size=3) +
-    theme_cpesr() +
+    theme_cpesr_cap() +
     guides(color=guide_legend(ncol=2)) +
     theme(legend.position = "bottom")
 ```
@@ -189,7 +189,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Val100, color=Population, group=Population)) +
     geom_line() + geom_point(size=3) +
-    theme_cpesr() +
+    theme_cpesr_cap() +
     guides(color=guide_legend(ncol=2)) +
     theme(legend.position = "bottom")
 ```
@@ -201,7 +201,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Valeur, fill=Population, group=Population)) +
     geom_area(alpha=0.7, color = "white") +
-    theme_cpesr() +
+    theme_cpesr_cap() +
     guides(fill=guide_legend(ncol=2)) +
     ylab("Population (milliers)") +
     theme(axis.title.x = element_blank()) +
@@ -216,7 +216,7 @@ pop.etu %>%
   mutate(Population = fct_rev(Population)) %>%
   ggplot(aes(x=Année, y=Val100, color=Population, group=Population)) +
     geom_line() +
-    theme_cpesr() +
+    theme_cpesr_cap() +
     guides(color=guide_legend(ncol=2)) +
     theme(legend.position = "bottom")
 ```
@@ -245,7 +245,7 @@ pop.bit.1529 %>%
   ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
     geom_line() +
     expand_limits(y=0) +
-    theme_cpesr()
+    theme_cpesr_cap()
 ```
 
 
@@ -275,7 +275,7 @@ pop.ensemble.1529 %>%
   ggplot(aes(x=Année,y=Valeur,color=Population,group=Population)) +
   geom_line() +
   expand_limits(y=0) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 ## Les jeunes
@@ -290,7 +290,7 @@ pop.all <- bind_rows(
  pop.all %>%
   ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
     geom_line() +
-    theme_cpesr() + guides(color=guide_legend(ncol=2, title = ""))
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=2, title = ""))
 ```
 
 
@@ -300,7 +300,7 @@ pop.all <- bind_rows(
   ggplot(aes(x=Année, y=Valeur, color=Population, group=Population)) +
     geom_line() +
     expand_limits(y=0) +
-    theme_cpesr() + guides(color=guide_legend(ncol=2, title = ""))
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=2, title = ""))
 ```
 
 ```{r popall.80.val100}  
@@ -310,7 +310,7 @@ pop.all <- bind_rows(
   mutate(val100 = Valeur / first(Valeur) * 100) %>%
   ggplot(aes(x=Année, y=val100, color=Population, group=Population)) +
     geom_line() +
-    theme_cpesr() + guides(color=guide_legend(ncol=2, title = ""))
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=2, title = ""))
 ```
 
 ```{r popall.80.diff}  
@@ -320,7 +320,7 @@ pop.all <- bind_rows(
   mutate(evolution = Valeur - first(Valeur)) %>%
   ggplot(aes(x=Année, y=evolution, color=Population, group=Population)) +
     geom_line() +
-    theme_cpesr() + guides(color=guide_legend(ncol=2, title = ""))
+    theme_cpesr_cap() + guides(color=guide_legend(ncol=2, title = ""))
 ```
 
 
@@ -338,7 +338,7 @@ annees.etu <- pop.all %>%
     scale_fill_brewer(palette = "Paired") +
     scale_color_brewer(palette = "Paired") +
    geom_line(data=pop.all %>% filter(Population == "Ensemble des 15-29") ) +
-    theme_cpesr() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
+    theme_cpesr_cap() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
 ```
 
 
@@ -363,7 +363,7 @@ pop.act.etu %>%
     geom_area(alpha = 0.5) + 
     scale_fill_brewer(palette = "Paired", direction = -1) +
     scale_color_brewer(palette = "Paired", direction = -1) +
-    theme_cpesr() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
+    theme_cpesr_cap() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
 ```
 
 ## Simulation Transfer etu -> innocupés
@@ -391,7 +391,7 @@ pop.act.etu %>%
     geom_area(alpha = 0.5) + 
     scale_fill_brewer(palette = "Paired", direction = -1) +
     scale_color_brewer(palette = "Paired", direction = -1) +
-    theme_cpesr() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
+    theme_cpesr_cap() + guides(fill=guide_legend(ncol=2, title = ""), color=FALSE)
 ```
 
 ## Saphire
@@ -475,7 +475,7 @@ saphire %>%
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
   ylab("Population née entre 1945 et 1960 (milliers)") +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 
@@ -491,7 +491,7 @@ saphire %>%
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
   ylab("Population (milliers)") +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 
@@ -514,7 +514,7 @@ saphire %>%
   expand_limits(y=0) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 ### Toute la population en 2017
@@ -532,7 +532,7 @@ saphire %>%
   expand_limits(y=0) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr() +
+  theme_cpesr_cap() +
   ylab("Population (milliers)") +
   ggtitle("Population française par activité et âge en 2017")
 ```
@@ -549,7 +549,7 @@ saphire %>%
   expand_limits(y=0) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 ```{r saphire.tout.facet}
@@ -566,7 +566,7 @@ saphire %>%
   facet_wrap(.~Année) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 ```{r saphire.tout.facet.2, fig.asp=4/3}
@@ -584,7 +584,7 @@ saphire %>%
   facet_grid(Année~Activité) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 ### Suivi de cohorte
@@ -610,7 +610,7 @@ cohorte <- function(naismin, naismax) {
       scale_x_continuous(name="Age",
                          labels = ~ paste0(.x-naismax,"-",.x-naismin), 
                          breaks = unique(saphire$Année)) +
-      theme_cpesr() +
+      theme_cpesr_cap() +
     ggtitle(paste0("Activité des français nés entre",naismin," et ",naismax))
 }
 
@@ -629,7 +629,7 @@ saphire.1629 %>%
   ggplot(aes(x=Année,y=Population)) + 
   geom_line() +
   expand_limits(y=0) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 
@@ -646,7 +646,7 @@ saphire %>%
   facet_grid(.~Année) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 
@@ -662,7 +662,7 @@ saphire.1629 %>%
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
   ylab("Population 16-29 ans (millions)") +
-  theme_cpesr() +
+  theme_cpesr_cap() +
   theme(axis.title.x = element_blank()) +
   ggtitle("Activité des jeunes français⋅es entre 16 en 29 ans, de 1968 à nos jours")
 ```
@@ -720,7 +720,7 @@ saphire.sim %>%
   scale_fill_manual(values=activités.sim.palette, name="") +
   scale_color_manual(values=activités.sim.palette, name="") +
   ylab("Population 16-29 ans (millions)") +
-  theme_cpesr() +
+  theme_cpesr_cap() +
   theme(axis.title.x = element_blank()) +
   ggtitle("Activité des jeunes français⋅es entre 16 en 29 ans, de 1968 à nos jours") 
 ```
@@ -748,7 +748,7 @@ saphire %>%
   xlim(16,30) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 ```{r saphire.ee.bin}
@@ -765,7 +765,7 @@ saphire %>%
   geom_col(position = position_dodge2()) +
   scale_fill_brewer(palette = "Blues", direction = 0) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 ```{r saphire.ee.agemoyen}
@@ -777,7 +777,7 @@ saphire %>%
   geom_line(aes(group=Activité)) +
   scale_color_manual(values=activités.palette) +
   expand_limits(y=0) +
-  theme_cpesr()
+  theme_cpesr_cap()
 ```
 
 
@@ -794,7 +794,7 @@ saphire %>%
   ggplot(aes(x=Année,y=Population,fill=Diplôme, color=Diplôme)) +
   geom_area(aes(group=Diplôme), color="white", alpha=0.5) +
   expand_limits(y=0) +
-  theme_cpesr()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=3, title = "")) +
+  theme_cpesr_cap()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=3, title = "")) +
   ggtitle("Population française par diplôme (hors élèves et étudiants)") +
   ylab("Population (millions)") +
   theme(axis.title.x = element_blank())
@@ -831,7 +831,7 @@ saphire %>%
     geom_area(aes(group=Diplôme), alpha=0.5, position="fill", color="white") +
     scale_y_continuous(labels=scales::percent) +
     expand_limits(y=0) +
-    theme_cpesr()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=2, title = "")) +
+    theme_cpesr_cap()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=2, title = "")) +
     ggtitle("Répartition par diplôme de la population française entre 25 à 34 ans", subtitle="(hors élèves et étudiants)") +
     ylab("Population (pourcentage)") +
     theme(axis.title.x = element_blank())
@@ -847,7 +847,7 @@ saphire %>%
   ggplot(aes(x=Année,y=Population,fill=Diplôme)) +
   geom_area(aes(group=Diplôme), color="white", alpha=0.5) +
   expand_limits(y=0) +
-  theme_cpesr()  + guides(fill=guide_legend(ncol=2, title = ""))
+  theme_cpesr_cap()  + guides(fill=guide_legend(ncol=2, title = ""))
 ```
 
 ### GIF
@@ -868,7 +868,7 @@ saphire %>%
   expand_limits(y=0) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr() +
+  theme_cpesr_cap() +
   ggtitle("Activité des français entre 15 et 50 ans en {closest_state}") +
   transition_states(Année) 
 ```
@@ -890,7 +890,7 @@ saphire %>%
   expand_limits(y=0) +
   scale_fill_manual(values=activités.palette) +
   scale_color_manual(values=activités.palette) +
-  theme_cpesr() +
+  theme_cpesr_cap() +
   ggtitle("Activité des français entre 15 et 40 ans en {closest_state}") +
   transition_states(Année) 
 ```
