@@ -894,3 +894,64 @@ saphire %>%
   ggtitle("Activité des français entre 15 et 40 ans en {closest_state}") +
   transition_states(Année) 
 ```
+
+
+## Pyramidage étudiants
+
+```{r etu}
+etu <- read.csv2("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv") %>%
+  select(Rentrée = rentree, starts_with("Cycle.universitaire..cursus.LMD")) %>%
+  filter(Rentrée >= 2010) %>%
+  pivot_longer(-Rentrée, names_to = "LMD", values_to = "Population") %>%
+  mutate(LMD=factor(str_sub(LMD,36,36), levels=c("L","M","D"))) %>%
+  group_by(Rentrée, LMD) %>%
+  summarise(Population = sum(Population,na.rm = TRUE)) %>%
+  group_by(LMD) %>%
+  mutate(
+    Val100 = Population / first(Population) * 100,
+    Evolution = Population - first(Population)) %>%
+  mutate(
+    Rentrée = factor(Rentrée),
+    Cycle = LMD) 
+```
+
+
+```{r sise.pyramide.abs}
+etu %>%
+  mutate(Population = Population / 1e3) %>%
+  ggplot(aes(x=Rentrée,y=Population,fill=Cycle, group=Cycle)) +
+  geom_area(color="white") +
+  ylab("Effectifs étudiants (milliers)") +
+  theme_cpesr_cap(source="DataESR")
+```
+
+```{r sise.pyramide.val100}
+etu %>%
+  ggplot(aes(x=Rentrée,y=Val100,color=Cycle, fill=Cycle, group=Cycle)) +
+  geom_line(size=1) + geom_point(size=4, shape=21, color="white") +
+  ylab("Etudiants (valeur 100 en 2010)") +
+  theme_cpesr_cap(source="DataESR") +
+  ggtitle("Evolution des effectifs étudiants du MESRI par cycle de formation")
+```
+
+
+```{r sise.pyramide.evol}
+etu %>%
+  mutate(Evolution = Evolution / 1e3) %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=Cycle, fill=Cycle, group=Cycle)) +
+  geom_line(size=1) + geom_point(size=4, shape=21, color="white", stroke=1) +
+  ylab("Evolution (milliers à partir de 2010)") +
+  theme_cpesr_cap(source="DataESR") +
+  ggtitle("Evolution des effectifs étudiants du MESRI par cycle de formation")
+```
+
+
+```{r sise.pyramide.col}
+etu %>%
+  mutate(Evolution = (Population - lag(Population)) / 1e3) %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=Cycle, fill=Cycle, group=Cycle)) +
+  geom_col(position="dodge") +
+  ylab("Evolution (milliers)") +
+  theme_cpesr_cap(source="DataESR") +
+  ggtitle("Evolution des effectifs étudiants du MESRI par cycle de formation")
+```
