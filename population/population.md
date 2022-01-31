@@ -281,6 +281,10 @@ Plongée dans l’INSEE
 
 ![](population_files/figure-gfm/saphire.allpop.gif.col-1.gif)<!-- -->
 
+![](population_files/figure-gfm/saphire.allpop.gif.col.amort-1.gif)<!-- -->
+
+![](population_files/figure-gfm/saphire.allpop.gif.col.amort.20.29-1.gif)<!-- -->
+
 ## Pyramidage étudiants
 
 ![](population_files/figure-gfm/sise.pyramide.abs-1.png)<!-- -->
