@@ -933,15 +933,22 @@ saphire %>%
   mutate(Activité=factor(Activité, levels=rev(c("Actifs ayant un emploi","Étudiants ou élèves","Chômeurs et inactifs")))) %>%
   summarise(Population = sum(Population)/1000) %>%
   mutate(Population = ceiling(Population)) %>%
-  mutate(Age = as.character(Age)) %>%
-  ggplot(aes(x=Age,y=Population,fill=Activité,color=Activité, group=Activité)) +
+  #mutate(Age = as.character(Age)) %>%
+  ggplot(aes(x=Age,y=Population,fill=Activité, group=Activité)) +
   geom_col(alpha=0.5, color="white", width=1, position="fill") +
+  geom_hline(yintercept = 1.05, color="grey50") +
+  annotate("text",y=1.10,x=scales::rescale(unique(saphire$Année)[-1], from=c(1975,2017), to=c(17.5,28.5)),
+           label=unique(saphire$Année)[-1], color="grey20", vjust=0) +
+  geom_point(aes(x=scales::rescale(Année, from=c(1975,2017), to=c(17.5,28.5))), 
+             y=1.05, color="grey50", size=3, show.legend = FALSE) +
   expand_limits(y=0) +
+  coord_cartesian(clip="off") +
   scale_fill_manual(values=activités.palette[rev(c(1,4,2))]) +
-  scale_color_manual(values=activités.palette) +
-  scale_y_continuous(labels=scales::percent) +
+  #scale_color_manual(values=activités.palette) +
+  scale_y_continuous(breaks=seq(0,1,0.25), labels=scales::percent, name="Proportion de la population") +
+  scale_x_continuous(breaks=seq(18,28)) +
   theme_cpesr_cap() +
-  ggtitle("Activité des français entre 18 et 28 ans en {closest_state}") +
+  ggtitle("Activité des français entre 18 et 28 ans par âge, en {closest_state}") +
   transition_states(Année) 
 ```
 
