@@ -14,9 +14,18 @@ theme_cpesr_setup(authors="Julien Gossa",
                   url="https://github.com/cpesr/RFC/blob/main/population/population.md", 
                   source="INSEE")
 
+spoilerTable <- function(df) {
+  cat("\n<details>\n")
+  cat("  <summary>Voir les données</summary>\n\n")
+  
+  print(kableExtra::kable(df, format="pipe"))
+  
+  cat("\n\n</details>\n")
+}
+
 ```
 
-- T101 Activité, emploi et chômage en 2020 et en séries longues https://www.insee.fr/fr/statistiques/5359497?sommaire=5359511&q=Population+active+au+sens+du+BIT+-%20S%C3%A9ries+longues#consulter
+- Activité, emploi et chômage en 2020 et en séries longues (T101 et T208) : https://www.insee.fr/fr/statistiques/5359500?sommaire=5359511
 - chômage/diplome : https://www.insee.fr/fr/statistiques/4498649?sommaire=4498692&q=Taux+de+ch%C3%B4mage+selon+le+niveau+de+dipl%C3%B4me
 - fm.T6 La situation démographique en 2019 https://www.insee.fr/fr/statistiques/5390418?sommaire=5390468
 - NEET : https://www.insee.fr/fr/statistiques/5346969
@@ -667,7 +676,7 @@ saphire.1629 %>%
   ggtitle("Activité des jeunes français⋅es entre 16 en 29 ans, de 1968 à nos jours")
 ```
 
-```{r saphire.1629.act.data}
+```{r saphire.1629.act.data, results='asis'}
 saphire.1629 %>%
   bind_rows(
     saphire.1629 %>%
@@ -688,7 +697,7 @@ saphire.1629 %>%
   mutate(Val100 = round(Population / first(Population) * 100),
          Différence = round(Population - first(Population))) %>%
   mutate(Population = format(Population*1000,nsmall=0,big.mark=" ")) %>%
-  kableExtra::kable(format="pipe",align="r")
+  spoilerTable()
 ```
 
 ```{r saphire.1629.sim}
@@ -725,11 +734,13 @@ saphire.sim %>%
   ggtitle("Activité des jeunes français⋅es entre 16 en 29 ans, de 1968 à nos jours") 
 ```
 
-```{r saphire.sim.data}
+```{r saphire.sim.data, results='asis'}
 saphire.sim %>% 
   arrange(Année,Activité) %>%
-  mutate(Population = format(Population*1000,nsmall=0,big.mark=" ")) %>%
-  kableExtra::kable(format="pipe",align="r")
+  group_by(Année) %>%
+  mutate(Part = scales::percent(Population / sum(Population))) %>%
+  spoilerTable()
+
 ```
 
 
@@ -800,7 +811,7 @@ saphire %>%
   theme(axis.title.x = element_blank())
 ```
 
-```{r saphire.dipl.data}
+```{r saphire.dipl.data, results='asis'}
 saphire %>%
   filter(Diplôme != "Personnes de moins de 15 ans (17 ans pour le RP 1975) ou étudiants - élèves") %>%
   mutate(Diplôme = fct_drop(Diplôme)) %>%
@@ -813,7 +824,25 @@ saphire %>%
     val100 = round(Population / first(Population) * 100),
     evol = Population - first(Population)) %>%
   mutate(Population = format(Population,nsmall=0,big.mark=" ")) %>%
-  kableExtra::kable(format="pipe",align="r")
+  spoilerTable()
+```
+
+```{r saphire.dipl.fill}
+saphire %>%
+  filter(Diplôme != "Personnes de moins de 15 ans (17 ans pour le RP 1975) ou étudiants - élèves") %>%
+  mutate(Diplôme = fct_drop(Diplôme)) %>%
+  group_by(Année,Diplôme) %>%
+  summarise(Population= round(sum(Population) / 1000)) %>%
+  complete(Année,Diplôme,fill=list(Population=0)) %>% 
+  mutate(Diplôme = fct_rev(Diplôme)) %>%
+  ggplot(aes(x=Année,y=Population,fill=Diplôme, color=Diplôme)) +
+    geom_area(aes(group=Diplôme), alpha=0.5, position="fill", color="white") +
+    scale_y_continuous(labels=scales::percent) +
+    expand_limits(y=0) +
+    theme_cpesr_cap()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=2, title = "")) +
+    ggtitle("Répartition par diplôme de la population française", subtitle="(hors élèves et étudiants)") +
+    ylab("Population (pourcentage)") +
+    theme(axis.title.x = element_blank())
 ```
 
 
@@ -836,6 +865,21 @@ saphire %>%
     ylab("Population (pourcentage)") +
     theme(axis.title.x = element_blank())
 ```
+
+```{r saphire.dipl.16.29.data, results='asis'}
+saphire %>%
+  filter(Diplôme != "Personnes de moins de 15 ans (17 ans pour le RP 1975) ou étudiants - élèves") %>%
+  mutate(Diplôme = fct_drop(Diplôme)) %>%
+  filter(Age >= 25, Age <35) %>%
+  group_by(Année,Diplôme) %>%
+  summarise(Population= round(sum(Population) / 1000)) %>%
+  complete(Année,Diplôme,fill=list(Population=0)) %>% 
+  mutate(Diplôme = fct_rev(Diplôme)) %>%
+  group_by(Année) %>%
+  mutate(Part = scales::percent(Population / sum(Population))) %>%
+  spoilerTable()
+```
+
 
 ```{r saphire.dipl.30.39}
 saphire %>%
