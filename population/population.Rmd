@@ -545,6 +545,7 @@ saphire %>%
   ylab("Population (milliers)") +
   ggtitle("Population française par activité et âge en 2017")
 ```
+
 ```{r saphire.allpop.2017.col}
 saphire %>%
   ungroup() %>%
@@ -741,6 +742,40 @@ saphire.sim %>%
   mutate(Part = scales::percent(Population / sum(Population))) %>%
   spoilerTable()
 
+```
+
+```{r saphire.1624.act}
+saphire %>%
+  filter(Age>=16,Age<=24) %>%
+  group_by(Année,Activité) %>%
+  summarise(Population = sum(Population)/1000000) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  ggplot(aes(x=Année,y=Population, fill=Activité, color=Activité, group=Activité)) + 
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  ylab("Population 16-29 ans (millions)") +
+  theme_cpesr_cap() +
+  theme(axis.title.x = element_blank()) +
+  ggtitle("Activité des jeunes français⋅es entre 16 en 24 ans, de 1968 à nos jours")
+```
+
+```{r saphire.2629.act}
+saphire %>%
+  filter(Age>=25,Age<=29) %>%
+  group_by(Année,Activité) %>%
+  summarise(Population = sum(Population)/1000000) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  ggplot(aes(x=Année,y=Population, fill=Activité, color=Activité, group=Activité)) + 
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  ylab("Population 16-29 ans (millions)") +
+  theme_cpesr_cap() +
+  theme(axis.title.x = element_blank()) +
+  ggtitle("Activité des jeunes français⋅es entre 25 en 29 ans, de 1968 à nos jours")
 ```
 
 

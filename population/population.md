@@ -89,6 +89,7 @@ Plongée dans l’INSEE
 ### Toute la population en 2017
 
 ![](population_files/figure-gfm/saphire.allpop.2017-1.png)<!-- -->
+
 ![](population_files/figure-gfm/saphire.allpop.2017.col-1.png)<!-- -->
 
 ![](population_files/figure-gfm/saphire.tout.facet-1.png)<!-- -->
@@ -216,6 +217,10 @@ Voir les données
 |  2017 | Étudiants ou élèves    |  1.7510000 | 17.3%  |
 
 </details>
+
+![](population_files/figure-gfm/saphire.1624.act-1.png)<!-- -->
+
+![](population_files/figure-gfm/saphire.2629.act-1.png)<!-- -->
 
 ### Etudiants ou élèves
 
