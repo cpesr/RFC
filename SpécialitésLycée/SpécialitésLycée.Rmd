@@ -176,6 +176,8 @@ stat.cospe()
 
 ## Parcoursup
 
+https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-enseignements-de-specialite-bacheliers-generaux/information/
+
 ```{r pspeload}
 
 spés <- list(
@@ -303,3 +305,53 @@ pspe %>%
   scale_fill_manual(values=type.pal) +
   theme_cpesr()
 ```
+
+
+```{r pspe.for, fig.height=10, fig.width=7}
+pspe %>% 
+  #filter(Formation != "Ensemble des candidats bacheliers" ) %>%
+  group_by(Formation) %>%
+  summarise(across(c(Candidatures,Propositions,Admissions),sum)) %>%
+  mutate(
+    Proposition.acceptée = Admissions,
+    Proposition.refusée = Propositions - Admissions,
+    Sans.proposition = Candidatures - Propositions
+  ) %>%
+  mutate(Taux.admission=Admissions/Candidatures) %>%
+  pivot_longer(c(Proposition.acceptée, Proposition.refusée, Sans.proposition), names_to = "Type", values_to = "Nombre") %>%
+  mutate(Type = fct_rev(factor(Type,
+                       levels=c("Proposition.acceptée","Proposition.refusée","Sans.proposition"),
+                       labels=c("Proposition acceptée","Proposition refusée","Sans proposition")))) %>% 
+  ggplot(aes(x=reorder(Formation,Taux.admission),y=Nombre)) +
+  geom_col(aes(fill=Type),position="fill") +
+  geom_text(data= . %>% select(Formation,Taux.admission,Candidatures) %>% unique(), y=0.5,
+    aes(label=format(Candidatures, big.mark=" ")),stat="unique", size=3, color="white", hjust=1) +
+  coord_flip() +
+  scale_fill_manual(values=type.pal) +
+  theme_cpesr() + theme(legend.justification='right')
+```
+
+```{r pspe.for.sans, fig.height=10, fig.width=7}
+pspe %>% 
+  #filter(Formation != "Ensemble des candidats bacheliers" ) %>%
+  group_by(Formation) %>%
+  summarise(across(c(Candidatures,Propositions,Admissions),sum)) %>%
+  mutate(
+    Proposition.acceptée = Admissions,
+    Proposition.refusée = Propositions - Admissions,
+    Sans.proposition = Candidatures - Propositions
+  ) %>%
+  mutate(Taux.proposition=Propositions/Candidatures) %>%
+  pivot_longer(c(Proposition.acceptée, Proposition.refusée, Sans.proposition), names_to = "Type", values_to = "Nombre") %>%
+  mutate(Type = fct_rev(factor(Type,
+                       levels=c("Proposition.acceptée","Proposition.refusée","Sans.proposition"),
+                       labels=c("Proposition acceptée","Proposition refusée","Sans proposition")))) %>% 
+  ggplot(aes(x=reorder(Formation,-Taux.proposition),y=Nombre)) +
+  geom_col(aes(fill=Type),position="fill") +
+  geom_text(data= . %>% select(Formation,Taux.proposition,Candidatures) %>% unique(), y=0.5,
+    aes(label=format(Candidatures, big.mark=" ")),stat="unique", size=3, color="white", hjust=1) +
+  coord_flip() +
+  scale_fill_manual(values=type.pal) +
+  theme_cpesr()  + theme(legend.justification='right')
+```
+

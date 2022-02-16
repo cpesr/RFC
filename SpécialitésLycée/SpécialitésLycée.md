@@ -25,6 +25,8 @@ visualisations ?*
 
 ## Parcoursup
 
+<https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-enseignements-de-specialite-bacheliers-generaux/information/>
+
 ![](SpécialitésLycée_files/figure-gfm/pspe.tp-1.png)<!-- -->
 
 ![](SpécialitésLycée_files/figure-gfm/pspe.ta-1.png)<!-- -->
@@ -34,3 +36,7 @@ visualisations ?*
 ![](SpécialitésLycée_files/figure-gfm/pspe.all.spe-1.png)<!-- -->
 
 ![](SpécialitésLycée_files/figure-gfm/pspe.all.all-1.png)<!-- -->
+
+![](SpécialitésLycée_files/figure-gfm/pspe.for-1.png)<!-- -->
+
+![](SpécialitésLycée_files/figure-gfm/pspe.for.sans-1.png)<!-- -->
