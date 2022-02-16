@@ -174,4 +174,132 @@ stat.cospe()
 ```
 
 
+## Parcoursup
 
+```{r pspeload}
+
+spés <- list(
+  "Arts"="Arts", 
+  "Biologie-Ecologie"="Bio-Eco", 
+  "Humanités, Littérature et Philosophie" = "Humanités", 
+  "Histoire,Géographie, Géopolitique, Sciences politiques" = "Histoire-Géo.", 
+  "Littératures, langues et culture de l'antiquité" = "LLCA",
+  "Langues, Littératures et Cultures Etrangères et Régionales" = "LLCER", 
+  "Mathématiques" = "Math.", 
+  "Numérique et Sciences Informatiques" = "NSI", 
+  "Physique-Chimie" = "PC", 
+  "Sciences économiques et sociales" = "SES", 
+  "Sciences de la vie et de la terre" = "SVT",
+  "Sciences de l'ingénieur" = "SI")
+
+pspe <- read.csv2("fr-esr-parcoursup-enseignements-de-specialite-bacheliers-generaux.csv", dec = ".") %>%
+  setNames(c("Spécialités","Formation","Candidatures","Propositions","Admissions")) %>%
+  mutate(
+    Taux.proposition = Propositions/Candidatures,
+    Taux.admission = Admissions/Candidatures 
+  ) %>%
+  separate(Spécialités,into=c("Spécialité.1","Spécialité.2"),sep="&",remove=FALSE) %>%
+  mutate(
+   Spécialité.1 = factor(Spécialité.1,levels=names(spés),labels=spés),
+   Spécialité.2 = factor(Spécialité.2,levels=names(spés),labels=spés),
+  ) %>%
+  mutate(
+    Spécialités = paste0(Spécialité.1," & ",Spécialité.2)
+  )
+
+type.pal = RColorBrewer::brewer.pal(6,"Paired")[c(6,5,4)]
+  
+```
+
+
+```{r pspe.tp, fig.height=6, fig.width=5}
+pspe %>% 
+  filter(Formation == "Ensemble des candidats bacheliers" ) %>%
+  filter(Candidatures > 100) %>%
+  ggplot(aes(x=reorder(Spécialités,Taux.proposition,FUN=median),y=Taux.proposition)) +
+  geom_point() +
+  coord_flip() +
+  theme_cpesr()
+```
+
+```{r pspe.ta, fig.height=6, fig.width=5}
+pspe %>% 
+  filter(Formation == "Ensemble des candidats bacheliers" ) %>%
+  filter(Candidatures > 100) %>%
+  ggplot(aes(x=reorder(Spécialités,Taux.admission,FUN=median),y=Taux.admission)) +
+  geom_point() +
+  coord_flip() +
+  theme_cpesr()
+```
+
+```{r pspe.all, fig.height=10, fig.width=7}
+pspe %>% 
+  filter(Formation == "Ensemble des candidats bacheliers" ) %>%
+  mutate(
+    Proposition.acceptée = Admissions,
+    Proposition.refusée = Propositions - Admissions,
+    Sans.proposition = Candidatures - Propositions
+  ) %>%
+  pivot_longer(c(Proposition.acceptée, Proposition.refusée, Sans.proposition), names_to = "Type", values_to = "Nombre") %>%
+  mutate(Type = fct_rev(factor(Type,
+                       levels=c("Proposition.acceptée","Proposition.refusée","Sans.proposition"),
+                       labels=c("Proposition acceptée","Proposition refusée","Sans proposition")))) %>%
+  #filter(Candidatures > 100) %>%
+  mutate(vj = case_when(Type == "Proposition acceptée" ~ 0, Type=="Proposition refusée" ~ 1, TRUE ~ 1)) %>%
+  ggplot(aes(x=reorder(Spécialités,Taux.admission,FUN=median),y=Nombre)) +
+  geom_col(aes(fill=Type),position="fill") +
+  geom_text(data= . %>% select(Spécialités,Taux.admission,Candidatures) %>% unique(), y=0.5,
+    aes(label=format(Candidatures, big.mark=" ")),stat="unique", size=3, color="white", hjust=1) +
+  coord_flip() +
+  scale_fill_manual(values=type.pal) +
+  theme_cpesr()
+```
+
+```{r pspe.all.spe, fig.height=6, fig.width=7}
+pspe %>% 
+  filter(Formation == "Ensemble des candidats bacheliers" ) %>%
+  pivot_longer(c(Spécialité.1,Spécialité.2),names_to = "Spé", values_to = "Spécialité") %>%
+  group_by(Spécialité) %>%
+  summarise(across(c(Candidatures,Propositions,Admissions),sum)) %>%
+  mutate(Taux.admission=Admissions/Candidatures) %>%
+  mutate(
+    Proposition.acceptée = Admissions,
+    Proposition.refusée = Propositions - Admissions,
+    Sans.proposition = Candidatures - Propositions
+  ) %>%
+  ungroup() %>%
+  pivot_longer(c(Proposition.acceptée, Proposition.refusée, Sans.proposition), names_to = "Type", values_to = "Nombre") %>%
+  mutate(Type = fct_rev(factor(Type,
+                       levels=c("Proposition.acceptée","Proposition.refusée","Sans.proposition"),
+                       labels=c("Proposition acceptée","Proposition refusée","Sans proposition")))) %>% 
+  ggplot(aes(x=reorder(Spécialité,Taux.admission),y=Nombre)) +
+  geom_col(aes(fill=Type),position="fill") +
+  geom_text(data= . %>% select(Spécialité,Taux.admission,Candidatures) %>% unique(), y=0.5,
+    aes(label=format(Candidatures, big.mark=" ")),stat="unique", size=3, color="white", hjust=1) +
+  coord_flip() +
+  scale_fill_manual(values=type.pal) +
+  theme_cpesr()
+```
+
+
+
+```{r pspe.all.all}
+pspe %>% 
+  filter(Formation == "Ensemble des candidats bacheliers" ) %>%
+  summarise(across(c(Candidatures,Propositions,Admissions),sum)) %>%
+  mutate(
+    Proposition.acceptée = Admissions,
+    Proposition.refusée = Propositions - Admissions,
+    Sans.proposition = Candidatures - Propositions
+  ) %>%
+  pivot_longer(c(Proposition.acceptée, Proposition.refusée, Sans.proposition), names_to = "Type", values_to = "Nombre") %>%
+  mutate(Type = fct_rev(factor(Type,
+                       levels=c("Proposition.acceptée","Proposition.refusée","Sans.proposition"),
+                       labels=c("Proposition acceptée","Proposition refusée","Sans proposition")))) %>%
+  ggplot(aes(x=Type,y=Nombre,fill=Type)) +
+  geom_col() +
+  coord_flip() +
+  geom_text(aes(label=Nombre),position=position_stack(vjust = .5), size=3) +
+  scale_fill_manual(values=type.pal) +
+  theme_cpesr()
+```

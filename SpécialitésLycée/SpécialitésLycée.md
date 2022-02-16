@@ -5,8 +5,8 @@ Choix spécialités Lycée
 
 Les données accompagnent les notes de la DEPP :
 
-  - <https://www.education.gouv.fr/choix-de-trois-specialites-en-premiere-generale-la-rentree-2019-15-combinaisons-pour-80-des-eleves-3245>
-  - <https://www.education.gouv.fr/la-rentree-2020-les-eleves-de-terminale-precisent-leur-choix-de-parcours-307016>
+-   <https://www.education.gouv.fr/choix-de-trois-specialites-en-premiere-generale-la-rentree-2019-15-combinaisons-pour-80-des-eleves-3245>
+-   <https://www.education.gouv.fr/la-rentree-2020-les-eleves-de-terminale-precisent-leur-choix-de-parcours-307016>
 
 ### Test Maths
 
@@ -22,3 +22,15 @@ visualisations ?*
 ![](SpécialitésLycée_files/figure-gfm/SES.global-1.png)<!-- -->
 
 ![](SpécialitésLycée_files/figure-gfm/SES.cospe-1.png)<!-- -->
+
+## Parcoursup
+
+![](SpécialitésLycée_files/figure-gfm/pspe.tp-1.png)<!-- -->
+
+![](SpécialitésLycée_files/figure-gfm/pspe.ta-1.png)<!-- -->
+
+![](SpécialitésLycée_files/figure-gfm/pspe.all-1.png)<!-- -->
+
+![](SpécialitésLycée_files/figure-gfm/pspe.all.spe-1.png)<!-- -->
+
+![](SpécialitésLycée_files/figure-gfm/pspe.all.all-1.png)<!-- -->

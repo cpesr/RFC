@@ -269,6 +269,7 @@ read_annee <- function(annee, min=15, max=29) {
     summarize(Valeur = sum(as.numeric(...3), na.rm=TRUE))
 }
 
+
 pop.ensemble.1529 <- tibble()
 for(annee in readxl::excel_sheets("fm_t6.xlsx")) {
   pop.ensemble.1529 <- bind_rows(pop.ensemble.1529,read_annee(annee))
@@ -409,14 +410,14 @@ https://www.insee.fr/fr/statistiques/4995124?sommaire=2414232
 
 ```{r saphire, eval=FALSE}
 
-saphire.var <- read.csv2("Varmod_RP_1968-2017.csv")
+saphire.var <- read.csv2("Varmod_RP_1968-2018.csv")
 factorize <- function(x,f) {
   lvl <- saphire.var %>% filter(COD_VAR == f)
   factor(x, levels = lvl$COD_MOD, labels = lvl$LIB_MOD)
 }
 
 
-saphire <- data.table::fread("FD_RP_1968-2017.csv", header = T) %>%
+saphire <- data.table::fread("FD_RP_1968-2018.csv", header = T) %>%
   tibble() %>%
   select(AN_RECENS,AGE_REV,SEXE,DIPL,NES4,NATIO,TYP_ACT,CSP,POND) %>%
   group_by(AN_RECENS,AGE_REV,SEXE,DIPL,NES4,NATIO,TYP_ACT,CSP) %>%
@@ -440,7 +441,7 @@ save(saphire, file="saphire.RData")
 ```
 
 ```{r saphire.load}
-load("saphire.RData")
+load("saphire-2017.RData")
 saphire <- saphire %>%
   mutate(
     Activité = fct_recode(Activité,
@@ -464,7 +465,7 @@ saphire.1629 <- saphire %>%
 activités.palette <- RColorBrewer::brewer.pal(8,"Paired")[c(2,8,7,4,3)]
 activités.sim.palette <- RColorBrewer::brewer.pal(10,"Paired")[c(2,8,7,9,4)]
 
-  
+saphire.last.année <- max(saphire$Année)
 ```
 
 
@@ -526,9 +527,9 @@ saphire %>%
   theme_cpesr_cap()
 ```
 
-### Toute la population en 2017
+### Toute la population à la dernière année
 
-```{r saphire.allpop.2017}
+```{r saphire.allpop.last}
 saphire %>%
   ungroup() %>%
   filter(Année == max(Année),Age >=15, Age <=100) %>%
@@ -543,10 +544,10 @@ saphire %>%
   scale_color_manual(values=activités.palette) +
   theme_cpesr_cap() +
   ylab("Population (milliers)") +
-  ggtitle("Population française par activité et âge en 2017")
+  ggtitle(paste("Population française par activité et âge",saphire.last.année))
 ```
 
-```{r saphire.allpop.2017.col}
+```{r saphire.allpop.last.col}
 saphire %>%
   ungroup() %>%
   filter(Année == max(Année),Age >=15, Age <=100) %>%
@@ -934,6 +935,7 @@ saphire %>%
 ```{r saphire.allpop.gif, cache=TRUE, fig.asp=9/16}
 library(gganimate)
 
+
 saphire %>%
   ungroup() %>%
   filter(Age >=16, Age <=40) %>%
@@ -960,6 +962,7 @@ saphire %>%
 ```{r saphire.allpop.gif.col, cache=TRUE, fig.asp=9/16}
 library(gganimate)
 
+
 saphire %>%
   ungroup() %>%
   filter(Age >=16, Age <=40) %>%
@@ -980,6 +983,7 @@ saphire %>%
 
 ```{r saphire.allpop.gif.col.amort, cache=TRUE, fig.asp=9/16}
 library(gganimate)
+
 
 saphire %>%
   ungroup() %>%
@@ -1003,6 +1007,7 @@ saphire %>%
 ```{r saphire.allpop.gif.col.amort.20.29, cache=TRUE, fig.asp=9/16}
 library(gganimate)
 
+
 saphire %>%
   ungroup() %>%
   filter(Année >=1975) %>%
@@ -1016,9 +1021,9 @@ saphire %>%
   ggplot(aes(x=Age,y=Population,fill=Activité, group=Activité)) +
   geom_col(alpha=0.5, color="white", width=1, position="fill") +
   geom_hline(yintercept = 1.05, color="grey50") +
-  annotate("text",y=1.10,x=scales::rescale(unique(saphire$Année)[-1], from=c(1975,2017), to=c(17.5,28.5)),
+  annotate("text",y=1.10,x=scales::rescale(unique(saphire$Année)[-1], from=c(1975,saphire.last.année), to=c(17.5,28.5)),
            label=unique(saphire$Année)[-1], color="grey20", vjust=0) +
-  geom_point(aes(x=scales::rescale(Année, from=c(1975,2017), to=c(17.5,28.5))), 
+  geom_point(aes(x=scales::rescale(Année, from=c(1975,saphire.last.année), to=c(17.5,28.5))), 
              y=1.05, color="grey50", size=3, show.legend = FALSE) +
   expand_limits(y=0) +
   coord_cartesian(clip="off") +
@@ -1079,6 +1084,12 @@ etu %>%
   ylab("Evolution (milliers à partir de 2010)") +
   theme_cpesr_cap(source="DataESR") +
   ggtitle("Evolution des effectifs étudiants du MESRI par cycle de formation")
+```
+
+```{r sise.pyramide.evol.data, results='asis'}
+etu %>%
+  mutate(Evolution = Evolution / 1e3) %>%
+  spoilerTable()
 ```
 
 
