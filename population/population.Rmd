@@ -878,7 +878,7 @@ saphire %>%
     theme_cpesr_cap()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=2, title = "")) +
     ggtitle("Répartition par diplôme de la population française", subtitle="(hors élèves et étudiants)") +
     ylab("Population (pourcentage)") +
-    theme(axis.title.x = element_blank())
+    theme(axis.title.x = element_blank()) 
 ```
 
 
@@ -899,7 +899,7 @@ saphire %>%
     theme_cpesr_cap()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=2, title = "")) +
     ggtitle("Répartition par diplôme de la population française entre 25 à 34 ans", subtitle="(hors élèves et étudiants)") +
     ylab("Population (pourcentage)") +
-    theme(axis.title.x = element_blank())
+    theme(axis.title.x = element_blank()) # + labs(caption="Julien Gossa - SNESUP-FSU  Source : base SAPHIRE INSEE\nhttps://github.com/cpesr/RFC/blob/main/population/population.md")
 ```
 
 ```{r saphire.dipl.16.29.data, results='asis'}
