@@ -1,6 +1,5 @@
 ---
-title: \vspace{-2.5cm} Proposition de stage en démographie - Exploration des données démographiques sur la transition formation/emploi
-author: "Julien Gossa, MCF, laboratoire SAGE"
+title: \vspace{-2.5cm} Proposition de stage en démographie
 output: 
      pdf_document:
          latex_engine: xelatex
@@ -35,8 +34,8 @@ theme_cpesr_setup(authors="Julien Gossa",
 ## Contexte 
 
 Notre équipe travaille à la conception d'une méthodologie pour éclairer l'action 
-publique par l'exploitation des données ouvertes. Ces données sont de tout ordre 
-et nature, comme en témoignent celles qui se trouvent sur le portail [data.gouv.fr](data.gouv.fr).
+publique par l'exploitation des données ouvertes. Ces données sont de tous ordres 
+et natures, comme en témoignent celles qui se trouvent sur le portail [data.gouv.fr](data.gouv.fr).
 Nous sommes plus particulièrement spécialisés dans les données de l'ESR 
 (Enseignement supérieur et recherche), et qui concernent donc par exemple les 
 universités et les étudiants. Ces données sont généralement disponibles depuis une dizaine d'années.
@@ -55,7 +54,7 @@ sortiraient plus tôt du système éducation ; lorsque les emplois sont rares, l
 prolongeraient leurs études.
 
 
-```{r saphire, fig.cap="Activité des jeunes entre 16 en 24 ans, depuis 1968", out.width="70%", fig.align='center'}
+```{r saphire, fig.cap="Activité des jeunes entre 16 en 24 ans, depuis 1968", out.width="100%", fig.align='center'}
 load("saphire-2017.RData")
 saphire <- saphire %>%
   mutate(
@@ -106,6 +105,7 @@ et de visualisation de cette articulation.
 ## Supervision
 
 La ou le stagiaire sera supervisé⋅e par :
+
 - Julien Gossa, Maître de conférences en informatique ;
 - Pauline Boyer, Doctorante en sciences politiques et sciences des données.
 
