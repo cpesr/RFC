@@ -1,0 +1,121 @@
+---
+title: \vspace{-2.5cm} Proposition de stage en démographie - Exploration des données démographiques sur la transition formation/emploi
+author: "Julien Gossa, MCF, laboratoire SAGE"
+output: 
+     pdf_document:
+         latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(fig.asp=9/16)
+knitr::opts_chunk$set(dev = "cairo_pdf")
+
+library(tidyverse)
+library(ggthemes)
+
+library(ggcpesrthemes)
+theme_cpesr_setup(authors="Julien Gossa",
+                  url="https://github.com/cpesr/RFC/blob/main/population/population.md", 
+                  source="INSEE")
+
+```
+
+\vspace{-1cm}
+
+| Titre du stage | Exploration des données démographiques sur la transition formation/emploi |
+|---|---|
+| Laboratoire | SAGE |
+| Encadrement | Julien Gossa et Pauline Boyer |
+| Durée | 6 à 12 semaines |
+| Gratification | selon la legislation en vigueur |
+| Lieu | MISHA ou en télé-travail |
+| Outils | R et GIT |
+
+## Contexte 
+
+Notre équipe travaille à la conception d'une méthodologie pour éclairer l'action 
+publique par l'exploitation des données ouvertes. Ces données sont de tout ordre 
+et nature, comme en témoignent celles qui se trouvent sur le portail [data.gouv.fr](data.gouv.fr).
+Nous sommes plus particulièrement spécialisés dans les données de l'ESR 
+(Enseignement supérieur et recherche), et qui concernent donc par exemple les 
+universités et les étudiants. Ces données sont généralement disponibles depuis une dizaine d'années.
+
+Ce travail nécessite une mise en contexte sur un plus long terme, permettant de 
+mieux saisir quelles sont les évolutions historiques de notre appareil de formation.
+C'est dans ce cadre que nous avons effectué une exploitation exploratoire de la 
+base SAPHIRE de l'INSEE, regroupant notamment des données issues de l'enquête emploi.
+L'objectif est de visualiser la massification (l'augmentation du nombre d'étudiants)
+et son rapport avec l'insertion professionnelle (donc l'emploi des jeunes).
+
+Cette exploitation révèle une remarquable constance des jeunes chômeurs et inactifs (Figure 1).
+Cela permet de soulever l'hypothèse d'un rôle d'« amortisseur » de la formation 
+entre la jeunesse et l'emploi : lorsque des emplois sont disponibles, les jeunes
+sortiraient plus tôt du système éducation ; lorsque les emplois sont rares, les jeunes
+prolongeraient leurs études.
+
+
+```{r saphire, fig.cap="Activité des jeunes entre 16 en 24 ans, depuis 1968", out.width="70%", fig.align='center'}
+load("saphire-2017.RData")
+saphire <- saphire %>%
+  mutate(
+    Activité = fct_recode(Activité,
+      "Actifs ayant un emploi" = "Militaires du contingent",
+      "Inactifs" = "Anciens actifs",
+      "Inactifs" = "Autres inactifs"),
+    ) %>%
+  mutate(Activité = factor(Activité,levels=c(
+    "Actifs ayant un emploi","Chômeurs","Inactifs","Étudiants ou élèves"
+  ))) %>%
+  filter(Nationalité %in% c("Français de naissance","Français par acquisition")) %>%
+  group_by(Année,Age,Sexe,Diplôme,Secteur.activité,Activité,CSP) %>%
+  summarise(Population = sum(Population)) %>%
+  ungroup()
+
+activités.palette <- RColorBrewer::brewer.pal(8,"Paired")[c(2,8,7,4,3)]
+activités.sim.palette <- RColorBrewer::brewer.pal(10,"Paired")[c(2,8,7,9,4)]
+
+saphire.last.année <- max(saphire$Année)
+
+saphire %>%
+  filter(Age>=16,Age<=24) %>%
+  group_by(Année,Activité) %>%
+  summarise(Population = sum(Population)/1000000) %>%
+  #mutate(Activité=fct_rev(Activité)) %>%
+  ggplot(aes(x=Année,y=Population, fill=Activité, color=Activité, group=Activité)) + 
+  geom_area(alpha=0.5) +
+  expand_limits(y=0) +
+  scale_fill_manual(values=activités.palette) +
+  scale_color_manual(values=activités.palette) +
+  ylab("Population 16-29 ans (millions)") +
+  theme_cpesr_cap() +
+  theme(axis.title.x = element_blank()) +
+  ggtitle("Activité des jeunes français⋅es entre 16 en 24 ans, depuis 1968")
+```
+
+## Sujet du stage
+
+L'objectif de ce stage est de confirmer ou infirmer cette hypothèse, en exploitant 
+des données plus précises que celles de la base SAPHIRE, et notamment celles 
+des enquêtes emplois de l'INSEE, ou en étendant l'investigation à d'autres données.
+
+Le stage sera aussi l'occasion d'explorer plus largement l'articulation entre 
+jeunesse, formation et emploi, et de tenter de trouver des moyens de caractérisation
+et de visualisation de cette articulation.
+
+## Supervision
+
+La ou le stagiaire sera supervisé⋅e par :
+- Julien Gossa, Maître de conférences en informatique ;
+- Pauline Boyer, Doctorante en sciences politiques et sciences des données.
+
+L'encadrement sera donc double, en sciences des données et en sciences politiques. 
+Le ou la stagiaire apportera ses compétences en démographie.
+
+Les travaux devront être réalisés en Rmarkdown, pour lequel la ou le stagiaire
+bénéficiera d'une formation et d'un appui technique pour maîtriser le processus 
+d'exploration/exploitation/publication des données et résultats.
+
+## Lien vers l'exploitation exploratoire
+
+https://github.com/cpesr/RFC/blob/main/population/population.md
