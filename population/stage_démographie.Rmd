@@ -26,6 +26,7 @@ theme_cpesr_setup(authors="Julien Gossa",
 |---|---|
 | Laboratoire | SAGE |
 | Encadrement | Julien Gossa et Pauline Boyer |
+| Contact | gossa@unistra.fr |
 | Durée | 6 à 12 semaines |
 | Gratification | selon la legislation en vigueur |
 | Lieu | MISHA ou en télé-travail |
@@ -45,7 +46,7 @@ mieux saisir quelles sont les évolutions historiques de notre appareil de forma
 C'est dans ce cadre que nous avons effectué une exploitation exploratoire de la 
 base SAPHIRE de l'INSEE, regroupant notamment des données issues de l'enquête emploi.
 L'objectif est de visualiser la massification (l'augmentation du nombre d'étudiants)
-et son rapport avec l'insertion professionnelle (donc l'emploi des jeunes).
+et son rapport avec l'insertion professionnelle, donc l'emploi des jeunes.
 
 Cette exploitation révèle une remarquable constance des jeunes chômeurs et inactifs (Figure 1).
 Cela permet de soulever l'hypothèse d'un rôle d'« amortisseur » de la formation 
