@@ -26,6 +26,42 @@ theme_cpesr_setup(authors=c("Julien Gossa"),
 
 _Ce document est un brouillon de différentes visualisations. Il a seulement vocation à permettre la discussion. Les observations et propositions peuvent être ajoutées [en issues](https://github.com/cpesr/RFC/issues)._
 
+
+## Contexte
+
+```{r contexte}
+kpiESR::esr.pnl %>%
+  filter(Groupe == "Ensemble") %>%
+  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
+  mutate(kpi=factor(kpi,
+                    levels=c("kpi.ENS.S.titulaires","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
+                    labels=c("Enseignants\ntitulaires","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
+  ggplot(aes(x=Rentrée,y=evolution,color=kpi,fill=kpi)) +
+  geom_line(aes(group=kpi)) +
+  geom_point(shape=21,size=3,stroke=2,color="white") +
+  scale_color_brewer(palette="Paired") +
+  scale_fill_brewer(palette="Paired") +
+  theme_cpesr_cap()
+```
+
+### Universités
+
+```{r contexte.univ}
+kpiESR::esr.pnl %>%
+  filter(Etablissement == "Universités et assimilés") %>%
+  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
+  mutate(kpi=factor(kpi,
+                    levels=c("kpi.ENS.S.titulaires","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
+                    labels=c("Enseignants\ntitulaires","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
+  ggplot(aes(x=Rentrée,y=evolution,color=kpi,fill=kpi)) +
+  geom_line(aes(group=kpi)) +
+  geom_point(shape=21,size=3,stroke=2,color="white") +
+  scale_color_brewer(palette="Paired") +
+  scale_fill_brewer(palette="Paired") +
+  theme_cpesr_cap()
+```
+
+
 ## Description des données 
 
 ```{r fix.data}
@@ -50,12 +86,12 @@ etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-pa
   filter(Attention != "* Attention : doubles comptes, établissement-composante") %>%
   transmute(
     UAI = recode(Identifiant.s..UAI, !!!uais.etu),
-    Type.établissement.etu = Type.d.établissement,
     Rentrée = rentree,
     Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE) %>%
-  group_by(Rentrée,UAI,Type.établissement.etu) %>%
+  group_by(Rentrée,UAI) %>%
   summarise(Etudiants = sum(Etudiants)) %>%
-  ungroup()
+  ungroup() %>%
+  left_join(kpiESR::esr.etab %>% select(UAI,Type.établissement=Groupe))
 
 ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
                   header=TRUE, sep=';', quote='"') %>%
@@ -63,22 +99,18 @@ ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
     UAI = Identifiant.établissement,
     Etablissement = as.factor(Établissement),
     Région = as.factor(Région),
-    Type.établissement.ens = factor(case_when(
-      Type.établissement == "Université" ~ "Université",
-      Type.établissement == "Grand établissement" ~ "Grand établissement",
-      Type.établissement %in% c("École habilitée à délivrer un diplôme d'ingénieur", "École nationale supérieure d'ingénieurs", "École d'ingénieurs", "École de formation artistique","Institut national polytechnique","École normale supérieure") ~ "École",
-      TRUE ~ "Autre établissement")),
     Rentrée = Rentrée,
     Enseignants = effectif
   ) %>%
-  group_by(UAI, Etablissement, Région, Type.établissement.ens, Rentrée) %>%
+  group_by(UAI, Etablissement, Région, Rentrée) %>%
   summarise(Enseignants = sum(Enseignants, na.rm = TRUE)) %>%
-  ungroup()
+  ungroup() %>%
+  left_join(kpiESR::esr.etab %>% select(UAI,Type.établissement=Groupe))
 
 tde <- full_join(ens, etu) %>%
-  mutate(Rentrée = as.factor(Rentrée)) %>%
-  mutate(Type.établissement = ifelse(is.na(Type.établissement.etu), Type.établissement.ens, Type.établissement.etu)) %>%
-  select(-Type.établissement.etu, -Type.établissement.ens)
+  filter(Rentrée > 2010, Rentrée < 2020) %>%
+  filter(Type.établissement != "Autres") %>%
+  mutate(Rentrée = as.factor(Rentrée)) 
 
 etiquettes <- read.csv("etiquettes.csv")
 ```
@@ -111,7 +143,8 @@ etu.disc <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscri
     Etudiants = Etudiants
   ) %>% 
   group_by(UAI, Rentrée, Grande.discipline) %>%
-  summarise(Etudiants = sum(Etudiants, na.rm = TRUE))
+  summarise(Etudiants = sum(Etudiants, na.rm = TRUE)) %>%
+  left_join(kpiESR::esr.etab %>% select(UAI,Type.établissement=Groupe))
 
 ens.disc <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
                   header=TRUE, sep=';', quote='"') %>%
@@ -141,10 +174,12 @@ ens.disc <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
     Enseignants = effectif
   ) %>%
   group_by(UAI, Etablissement, Rentrée, Grande.discipline) %>%
-  summarise(Enseignants = sum(Enseignants, na.rm = TRUE))
+  summarise(Enseignants = sum(Enseignants, na.rm = TRUE)) %>%
+  left_join(kpiESR::esr.etab %>% select(UAI,Type.établissement=Groupe))
 
 tde.disc <- full_join(ens.disc,etu.disc) %>%
-  mutate(Rentrée = as.factor(Rentrée))
+  filter(Rentrée > 2010) %>%
+  mutate(Rentrée = as.factor(Rentrée)) 
 ```
 
 - Sources :
@@ -181,25 +216,7 @@ etu %>%
   mutate(Evolution = Etudiants.MESRI - min(Etudiants.MESRI)) %>% kable()
 ```
 
-```{r check.doubleinscription}
-merge(
-  tde.disc %>% filter(Type.établissement == "Université") %>%
-    group_by(Rentrée) %>%
-    summarise(Etudiants.DIC = sum(Etudiants)),
-  tde %>% filter(Type.établissement == "Université") %>%
-    group_by(Rentrée) %>%
-    summarise(Etudiants.HDI = sum(Etudiants))) %>%
-  pivot_longer(-Rentrée) %>%
-  ggplot(aes(x=Rentrée, y=value, color=name)) +
-    geom_line(aes(group=name), size=2) +
-    scale_color_discrete(name="", labels=c("Avec double inscription", "Hors double inscription")) +
-    ylab("Inscriptions étudiantes dans les universités") +
-    theme_cpesr_cap()
-```
 
-
-
-_Attention : dans la suite, tous les graphiques avec les disciplines comprennent donc les doubles inscriptions. Les tendances sont bonnes, mais il peut y avoir un décalage dans les valeurs, et des effets locaux. Les autres données sont hors double inscriptions._
 
 
 ```{r detection, include=FALSE}
@@ -221,7 +238,7 @@ etab.etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscri
 rbind(
   etab.etu %>% filter(!UAI %in% etab.ens$UAI),
   etab.ens %>% filter(!UAI %in% etab.etu$UAI)
-  ) %>% arrange(Type, Etablissement) %>% kable()
+  ) %>% arrange(Etablissement) %>% kable()
 ```
 
 
@@ -394,7 +411,7 @@ tde.etab %>%
 
 ```{r ens.data}
 tde.ens <- tde.disc %>% 
-  filter(Type.établissement == "ENS") %>% 
+  filter(Type.établissement == "Ecoles normales supérieures") %>% 
   mutate(Etablissement = stringr::str_extract(string = Etablissement,
                                                pattern = "(?<=\\().*(?=\\))"),
          Grande.discipline = recode(Grande.discipline, "Santé" = "Autre"))
@@ -440,7 +457,7 @@ tde.ens %>%
 
 ```{r nb.etu.univ}
 etu %>% 
-  filter(Type.établissement == "Université") %>%
+  filter(Type.établissement == "Universités et assimilés") %>%
   group_by(Rentrée) %>% 
   summarise(Etudiants.univ = sum(Etudiants)) %>% 
   mutate(Evolution = Etudiants.univ - min(Etudiants.univ)) %>% kable()
@@ -449,7 +466,7 @@ etu %>%
 
 ```{r univ.data}
 tde.univ <- tde %>% 
-  filter(Type.établissement == "Université") 
+  filter(Type.établissement == "Universités et assimilés") 
 ```
 
 
@@ -530,7 +547,7 @@ tde.univ.global %>%
 
 ```{r univ.values.disc}
 tde.disc %>% 
-  filter(Type.établissement == "Université") %>%
+  filter(Type.établissement == "Universités et assimilés") %>%
   group_by(Rentrée, Grande.discipline) %>%
   summarise(
     Etudiants = sum(Etudiants),
@@ -548,7 +565,7 @@ tde.disc %>%
 
 ```{r univ.evol.disc}
 tde.disc %>% 
-  filter(Type.établissement == "Université") %>%
+  filter(Type.établissement == "Universités et assimilés") %>%
   filter(Grande.discipline != "Autre") %>%
   group_by(Rentrée, Grande.discipline) %>%
   summarise(
@@ -759,126 +776,13 @@ merge(tde.univ,etiquettes) %>%
 ```
 
 
-### Hausse des inscriptions en université entre 2014 et 2015
-
-_Question_ : Que se passe-t-il en 2015 ? 
-
-Le [CP du MESRI](https://cache.media.enseignementsup-recherche.gouv.fr/file/Rentree_universitaire/51/5/DP_optimise_467515.pdf) confirme l'augmentation, ce qui permet de confirmer la hausse :
-_« Avec ses 65 000 étudiants supplémentaires à l’université, cette année,
-la rentrée revêt une importance toute particulière. Elle est la manifestation
-tangible du succès de nos universités et de nos écoles, et plus généralement,
-la preuve que le double mouvement de démocratisation de notre enseignement
-supérieur et d’élévation des qualifications et des diplômes de la jeunesse,
-est désormais universellement engagé. Cette évolution implique
-des efforts renforcés en matière de qualité des enseignements, de soutien
-à la vie étudiante dans tous ses aspects sociaux, et d’amélioration
-des conditions matérielles et humaines d’accueil des étudiants. »_
-
-Effectifs étudiants entre 2013 et 2015 :
-```{r univ.evol.controle}
-tde.univ %>%
-  filter(Rentrée %in% c(2013,2014,2015)) %>%
-  select(Etablissement,Rentrée, Etudiants) %>%
-  pivot_wider(names_from=Rentrée, values_from=Etudiants,names_prefix="Rentrée") %>%
-  mutate(
-    delta1314 = Rentrée2014-Rentrée2013,
-    delta1415 = Rentrée2015-Rentrée2014) %>% 
-  arrange(desc(delta1314+delta1415)) %>% kable()
-```
-
-Ce n'est pas l'effet des doubles inscriptions, qui explosent également :
-
-```{r check.doubleinscription2}
-merge(
-  tde.disc %>% filter(Type.établissement == "Université") %>%
-    group_by(Rentrée) %>%
-    summarise(Etudiants.DIC = sum(Etudiants)),
-  tde %>% filter(Type.établissement == "Université") %>%
-    group_by(Rentrée) %>%
-    summarise(Etudiants.HDI = sum(Etudiants))) %>%
-  pivot_longer(-Rentrée) %>%
-  ggplot(aes(x=Rentrée, y=value, color=name)) +
-    geom_line(aes(group=name), size=2) +
-    scale_color_discrete(name="", labels=c("Avec double inscription", "Hors double inscription")) +
-    ylab("Inscriptions étudiantes dans les universités") +
-    theme_cpesr_cap()
-```
-
-
-Par rapport à [la hausse du nombre de bacheliers](https://www.enseignementsup-recherche.gouv.fr/cid151347/projections-des-effectifs-dans-l-enseignement-superieur-pour-les-rentrees-de-2019-a-2028.html) :
-
-
-```{r 201415.bac}
-delta.angle <- function(angle, anglecut=0) {
-  read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
-                    header=TRUE, sep=';', quote='"') %>%
-    filter(Type.d.établissement == "Université", rentree %in% c(2013,2014,2015)) %>%
-    select(rentree, starts_with(angle)) %>% 
-    pivot_longer(-rentree) %>%
-    mutate(name = substr(name,anglecut,100)) %>%
-    group_by(rentree,name) %>%
-    summarise(Etudiants = sum(value, na.rm=TRUE)) %>%
-    group_by(name) %>%
-    mutate(
-      Evolution = Etudiants - lag(Etudiants),
-      Evolution.tot = Etudiants - first(Etudiants),
-      ) %>%
-    mutate(rentree = factor(rentree, levels=c("2015","2014","2013"))) %>%
-    filter(rentree != 2013) %>%
-    ggplot(aes(x=reorder(name,Evolution.tot), y=Evolution, fill=rentree)) +
-      geom_col(position="stack") +
-      coord_flip() +
-      xlab("") +
-      ggtitle("Augmentation des effectifs étudiants des universités\nentre 2013 et 2015") +
-      theme_cpesr_cap() #+ guides(fill=FALSE)
-}
-```
-
-```{r angle.bac}
-delta.angle("Bac",7)
-```
-
-
-Par rapport au diplôme préparé : c'est essentiellement en L.
-
-```{r 201415.Diplôme.préparé}
-delta.angle("Diplôme.préparé",19)
-```
-
-Par rapport à la discipline :
-
-```{r 201415.Discipline}
-delta.angle("Discipline",14)
-```
-
-Par rapport au secteur disciplinaire :
-
-```{r 201415.Secteur.disciplinaire, fig.height=10}
-delta.angle("Secteur.disciplinaire",25)
-```
-
-Evolution 2014 2015 pour les pluridisciplinaires science
-```{r pluriscience}
-read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
-                  header=TRUE, sep=';', quote='"') %>%
-  filter(Type.d.établissement == "Université", rentree %in% c(2014,2015)) %>%
-  filter(Secteur.disciplinaire...Pluridisciplinaire.sciences>0) %>%
-  select(rentree, Établissement, Secteur.disciplinaire...Pluridisciplinaire.sciences) %>%
-  pivot_wider(names_from=rentree,
-              values_from=Secteur.disciplinaire...Pluridisciplinaire.sciences,
-              names_prefix="R") %>%
-  mutate(delta=R2015-R2014,deltap=R2015/R2014) %>%
-  arrange(desc(deltap)) 
-```
-
-
 ## Focus Ile-de-France
 
 Périmètre : Universités en Ile-de-France + `Université Paris Dauphine - PSL`
 
 ```{r tde.idf.data}
 tde.idf <- tde %>% 
-  filter(Type.établissement == "Université" | Etablissement == "Université Paris Dauphine - PSL", Région == "Île-de-France") %>%
+  filter(Type.établissement == "Universités et assimilés" | Etablissement == "Université Paris Dauphine - PSL", Région == "Île-de-France") %>%
   group_by(Rentrée, Etablissement) %>%
   summarise(
     Etudiants = sum(Etudiants),
