@@ -5,7 +5,7 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
-knitr::opts_chunk$set(fig.asp=9/16)
+knitr::opts_chunk$set(fig.asp=9/16, fig.retina = 2)
 
 
 library(tidyverse)
@@ -604,6 +604,7 @@ saphire %>%
 
 ```{r saphire.cohorte}
 cohorte <- function(naismin, naismax) {
+  
   saphire %>%
     mutate(Activité=factor(
       ifelse(Age < 15,"Moins de 15 ans",as.character(Activité)),
@@ -611,9 +612,10 @@ cohorte <- function(naismin, naismax) {
       )) %>%
     mutate(Naissance = Année-Age) %>%
     #filter(Age>=15) %>%
-    filter(Naissance >= naismin, Naissance <= naismax) %>%
-    group_by(Année,Activité) %>%
+    filter(Naissance >= naismin, Naissance <= naismax) %>% 
+    group_by(Année,Activité) %>%  
     summarise(Population = sum(Population)/1000) %>% 
+    ungroup() %>%
     complete(Année,Activité,fill=list(Population=0)) %>% 
     ggplot(aes(x=Année,y=Population,fill=Activité,color=Activité)) +
       geom_area(alpha=0.5) +
@@ -838,6 +840,7 @@ saphire %>%
   mutate(Diplôme = fct_drop(Diplôme)) %>%
   group_by(Année,Diplôme) %>%
   summarise(Population= sum(Population) / 1000000) %>%
+  ungroup() %>%
   complete(Année,Diplôme,fill=list(Population=0)) %>% 
   mutate(Diplôme = fct_rev(Diplôme)) %>%
   ggplot(aes(x=Année,y=Population,fill=Diplôme, color=Diplôme)) +
@@ -871,6 +874,7 @@ saphire %>%
   mutate(Diplôme = fct_drop(Diplôme)) %>%
   group_by(Année,Diplôme) %>%
   summarise(Population= round(sum(Population) / 1000)) %>%
+  ungroup() %>%
   complete(Année,Diplôme,fill=list(Population=0)) %>% 
   mutate(Diplôme = fct_rev(Diplôme)) %>%
   ggplot(aes(x=Année,y=Population,fill=Diplôme, color=Diplôme)) +
@@ -892,6 +896,7 @@ saphire %>%
   filter(Age >= 25, Age <35) %>%
   group_by(Année,Diplôme) %>%
   summarise(Population= round(sum(Population) / 1000)) %>%
+  ungroup() %>%
   complete(Année,Diplôme,fill=list(Population=0)) %>% 
   mutate(Diplôme = fct_rev(Diplôme)) %>%
   ggplot(aes(x=Année,y=Population,fill=Diplôme, color=Diplôme)) +
@@ -911,6 +916,7 @@ saphire %>%
   filter(Age >= 25, Age <35) %>%
   group_by(Année,Diplôme) %>%
   summarise(Population= round(sum(Population) / 1000)) %>%
+  ungroup() %>%
   complete(Année,Diplôme,fill=list(Population=0)) %>% 
   mutate(Diplôme = fct_rev(Diplôme)) %>%
   group_by(Année) %>%
@@ -924,6 +930,7 @@ saphire %>%
   filter(Age >= 30, Age <=39) %>%
   group_by(Année,Diplôme) %>%
   summarise(Population= sum(Population)) %>%
+  ungroup() %>%
   complete(Année,Diplôme,fill=list(Population=0)) %>% 
   mutate(Diplôme = fct_rev(Diplôme)) %>%
   ggplot(aes(x=Année,y=Population,fill=Diplôme)) +

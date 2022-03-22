@@ -14,57 +14,57 @@ Plongée dans l’INSEE
 
 ## Taux d’emploi des 25-49 par niveau de diplôme
 
-![](population_files/figure-gfm/chomage.25.d-1.png)<!-- -->
+<img src="population_files/figure-gfm/chomage.25.d-1.png" width="672" />
 
-![](population_files/figure-gfm/chomage.25.d.val100-1.png)<!-- -->
+<img src="population_files/figure-gfm/chomage.25.d.val100-1.png" width="672" />
 
-![](population_files/figure-gfm/chomage.15.d-1.png)<!-- -->
+<img src="population_files/figure-gfm/chomage.15.d-1.png" width="672" />
 
-![](population_files/figure-gfm/chomage.15.d.val100-1.png)<!-- -->
+<img src="population_files/figure-gfm/chomage.15.d.val100-1.png" width="672" />
 
 ## Eleve du secondaire et étudiants du supérieur
 
-![](population_files/figure-gfm/eleveetu-1.png)<!-- -->
+<img src="population_files/figure-gfm/eleveetu-1.png" width="672" />
 
-![](population_files/figure-gfm/eleveetu.val100-1.png)<!-- -->
+<img src="population_files/figure-gfm/eleveetu.val100-1.png" width="672" />
 
-![](population_files/figure-gfm/pop.etu.sup-1.png)<!-- -->
+<img src="population_files/figure-gfm/pop.etu.sup-1.png" width="768" />
 
-![](population_files/figure-gfm/pop.etu.sup.val100-1.png)<!-- -->
+<img src="population_files/figure-gfm/pop.etu.sup.val100-1.png" width="768" />
 
-![](population_files/figure-gfm/pop.etu.sup.val100.hec-1.png)<!-- -->
+<img src="population_files/figure-gfm/pop.etu.sup.val100.hec-1.png" width="768" />
 
-![](population_files/figure-gfm/pop.etu.sup.val100.hec.2010-1.png)<!-- -->
+<img src="population_files/figure-gfm/pop.etu.sup.val100.hec.2010-1.png" width="768" />
 
-![](population_files/figure-gfm/pop.etu.app-1.png)<!-- -->
+<img src="population_files/figure-gfm/pop.etu.app-1.png" width="768" />
 
-![](population_files/figure-gfm/pop.etu.app.val100-1.png)<!-- -->
+<img src="population_files/figure-gfm/pop.etu.app.val100-1.png" width="768" />
 
 ## Population active 15-29 au sens du BIT
 
-![](population_files/figure-gfm/bit-1.png)<!-- -->
+<img src="population_files/figure-gfm/bit-1.png" width="672" />
 
 ## Population totale des 15-29
 
-![](population_files/figure-gfm/fm.t6-1.png)<!-- -->
+<img src="population_files/figure-gfm/fm.t6-1.png" width="672" />
 
 ## Les jeunes
 
-![](population_files/figure-gfm/popall-1.png)<!-- -->
+<img src="population_files/figure-gfm/popall-1.png" width="672" />
 
-![](population_files/figure-gfm/popall.80-1.png)<!-- -->
+<img src="population_files/figure-gfm/popall.80-1.png" width="672" />
 
-![](population_files/figure-gfm/popall.80.val100-1.png)<!-- -->
+<img src="population_files/figure-gfm/popall.80.val100-1.png" width="672" />
 
-![](population_files/figure-gfm/popall.80.diff-1.png)<!-- -->
+<img src="population_files/figure-gfm/popall.80.diff-1.png" width="672" />
 
-![](population_files/figure-gfm/popall.80.stack-1.png)<!-- -->
+<img src="population_files/figure-gfm/popall.80.stack-1.png" width="672" />
 
-![](population_files/figure-gfm/popall.80.stack.simple-1.png)<!-- -->
+<img src="population_files/figure-gfm/popall.80.stack.simple-1.png" width="672" />
 
 ## Simulation Transfer etu -&gt; innocupés
 
-![](population_files/figure-gfm/popall.80.stack.simu-1.png)<!-- -->
+<img src="population_files/figure-gfm/popall.80.stack.simu-1.png" width="672" />
 
 ## Saphire
 
@@ -72,9 +72,9 @@ Plongée dans l’INSEE
 
 ## Check
 
-![](population_files/figure-gfm/saphire.check1-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.check1-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.check2-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.check2-1.png" width="672" />
 
     ## # A tibble: 2 × 8
     ##   Année   Age Sexe  Diplôme        Secteur.activité Activité CSP      Population
@@ -84,29 +84,29 @@ Plongée dans l’INSEE
 
 ### Toute la population
 
-![](population_files/figure-gfm/saphire.allpop-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.allpop-1.png" width="672" />
 
 ### Toute la population à la dernière année
 
-![](population_files/figure-gfm/saphire.allpop.last-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.allpop.last-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.allpop.last.col-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.allpop.last.col-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.tout.facet-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.tout.facet-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.tout.facet.2-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.tout.facet.2-1.png" width="672" />
 
 ### Suivi de cohorte
 
-![](population_files/figure-gfm/saphire.cohorte-1.png)<!-- -->![](population_files/figure-gfm/saphire.cohorte-2.png)<!-- -->![](population_files/figure-gfm/saphire.cohorte-3.png)<!-- -->![](population_files/figure-gfm/saphire.cohorte-4.png)<!-- -->![](population_files/figure-gfm/saphire.cohorte-5.png)<!-- -->![](population_files/figure-gfm/saphire.cohorte-6.png)<!-- -->![](population_files/figure-gfm/saphire.cohorte-7.png)<!-- -->![](population_files/figure-gfm/saphire.cohorte-8.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.cohorte-1.png" width="672" /><img src="population_files/figure-gfm/saphire.cohorte-2.png" width="672" /><img src="population_files/figure-gfm/saphire.cohorte-3.png" width="672" /><img src="population_files/figure-gfm/saphire.cohorte-4.png" width="672" /><img src="population_files/figure-gfm/saphire.cohorte-5.png" width="672" /><img src="population_files/figure-gfm/saphire.cohorte-6.png" width="672" /><img src="population_files/figure-gfm/saphire.cohorte-7.png" width="672" /><img src="population_files/figure-gfm/saphire.cohorte-8.png" width="672" />
 
 ### 16-29
 
-![](population_files/figure-gfm/saphire.1629.check-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.1629.check-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.1629-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.1629-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.1629.act-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.1629.act-1.png" width="672" />
 
 <details>
 <summary>
@@ -166,7 +166,7 @@ Voir les données
 
 </details>
 
-![](population_files/figure-gfm/saphire.1629.sim-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.1629.sim-1.png" width="672" />
 
 <details>
 <summary>
@@ -218,21 +218,21 @@ Voir les données
 
 </details>
 
-![](population_files/figure-gfm/saphire.1624.act-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.1624.act-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.2629.act-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.2629.act-1.png" width="672" />
 
 ### Etudiants ou élèves
 
-![](population_files/figure-gfm/saphire.ee-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.ee-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.ee.bin-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.ee.bin-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.ee.agemoyen-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.ee.agemoyen-1.png" width="672" />
 
 ### Niveau de diplomation
 
-![](population_files/figure-gfm/saphire.dipl-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.dipl-1.png" width="672" />
 
 <details>
 <summary>
@@ -298,9 +298,9 @@ Voir les données
 
 </details>
 
-![](population_files/figure-gfm/saphire.dipl.fill-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.dipl.fill-1.png" width="672" />
 
-![](population_files/figure-gfm/saphire.dipl.16.29-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.dipl.16.29-1.png" width="672" />
 
 <details>
 <summary>
@@ -376,7 +376,7 @@ Voir les données
 
 </details>
 
-![](population_files/figure-gfm/saphire.dipl.30.39-1.png)<!-- -->
+<img src="population_files/figure-gfm/saphire.dipl.30.39-1.png" width="672" />
 
 ### GIF
 
@@ -390,11 +390,11 @@ Voir les données
 
 ## Pyramidage étudiants
 
-![](population_files/figure-gfm/sise.pyramide.abs-1.png)<!-- -->
+<img src="population_files/figure-gfm/sise.pyramide.abs-1.png" width="672" />
 
-![](population_files/figure-gfm/sise.pyramide.val100-1.png)<!-- -->
+<img src="population_files/figure-gfm/sise.pyramide.val100-1.png" width="672" />
 
-![](population_files/figure-gfm/sise.pyramide.evol-1.png)<!-- -->
+<img src="population_files/figure-gfm/sise.pyramide.evol-1.png" width="672" />
 
 <details>
 <summary>
@@ -439,4 +439,4 @@ Voir les données
 
 </details>
 
-![](population_files/figure-gfm/sise.pyramide.col-1.png)<!-- -->
+<img src="population_files/figure-gfm/sise.pyramide.col-1.png" width="672" />
