@@ -5,7 +5,7 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(fig.width = 8, fig.height = 4.5)
+knitr::opts_chunk$set(fig.width = 8, fig.height = 4.5, fig.retina = 2)
 
 options(dplyr.summarise.inform = FALSE)
 options(tidyverse.quiet = TRUE)
@@ -41,6 +41,7 @@ kpiESR::esr.pnl %>%
   geom_point(shape=21,size=3,stroke=2,color="white") +
   scale_color_brewer(palette="Paired") +
   scale_fill_brewer(palette="Paired") +
+  xlab("Rentrée") + ylab("Evolution (valeur 100 en 2013)") +
   theme_cpesr_cap()
 ```
 
@@ -58,6 +59,7 @@ kpiESR::esr.pnl %>%
   geom_point(shape=21,size=3,stroke=2,color="white") +
   scale_color_brewer(palette="Paired") +
   scale_fill_brewer(palette="Paired") +
+  xlab("Rentrée") + ylab("Evolution (valeur 100 en 2013)") +
   theme_cpesr_cap()
 ```
 

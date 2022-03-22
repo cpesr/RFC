@@ -8,11 +8,11 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 ## Contexte
 
-![](tauxdencadrement_files/figure-gfm/contexte-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/contexte-1.png" width="768" />
 
 ### Universités
 
-![](tauxdencadrement_files/figure-gfm/contexte.univ-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/contexte.univ-1.png" width="768" />
 
 ## Description des données
 
@@ -250,17 +250,17 @@ Evolution
 
 ### Evolution globale
 
-![](tauxdencadrement_files/figure-gfm/etab.globale-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/etab.globale-1.png" width="768" />
 
 ### Evolution par type d’établissement et discipline
 
-![](tauxdencadrement_files/figure-gfm/etab.disc-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/etab.disc-1.png" width="768" />
 
 ### Distribution des établissements
 
     ## Warning: Removed 13 rows containing non-finite values (stat_boxplot).
 
-![](tauxdencadrement_files/figure-gfm/etab.distrib-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/etab.distrib-1.png" width="768" />
 
 Top 10 :
 
@@ -414,7 +414,7 @@ Inf
 
     ## Warning: Removed 13 rows containing non-finite values (stat_boxplot).
 
-![](tauxdencadrement_files/figure-gfm/etab.distrib.zoom-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/etab.distrib.zoom-1.png" width="768" />
 
 ## Taux d’encadrement par grande discipline
 
@@ -422,17 +422,17 @@ Inf
 
     ## Warning: Removed 2 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/disc.globale-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/disc.globale-1.png" width="768" />
 
 ### Evolution par discpline et type d’établissement
 
-![](tauxdencadrement_files/figure-gfm/disc.etab-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/disc.etab-1.png" width="768" />
 
-![](tauxdencadrement_files/figure-gfm/disc.etab.zoom-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/disc.etab.zoom-1.png" width="768" />
 
 ### Distribution
 
-![](tauxdencadrement_files/figure-gfm/disc.distrib-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/disc.distrib-1.png" width="768" />
 
 Top 10 (on y constate la limite disciplinaire expliquée au dessus) :
 
@@ -583,17 +583,17 @@ LSHS
 </tbody>
 </table>
 
-![](tauxdencadrement_files/figure-gfm/disc.distrib.zoom-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/disc.distrib.zoom-1.png" width="768" />
 
 ## Focus ENS
 
     ## Warning: Removed 10 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/ens.values-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/ens.values-1.png" width="768" />
 
     ## Warning: Removed 13 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/ens.values.disc-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/ens.values.disc-1.png" width="768" />
 
 ## Focus Universités
 
@@ -782,60 +782,60 @@ Evolution
 
     ## Warning: Removed 95 rows containing non-finite values (stat_boxplot).
 
-![](tauxdencadrement_files/figure-gfm/univ.values.etab-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.values.etab-1.png" width="768" />
 
     ## Warning: Removed 27 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/univ.values-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.values-1.png" width="768" />
 
     ## Warning: Removed 27 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/univ.evol-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.evol-1.png" width="768" />
 
     ## Warning: Removed 18 rows containing missing values (geom_col).
 
-![](tauxdencadrement_files/figure-gfm/univ.evol.besoinsvsreel-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.evol.besoinsvsreel-1.png" width="768" />
 
     ## Warning: Removed 66 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/univ.values.disc-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.values.disc-1.png" width="768" />
 
     ## Warning: Removed 120 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/univ.evol.disc-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.evol.disc-1.png" width="768" />
 
     ## Warning: Removed 10 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/univ.values.etiquettes-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.values.etiquettes-1.png" width="768" />
 
     ## Warning: Removed 19 row(s) containing missing values (geom_path).
 
-![](tauxdencadrement_files/figure-gfm/univ.evol.etiquettes-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.evol.etiquettes-1.png" width="768" />
 
     ## Warning: Removed 95 rows containing non-finite values (stat_boxplot).
 
-![](tauxdencadrement_files/figure-gfm/univ.etab.values.etiquettes-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.etab.values.etiquettes-1.png" width="768" />
 
     ## Warning: Removed 134 rows containing non-finite values (stat_boxplot).
 
-![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes-1.png" width="768" />
 
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
-![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.map-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.map-1.png" width="768" />
 
 *Note : dans la suite, la barre verticale indique la valeur nationale
 (donc pas la moyenne des établissements)*
 
     ## Warning: Removed 1 rows containing missing values (geom_hline).
 
-![](tauxdencadrement_files/figure-gfm/univ.etab.etiquettes.rank-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.etab.etiquettes.rank-1.png" width="768" />
 
     ## Warning: Removed 3 rows containing missing values (position_stack).
 
     ## Warning: Removed 1 rows containing missing values (geom_hline).
 
-![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank-1.png" width="768" />
 
 ### Focus Guyane
 
@@ -1483,7 +1483,7 @@ l’université.
 
     ## Warning: Removed 1 rows containing missing values (geom_hline).
 
-![](tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank.filter-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/univ.etab.evol.etiquettes.rank.filter-1.png" width="768" />
 
 ## Focus Ile-de-France
 
@@ -1577,14 +1577,14 @@ Université Sorbonne Paris Nord
 </tbody>
 </table>
 
-![](tauxdencadrement_files/figure-gfm/tde.idf.evol-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/tde.idf.evol-1.png" width="960" />
 
 ## Focus Paris 8
 
     ## Warning: Removed 51 rows containing non-finite values (stat_boxplot).
 
-![](tauxdencadrement_files/figure-gfm/tde.idf.evol.P8-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/tde.idf.evol.P8-1.png" width="768" />
 
 ## Focus Strasbourg
 
-![](tauxdencadrement_files/figure-gfm/tde.idf.evol.unistra-1.png)<!-- -->
+<img src="tauxdencadrement_files/figure-gfm/tde.idf.evol.unistra-1.png" width="768" />
