@@ -1588,3 +1588,5 @@ Université Sorbonne Paris Nord
 ## Focus Strasbourg
 
 <img src="tauxdencadrement_files/figure-gfm/tde.idf.evol.unistra-1.png" width="768" />
+
+## focus 19

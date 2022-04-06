@@ -863,3 +863,32 @@ tde.strasbourg <- tde %>%
     theme_cpesr_cap()
 ```
 
+
+## focus 19
+
+```{r s19.etu}
+read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
+                       header=TRUE, sep=';', quote='"') %>%
+  group_by(rentree) %>%
+  summarise(SocioDémo = sum(Secteur.disciplinaire...Sociologie..démographie, na.rm = TRUE)) %>% 
+  ggplot(aes(x=rentree,y=SocioDémo)) +
+    geom_point(size=3) + geom_line(size=1,aes(group=1)) +
+    geom_vline(xintercept = 2013) +
+    expand_limits(y=0) +
+    theme_cpesr_cap()
+```
+
+```{r s19.etu}
+read.table("fr-esr-enseignants-titulaires-esr-public.csv",
+                       header=TRUE, sep=';', quote='"') %>%
+  group_by(Rentrée) %>%
+  filter(code_section_cnu == 19) %>%
+  group_by(Rentrée,Code.categorie.personnels) %>%
+  summarise(Effectif = sum(effectif, na.rm = TRUE)) %>% 
+  mutate(Rentrée = as.factor(Rentrée)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif, color=Code.categorie.personnels)) +
+    geom_point(size=3) + geom_line(size=1,aes(group=Code.categorie.personnels)) +
+    expand_limits(y=0) +
+    scale_color_brewer(palette = "Set2") +
+    theme_cpesr_cap()
+```
