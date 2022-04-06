@@ -143,7 +143,11 @@ Voir les données
 | detail\_forma2                                                                                                                                   |
 | etablissement\_id\_paysage                                                                                                                       |
 | composante\_id\_paysage                                                                                                                          |
+| rdda                                                                                                                                             |
+| Taux.sélection                                                                                                                                   |
 | taux.accès                                                                                                                                       |
+| Accessibilité                                                                                                                                    |
+| taille                                                                                                                                           |
 
 </details>
 
@@ -270,6 +274,23 @@ Voir les données
     ## `.groups` argument.
 
 ![](parcoursup_files/figure-gfm/tda.adm.fil-1.png)<!-- -->
+
+    ## `summarise()` has grouped output by 'Accessibilité'. You can override using the
+    ## `.groups` argument.
+
+![](parcoursup_files/figure-gfm/tda.adm.fil.per-1.png)<!-- -->
+
+### Taille formation
+
+    ## `summarise()` has grouped output by 'Session'. You can override using the
+    ## `.groups` argument.
+
+![](parcoursup_files/figure-gfm/taille-1.png)<!-- -->
+
+    ## `summarise()` has grouped output by 'Accessibilité'. You can override using the
+    ## `.groups` argument.
+
+![](parcoursup_files/figure-gfm/taille.tda-1.png)<!-- -->
 
 ## Diversification des formations publiques
 

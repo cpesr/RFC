@@ -85,7 +85,19 @@ ps <- bind_rows(apb,ps18,ps19,ps20,ps21) %>%
     propositions = Effectif.total.des.candidats.ayant.reçu.une.proposition.d.admission.de.la.part.de.l.établissement,
     admis = Effectif.total.des.candidats.ayant.accepté.la.proposition.de.l.établissement..admis.
     ) %>%
-  mutate(taux.accès = Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP. / 100)
+  mutate(rdda = ifelse(is.na(Rang.du.dernier.appelé),Rang.du.dernier.appelé.du.groupe.1,Rang.du.dernier.appelé)) %>%
+  mutate(Taux.sélection = rdda / candidats) %>%
+  mutate(
+    taux.accès = Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP. / 100,
+    Sélectivité = cut(Taux.sélection, 
+                      breaks = c(0,0.05,0.10,0.20,0.50,0.80,0.90,0.95,1.00,1000)),
+    Accessibilité = cut(taux.accès, 
+                        breaks = c(0,0.20,0.50,0.80,1.00,1.01),
+                        include.lowest = TRUE, right=FALSE),
+    taille = cut(admis,
+                 breaks=c(0,35,70,140,280,100000))
+  )
+
 ```
 
 ```{r load.data, results='asis'}
@@ -102,17 +114,10 @@ nombre de candidatures :
 à 100%, tous les candidats ont été appelé ; à 10%, seul un candidat sur 10 a été appelé.
 
 ```{r Licence}
-licence <- ps %>% filter(Filière.de.formation.très.agrégée %in% c("Licence","Licence_Las")) %>%
-  mutate(rdda = ifelse(is.na(Rang.du.dernier.appelé),Rang.du.dernier.appelé.du.groupe.1,Rang.du.dernier.appelé)) %>%
-  mutate(Taux.sélection = rdda / candidats) %>%
-  mutate(Sélectivité = cut(Taux.sélection, 
-                           breaks = c(0,0.05,0.10,0.20,0.50,0.80,0.90,0.95,1.00,1000))) %>%
-  mutate(Accessibilité = cut(taux.accès, 
-                           breaks = c(0,0.20,0.50,0.80,1.00,1.01),
-                           include.lowest = TRUE, right=FALSE)) %>%
-  
+licence <- ps %>% 
+  filter(Filière.de.formation.très.agrégée %in% c("Licence","Licence_Las")) %>%
   select(Session,Établissement,Filière.de.formation,Filière.de.formation.très.agrégée,Filière.de.formation.détaillée,
-         places, candidats, propositions, admis, rdda, taux.accès, Accessibilité, Taux.sélection, Sélectivité)
+         places, candidats, propositions, admis, taille, rdda, taux.accès, Accessibilité, Taux.sélection, Sélectivité)
 
 ```
 
@@ -272,7 +277,40 @@ licence %>%
 ```
 
 
+```{r tda.adm.fil.per}
+licence %>% 
+  filter(!is.na(taux.accès)) %>%
+  group_by(Accessibilité,Filière.de.formation) %>% 
+  summarise(nb.admis = sum(admis)) %>%
+  ggplot(aes(x=Filière.de.formation,y=nb.admis,fill=Accessibilité)) +
+    geom_col(position = "fill") +
+    scale_fill_brewer(palette = "Purples",direction=-1) +
+  coord_flip()
+```
 
+### Taille formation
+
+```{r taille}
+session.palette <- RColorBrewer::brewer.pal(8,"RdBu")[c(1,3,5:8)]
+licence %>% 
+  filter(!is.na(taille)) %>%
+  group_by(Session, taille) %>% 
+  summarise(nb.formations = n()) %>%
+  mutate(Session = as.factor(Session)) %>%
+  ggplot(aes(x=taille,y=nb.formations,fill=Session)) +
+    geom_col(position="dodge") +
+    scale_fill_manual(values=session.palette)
+```
+
+```{r taille.tda}
+licence %>% 
+  filter(!is.na(taille),!is.na(Accessibilité)) %>%
+  group_by(Accessibilité,taille) %>% 
+  summarise(nb.admis = sum(admis), nb.formations=n()) %>%
+  ggplot(aes(x=taille,y=nb.formations,fill=Accessibilité)) +
+    geom_col() +
+    scale_fill_brewer(palette = "Purples",direction=-1) 
+```
 
 
 ## Diversification des formations publiques
