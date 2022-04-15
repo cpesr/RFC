@@ -302,6 +302,8 @@ Voir les données
 
 <img src="population_files/figure-gfm/saphire.dipl.16.29-1.png" width="672" />
 
+<img src="population_files/figure-gfm/saphire.dipl.16.29.pyramide-1.png" width="672" />
+
 <details>
 <summary>
 Voir les données
