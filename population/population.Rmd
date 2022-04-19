@@ -931,6 +931,58 @@ saphire %>%
     theme(axis.title.x = element_blank()) # + labs(caption="Julien Gossa - SNESUP-FSU  Source : base SAPHIRE INSEE\nhttps://github.com/cpesr/RFC/blob/main/population/population.md")
 ```
 
+
+```{r saphire.dipl.16.29.pyramide2, fig.height=12, fig.asp=4/4}
+saphire %>%
+  filter(Diplôme != "Personnes de moins de 15 ans (17 ans pour le RP 1975) ou étudiants - élèves") %>%
+  mutate(Diplôme = fct_drop(Diplôme)) %>%
+  mutate(Diplôme = fct_recode(Diplôme,
+                              "Aucun diplôme - CEP - BEPC" = "Aucun diplôme",
+                              "Aucun diplôme - CEP - BEPC" = "Niveau CEP", 
+                              "Aucun diplôme - CEP - BEPC" = "Niveau BEPC")) %>%
+  filter(Age >= 25, Age <35) %>%
+  group_by(Année,Diplôme,Sexe) %>%
+  summarise(Population= round(sum(Population) / 1000)) %>%
+  ungroup() %>%
+  #complete(Année,Diplôme,Sexe,fill=list(Population=0)) %>% 
+  mutate(Population = ifelse(Sexe=="Homme",-Population,Population)) %>%
+  ggplot(aes(x=Diplôme,y=Population,fill=Sexe)) +
+    geom_col( alpha=0.5, position="identity") +
+    #scale_y_continuous(labels=scales::percent) +
+    coord_flip() +
+    facet_grid(Année~.,scales = "free_y") +
+    theme_cpesr_cap()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=2, title = "")) +
+    ggtitle("Répartition par diplôme de la population française entre 25 à 34 ans", subtitle="(hors élèves et étudiants)") +
+    ylab("Population (pourcentage)") +
+    theme(axis.title.x = element_blank()) # + labs(caption="Julien Gossa - SNESUP-FSU  Source : base SAPHIRE INSEE\nhttps://github.com/cpesr/RFC/blob/main/population/population.md")
+```
+
+```{r saphire.dipl.16.29.pyramide2.gif, cache=TRUE, fig.asp=9/16}
+saphire %>%
+  filter(Diplôme != "Personnes de moins de 15 ans (17 ans pour le RP 1975) ou étudiants - élèves") %>%
+  mutate(Diplôme = fct_drop(Diplôme)) %>%
+  mutate(Diplôme = fct_recode(Diplôme,
+                              "Diplôme universitaire de 1er cycle" = "Diplôme supérieur au Baccalauréat",
+                              "Aucun diplôme - CEP - BEPC" = "Aucun diplôme",
+                              "Aucun diplôme - CEP - BEPC" = "Niveau CEP", 
+                              "Aucun diplôme - CEP - BEPC" = "Niveau BEPC")) %>%
+  filter(Age >= 25, Age <35) %>%
+  group_by(Année,Diplôme,Sexe) %>%
+  summarise(Population= round(sum(Population) / 1000)) %>%
+  ungroup() %>%
+  #complete(Année,Diplôme,Sexe,fill=list(Population=0)) %>% 
+  mutate(Population = ifelse(Sexe=="Homme",-Population,Population)) %>%
+  ggplot(aes(x=Diplôme,y=Population,fill=Sexe)) +
+    geom_col( alpha=0.5, position="identity") +
+    #scale_y_continuous(labels=scales::percent) +
+    coord_flip() +
+    theme_cpesr_cap()  + guides(fill=guide_legend(ncol=3, title = ""), color=guide_legend(ncol=2, title = "")) +
+    ggtitle("Répartition par diplôme en {closest_state}", subtitle="Population française entre 25 à 34 ans") +
+    ylab("Population (pourcentage)") +
+    theme(axis.title.x = element_blank()) +
+    gganimate::transition_states(Année) 
+```
+
 ```{r saphire.dipl.16.29.data, results='asis'}
 saphire %>%
   filter(Diplôme != "Personnes de moins de 15 ans (17 ans pour le RP 1975) ou étudiants - élèves") %>%
