@@ -1,0 +1,33 @@
+---
+title: "Unités de recherches"
+output:
+  github_document: default
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors = "Paola Bertelli, Julien Gossa", source="https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-structures-recherche-publiques-actives/")
+
+ur <- read.csv2("../data/fr-esr-structures-recherche-publiques-actives.csv")
+```
+
+
+## Nombre de structures par type
+
+Voici le nombre de structurs de recherche par type.
+
+```{r type_de_structure}
+ur %>% 
+  ggplot(aes(x=type_de_structure, fill=type_de_structure)) + 
+  geom_bar() + 
+  coord_flip() +
+  theme_cpesr_cap() +
+  theme(legend.position = "none", axis.title.y = element_blank()) +
+  ylab("Nombre de structures")
+
+```
