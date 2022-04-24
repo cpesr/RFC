@@ -19,15 +19,89 @@ ur <- read.csv2("../data/fr-esr-structures-recherche-publiques-actives.csv")
 
 ## Nombre de structures par type
 
-Voici le nombre de structurs de recherche par type.
-
 ```{r type_de_structure}
 ur %>% 
-  ggplot(aes(x=type_de_structure, fill=type_de_structure)) + 
-  geom_bar() + 
+  group_by(type_de_structure) %>%
+  summarize(nombre = n()) %>%
+  ggplot(aes(x=reorder(type_de_structure,nombre), y=nombre, fill=type_de_structure)) + 
+  geom_col() +
   coord_flip() +
   theme_cpesr_cap() +
   theme(legend.position = "none", axis.title.y = element_blank()) +
   ylab("Nombre de structures")
-
 ```
+
+
+## Tutelles
+
+### Nombre d'institutions tutelles par nature
+
+```{r nature.tutelles}
+ur %>% 
+  separate_rows(sigles_des_tutelles, nature_de_tutelle, sep=';') %>%
+  group_by(nature_de_tutelle) %>%
+  summarise(nb_tutelles = n_distinct(sigles_des_tutelles)) %>%
+  ggplot(aes(x=reorder(nature_de_tutelle,nb_tutelles),y=nb_tutelles,fill=nature_de_tutelle)) +
+  geom_col() +
+  coord_flip() +
+  theme_cpesr_cap() +
+  theme(legend.position = "none")
+```
+
+### Nombre de tutelles par nature d'institution
+
+```{r nb.nature.tutelles}
+ur %>% 
+  separate_rows(sigles_des_tutelles, nature_de_tutelle, sep=';') %>%
+  group_by(nature_de_tutelle) %>%
+  summarise(nb_tutelles = n()) %>%
+  ggplot(aes(x=reorder(nature_de_tutelle,nb_tutelles),y=nb_tutelles,fill=nature_de_tutelle)) +
+  geom_col() +
+  coord_flip() +
+  theme_cpesr_cap() +
+  theme(legend.position = "none")
+```
+
+### Nombre de tutelles des EPST et EPIC
+
+```{r nb.tutelles.epst}
+ur %>% 
+  separate_rows(sigles_des_tutelles, type_de_tutelle, nature_de_tutelle, sep=';') %>%
+  filter(nature_de_tutelle %in% c("Organismes de type EPST","Organismes de type EPIC")) %>%
+  group_by(sigles_des_tutelles, type_de_tutelle) %>%
+  summarise(nb_tutelles = n()) %>% 
+  ggplot(aes(x=reorder(sigles_des_tutelles,nb_tutelles),y=nb_tutelles,fill=type_de_tutelle)) +
+  geom_col() +
+  coord_flip() +
+  theme_cpesr_cap()
+```
+
+### Nombre de tutelles par type de structure
+
+```{r nb.tutelles.type}
+ur %>% 
+  separate_rows(sigles_des_tutelles, type_de_tutelle, sep=';') %>%
+  group_by(libelle,type_de_structure, type_de_tutelle) %>%
+  summarise(nb_tutelles = n_distinct(sigles_des_tutelles)) %>%
+  ggplot(aes(x=reorder(type_de_structure,nb_tutelles,FUN=sum),y=nb_tutelles,color=type_de_tutelle)) +
+  geom_violin() +
+  coord_flip() +
+  theme_cpesr_cap()
+```
+
+```{r nb.tutelles.type.umr}
+ur %>% 
+  filter(code_de_type_de_structure %in% c(1,21,22)) %>%
+  separate_rows(sigles_des_tutelles, type_de_tutelle, sep=';') %>%
+  group_by(libelle,type_de_structure, type_de_tutelle) %>%
+  summarise(nb_tutelles = n_distinct(sigles_des_tutelles)) %>%
+  ggplot(aes(x=reorder(type_de_structure,nb_tutelles,FUN=sum),y=nb_tutelles,
+             fill=type_de_tutelle)) +
+  geom_boxplot() +
+  coord_flip() +
+  scale_y_continuous(breaks = seq(1,20)) +
+  theme_cpesr_cap()
+```
+
+
+
