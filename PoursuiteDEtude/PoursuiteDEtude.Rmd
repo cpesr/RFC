@@ -1,0 +1,115 @@
+---
+title: "Poursuite d'étude"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(fig.asp=9/16, fig.retina = 2)
+
+
+library(tidyverse)
+library(ggthemes)
+
+library(ggcpesrthemes)
+theme_cpesr_setup(authors="Julien Gossa",
+                  url="https://github.com/cpesr/RFC/blob/main/population/population.md", 
+                  source="https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-taux-poursuite-enseignement-superieur-par-academie/")
+
+spoilerTable <- function(df) {
+  cat("\n<details>\n")
+  cat("  <summary>Voir les données</summary>\n\n")
+  
+  print(kableExtra::kable(df, format="pipe"))
+  
+  cat("\n\n</details>\n")
+}
+
+pe <- read.csv2("../data/fr-esr-taux-poursuite-enseignement-superieur-par-academie.csv", dec='.') %>% 
+  rename(
+    Session = Rentrée...Session,
+    Bacheliers = Nombre.total.de.bacheliers
+  ) %>%
+  mutate(
+    Poursuivants.public = rowSums(.[c(5:12,17:18,23:24)]),
+    Poursuivants.privé = rowSums(.[c(15:16,21:22)]),
+    Poursuivants.nc = rowSums(.[c(13:14,19:20)])
+    ) %>%
+  mutate(Poursuivants = Poursuivants.public + Poursuivants.privé + Poursuivants.nc)
+```
+
+
+https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-taux-poursuite-enseignement-superieur-par-academie/
+
+
+```{r colnames}
+colnames(pe)
+```
+
+
+```{r tpe}
+pe %>%
+  group_by(Session = as.character(Session)) %>%
+  summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
+  ggplot(aes(x=Session,y=Taux.Poursuite.d.études, group=1)) +
+  geom_vline(xintercept = "2018") +
+  geom_line(size=1) + geom_point(shape = 21, stroke=1, size=3, color = "white", fill="black") +
+  theme_cpesr_cap()
+```
+
+
+```{r tpe.serie}
+pe %>%
+  group_by(Session = as.character(Session),Série.du.bac) %>%
+  summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
+  ggplot(aes(x=Session,y=Taux.Poursuite.d.études, group=Série.du.bac)) +
+  geom_vline(xintercept = "2018") +
+  geom_line(aes(color=Série.du.bac), size=1) + 
+  geom_point(aes(fill=Série.du.bac), shape = 21, stroke=1, size=3, color = "white") +
+  theme_cpesr_cap()
+```
+
+
+```{r tpe.serie.val100}
+pe %>%
+  group_by(Session = as.character(Session),Série.du.bac) %>%
+  summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
+  group_by(Série.du.bac) %>%
+  mutate(val100 = Taux.Poursuite.d.études / first(Taux.Poursuite.d.études) *100) %>%
+  ggplot(aes(x=Session,y=val100, group=Série.du.bac)) +
+  geom_vline(xintercept = "2018") +
+  geom_line(aes(color=Série.du.bac), size=1) + 
+  geom_point(aes(fill=Série.du.bac), shape = 21, stroke=1, size=3, color = "white") +
+  theme_cpesr_cap()
+```
+
+
+
+```{r tpe.secteur}
+pe %>%
+  select(-Poursuivants) %>%
+  pivot_longer(c(Poursuivants.privé,Poursuivants.public), names_to = "Secteur", values_to = "Poursuivants") %>%
+  group_by(Session = as.character(Session), Secteur) %>%
+  summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
+  ggplot(aes(x=Session,y=Taux.Poursuite.d.études, group=Secteur)) +
+  geom_vline(xintercept = "2018") +
+  geom_line(aes(color=Secteur), size=1) + 
+  geom_point(aes(fill=Secteur), shape = 21, stroke=1, size=3, color = "white") +
+  theme_cpesr_cap()
+```
+
+
+```{r tpe.secteur.val100}
+pe %>%
+  select(-Poursuivants) %>%
+  pivot_longer(c(Poursuivants.privé,Poursuivants.public), names_to = "Secteur", values_to = "Poursuivants") %>%
+  group_by(Session = as.character(Session), Secteur) %>%
+  summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
+  group_by(Secteur) %>%
+  mutate(val100 = Taux.Poursuite.d.études / first(Taux.Poursuite.d.études) *100) %>%
+  ggplot(aes(x=Session,y=val100, group=Secteur)) +
+  geom_vline(xintercept = "2018") +
+  geom_line(aes(color=Secteur), size=1) + 
+  geom_point(aes(fill=Secteur), shape = 21, stroke=1, size=3, color = "white") +
+  theme_cpesr_cap()
+```
