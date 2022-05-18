@@ -263,6 +263,7 @@ pe_part_plot <- function(critere,palette="Set2") {
     mutate(Critère = !!sym(critere)) %>%
     group_by(Session, Critère) %>%
     summarise(Poursuites = sum(Poursuites) / 1000) %>% 
+    na.omit() %>%
     group_by(Session) %>%
     mutate(Part = Poursuites / sum(Poursuites)) %>%
     group_by(Critère) %>%
@@ -271,7 +272,6 @@ pe_part_plot <- function(critere,palette="Set2") {
     mutate(Session17 = relevel(factor(Session),"2017")) %>% 
     arrange(Session17) %>% 
     mutate(PartEvol17 = (Part - first(Part))*100) %>% 
-    na.omit() %>%
 
     ggplot(aes(x=Session,y=PartEvol17, group=Critère)) +
       geom_vline(xintercept = "2017") +
@@ -346,7 +346,7 @@ np_norm_plot <- function(critere,palette="Set2") {
     mutate(Session17 = relevel(factor(Session),"2017")) %>% 
     arrange(Session17) %>% 
     mutate(PartEvol17 = (Part - first(Part))*100) %>% 
-    na.omit() %>%
+    na.omit() %>% 
 
     ggplot(aes(x=Session,y=PartEvol17, group=Critère)) +
     geom_vline(xintercept = "2017") +
