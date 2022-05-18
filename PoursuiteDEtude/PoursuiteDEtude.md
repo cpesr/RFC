@@ -33,7 +33,14 @@ Poursuite d’étude
     ## [28] "Poursuivants.public"                                                                                                                               
     ## [29] "Poursuivants.privé"                                                                                                                                
     ## [30] "Poursuivants.nc"                                                                                                                                   
-    ## [31] "Poursuivants"
+    ## [31] "Poursuivants"                                                                                                                                      
+    ## [32] "Série"
+
+<img src="PoursuiteDEtude_files/figure-gfm/pe.all-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/pe.all.val100-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/pe.np-1.png" width="672" />
 
 <img src="PoursuiteDEtude_files/figure-gfm/tpe-1.png" width="672" />
 
@@ -44,3 +51,24 @@ Poursuite d’étude
 <img src="PoursuiteDEtude_files/figure-gfm/tpe.secteur-1.png" width="672" />
 
 <img src="PoursuiteDEtude_files/figure-gfm/tpe.secteur.val100-1.png" width="672" />
+
+## Bacheliers
+
+<img src="PoursuiteDEtude_files/figure-gfm/bacheliers-1.png" width="672" />
+
+### Poursuites
+
+<img src="PoursuiteDEtude_files/figure-gfm/pe.criteres-1.png" width="768" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/pe.pivot.norm.fun-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/pe.norm.criteres-1.png" width="768" />
+
+### Non poursuivants
+
+<img src="PoursuiteDEtude_files/figure-gfm/np.data-1.png" width="672" /><img src="PoursuiteDEtude_files/figure-gfm/np.data-2.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/np.criteres-1.png" width="768" />
+<img src="PoursuiteDEtude_files/figure-gfm/np.norm.data-1.png" width="672" /><img src="PoursuiteDEtude_files/figure-gfm/np.norm.data-2.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/np.norm.criteres-1.png" width="768" />

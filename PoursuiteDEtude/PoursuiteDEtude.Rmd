@@ -13,8 +13,7 @@ library(ggthemes)
 
 library(ggcpesrthemes)
 theme_cpesr_setup(authors="Julien Gossa",
-                  url="https://github.com/cpesr/RFC/blob/main/population/population.md", 
-                  source="https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-taux-poursuite-enseignement-superieur-par-academie/")
+                  source="fr-esr-taux-poursuite-enseignement-superieur-par-academie")
 
 spoilerTable <- function(df) {
   cat("\n<details>\n")
@@ -35,7 +34,11 @@ pe <- read.csv2("../data/fr-esr-taux-poursuite-enseignement-superieur-par-academ
     Poursuivants.privé = rowSums(.[c(15:16,21:22)]),
     Poursuivants.nc = rowSums(.[c(13:14,19:20)])
     ) %>%
-  mutate(Poursuivants = Poursuivants.public + Poursuivants.privé + Poursuivants.nc)
+  mutate(Poursuivants = Poursuivants.public + Poursuivants.privé + Poursuivants.nc) %>%
+  mutate(Session = as.character(Session)) %>%
+  mutate(Série = factor(Série.du.bac, 
+                        levels = c("Bac général","Bac technologique","Bac professionnel"),
+                        labels = c("Gen.","Techno.","Pro.")))
 ```
 
 
@@ -47,12 +50,74 @@ colnames(pe)
 ```
 
 
+
+```{r pe.all}
+pe %>%
+  group_by(Session = as.character(Session)) %>%
+  summarise(across(c(starts_with("Néo")),sum)) %>% 
+  pivot_longer(starts_with("Néo"), names_to = "Filière", values_to = "Poursuites") %>% 
+  mutate(
+    Secteur = case_when(
+      str_detect(Filière,"secteur.privé") ~ "Privé",
+      str_detect(Filière,"non.renseigné") ~ "NC",
+      TRUE ~ "Public"),
+    Mobilité = ifelse(str_detect(Filière,"différente"),"Hors académie", "Même académie")
+  ) %>%
+    mutate(Poursuite = paste(Secteur,Mobilité)) %>% 
+  group_by(Session,Poursuite) %>%
+  summarise(Poursuites = sum(Poursuites)) %>% 
+  ggplot(aes(x=Session,y=Poursuites, group=Poursuite)) +
+  geom_vline(xintercept = "2017") +
+  geom_area(aes(fill=Poursuite,color=Poursuite), alpha=0.7, size=1) + 
+  scale_color_brewer(palette = "Paired") +
+  scale_fill_brewer(palette = "Paired") +
+  theme_cpesr_cap() 
+```
+
+```{r pe.all.val100}
+pe %>%
+  group_by(Session = as.character(Session)) %>%
+  summarise(across(c(Bacheliers,starts_with("Néo")),sum)) %>% 
+  pivot_longer(starts_with("Néo"), names_to = "Filière", values_to = "Poursuites") %>% 
+  mutate(
+    Secteur = case_when(
+      str_detect(Filière,"secteur.privé") ~ "Privé",
+      str_detect(Filière,"non.renseigné") ~ "NC",
+      TRUE ~ "Public"),
+    Mobilité = ifelse(str_detect(Filière,"différente"),"Hors académie", "Même académie")
+  ) %>%
+  mutate(Poursuite = paste(Secteur,Mobilité)) %>% 
+  group_by(Session,Secteur,Mobilité,Poursuite) %>%
+  summarise(Poursuites = sum(Poursuites)) %>% 
+  group_by(Secteur,Mobilité,Poursuite) %>%
+  mutate(val100 = Poursuites / first(Poursuites) * 100) %>%
+  ggplot(aes(x=Session,y=val100, group=1)) +
+  geom_vline(xintercept = "2017") +
+  geom_line(aes(fill=Poursuite,color=Poursuite), size=1) + 
+  scale_color_brewer(palette = "Paired") +
+  scale_fill_brewer(palette = "Paired") +
+  facet_grid(Mobilité~Secteur) +
+  theme_cpesr_cap() 
+```
+
+
+```{r pe.np}
+pe %>%
+  group_by(Session = as.character(Session), Série.du.bac) %>%
+  summarise(Non.poursuivants = sum(Bacheliers - Poursuivants)) %>% 
+  ggplot(aes(x=Session,y=Non.poursuivants, group=Série.du.bac)) +
+  geom_vline(xintercept = "2017") +
+  geom_area(aes(fill=Série.du.bac,color=Série.du.bac), size=1, alpha = 0.6) + 
+  theme_cpesr_cap() 
+```
+
+
 ```{r tpe}
 pe %>%
   group_by(Session = as.character(Session)) %>%
   summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
   ggplot(aes(x=Session,y=Taux.Poursuite.d.études, group=1)) +
-  geom_vline(xintercept = "2018") +
+  geom_vline(xintercept = "2017") +
   geom_line(size=1) + geom_point(shape = 21, stroke=1, size=3, color = "white", fill="black") +
   theme_cpesr_cap()
 ```
@@ -63,7 +128,7 @@ pe %>%
   group_by(Session = as.character(Session),Série.du.bac) %>%
   summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
   ggplot(aes(x=Session,y=Taux.Poursuite.d.études, group=Série.du.bac)) +
-  geom_vline(xintercept = "2018") +
+  geom_vline(xintercept = "2017") +
   geom_line(aes(color=Série.du.bac), size=1) + 
   geom_point(aes(fill=Série.du.bac), shape = 21, stroke=1, size=3, color = "white") +
   theme_cpesr_cap()
@@ -77,7 +142,7 @@ pe %>%
   group_by(Série.du.bac) %>%
   mutate(val100 = Taux.Poursuite.d.études / first(Taux.Poursuite.d.études) *100) %>%
   ggplot(aes(x=Session,y=val100, group=Série.du.bac)) +
-  geom_vline(xintercept = "2018") +
+  geom_vline(xintercept = "2017") +
   geom_line(aes(color=Série.du.bac), size=1) + 
   geom_point(aes(fill=Série.du.bac), shape = 21, stroke=1, size=3, color = "white") +
   theme_cpesr_cap()
@@ -92,7 +157,7 @@ pe %>%
   group_by(Session = as.character(Session), Secteur) %>%
   summarize(Taux.Poursuite.d.études = sum(Poursuivants,na.rm = TRUE) / sum(Bacheliers,na.rm = TRUE)) %>% 
   ggplot(aes(x=Session,y=Taux.Poursuite.d.études, group=Secteur)) +
-  geom_vline(xintercept = "2018") +
+  geom_vline(xintercept = "2017") +
   geom_line(aes(color=Secteur), size=1) + 
   geom_point(aes(fill=Secteur), shape = 21, stroke=1, size=3, color = "white") +
   theme_cpesr_cap()
@@ -108,8 +173,199 @@ pe %>%
   group_by(Secteur) %>%
   mutate(val100 = Taux.Poursuite.d.études / first(Taux.Poursuite.d.études) *100) %>%
   ggplot(aes(x=Session,y=val100, group=Secteur)) +
-  geom_vline(xintercept = "2018") +
+  geom_vline(xintercept = "2017") +
   geom_line(aes(color=Secteur), size=1) + 
   geom_point(aes(fill=Secteur), shape = 21, stroke=1, size=3, color = "white") +
   theme_cpesr_cap()
+```
+
+
+## Bacheliers
+
+```{r bacheliers}
+pe %>%
+  group_by(Session = as.character(Session), Série.du.bac) %>%
+  summarise(Bacheliers=sum(Bacheliers)/1000) %>% 
+  ggplot(aes(x=Session,y=Bacheliers, group=Série.du.bac)) +
+  geom_vline(xintercept = "2017") +
+  geom_area(aes(fill=Série.du.bac,color=Série.du.bac), alpha=0.7, size=1) + 
+  theme_cpesr_cap() 
+```
+
+```{r bacheliers.data, eval=FALSE}
+pe %>%
+  filter(Session %in% c("2010","2017","2020")) %>%
+  group_by(Session, Série.du.bac) %>%
+  summarise(Bacheliers=round(sum(Bacheliers)/1000)) %>% 
+  group_by(Série.du.bac) %>%
+  mutate(Evolution = scales::percent(Bacheliers / first(Bacheliers) - 1 )) %>%
+  pivot_wider(names_from = Série.du.bac, values_from = c(Bacheliers,Evolution)) %>% 
+  mutate(Total = `Bacheliers_Gen.`+`Bacheliers_Pro.`+`Bacheliers_Techno.`) %>%
+  spoilerTable()
+```
+
+### Poursuites
+
+```{r pe.all.data}
+pe.pivot <- pe %>%
+  group_by(Session,Série,Genre) %>%
+  summarise(across(c(starts_with("Néo")),sum)) %>% 
+  pivot_longer(starts_with("Néo"), names_to = "Label", values_to = "Poursuites") %>% 
+  mutate(
+    Secteur = factor(
+      case_when(
+        str_detect(Label,"secteur.privé") ~ "Privé",
+        str_detect(Label,"non.renseigné") ~ as.character(NA),
+        TRUE ~ "Public"),
+      levels=c("Public","Privé","NC")),
+    Mobilité = ifelse(str_detect(Label,"différente"),"Hors aca.", "Même aca."),
+    Filière = factor(
+      case_when(
+        str_detect(Label,"université") ~ "Université",
+        str_detect(Label,"en.IUT") ~ "IUT",
+        str_detect(Label,"CPGE") ~ "CPGE",
+        str_detect(Label,"STS") ~ "STS",
+        TRUE ~ "Autre"),
+      levels = c("Université","IUT","CPGE","STS","Autre"))
+  )
+```
+
+
+```{r pe.pivot.fun}
+pe_plot <- function(critere,palette="Set2") {
+  pe.pivot %>%
+    mutate(Critère = !!sym(critere)) %>%
+    group_by(Session, Critère) %>%
+    summarise(Poursuites = sum(Poursuites) / 1000) %>% 
+    ggplot(aes(x=Session,y=Poursuites, group=Critère)) +
+    geom_vline(xintercept = "2017") +
+    geom_area(aes(fill=Critère,color=Critère), alpha=0.7, size=1, 
+              position = position_stack(reverse = FALSE)) + 
+    scale_color_brewer(palette = palette, name=critere, na.value = "grey50") +
+    scale_fill_brewer(palette = palette, name=critere, na.value = "grey50") +
+    #scale_y_continuous(labels=scales::percent) +
+    ylab("Poursuites (milliers)") +
+    scale_x_discrete(breaks=c("2010","2012","2014","2016","2018","2020")) +
+    theme_cpesr() +
+    theme(legend.position = "right")
+}
+```
+
+```{r pe.criteres, fig.asp=9/16, fig.width=8}
+cowplot::plot_grid(align = "hv", axis = "tblr",
+  pe_plot("Série"), pe_plot("Filière"), pe_plot("Secteur"), pe_plot("Mobilité")
+)
+```
+
+```{r pe.pivot.norm.fun}
+pe_part_plot <- function(critere,palette="Set2") {
+  pe.pivot %>%
+    mutate(Critère = !!sym(critere)) %>%
+    group_by(Session, Critère) %>%
+    summarise(Poursuites = sum(Poursuites) / 1000) %>% 
+    group_by(Session) %>%
+    mutate(Part = Poursuites / sum(Poursuites)) %>%
+    group_by(Critère) %>%
+    mutate(Evol = Poursuites / first(Poursuites) * 100) %>%
+    mutate(PartEvol = Part - first(Part)) %>%
+    mutate(Session17 = relevel(factor(Session),"2017")) %>% 
+    arrange(Session17) %>% 
+    mutate(PartEvol17 = (Part - first(Part))*100) %>% 
+    na.omit() %>%
+
+    ggplot(aes(x=Session,y=PartEvol17, group=Critère)) +
+      geom_vline(xintercept = "2017") +
+      geom_line(aes(fill=Critère,color=Critère), size=1) + 
+      scale_color_brewer(palette = palette, name=critere) +
+      scale_fill_brewer(palette = palette, name=critere) +
+      #scale_y_continuous(labels=scales::percent) +
+      ylab("Part (valeur 100 en 2017)") +
+      scale_x_discrete(breaks=c("2010","2012","2014","2016","2018","2020")) +
+      theme_cpesr() +
+      theme(legend.position = "right")
+}
+
+pe_part_plot("Filière")
+```
+
+```{r pe.norm.criteres, fig.asp=9/16, fig.width=8}
+cowplot::plot_grid(align = "hv", axis = "tblr",
+  pe_part_plot("Série"), pe_part_plot("Filière"), pe_part_plot("Secteur"), pe_part_plot("Mobilité")
+)
+```
+
+### Non poursuivants
+
+```{r np.data}
+np <- pe %>% 
+  group_by(Session,Série,Genre,Académie.du.Bac) %>%
+  summarize(Non.poursuites = sum(Bacheliers) - sum(Poursuivants))
+
+np_plot <- function(critere,palette="Set2") {
+  np %>%
+    mutate(Critère = !!sym(critere)) %>%
+    group_by(Session, Critère) %>%
+    summarise(Non.poursuites = sum(Non.poursuites) / 1000) %>% 
+    ggplot(aes(x=Session,y=Non.poursuites, group=Critère)) +
+    geom_vline(xintercept = "2017") +
+    geom_area(aes(fill=Critère,color=Critère), alpha=0.7, size=1, 
+              position = position_stack(reverse = FALSE)) + 
+    scale_color_brewer(palette = palette, name=critere) +
+    scale_fill_brewer(palette = palette, name=critere) +
+    #scale_y_continuous(labels=scales::percent) +
+    ylab("Non poursuites (milliers)") +
+    scale_x_discrete(breaks=c("2010","2012","2014","2016","2018","2020")) +
+    theme_cpesr() +
+    theme(legend.position = "right")
+}
+
+np_plot("Série")
+np_plot("Genre")
+```
+
+```{r np.criteres, fig.asp=4.5/16, fig.width=8}
+cowplot::plot_grid(align = "hv", axis = "tblr",
+  np_plot("Série"), np_plot("Genre")
+)
+```
+```{r np.norm.data}
+np <- pe %>% 
+  group_by(Session,Série,Genre,Académie.du.Bac) %>%
+  summarize(Non.poursuites = sum(Bacheliers) - sum(Poursuivants))
+
+np_norm_plot <- function(critere,palette="Set2") {
+  np %>%
+    mutate(Critère = !!sym(critere)) %>%
+    group_by(Session, Critère) %>%
+    summarise(Non.poursuites = sum(Non.poursuites) / 1000) %>% 
+    group_by(Session) %>%
+    mutate(Part = Non.poursuites / sum(Non.poursuites)) %>%
+    group_by(Critère) %>%
+    mutate(Evol = Non.poursuites / first(Non.poursuites) * 100) %>%
+    mutate(PartEvol = Part - first(Part)) %>%
+    mutate(Session17 = relevel(factor(Session),"2017")) %>% 
+    arrange(Session17) %>% 
+    mutate(PartEvol17 = (Part - first(Part))*100) %>% 
+    na.omit() %>%
+
+    ggplot(aes(x=Session,y=PartEvol17, group=Critère)) +
+    geom_vline(xintercept = "2017") +
+    geom_line(aes(fill=Critère,color=Critère),  size=1) + 
+    scale_color_brewer(palette = palette, name=critere) +
+    scale_fill_brewer(palette = palette, name=critere) +
+    #scale_y_continuous(labels=scales::percent) +
+    ylab("Part dans les non poursuites (points p/r à 2017") +
+    scale_x_discrete(breaks=c("2010","2012","2014","2016","2018","2020")) +
+    theme_cpesr() +
+    theme(legend.position = "right")
+}
+
+np_norm_plot("Série")
+np_norm_plot("Genre")
+```
+
+```{r np.norm.criteres, fig.asp=4.5/16, fig.width=8}
+cowplot::plot_grid(align = "hv", axis = "tblr",
+  np_norm_plot("Série"), np_norm_plot("Genre")
+)
 ```
