@@ -328,3 +328,20 @@ ps %>%
   ggplot(aes(x=Session,y=admis,fill=Statut, color=Statut, group=Statut)) +
   geom_col()
 ```
+
+
+### Bac Pro
+
+```{r bacpro}
+ps %>% 
+  filter(Session > 2017) %>%
+  group_by(Session,Filière = Filière.de.formation.très.agrégée) %>%
+  summarize(BacPro = sum(Effectif.des.admis.néo.bacheliers.professionnels, na.rm=TRUE)) %>%
+  #mutate(Session17 = relevel(factor(Session), "2017")) %>%
+  group_by(Filière) %>%
+  arrange(Session) %>%
+  mutate(Val100 = BacPro / first(BacPro) * 100) %>%
+  ggplot(aes(x=Session,y=BacPro, color=Filière)) +
+  geom_line() +
+  theme_cpesr()
+```

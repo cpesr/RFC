@@ -72,3 +72,51 @@ Poursuite d’étude
 <img src="PoursuiteDEtude_files/figure-gfm/np.norm.data-1.png" width="672" /><img src="PoursuiteDEtude_files/figure-gfm/np.norm.data-2.png" width="672" />
 
 <img src="PoursuiteDEtude_files/figure-gfm/np.norm.criteres-1.png" width="768" />
+
+### Flux Série / Filière
+
+<img src="PoursuiteDEtude_files/figure-gfm/flux-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/flux2-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/flux2bis-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/flux2ter-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/flux2quatro-1.png" width="672" />
+
+### Bac pro
+
+<img src="PoursuiteDEtude_files/figure-gfm/bp-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/bp2-1.png" width="672" />
+
+### Flux des différences
+
+    ## # A tibble: 15 × 5
+    ## # Groups:   Série, Filière [15]
+    ##    Session Série   Filière    Poursuites    Diff
+    ##    <chr>   <fct>   <fct>           <dbl>   <dbl>
+    ##  1 2020    Gen.    Université    197395. 25010. 
+    ##  2 2020    Gen.    IUT            33028.  1121. 
+    ##  3 2020    Gen.    CPGE           37787. -2011. 
+    ##  4 2020    Gen.    STS            36930.  8595. 
+    ##  5 2020    Gen.    Autre          52137. 14450. 
+    ##  6 2020    Techno. Université     26201.  2049. 
+    ##  7 2020    Techno. IUT            17385.  2674. 
+    ##  8 2020    Techno. CPGE            2645.   227. 
+    ##  9 2020    Techno. STS            59685.  6428  
+    ## 10 2020    Techno. Autre          12076.  5113. 
+    ## 11 2020    Pro.    Université     10059. -1174. 
+    ## 12 2020    Pro.    IUT              675    -89  
+    ## 13 2020    Pro.    CPGE             126.    39.0
+    ## 14 2020    Pro.    STS            65049. 10332. 
+    ## 15 2020    Pro.    Autre           4817.  3076.
+
+<img src="PoursuiteDEtude_files/figure-gfm/diflux-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/diflux2plot-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/diflux3-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/diflux4-1.png" width="672" />

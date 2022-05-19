@@ -10,6 +10,7 @@ knitr::opts_chunk$set(fig.asp=9/16, fig.retina = 2)
 
 library(tidyverse)
 library(ggthemes)
+library(ggalluvial)
 
 library(ggcpesrthemes)
 theme_cpesr_setup(authors="Julien Gossa",
@@ -180,6 +181,9 @@ pe %>%
 ```
 
 
+
+
+
 ## Bacheliers
 
 ```{r bacheliers}
@@ -285,7 +289,7 @@ pe_part_plot <- function(critere,palette="Set2") {
       theme(legend.position = "right")
 }
 
-pe_part_plot("Filière")
+pe_part_plot("Secteur")
 ```
 
 ```{r pe.norm.criteres, fig.asp=9/16, fig.width=8}
@@ -368,4 +372,337 @@ np_norm_plot("Genre")
 cowplot::plot_grid(align = "hv", axis = "tblr",
   np_norm_plot("Série"), np_norm_plot("Genre")
 )
+```
+
+
+### Flux Série / Filière
+
+```{r flux}
+pe.pivot %>% 
+  group_by(Session,Série,Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  group_by(Série,Filière) %>%
+  mutate(Session17 = relevel(factor(Session),"2017")) %>% 
+  arrange(Session17) %>% 
+  mutate(Evolution = Poursuites / first(Poursuites) * 100 ) %>%
+  ggplot(aes(x=Session,y=Evolution, color=Série, group=1)) +
+  geom_vline(xintercept = "2017") +
+  geom_line(size=1) +
+  facet_grid(Série~Filière) +
+  scale_x_discrete(breaks=c("2010","2017")) +
+  ylab("Poursuites (valeur 100 en 2017)") +
+  theme_cpesr()
+```
+
+```{r flux2}
+pe.pivot %>% 
+  group_by(Session,Série,Secteur,Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  group_by(Série,Secteur,Filière) %>%
+  na.omit() %>%
+  mutate(Session17 = relevel(factor(Session),"2017")) %>% 
+  arrange(Session17) %>% 
+  mutate(Evolution = Poursuites / first(Poursuites) * 100 ) %>%
+  ggplot(aes(x=Session,y=Evolution, color=Secteur, group=Secteur)) +
+  geom_vline(xintercept = "2017") +
+  geom_line(size=1) +
+  facet_grid(Série~Filière) +
+  scale_x_discrete(breaks=c("2010","2017")) +
+  ylab("Poursuites (valeur 100 en 2017)") +
+  theme_cpesr()
+```
+
+```{r flux2bis}
+pe.pivot %>% 
+  group_by(Session,Série,Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  group_by(Série,Filière) %>%
+  na.omit() %>%
+  mutate(Session17 = relevel(factor(Session),"2017")) %>% 
+  arrange(Session17) %>% 
+  mutate(Evolution = Poursuites / first(Poursuites) * 100 ) %>%
+  ggplot(aes(x=Session,y=Evolution, color=Série, group=Série)) +
+  geom_vline(xintercept = "2017") +
+  geom_line(size=1) +
+  facet_grid(Série~Filière) +
+  scale_x_discrete(breaks=c("2010","2017")) +
+  ylab("Poursuites (valeur 100 en 2017)") +
+  coord_cartesian(ylim=c(50,200)) +
+  theme_cpesr()
+```
+
+```{r flux2ter}
+pe.pivot %>% 
+  group_by(Session,Série,Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  #filter(Série != "Pro.", Filière != "Autre") %>%
+  group_by(Série,Filière) %>%
+  na.omit() %>%
+  mutate(Session17 = relevel(factor(Session),"2017")) %>% 
+  arrange(Session17) %>% 
+  mutate(Evolution = Poursuites / first(Poursuites) * 100 ) %>%
+  filter(Poursuites>5000) %>%
+  ggplot(aes(x=Session,y=Evolution, color=Filière, group=Filière)) +
+  geom_vline(xintercept = "2017") +
+  geom_line(size=1) +
+  geom_text(data=. %>% filter(Session == 2017), y=80, aes(label=round(Poursuites))) +
+  facet_grid(Série~Filière) +
+  scale_x_discrete(breaks=c("2010","2017")) +
+  ylab("Poursuites (valeur 100 en 2017)") +
+  theme_cpesr()
+```
+
+```{r flux2quatro}
+pe.pivot %>% 
+  group_by(Session,Série,Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  #filter(Série != "Pro.", Filière != "Autre") %>%
+  group_by(Série,Filière) %>%
+  na.omit() %>%
+  mutate(Session17 = relevel(factor(Session),"2017")) %>% 
+  arrange(Session17) %>% 
+  mutate(Evolution = Poursuites - first(Poursuites) ) %>%
+  ggplot(aes(x=Session,y=Evolution, color=Filière, group=Filière)) +
+  geom_vline(xintercept = "2017", size=0.2) +
+  geom_line(size=1) +
+  #geom_text(data=. %>% filter(Session == 2017), y=80, aes(label=round(Poursuites))) +
+  facet_grid(Série~Filière) +
+  scale_x_discrete(breaks=c("2010","2017")) +
+  ylab("Poursuites (différence à 2017)") +
+  theme_cpesr()
+```
+
+### Bac pro
+
+```{r bp}
+pe.pivot %>%
+  filter(Série == "Pro.", Secteur == "Public", Filière == "Autre") %>% 
+  group_by(Session,Série,Secteur,Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  ggplot(aes(x=Session,y=Poursuites, color=Série, group=Série)) +
+  geom_vline(xintercept = "2017") +
+  geom_line(size=1) +
+  scale_x_discrete(breaks=c("2010","2017")) +
+  ylab("Poursuites") +
+  theme_cpesr()
+```
+
+
+```{r bp2}
+pe %>%
+  filter(Série == "Pro.") %>% 
+  group_by(Session,Académie.du.Bac) %>%
+  summarise(Poursuites = sum(Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.public.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat)) %>% 
+  ggplot(aes(x=Session,y=Poursuites, color=Académie.du.Bac, group=Académie.du.Bac)) +
+  geom_vline(xintercept = "2017") +
+  geom_line(size=1) +
+  scale_x_discrete(breaks=c("2010","2017")) +
+  ylab("Poursuites") +
+  theme_cpesr()
+```
+
+
+### Flux des différences
+
+
+```{r diflux}
+df <- pe.pivot %>%
+  filter(Session %in% c("2017","2020")) %>%
+  group_by(Session, Série, Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  group_by(Série, Filière) %>%
+  mutate(Diff = Poursuites - first(Poursuites)) %>%
+  filter(Session == "2020") 
+
+df 
+df %>%
+  filter(Diff > 0) %>%
+  filter(Filière != "CPGE") %>%
+ggplot(aes(y = Diff, axis1 = Série, axis2=Filière)) +
+  geom_alluvium(aes(fill = Série, color=Série), width = 1/12, alpha=0.8) +
+  geom_stratum(width = 1/6, fill = "black", color = "grey") +
+  geom_text(stat = "stratum", color = "white", aes(label = after_stat(stratum))) +
+  theme_cpesr() + theme(axis.text.x = element_blank())
+```
+
+
+```{r diflux2}
+df <- pe.pivot %>%
+  filter(Session %in% c("2017","2020")) %>%
+  group_by(Session, Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  group_by(Filière) %>%
+  pivot_wider(values_from = Poursuites, names_from = Session, names_prefix = "Poursuites") %>%
+  mutate(diff = Poursuites2020 - Poursuites2017) %>%
+  mutate(Filière = as.character(Filière)) 
+
+diflux <- bind_rows(
+  transmute(df,
+    id = paste("2017_",Filière),
+    Session = "2017",
+    Cohorte = "Bacheliers 2017",
+    Filière = Filière,
+    Effectif = Poursuites2017
+  ),
+  transmute(df,
+    id = paste("2017_",Filière),
+    Session = "2020",
+    Cohorte = "Bacheliers 2017",
+    Filière = Filière,
+    Effectif = min(Poursuites2017,Poursuites2020)
+  ),
+  transmute(df,
+    id = paste("2020_",Filière),
+    Session = "2017",
+    Cohorte = "Bacheliers 2020",
+    Filière = "Bacheliers 2020",
+    Effectif = max(Poursuites2020-Poursuites2017,0)
+    ),
+  transmute(df,
+    id = paste("2020_",Filière),
+    Session = "2020",
+    Cohorte = "Bacheliers 2020",
+    Filière = Filière,
+    Effectif = max(Poursuites2020-Poursuites2017,0)
+    )
+) %>%
+  mutate(Filière = factor(Filière, 
+                          levels = c("Université","IUT","CPGE","STS","Autre","Bacheliers 2020"))) %>%
+  mutate(Effectif = Effectif / 1000)
+
+  # ggplot(aes(y = Diff, axis1 = Série, axis2=Filière)) +
+  # geom_alluvium(aes(fill = Série, color=Série), width = 1/12) +
+  # geom_stratum(width = 1/12, fill = "black", color = "grey") +
+  # geom_label(stat = "stratum", aes(label = after_stat(stratum))) +
+  # theme_cpesr() + theme(axis.text.x = element_blank())
+
+```
+
+```{r diflux2plot}
+diflux %>% 
+  filter(Effectif != 0) %>%
+  ggplot(aes(x=Session, y = Effectif, alluvium = id, stratum=Filière)) +
+  geom_alluvium(aes(fill = Cohorte), color="white", width = 1/12, alpha=1) +
+  geom_stratum(width = 1/6, fill = "black", color = "grey") +
+  geom_text(stat = "stratum", color="white", aes(label = str_replace(after_stat(stratum)," ","\n"))) +
+  scale_x_discrete(limits = c("2017", "2020"), expand = c(.1, .1)) +
+  ylab("Poursuites (milliers)") +
+  theme_cpesr()
+```
+
+```{r diflux3, fig.retina=2}
+df.serie <- pe.pivot %>%
+  filter(Session %in% c("2017","2020")) %>%
+  group_by(Session, Série, Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  group_by(Série, Filière) %>%
+  pivot_wider(values_from = Poursuites, names_from = Session, names_prefix = "Poursuites") %>%
+  mutate(diff = Poursuites2020 - Poursuites2017) %>%
+  mutate(Filière = as.character(Filière)) 
+
+diflux2 <- bind_rows(
+  transmute(df,
+    id = paste("2017_",Filière),
+    Session = "2017",
+    Cohorte = "Bacheliers 2017",
+    Filière = Filière,
+    Effectif = Poursuites2017
+  ),
+  transmute(df,
+    id = paste("2017_",Filière),
+    Session = "2020",
+    Cohorte = "Bacheliers 2017",
+    Filière = Filière,
+    Effectif = min(Poursuites2017,Poursuites2020)
+  ),
+  transmute(df.serie,
+    id = paste("2020_",Filière,Série),
+    Session = "2017",
+    Cohorte = paste("Bacheliers 2020",Série),
+    Série,
+    Filière = "Bacheliers 2020",
+    Effectif = max(Poursuites2020-Poursuites2017,0)
+    ),
+  transmute(df.serie,
+    id = paste("2020_",Filière,Série),
+    Session = "2020",
+    Cohorte = paste("Bacheliers 2020",Série),
+    Série,
+    Filière = Filière,
+    Effectif = max(Poursuites2020-Poursuites2017,0)
+    )
+) %>%
+  mutate(Filière = factor(Filière, 
+                          levels = c("Université","IUT","CPGE","STS","Autre","Bacheliers 2020"))) %>%
+  mutate(Effectif = Effectif / 1000) %>%
+  filter(Effectif != 0)
+  
+diflux2 %>%
+  ggplot(aes(x=Session, y = Effectif, alluvium = id, stratum=Filière)) +
+  geom_alluvium(aes(fill = Cohorte, color=Cohorte), size=0.2, width = 1/12, alpha=1) +
+  geom_stratum(width = 1/6, fill = "black", color = "grey") +
+  geom_text(stat = "stratum", color="white", aes(label = str_replace(after_stat(stratum)," ","\n"))) +
+  scale_x_discrete(limits = c("2017", "2020"), expand = c(.1, .1)) +
+  ylab("Poursuites (milliers)") +
+  theme_cpesr()
+```
+
+```{r diflux4, fig.asp=2}
+df.serie <- pe.pivot %>%
+  filter(Session %in% c("2017","2020")) %>%
+  group_by(Session, Série, Filière) %>%
+  summarise(Poursuites = sum(Poursuites)) %>%
+  group_by(Série, Filière) %>%
+  pivot_wider(values_from = Poursuites, names_from = Session, names_prefix = "Poursuites") %>%
+  mutate(diff = Poursuites2020 - Poursuites2017) %>%
+  mutate(Filière = as.character(Filière)) 
+
+diflux <- bind_rows(
+  transmute(df.serie,
+    id = paste("2017_",Filière,Série),
+    Session = "2017",
+    Cohorte = "Bacheliers 2017",
+    Série,
+    Filière = Filière,
+    Effectif = Poursuites2017
+  ),
+  transmute(df.serie,
+    id = paste("2017_",Filière,Série),
+    Session = "2020",
+    Cohorte = "Bacheliers 2017",
+    Série,
+    Filière = Filière,
+    Effectif = min(Poursuites2017,Poursuites2020)
+  ),
+  transmute(df.serie,
+    id = paste("2020_",Filière,Série),
+    Session = "2017",
+    Cohorte = "Bacheliers 2020",
+    Série,
+    Filière = "Bacheliers 2020",
+    Effectif = max(Poursuites2020-Poursuites2017,0)
+    ),
+  transmute(df.serie,
+    id = paste("2020_",Filière,Série),
+    Session = "2020",
+    Cohorte = "Bacheliers 2020",
+    Série,
+    Filière = Filière,
+    Effectif = max(Poursuites2020-Poursuites2017,0)
+    )
+) %>%
+  mutate(Filière = factor(Filière, 
+                          levels = c("Université","IUT","CPGE","STS","Autre","Bacheliers 2020"))) %>%
+  mutate(Effectif = Effectif / 1000) %>%
+  filter(Effectif != 0)
+  
+diflux %>%
+  ggplot(aes(x=Session, y = Effectif, alluvium = id, stratum=Filière)) +
+  geom_alluvium(aes(fill = Cohorte, color= Cohorte), alpha=1,width = 1/12) +
+  geom_stratum(width = 1/6, fill = "black", color = "grey") +
+  geom_text(stat = "stratum", color="white", aes(label = str_replace(after_stat(stratum)," ","\n"))) +
+  scale_x_discrete(limits = c("2017", "2020"), expand = c(.1, .1)) +
+  ylab("Poursuites (milliers)") +
+  facet_wrap(Série~., scales = "free_y", ncol = 1) +
+  theme_cpesr()
 ```
