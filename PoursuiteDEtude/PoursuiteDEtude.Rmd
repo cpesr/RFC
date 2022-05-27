@@ -14,7 +14,7 @@ library(ggalluvial)
 
 library(ggcpesrthemes)
 theme_cpesr_setup(authors="Julien Gossa",
-                  source="fr-esr-taux-poursuite-enseignement-superieur-par-academie")
+                  source="SIES <fr-esr-taux-poursuite-enseignement-superieur-par-academie")
 
 spoilerTable <- function(df) {
   cat("\n<details>\n")
@@ -102,16 +102,26 @@ pe %>%
 ```
 
 
-```{r pe.np}
+```{r pe.np, fig.retina=2}
 pe %>%
   group_by(Session = as.character(Session), Série.du.bac) %>%
-  summarise(Non.poursuivants = sum(Bacheliers - Poursuivants)) %>% 
+  summarise(Non.poursuivants = sum(Bacheliers - Poursuivants)/1000) %>% 
   ggplot(aes(x=Session,y=Non.poursuivants, group=Série.du.bac)) +
   geom_vline(xintercept = "2017") +
   geom_area(aes(fill=Série.du.bac,color=Série.du.bac), size=1, alpha = 0.6) + 
+  scale_fill_discrete(name="") + 
+  scale_color_discrete(name="") +
+  ylab("Nombre de bacheliers\nnon poursuivants (milliers)") +
   theme_cpesr_cap() 
 ```
 
+```{r pe.np.data, results='asis'}
+pe %>%
+  group_by(Session = as.character(Session), Série.du.bac) %>%
+  summarise(Non.poursuivants = sum(Bacheliers - Poursuivants)) %>% 
+  pivot_wider(names_from = Série.du.bac, values_from = Non.poursuivants) %>%
+  spoilerTable()
+```
 
 ```{r tpe}
 pe %>%
@@ -556,7 +566,7 @@ diflux <- bind_rows(
     Session = "2017",
     Cohorte = "Bacheliers 2020",
     Filière = "Bacheliers 2020",
-    Effectif = max(Poursuites2020-Poursuites2017,0)
+    Effectif = -max(Poursuites2020-Poursuites2017,0)
     ),
   transmute(df,
     id = paste("2020_",Filière),
@@ -621,7 +631,7 @@ diflux2 <- bind_rows(
     Cohorte = paste("Bacheliers 2020",Série),
     Série,
     Filière = "Bacheliers 2020",
-    Effectif = max(Poursuites2020-Poursuites2017,0)
+    Effectif = -max(Poursuites2020-Poursuites2017,0)
     ),
   transmute(df.serie,
     id = paste("2020_",Filière,Série),
@@ -680,7 +690,7 @@ diflux <- bind_rows(
     Cohorte = "Bacheliers 2020",
     Série,
     Filière = "Bacheliers 2020",
-    Effectif = max(Poursuites2020-Poursuites2017,0)
+    Effectif = -max(Poursuites2020-Poursuites2017,0)
     ),
   transmute(df.serie,
     id = paste("2020_",Filière,Série),

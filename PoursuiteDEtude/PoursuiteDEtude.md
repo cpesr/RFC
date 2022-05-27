@@ -42,6 +42,27 @@ Poursuite d’étude
 
 <img src="PoursuiteDEtude_files/figure-gfm/pe.np-1.png" width="672" />
 
+<details>
+<summary>
+Voir les données
+</summary>
+
+| Session | Bac général | Bac professionnel | Bac technologique |
+|:--------|------------:|------------------:|------------------:|
+| 2010    |    15493.82 |          77280.43 |          26002.04 |
+| 2011    |    18117.91 |         102225.98 |          25308.99 |
+| 2012    |    19379.09 |         123895.97 |          24598.95 |
+| 2013    |    20791.91 |          96378.86 |          28448.84 |
+| 2014    |    20395.96 |         122630.96 |          27347.77 |
+| 2015    |    21366.01 |         112149.83 |          24172.88 |
+| 2016    |    25097.85 |         114871.99 |          26095.92 |
+| 2017    |    27602.09 |         109027.94 |          26987.04 |
+| 2018    |    26027.04 |         108519.93 |          29509.85 |
+| 2019    |    21875.96 |         101044.96 |          26802.01 |
+| 2020    |    26880.82 |         108114.94 |          31980.09 |
+
+</details>
+
 <img src="PoursuiteDEtude_files/figure-gfm/tpe-1.png" width="672" />
 
 <img src="PoursuiteDEtude_files/figure-gfm/tpe.serie-1.png" width="672" />
