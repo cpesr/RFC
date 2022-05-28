@@ -63,6 +63,8 @@ Voir les données
 
 </details>
 
+[non\_poursuites.csv](non_poursuites.csv)
+
 <img src="PoursuiteDEtude_files/figure-gfm/tpe-1.png" width="672" />
 
 <img src="PoursuiteDEtude_files/figure-gfm/tpe.serie-1.png" width="672" />
