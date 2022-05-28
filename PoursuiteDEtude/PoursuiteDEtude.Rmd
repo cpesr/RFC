@@ -120,7 +120,7 @@ df <- pe %>%
   group_by(Session = as.character(Session), Série.du.bac) %>%
   summarise(Non.poursuivants = sum(Bacheliers - Poursuivants)) %>% 
   pivot_wider(names_from = Série.du.bac, values_from = Non.poursuivants) 
-write.csv2(df,"non_poursuites.csv")
+write.csv(df,"non_poursuites.csv", row.names = FALSE)
 
 df %>% spoilerTable()
 ```
