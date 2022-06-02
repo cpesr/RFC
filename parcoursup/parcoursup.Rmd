@@ -63,7 +63,8 @@ ps19 <- read.csv2("../data/fr-esr-parcoursup-2019.csv",dec='.')
 ps20 <- read.csv2("../data/fr-esr-parcoursup-2020-xls.csv",dec=',') %>%
   rename(
     Libellé.formation = Filière.de.formation.détaillée,
-    Filière.de.formation.détaillée = Filière.de.formation.détaillée.1
+    Filière.de.formation.détaillée = Filière.de.formation.détaillée.1,
+    Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP. = Indicateur.Parcoursup.du.taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.dernier.classé.
   ) %>%
   select(-X..d.admis.néo.bacheliers.issus.du.même.établissement..BTS.CPGE.)
 
@@ -343,5 +344,35 @@ ps %>%
   mutate(Val100 = BacPro / first(BacPro) * 100) %>%
   ggplot(aes(x=Session,y=BacPro, color=Filière)) +
   geom_line() +
+  theme_cpesr()
+```
+
+
+### Droit eco gestion
+
+```{r deg.admis}
+ps %>% 
+  filter(Filière.de.formation.très.agrégée == "Licence") %>%
+  filter(Filière.de.formation.détaillée %in% c("Droit","Economie","Economie et gestion")) %>%
+  group_by(Session, Filière = Filière.de.formation.détaillée) %>%
+  summarise(Admis = sum(admis)) %>% 
+  na.omit() %>%
+  ggplot(aes(x=Session, y=Admis, group=Filière, color=Filière)) +
+  geom_line() + geom_point() + 
+  expand_limits(y=0) +
+  theme_cpesr()
+```
+
+
+```{r deg.tda}
+ps %>% 
+  filter(Session >= 2020) %>%
+  mutate(Session = as.character(Session)) %>%
+  filter(Filière.de.formation.très.agrégée == "Licence") %>%
+  filter(Filière.de.formation.détaillée %in% c("Droit","Economie","Economie et gestion")) %>%
+  ggplot(aes(x=Session, y=taux.accès, fill=Filière.de.formation.détaillée, group=Session)) +
+  geom_boxplot() +
+  expand_limits(y=0) + 
+  facet_wrap(Filière.de.formation.détaillée~.) +
   theme_cpesr()
 ```

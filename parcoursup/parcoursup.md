@@ -126,7 +126,7 @@ Voir les données
 | Rang.du.dernier.appelé.du.groupe.4                                                                                                               |
 | Regroupement.5.effectué.par.les.formations.pour.les.classements                                                                                  |
 | Rang.du.dernier.appelé.du.groupe.5                                                                                                               |
-| Indicateur.Parcoursup.du.taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.dernier.classé.            |
+| Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP.                                     |
 | Dont.taux.d.accès.des.candidats.ayant.un.bac.professionnel.ayant.postulé.à.la.formation                                                          |
 | Dont.taux.d.accès.des.candidats.ayant.un.bac.général.ayant.postulé.à.la.formation                                                                |
 | Dont.taux.d.accès.des.candidats.ayant.un.bac.technologique.ayant.postulé.à.la.formation                                                          |
@@ -138,7 +138,6 @@ Voir les données
 | Dont…d.admis.avec.mention..BT.                                                                                                                   |
 | Dont…d.admis.avec.mention..BP.                                                                                                                   |
 | list\_com                                                                                                                                        |
-| Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP.                                     |
 | LIB\_FOR\_VOE\_INS                                                                                                                               |
 | detail\_forma2                                                                                                                                   |
 | etablissement\_id\_paysage                                                                                                                       |
@@ -218,7 +217,7 @@ Disponibilité des données :
     ## `summarise()` has grouped output by 'Session'. You can override using the
     ## `.groups` argument.
 
-    ## # A tibble: 7 × 3
+    ## # A tibble: 8 × 3
     ## # Groups:   Session [6]
     ##   Session check     n
     ##     <int> <lgl> <int>
@@ -226,9 +225,10 @@ Disponibilité des données :
     ## 2    2017 FALSE  1352
     ## 3    2018 FALSE  2434
     ## 4    2019 FALSE  2521
-    ## 5    2020 FALSE  3035
-    ## 6    2021 FALSE     8
-    ## 7    2021 TRUE   3206
+    ## 5    2020 FALSE     7
+    ## 6    2020 TRUE   3028
+    ## 7    2021 FALSE     8
+    ## 8    2021 TRUE   3206
 
 ![](parcoursup_files/figure-gfm/tda.ecdf-1.png)<!-- -->
 
@@ -241,11 +241,11 @@ Voir les données
 
 | Accessibilité | nb.Licences | nb.admis | part.licences | part.admis |
 |:--------------|------------:|---------:|:--------------|:-----------|
-| \[0,0.2)      |         180 |     8016 | 5.61%         | 2.68%      |
-| \[0.2,0.5)    |         593 |    64910 | 18.50%        | 21.71%     |
-| \[0.5,0.8)    |         623 |    69390 | 19.43%        | 23.21%     |
-| \[0.8,1)      |         974 |    84993 | 30.38%        | 28.43%     |
-| \[1,1.01\]    |         836 |    71696 | 26.08%        | 23.98%     |
+| \[0,0.2)      |         314 |    12838 | 5.0%          | 2.12%      |
+| \[0.2,0.5)    |        1090 |   122179 | 17.5%         | 20.18%     |
+| \[0.5,0.8)    |        1269 |   150370 | 20.4%         | 24.83%     |
+| \[0.8,1)      |        1832 |   167800 | 29.4%         | 27.71%     |
+| \[1,1.01\]    |        1729 |   152342 | 27.7%         | 25.16%     |
 
 </details>
 
@@ -298,3 +298,21 @@ Voir les données
     ## `.groups` argument.
 
 ![](parcoursup_files/figure-gfm/public-1.png)<!-- -->
+
+### Bac Pro
+
+    ## `summarise()` has grouped output by 'Session'. You can override using the
+    ## `.groups` argument.
+
+![](parcoursup_files/figure-gfm/bacpro-1.png)<!-- -->
+
+### Droit eco gestion
+
+    ## `summarise()` has grouped output by 'Session'. You can override using the
+    ## `.groups` argument.
+
+![](parcoursup_files/figure-gfm/deg.admis-1.png)<!-- -->
+
+    ## Warning: Removed 2 rows containing non-finite values (stat_boxplot).
+
+![](parcoursup_files/figure-gfm/deg.tda-1.png)<!-- -->
