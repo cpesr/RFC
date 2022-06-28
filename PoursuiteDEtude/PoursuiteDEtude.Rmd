@@ -14,7 +14,7 @@ library(ggalluvial)
 
 library(ggcpesrthemes)
 theme_cpesr_setup(authors="Julien Gossa",
-                  source="SIES <fr-esr-taux-poursuite-enseignement-superieur-par-academie")
+                  source="SIES fr-esr-taux-poursuite-enseignement-superieur-par-academie")
 
 spoilerTable <- function(df) {
   cat("\n<details>\n")
@@ -25,7 +25,7 @@ spoilerTable <- function(df) {
   cat("\n\n</details>\n")
 }
 
-pe <- read.csv2("../data/fr-esr-taux-poursuite-enseignement-superieur-par-academie.csv", dec='.') %>% 
+pe <- read.csv2("data/fr-esr-taux-poursuite-enseignement-superieur-par-academie.csv", dec='.') %>% 
   rename(
     Session = Rentrée...Session,
     Bacheliers = Nombre.total.de.bacheliers

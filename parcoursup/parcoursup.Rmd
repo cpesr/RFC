@@ -376,3 +376,16 @@ ps %>%
   facet_wrap(Filière.de.formation.détaillée~.) +
   theme_cpesr()
 ```
+
+
+```{r deg.tda.taille}
+ps %>% 
+  filter(Session >= 2021) %>%
+  mutate(Session = as.character(Session)) %>%
+  filter(Filière.de.formation.très.agrégée == "Licence") %>%
+  filter(Filière.de.formation.détaillée %in% c("Droit","Economie","Economie et gestion")) %>%
+  ggplot(aes(x=admis, y=taux.accès, color=Filière.de.formation.détaillée)) +
+  geom_point() +
+  expand_limits(y=0) + 
+  theme_cpesr()
+```

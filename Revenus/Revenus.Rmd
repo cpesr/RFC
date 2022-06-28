@@ -1,0 +1,84 @@
+---
+title: "Revenus"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+
+pdi <- read.csv("point_indice.csv", dec=',') %>%
+  transmute(
+    Date = as.Date(Date, format="%d/%m/%Y"),
+    Valeur = as.numeric(str_replace(str_replace(Point.d.indice,"[^0-9,]",""), ",",".")),
+    Type = "Point d'indice"
+    ) 
+
+idp <- read.csv2("ipc.csv",dec='.', skip=3) %>% 
+  transmute(
+    Date = as.Date(Date.de.parution.au.JO, format="%d/%m/%Y"),
+    Valeur = X,
+    Type = "Indice des prix à la consommation")
+
+loyer <- read.csv2("loyer.csv",dec='.', skip=3) %>% 
+  transmute(
+    Date = as.Date(paste0(Période,-01), format="%Y-%m-%d"),
+    Valeur = X,
+    Type = "Indice des prix du loyer")
+```
+
+Sources : 
+- Point d'indice : https://www.fonction-publique.gouv.fr/connaitre-point-dindice
+- IPC : https://www.insee.fr/fr/statistiques/serie/001759970
+- Loyers : https://www.insee.fr/fr/statistiques/serie/001764297
+
+```{r pdi}
+pdi %>% 
+  arrange(Date) %>%
+  mutate(w = ifelse(Date < as.Date("2012-02-01"),1,0)) %>%
+  mutate(val100 = Valeur / first(Valeur) * 100) %>%
+  ggplot(aes(x=Date,y=val100,group=Type,weight = w)) +
+  geom_step(size=1) +
+  geom_smooth(method = "lm", se=FALSE, size=0.5) +
+  ylab("Point d'indice") +
+  theme_minimal() +
+  ggtitle("Evolution du point d'indice des fonctionnaires (valeur 100 en 1995)") 
+```
+
+```{r pdiidp}
+bind_rows(pdi,idp) %>% 
+  filter(Date > as.Date("1995-01-01")) %>%
+  arrange(Date) %>%
+  group_by(Type) %>%
+  mutate(w = ifelse(Date < as.Date("2012-02-01"),1,0)) %>%
+  mutate(val100 = Valeur / first(Valeur) * 100) %>%
+  ggplot(aes(x=Date,y=val100,group=Type,color=Type,weight = w)) +
+  geom_step(size=1) +
+  geom_smooth(method = "lm", se=FALSE, size=0.5) +
+  ylab("Valeur 100 pour 1995") +
+  theme_minimal() +
+  ggtitle("Point d'indice des fonctionnaires et Indice des prix à la consommation", 
+          subtitle = "Lignes de tendance calculées sur 1995-2012")  +
+  theme(legend.position = "bottom")
+```
+
+
+```{r pdiidployer}
+bind_rows(pdi,idp,loyer) %>% 
+  filter(Date > as.Date("1995-01-01")) %>%
+  arrange(Date) %>%
+  group_by(Type) %>%
+  mutate(w = ifelse(Date < as.Date("2012-02-01"),1,0)) %>%
+  mutate(val100 = Valeur / first(Valeur) * 100) %>%
+  ggplot(aes(x=Date,y=val100,group=Type,color=Type,weight = w)) +
+  geom_step(size=1) +
+  geom_smooth(method = "lm", se=FALSE, size=0.5) +
+  ylab("Valeur 100 pour 1995") +
+  theme_minimal() +
+  ggtitle("Point d'indice des fonctionnaires et Indice des prix à la consommation et loyers", 
+          subtitle = "Lignes de tendance calculées sur 1995-2012")  +
+  theme(legend.position = "bottom")
+```

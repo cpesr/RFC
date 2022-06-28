@@ -130,18 +130,18 @@ Voir les données
 | Dont.taux.d.accès.des.candidats.ayant.un.bac.professionnel.ayant.postulé.à.la.formation                                                          |
 | Dont.taux.d.accès.des.candidats.ayant.un.bac.général.ayant.postulé.à.la.formation                                                                |
 | Dont.taux.d.accès.des.candidats.ayant.un.bac.technologique.ayant.postulé.à.la.formation                                                          |
-| COD\_AFF\_FORM                                                                                                                                   |
+| COD_AFF_FORM                                                                                                                                     |
 | Commune.de.l.établissement                                                                                                                       |
 | Dont.effectif.des.admis.néo.bacheliers.avec.mention.Très.Bien.avec.félicitations.au.bac                                                          |
 | X..d.admis.néo.bacheliers.avec.mention.Très.Bien.avec.félicitations.au.bac                                                                       |
 | Dont…d.admis.avec.mention..BG.                                                                                                                   |
 | Dont…d.admis.avec.mention..BT.                                                                                                                   |
 | Dont…d.admis.avec.mention..BP.                                                                                                                   |
-| list\_com                                                                                                                                        |
-| LIB\_FOR\_VOE\_INS                                                                                                                               |
-| detail\_forma2                                                                                                                                   |
-| etablissement\_id\_paysage                                                                                                                       |
-| composante\_id\_paysage                                                                                                                          |
+| list_com                                                                                                                                         |
+| LIB_FOR_VOE_INS                                                                                                                                  |
+| detail_forma2                                                                                                                                    |
+| etablissement_id_paysage                                                                                                                         |
+| composante_id_paysage                                                                                                                            |
 | rdda                                                                                                                                             |
 | Taux.sélection                                                                                                                                   |
 | taux.accès                                                                                                                                       |
@@ -316,3 +316,7 @@ Voir les données
     ## Warning: Removed 2 rows containing non-finite values (stat_boxplot).
 
 ![](parcoursup_files/figure-gfm/deg.tda-1.png)<!-- -->
+
+    ## Warning: Removed 1 rows containing missing values (geom_point).
+
+![](parcoursup_files/figure-gfm/deg.tda.taille-1.png)<!-- -->
