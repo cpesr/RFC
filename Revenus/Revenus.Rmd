@@ -15,19 +15,29 @@ pdi <- read.csv("point_indice.csv", dec=',') %>%
     Date = as.Date(Date, format="%d/%m/%Y"),
     Valeur = as.numeric(str_replace(str_replace(Point.d.indice,"[^0-9,]",""), ",",".")),
     Type = "Point d'indice"
-    ) 
+    ) %>%
+  filter(Date > as.Date("1995-01-01")) %>%
+  arrange(Date) %>%
+  mutate(Val100 = Valeur / first(Valeur) * 100)
 
 idp <- read.csv2("ipc.csv",dec='.', skip=3) %>% 
   transmute(
     Date = as.Date(Date.de.parution.au.JO, format="%d/%m/%Y"),
     Valeur = X,
-    Type = "Indice des prix à la consommation")
+    Type = "Indice des prix à la consommation") %>%
+  filter(Date > as.Date("1995-01-01")) %>%
+  arrange(Date) %>%
+  mutate(Val100 = Valeur - first(Valeur) + 100)
 
 loyer <- read.csv2("loyer.csv",dec='.', skip=3) %>% 
   transmute(
     Date = as.Date(paste0(Période,-01), format="%Y-%m-%d"),
     Valeur = X,
-    Type = "Indice des prix du loyer")
+    Type = "Indice des prix du loyer") %>%
+  filter(Date > as.Date("1995-01-01")) %>%
+  arrange(Date) %>%
+  mutate(Val100 = Valeur - first(Valeur) + 100)
+
 ```
 
 Sources : 
@@ -40,8 +50,7 @@ Sources :
 pdi %>% 
   arrange(Date) %>%
   mutate(w = ifelse(Date < as.Date("2012-02-01"),1,0)) %>%
-  mutate(val100 = Valeur / first(Valeur) * 100) %>%
-  ggplot(aes(x=Date,y=val100,group=Type,weight = w)) +
+  ggplot(aes(x=Date,y=Val100,group=Type,weight = w)) +
   geom_step(size=1) +
   geom_smooth(method = "lm", se=FALSE, size=0.5) +
   ylab("Point d'indice") +
@@ -55,8 +64,7 @@ bind_rows(pdi,idp) %>%
   arrange(Date) %>%
   group_by(Type) %>%
   mutate(w = ifelse(Date < as.Date("2012-02-01"),1,0)) %>%
-  mutate(val100 = Valeur / first(Valeur) * 100) %>%
-  ggplot(aes(x=Date,y=val100,group=Type,color=Type,weight = w)) +
+  ggplot(aes(x=Date,y=Val100,group=Type,color=Type,weight = w)) +
   geom_step(size=1) +
   geom_smooth(method = "lm", se=FALSE, size=0.5) +
   ylab("Valeur 100 pour 1995") +
@@ -73,8 +81,7 @@ bind_rows(pdi,idp,loyer) %>%
   arrange(Date) %>%
   group_by(Type) %>%
   mutate(w = ifelse(Date < as.Date("2012-02-01"),1,0)) %>%
-  mutate(val100 = Valeur / first(Valeur) * 100) %>%
-  ggplot(aes(x=Date,y=val100,group=Type,color=Type,weight = w)) +
+  ggplot(aes(x=Date,y=Val100,group=Type,color=Type,weight = w)) +
   geom_step(size=1) +
   geom_smooth(method = "lm", se=FALSE, size=0.5) +
   ylab("Valeur 100 pour 1995") +
@@ -83,3 +90,7 @@ bind_rows(pdi,idp,loyer) %>%
           subtitle = "Lignes de tendance calculées sur 1995-2012")  +
   theme(legend.position = "bottom")
 ```
+
+
+
+
