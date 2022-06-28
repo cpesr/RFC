@@ -31,6 +31,7 @@ loyer <- read.csv2("loyer.csv",dec='.', skip=3) %>%
 ```
 
 Sources : 
+
 - Point d'indice : https://www.fonction-publique.gouv.fr/connaitre-point-dindice
 - IPC : https://www.insee.fr/fr/statistiques/serie/001759970
 - Loyers : https://www.insee.fr/fr/statistiques/serie/001764297
