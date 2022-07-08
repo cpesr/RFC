@@ -91,6 +91,21 @@ bind_rows(pdi,idp,loyer) %>%
   theme(legend.position = "bottom")
 ```
 
-
+```{r pdiidployer.test}
+bind_rows(pdi,idp,loyer) %>% 
+  filter(Date > as.Date("2016-01-01")) %>%
+  arrange(Date) %>%
+  group_by(Type) %>%
+  mutate(Val100 = Val100 - first(Val100) + 100) %>%
+  mutate(w = ifelse(Date < as.Date("2012-02-01"),1,1)) %>%
+  ggplot(aes(x=Date,y=Val100,group=Type,color=Type,weight = w)) +
+  geom_step(size=1) +
+  geom_smooth(method = "lm", se=FALSE, size=0.5) +
+  ylab("Valeur 100 pour 1995") +
+  theme_minimal() +
+  ggtitle("Point d'indice des fonctionnaires et Indice des prix à la consommation et loyers", 
+          subtitle = "Lignes de tendance calculées sur 1995-2012")  +
+  theme(legend.position = "bottom")
+```
 
 

@@ -17,6 +17,6 @@ Indicateurs financiers d’établissement
 
 ## Tous les indicateurs
 
-    ## Warning: Removed 131 rows containing missing values (geom_point).
+    ## Warning: Removed 122 rows containing missing values (geom_point).
 
 ![](université_nice___sophia_antipolis_files/figure-gfm/etab-1.png)<!-- -->

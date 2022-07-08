@@ -294,6 +294,31 @@ rpf %>%
     theme_cpesr_cap()
 ```
 
+## Point d'indice
+
+```{r pdi, fig.asp=9/16, fig.retina=2}
+df <- fin %>%
+  filter(exercice == 2021) %>%
+  left_join(etiquettes, by = c("uai...identifiant" = "UAI")) %>%
+  mutate(étiquettes = fct_recode(étiquettes, "IDEx ou ISITE" = "IDEx","IDEx ou ISITE" = "ISITE"))
+
+df <- bind_rows(
+    df %>% group_by(Type = "Ensemble") %>% summarise(pdi = sum(Dépenses.de.personnel, na.rm=TRUE)*0.035),
+    df %>% group_by(Type = groupe) %>% summarise(pdi = sum(Dépenses.de.personnel, na.rm=TRUE)*0.035),
+    df %>% group_by(Type = étiquettes) %>% summarise(pdi = sum(Dépenses.de.personnel, na.rm=TRUE)*0.035)
+  ) 
+
+df %>%
+    filter(Type %in% c("Ensemble","Université", "IDEx ou ISITE")) %>%
+    ggplot(aes(x=Type,y=pdi,fill=Type)) +
+    geom_col() +
+    scale_y_continuous(labels = ~ .x /1e6, name="Coût (millions d'euros)") +
+    scale_x_discrete(limits=c("Ensemble","Université","IDEx ou ISITE")) +
+    ggtitle("Budget nécessaire pour l'augmentation de 3,5% du point d'indice \nau MESRI") +
+    theme_cpesr_cap()
+    
+```
+
 ## Tous les indicateurs par établissement
 
 
@@ -306,7 +331,7 @@ outmd <- function(x, ext=".md") {
 }
 ```
 
-```{r production, eval=TRUE}
+```{r production, eval=FALSE}
 # etabs <- c("Université de Strasbourg")
 etabs <- unique(fin$etablissement)
 for(etab in etabs) {
@@ -323,7 +348,7 @@ for(etab in etabs) {
 
 
 
-```{r production2, results="asis", eval=TRUE}
+```{r production2, results="asis", eval=FALSE}
 for(grp in unique(fin$groupe)) {
   cat("\n\n###", grp,"\n\n")
   grpdf <- fin %>% filter(groupe == grp)
