@@ -1,0 +1,142 @@
+---
+title: "BIATSS"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.asp=9/16, fig.retina = 2)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors = "Julien Gossa", source="SIES https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-personnels-biatss-etablissements-publics/")
+
+biatss <- read.csv2("../data/fr-esr-personnels-biatss-etablissements-publics.csv")
+```
+
+Source : https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-personnels-biatss-etablissements-publics/export/
+
+```{r biatss.cn}
+colnames(biatss)
+```
+
+
+
+```{r biatss.eff}
+biatss %>%
+  group_by(Année,Type.de.personnel) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Année,y=Effectif, group=Type.de.personnel, color=Type.de.personnel)) +
+  geom_line() + geom_point() +
+  expand_limits(y=0) +
+  theme_cpesr_cap()
+```
+
+
+```{r biatss.tt}
+biatss %>%
+  group_by(Année,Type.de.personnel) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(values_from = Effectif, names_from = Type.de.personnel) %>%
+  mutate(Taux.de.titularité = titulaires / (titulaires+contractuels)) %>%
+  ggplot(aes(x=Année,y=Taux.de.titularité, group=1)) +
+  geom_line() + geom_point() +
+  expand_limits(y=c(0.55,0.65)) +
+  theme_cpesr_cap()
+```
+
+
+```{r biatss.tt.type}
+biatss %>%
+  group_by(Année,etablissement_type,Type.de.personnel) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(values_from = Effectif, names_from = Type.de.personnel) %>%
+  mutate(Taux.de.titularité = titulaires / (titulaires+contractuels)) %>%
+  ggplot(aes(x=Année,y=Taux.de.titularité, group=etablissement_type, color=etablissement_type)) +
+  geom_line() + geom_point() +
+  expand_limits(y=c(0.3,0.7)) +
+  theme_cpesr_cap() +
+  scale_color_discrete(name="")
+```
+
+
+```{r biatss.tt.univ}
+biatss %>%
+  filter(etablissement_type=="Université", Année==2020) %>%
+  group_by(Année,Etablissement,Type.de.personnel) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(values_from = Effectif, names_from = Type.de.personnel) %>%
+  mutate(Taux.de.titularité = titulaires / (titulaires+contractuels)) %>%
+  ggplot(aes(x=titulaires,y=contractuels, color=Taux.de.titularité)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement)) +
+  geom_smooth(method = "lm", alpha=0.6, size=0.2) +
+  scale_color_distiller(palette="RdBu", direction = 0) +
+  theme_cpesr_cap() + theme_minimal()
+```
+
+```{r biatss.tt.univ.ht}
+biatss %>%
+  filter(etablissement_type=="Université", Année==2020) %>%
+  group_by(Année,Etablissement,Type.de.personnel) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(values_from = Effectif, names_from = Type.de.personnel) %>%
+  mutate(Taux.de.titularité = titulaires / (titulaires+contractuels)) %>%
+  arrange(Taux.de.titularité) %>%
+  psych::headTail(top = 10, bottom = 10) %>%
+  kableExtra::kable()
+```
+
+
+```{r biatss.fil}
+biatss %>%
+  group_by(Année,Filière=code_filiere) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Année,y=Effectif, group=Filière, color=Filière)) +
+  geom_line() + geom_point() +
+  theme_cpesr_cap() +
+  guides(color=guide_legend(nrow=2,byrow=TRUE))
+```
+
+```{r biatss.corps}
+biatss %>%
+  filter(Année %in% range(Année)) %>%
+  mutate(Année = as.character(Année)) %>%
+  group_by(Année,Corps=Corps) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(y=reorder(Corps,Effectif),x=Effectif, group=Année, fill=Année)) +
+  geom_col(position="dodge") +
+  theme_cpesr_cap() +
+  guides(color=guide_legend(nrow=2,byrow=TRUE)) +
+  ylab("") + theme_minimal()
+```
+
+```{r biatss.corps.log}
+biatss %>%
+  filter(Année %in% range(Année)) %>%
+  mutate(Année = as.character(Année)) %>%
+  group_by(Année,Corps=Corps) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(y=reorder(Corps,Effectif),x=Effectif, group=Année, fill=Année)) +
+  geom_col(position="dodge") +
+  theme_cpesr_cap() +
+  guides(color=guide_legend(nrow=2,byrow=TRUE)) +
+  ylab("") + theme_minimal() +
+  scale_x_log10()
+```
+
+
+```{r biatss.medecin}
+biatss %>%
+  filter(code_corps %in% c("MED PREV","MEN", "INF - B","INF - A")) %>%
+  group_by(Année) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Année,y=Effectif, group=1)) +
+  geom_line() + geom_point() +
+  expand_limits(y=0) +
+  theme_cpesr_cap() +
+  ggtitle("Effectif médecins et infirmiers dans l'ESR")
+```
