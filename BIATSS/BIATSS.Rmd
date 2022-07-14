@@ -61,6 +61,34 @@ biatss %>%
   scale_color_discrete(name="")
 ```
 
+```{r biatss.tt.cat}
+biatss %>%
+  group_by(Année,Catégorie,Type.de.personnel) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(values_from = Effectif, names_from = Type.de.personnel) %>%
+  mutate(Taux.de.titularité = titulaires / (titulaires+contractuels)) %>%
+  ggplot(aes(x=Année,y=Taux.de.titularité, group=Catégorie, color=Catégorie)) +
+  geom_line() + geom_point() +
+  expand_limits(y=c(0.3,0.7)) +
+  theme_cpesr_cap() +
+  scale_color_discrete(name="")
+```
+
+
+```{r biatss.eff.cat}
+biatss %>%
+  mutate(Type.de.personnel = fct_rev(Type.de.personnel)) %>%
+  group_by(Année,Catégorie,Type.de.personnel) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Année,y=Effectif, group=paste(Catégorie,Type.de.personnel), color=Catégorie, shape=Type.de.personnel, linetype=Type.de.personnel)) +
+  geom_line() + geom_point() +
+  expand_limits(y=c(0.3,0.7)) +
+  theme_cpesr_cap() +
+  scale_color_discrete(name="")
+```
+
+
 
 ```{r biatss.tt.univ}
 biatss %>%
@@ -129,7 +157,56 @@ biatss %>%
 ```
 
 
+```{r biatss.bap}
+biatss %>%
+  filter(Année %in% range(Année)) %>%
+  mutate(Année = as.character(Année)) %>%
+  group_by(Année,bap=paste(code_bap,BAP)) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  filter(bap!=" ") %>%
+  ggplot(aes(y=reorder(bap,Effectif),x=Effectif, group=Année, fill=Année)) +
+  geom_col(position="dodge") +
+  theme_cpesr_cap() +
+  guides(color=guide_legend(nrow=2,byrow=TRUE)) +
+  ylab("") + theme_minimal()
+```
+
+
+```{r biatss.bap.ul}
+biatss %>%
+  filter(Etablissement == "Université de Lorraine") %>%
+  filter(Année %in% range(Année)) %>%
+  mutate(Année = as.character(Année)) %>%
+  group_by(Année,bap=paste(code_bap,BAP)) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  filter(bap!=" ") %>%
+  ggplot(aes(y=reorder(bap,Effectif),x=Effectif, group=Année, fill=Année)) +
+  geom_col(position="dodge") +
+  theme_cpesr_cap() +
+  guides(color=guide_legend(nrow=2,byrow=TRUE)) +
+  ylab("") + theme_minimal()
+```
+
+
+
+
 ```{r biatss.medecin}
+biatss %>%
+  filter(code_corps %in% c("MED PREV","MEN", "INF - B","INF - A")) %>%
+  group_by(Année, Corps) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Année,y=Effectif, group=Corps, color=Corps)) +
+  geom_line() + geom_point() +
+  expand_limits(y=0) +
+  theme_cpesr_cap() +
+  ggtitle("Effectif médecins et infirmiers dans l'ESR") +
+  guides(color=guide_legend(nrow=2,byrow=TRUE))
+
+```
+
+
+
+```{r biatss.medecin.tot}
 biatss %>%
   filter(code_corps %in% c("MED PREV","MEN", "INF - B","INF - A")) %>%
   group_by(Année) %>%
@@ -139,4 +216,17 @@ biatss %>%
   expand_limits(y=0) +
   theme_cpesr_cap() +
   ggtitle("Effectif médecins et infirmiers dans l'ESR")
+```
+
+
+```{r biatss.medecin.region}
+biatss %>%
+  filter(code_corps %in% c("MED PREV","MEN", "INF - B","INF - A")) %>%
+  filter(Année == 2020) %>%
+  group_by(Année, Région, Corps=code_corps) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = Corps, values_from = Effectif) %>%
+
+  kableExtra::kable()
 ```

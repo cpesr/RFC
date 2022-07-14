@@ -34,6 +34,16 @@ Source :
 
 <img src="BIATSS_files/figure-gfm/biatss.tt.type-1.png" width="672" />
 
+    ## `summarise()` has grouped output by 'Année', 'Catégorie'. You can override
+    ## using the `.groups` argument.
+
+<img src="BIATSS_files/figure-gfm/biatss.tt.cat-1.png" width="672" />
+
+    ## `summarise()` has grouped output by 'Année', 'Catégorie'. You can override
+    ## using the `.groups` argument.
+
+<img src="BIATSS_files/figure-gfm/biatss.eff.cat-1.png" width="672" />
+
     ## `summarise()` has grouped output by 'Année', 'Etablissement'. You can override
     ## using the `.groups` argument.
     ## `geom_smooth()` using formula 'y ~ x'
@@ -448,4 +458,369 @@ NA
 
 <img src="BIATSS_files/figure-gfm/biatss.corps.log-1.png" width="672" />
 
+    ## `summarise()` has grouped output by 'Année'. You can override using the
+    ## `.groups` argument.
+
+<img src="BIATSS_files/figure-gfm/biatss.bap-1.png" width="672" />
+
+    ## `summarise()` has grouped output by 'Année'. You can override using the
+    ## `.groups` argument.
+
+<img src="BIATSS_files/figure-gfm/biatss.bap.ul-1.png" width="672" />
+
+    ## `summarise()` has grouped output by 'Année'. You can override using the
+    ## `.groups` argument.
+
 <img src="BIATSS_files/figure-gfm/biatss.medecin-1.png" width="672" />
+
+<img src="BIATSS_files/figure-gfm/biatss.medecin.tot-1.png" width="672" />
+
+    ## `summarise()` has grouped output by 'Année', 'Région'. You can override using
+    ## the `.groups` argument.
+
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+Année
+</th>
+<th style="text-align:left;">
+Région
+</th>
+<th style="text-align:right;">
+INF - A
+</th>
+<th style="text-align:right;">
+MED PREV
+</th>
+<th style="text-align:right;">
+MEN
+</th>
+<th style="text-align:right;">
+INF - B
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Auvergne-Rhône-Alpes
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Bourgogne-Franche-Comté
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Bretagne
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Centre-Val de Loire
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Collectivités d’outre-mer
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Grand Est
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Guadeloupe
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Guyane
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Hauts-de-France
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Île-de-France
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+La Réunion
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Normandie
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Nouvelle-Aquitaine
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Occitanie
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Pays de la Loire
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2020
+</td>
+<td style="text-align:left;">
+Provence-Alpes-Côte d’Azur
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
