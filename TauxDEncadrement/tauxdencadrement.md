@@ -334,6 +334,14 @@ Universités et assimilés
 </tbody>
 </table>
 
+### Perimex
+
+    ## Joining, by = c("Groupe", "UAI", "Etablissement", "Type")
+
+<img src="tauxdencadrement_files/figure-gfm/contexte.perimex-1.png" width="768" />
+
+<img src="tauxdencadrement_files/figure-gfm/contexte.perimex.evol-1.png" width="768" />
+
 ## Description des données
 
     ## Joining, by = "UAI"

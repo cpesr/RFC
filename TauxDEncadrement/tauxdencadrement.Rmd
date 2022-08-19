@@ -83,6 +83,44 @@ kpiESR::esr.pnl %>%
   kableExtra::kable()
 ```
 
+### Perimex
+
+
+```{r contexte.perimex}
+tde.perimex <- kpiESR::esr %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  left_join(esr.etab) %>% 
+  mutate(PerimEx = fct_explicit_na(PerimEx, "NINI")) %>%
+  filter(!is.na(kpi.ETU.P.effectif),!is.na(kpi.ENS.S.titulaires)) %>%
+  group_by(Rentrée, PerimEx) %>%
+  summarise(
+    etu = sum(kpi.ETU.P.effectif, na.rm = TRUE),
+    ens = sum(kpi.ENS.S.titulaires, na.rm = TRUE)
+  ) %>%
+  mutate(Taux.d.encadrement = ens / etu * 100) %>%
+  group_by(PerimEx) %>%
+  mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) * 100)
+
+tde.perimex %>%
+  ggplot(aes(x=Rentrée,y=Taux.d.encadrement,color=PerimEx,fill=PerimEx)) +
+  geom_line(aes(group=PerimEx)) +
+  geom_point(shape=21,size=3,stroke=2,color="white") +
+  scale_color_brewer(palette="Paired") +
+  scale_fill_brewer(palette="Paired") +
+  xlab("Rentrée") + ylab("Taux d'encadrement") +
+  theme_cpesr_cap()
+```
+
+```{r contexte.perimex.evol}
+tde.perimex %>%
+  ggplot(aes(x=Rentrée,y=Evolution,color=PerimEx,fill=PerimEx)) +
+  geom_line(aes(group=PerimEx)) +
+  geom_point(shape=21,size=3,stroke=2,color="white") +
+  scale_color_brewer(palette="Paired") +
+  scale_fill_brewer(palette="Paired") +
+  xlab("Rentrée") + ylab("Taux d'encadrement (valeur 100 pour 2010)") +
+  theme_cpesr_cap()
+```
 
 ## Description des données 
 
