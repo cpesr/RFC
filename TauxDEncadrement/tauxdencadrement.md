@@ -10,9 +10,329 @@ issues](https://github.com/cpesr/RFC/issues).*
 
 <img src="tauxdencadrement_files/figure-gfm/contexte-1.png" width="768" />
 
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Etablissement
+</th>
+<th style="text-align:left;">
+Rentrée
+</th>
+<th style="text-align:right;">
+kpi.ENS.S.titulaires
+</th>
+<th style="text-align:right;">
+kpi.ETU.P.effectif
+</th>
+<th style="text-align:right;">
+kpi.K.ensPetu
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2013
+</td>
+<td style="text-align:right;">
+69805
+</td>
+<td style="text-align:right;">
+1584308
+</td>
+<td style="text-align:right;">
+4.608488
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2014
+</td>
+<td style="text-align:right;">
+69847
+</td>
+<td style="text-align:right;">
+1616863
+</td>
+<td style="text-align:right;">
+4.511483
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2015
+</td>
+<td style="text-align:right;">
+69520
+</td>
+<td style="text-align:right;">
+1660689
+</td>
+<td style="text-align:right;">
+4.364074
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2016
+</td>
+<td style="text-align:right;">
+69563
+</td>
+<td style="text-align:right;">
+1681236
+</td>
+<td style="text-align:right;">
+4.310651
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2017
+</td>
+<td style="text-align:right;">
+68401
+</td>
+<td style="text-align:right;">
+1696938
+</td>
+<td style="text-align:right;">
+4.192710
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2018
+</td>
+<td style="text-align:right;">
+68465
+</td>
+<td style="text-align:right;">
+1727042
+</td>
+<td style="text-align:right;">
+4.118146
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2019
+</td>
+<td style="text-align:right;">
+68471
+</td>
+<td style="text-align:right;">
+1836104
+</td>
+<td style="text-align:right;">
+3.866242
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ensemble
+</td>
+<td style="text-align:left;">
+2020
+</td>
+<td style="text-align:right;">
+68484
+</td>
+<td style="text-align:right;">
+1864197
+</td>
+<td style="text-align:right;">
+3.804246
+</td>
+</tr>
+</tbody>
+</table>
+
 ### Universités
 
 <img src="tauxdencadrement_files/figure-gfm/contexte.univ-1.png" width="768" />
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Etablissement
+</th>
+<th style="text-align:left;">
+Rentrée
+</th>
+<th style="text-align:right;">
+kpi.ENS.S.titulaires
+</th>
+<th style="text-align:right;">
+kpi.ETU.P.effectif
+</th>
+<th style="text-align:right;">
+kpi.K.ensPetu
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2013
+</td>
+<td style="text-align:right;">
+63297
+</td>
+<td style="text-align:right;">
+1480446
+</td>
+<td style="text-align:right;">
+4.462554
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2014
+</td>
+<td style="text-align:right;">
+63269
+</td>
+<td style="text-align:right;">
+1510119
+</td>
+<td style="text-align:right;">
+4.365770
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2015
+</td>
+<td style="text-align:right;">
+62971
+</td>
+<td style="text-align:right;">
+1552279
+</td>
+<td style="text-align:right;">
+4.219677
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2016
+</td>
+<td style="text-align:right;">
+62993
+</td>
+<td style="text-align:right;">
+1572553
+</td>
+<td style="text-align:right;">
+4.164119
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2017
+</td>
+<td style="text-align:right;">
+61951
+</td>
+<td style="text-align:right;">
+1586664
+</td>
+<td style="text-align:right;">
+4.052995
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2018
+</td>
+<td style="text-align:right;">
+61964
+</td>
+<td style="text-align:right;">
+1615893
+</td>
+<td style="text-align:right;">
+3.975091
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2019
+</td>
+<td style="text-align:right;">
+61930
+</td>
+<td style="text-align:right;">
+1741436
+</td>
+<td style="text-align:right;">
+3.681576
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Universités et assimilés
+</td>
+<td style="text-align:left;">
+2020
+</td>
+<td style="text-align:right;">
+61760
+</td>
+<td style="text-align:right;">
+1769743
+</td>
+<td style="text-align:right;">
+3.608204
+</td>
+</tr>
+</tbody>
+</table>
 
 ## Description des données
 
@@ -23,7 +343,7 @@ issues](https://github.com/cpesr/RFC/issues).*
 -   Sources :
     -   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement/export/>
     -   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/table/?disjunctive.annee&q=%22Universit%C3%A9+de+Nantes%22>
--   Nombre d’observations : 1198
+-   Nombre d’observations : 1182
 -   Variables :
 
 <!-- -->
@@ -333,6 +653,47 @@ Inf
 2018
 </td>
 <td style="text-align:left;">
+Grands établissements (hors écoles)
+</td>
+<td style="text-align:left;">
+Collège de France
+</td>
+<td style="text-align:right;">
+48
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2018
+</td>
+<td style="text-align:left;">
+Grands établissements (hors écoles)
+</td>
+<td style="text-align:left;">
+Institut national supérieur de formation et de recherche pour
+l’éducation des jeunes handicapés et les enseignements adaptés (INS HEA)
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+Inf
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2018
+</td>
+<td style="text-align:left;">
 Ecoles d’ingénieurs (CTI)
 </td>
 <td style="text-align:left;">
@@ -360,47 +721,6 @@ Centrale Lille Institut (CLI)
 </td>
 <td style="text-align:right;">
 131
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-Inf
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2018
-</td>
-<td style="text-align:left;">
-Ecoles d’ingénieurs (CTI)
-</td>
-<td style="text-align:left;">
-Conservatoire national des arts et métiers (CNAM)
-</td>
-<td style="text-align:right;">
-379
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-Inf
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-2018
-</td>
-<td style="text-align:left;">
-Ecoles d’ingénieurs (CTI)
-</td>
-<td style="text-align:left;">
-Institut national des sciences appliquées Centre Val de Loire (INSA
-Centre Val de Loire)
-</td>
-<td style="text-align:right;">
-89
 </td>
 <td style="text-align:right;">
 0
@@ -584,16 +904,6 @@ LSHS
 </table>
 
 <img src="tauxdencadrement_files/figure-gfm/disc.distrib.zoom-1.png" width="768" />
-
-## Focus ENS
-
-    ## Warning: Removed 10 row(s) containing missing values (geom_path).
-
-<img src="tauxdencadrement_files/figure-gfm/ens.values-1.png" width="768" />
-
-    ## Warning: Removed 13 row(s) containing missing values (geom_path).
-
-<img src="tauxdencadrement_files/figure-gfm/ens.values.disc-1.png" width="768" />
 
 ## Focus Universités
 
@@ -1590,3 +1900,7 @@ Université Sorbonne Paris Nord
 <img src="tauxdencadrement_files/figure-gfm/tde.idf.evol.unistra-1.png" width="768" />
 
 ## focus 19
+
+<img src="tauxdencadrement_files/figure-gfm/s19.etu-1.png" width="768" />
+
+<img src="tauxdencadrement_files/figure-gfm/s19.etu.2-1.png" width="768" />
