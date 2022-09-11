@@ -10,7 +10,7 @@ library(tidyverse)
 library(ggcpesrthemes)
 
 theme_set(theme_cpesr())
-theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/H2020")
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/blob/main/H2020/H2020.md")
 
 h2020 <- read.csv2("appels-a-projets-horizon-2020-projets-retenus-et-participants-identifies0.csv", dec='.')
 ```
