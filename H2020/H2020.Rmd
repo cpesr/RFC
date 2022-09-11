@@ -129,3 +129,153 @@ h2020 %>%
   theme(legend.position = "None") +
   cpesr_cap()
 ```
+
+## Nombre de partenaires
+
+```{r part.nb}
+part.nb <- h2020 %>%
+  mutate(country_name = factor(country_name, levels = rev(sorted_cn))) %>%
+  filter(country_name %in% head(sorted_cn, 10)) %>%
+  select(country_name,participation_id,participant_type_code) %>%
+  #unique() %>%
+  group_by(country_name,participation_id) %>%
+  summarize(n = n()) 
+  #summarize(participans = paste(participant_type_code))
+
+part.nb %>%
+  group_by(country_name) %>%
+  summarise(
+    moyenne = mean(n)
+  ) %>% 
+  arrange(desc(moyenne)) %>%
+  kableExtra::kable()
+```
+
+
+
+```{r part.nb.plot}
+part.nb %>%
+  ggplot(aes(y=country_name, x=n)) +
+  geom_boxplot() +
+  ylab("") + xlab("Nombre de participants") +
+  ggtitle("Nombre de participants aux projets H2020","Top 10 des pays les plus financés") +
+  theme(legend.position = "None") +
+  cpesr_cap()
+```
+
+
+## Participation univ
+
+```{r part.type.nb}
+part.type.nb <- h2020 %>%
+  mutate(country_name = factor(country_name, levels = rev(sorted_cn))) %>%
+  filter(country_name %in% head(sorted_cn, 10)) %>%
+  filter(participant_type_code != "") %>%
+  group_by(country_name, participation_id) %>%
+  mutate(nb_participants=n()) %>%
+  group_by(country_name, participation_id, nb_participants, participant_type_code) %>%
+  summarize(nt = n()) %>%
+  pivot_wider(names_from = participant_type_code, values_from = nt, values_fill = 0)
+
+part.type.nb.esr <- part.type.nb %>%
+  mutate(
+    es = `Ens. supérieur` != 0,
+    multi_participants = ifelse(nb_participants > 1, "multi participants", "mono participant")) %>%
+  group_by(country_name, multi_participants, es) %>%
+  summarise(nb_participations = n()) %>%
+  group_by(country_name, multi_participants) %>%
+  mutate(ratio = nb_participations / sum(nb_participations)) %>%
+  filter(es) %>%
+  select(-es)
+
+part.type.nb.esr %>%
+  arrange(country_name) %>%
+  kableExtra::kable()
+```
+
+
+
+```{r part.type.nb.esr.plot}
+part.type.nb.esr %>%
+  ggplot(aes(y=country_name,x=ratio,fill=multi_participants)) +
+  geom_col() +
+  facet_grid(.~multi_participants) +
+  scale_x_continuous(labels=scales::percent) +
+  ylab("") +
+  ggtitle("Taux de participation de l'enseignement supérieur aux projets H2020", "selon que le projet est mono ou multi participant, top 10 des pays les plus financés") +
+  theme(legend.position = "None") +
+  cpesr_cap()
+```
+
+
+## Participation privé
+
+```{r part.type.nb.prive}
+part.type.nb.prive <- part.type.nb %>%
+  mutate(
+    es = `Org. privés` != 0,
+    multi_participants = ifelse(nb_participants > 1, "multi participants", "mono participant")) %>%
+  group_by(country_name, multi_participants, es) %>%
+  summarise(nb_participations = n()) %>%
+  group_by(country_name, multi_participants) %>%
+  mutate(ratio = nb_participations / sum(nb_participations)) %>%
+  filter(es) %>%
+  select(-es)
+
+part.type.nb.prive %>%
+  arrange(country_name) %>%
+  kableExtra::kable()
+```
+
+
+
+```{r part.type.nb.prive.plot}
+part.type.nb.prive %>%
+  ggplot(aes(y=country_name,x=ratio,fill=multi_participants)) +
+  geom_col() +
+  facet_grid(.~multi_participants) +
+  scale_x_continuous(labels=scales::percent) +
+  ylab("") +
+  ggtitle("Taux de participation des organismes privés aux projets H2020", "selon que le projet est mono ou multi participant, top 10 des pays les plus financés") +
+  theme(legend.position = "None") +
+  cpesr_cap()
+```
+
+
+## Fundings
+
+```{r fund.type.nb}
+funding.type <- h2020 %>%
+  mutate(country_name = factor(country_name, levels = rev(sorted_cn))) %>%
+  filter(country_name %in% head(sorted_cn, 10)) %>%
+  filter(participant_type_code != "") %>%
+  group_by(country_name, participation_id, participant_type_code) %>%
+  summarise(funding = sum(funding)) %>%
+  group_by(country_name, participation_id) %>%
+  mutate(part = funding / sum(funding)) %>% 
+  filter(part != 1) %>%
+  group_by(country_name, participant_type_code) %>%
+  summarise(funding_moyen = mean(funding), 
+            part_moyenne = mean(part))
+
+
+funding.type %>% 
+  mutate(part_moyenne = scales::percent(part_moyenne)) %>%
+  kableExtra::kable()
+```
+
+
+```{r fund.type.plot}
+funding.type %>%
+  filter(participant_type_code %in% c("Org. privés","Ens. supérieur","Recherche")) %>%
+  ggplot(aes(y=country_name,x=part_moyenne,fill=participant_type_code)) +
+  geom_col() +
+  facet_grid(.~participant_type_code) +
+  scale_x_continuous(labels=scales::percent) +
+  ylab("") +
+  ggtitle("Part moyenne du financement dans les projets multi-partenaires", "par type de partenaire, aux projets H2020, top 10 des pays les plus financés") +
+  theme(legend.position = "None") +
+  cpesr_cap()
+```
+
+
