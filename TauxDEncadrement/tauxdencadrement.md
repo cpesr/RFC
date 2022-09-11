@@ -342,6 +342,18 @@ Universités et assimilés
 
 <img src="tauxdencadrement_files/figure-gfm/contexte.perimex.evol-1.png" width="768" />
 
+Titulaires et contractuels (hors vacataires)
+
+    ## Joining, by = c("Groupe", "UAI", "Etablissement", "Type")
+
+<img src="tauxdencadrement_files/figure-gfm/contexte.perimex.np-1.png" width="768" />
+
+    ## Joining, by = c("Groupe", "UAI", "Etablissement", "Type")
+
+    ## Warning: Removed 9 rows containing missing values (geom_point).
+
+<img src="tauxdencadrement_files/figure-gfm/contexte.perimex.eff-1.png" width="768" />
+
 ## Description des données
 
     ## Joining, by = "UAI"

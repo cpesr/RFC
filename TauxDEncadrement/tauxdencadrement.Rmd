@@ -32,10 +32,10 @@ _Ce document est un brouillon de différentes visualisations. Il a seulement voc
 ```{r contexte}
 kpiESR::esr.pnl %>%
   filter(Groupe == "Ensemble") %>%
-  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
+  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
   mutate(kpi=factor(kpi,
-                    levels=c("kpi.ENS.S.titulaires","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
-                    labels=c("Enseignants\ntitulaires","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
+                    levels=c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
+                    labels=c("Enseignants\ntitulaires","Enseignants","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
   ggplot(aes(x=Rentrée,y=evolution,color=kpi,fill=kpi)) +
   geom_line(aes(group=kpi)) +
   geom_point(shape=21,size=3,stroke=2,color="white") +
@@ -46,11 +46,15 @@ kpiESR::esr.pnl %>%
 ```
 
 ```{r contexte.data}
-kpiESR::esr.pnl %>%
+kpiESR::esr %>%
   filter(Groupe == "Ensemble") %>%
-  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ETU.P.effectif","kpi.K.ensPetu")) %>%
-  select(Etablissement,Rentrée,kpi,valeur) %>%
-  pivot_wider(names_from = kpi, values_from = valeur) %>%
+  transmute(
+    Rentrée,
+    Enseignants = kpi.ENS.S.enseignants,
+    Etudiants = kpi.ETU.S.cycle1_L+kpi.ETU.S.cycle2_M,
+    TDE = round(kpi.K.ensPetu,2)) %>%
+  na.omit() %>%
+  mutate(val100 = round(TDE/first(TDE)*100,0)) %>%
   kableExtra::kable()
 ```
 
@@ -59,10 +63,10 @@ kpiESR::esr.pnl %>%
 ```{r contexte.univ}
 kpiESR::esr.pnl %>%
   filter(Etablissement == "Universités et assimilés") %>%
-  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
+  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
   mutate(kpi=factor(kpi,
-                    levels=c("kpi.ENS.S.titulaires","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
-                    labels=c("Enseignants\ntitulaires","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
+                    levels=c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
+                    labels=c("Enseignants\ntitulaires","Enseignants","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
   ggplot(aes(x=Rentrée,y=evolution,color=kpi,fill=kpi)) +
   geom_line(aes(group=kpi)) +
   geom_point(shape=21,size=3,stroke=2,color="white") +
@@ -72,55 +76,163 @@ kpiESR::esr.pnl %>%
   theme_cpesr_cap()
 ```
 
-
-
-```{r contexte.univ.data}
-kpiESR::esr.pnl %>%
+```{r contexte.data.univ}
+kpiESR::esr %>%
   filter(Etablissement == "Universités et assimilés") %>%
-  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ETU.P.effectif","kpi.K.ensPetu")) %>%
-  select(Etablissement,Rentrée,kpi,valeur) %>%
-  pivot_wider(names_from = kpi, values_from = valeur) %>%
+  transmute(
+    Rentrée,
+    Enseignants = kpi.ENS.S.enseignants,
+    Etudiants = kpi.ETU.S.cycle1_L+kpi.ETU.S.cycle2_M,
+    TDE = round(kpi.K.ensPetu,2)) %>%
+  na.omit() %>%
+  mutate(val100 = round(TDE/first(TDE)*100,0)) %>%
   kableExtra::kable()
 ```
 
-### Perimex
+
+## Différents modes de calcul
 
 
-```{r contexte.perimex}
-tde.perimex <- kpiESR::esr %>%
-  filter(Groupe == "Universités et assimilés") %>%
-  left_join(esr.etab) %>% 
-  mutate(PerimEx = fct_explicit_na(PerimEx, "NINI")) %>%
-  filter(!is.na(kpi.ETU.P.effectif),!is.na(kpi.ENS.S.titulaires)) %>%
-  group_by(Rentrée, PerimEx) %>%
+```{r calc.data}
+
+etu <- read.table("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  filter(Attention != "* Attention : doubles comptes, établissement-composante") %>%
+  group_by(Rentrée = rentree) %>%
   summarise(
-    etu = sum(kpi.ETU.P.effectif, na.rm = TRUE),
-    ens = sum(kpi.ENS.S.titulaires, na.rm = TRUE)
+    Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE),
+    Etudiants.LM = sum(Cycle.universitaire..cursus.LMD....L..1er.cycle., na.rm=TRUE)+sum(Cycle.universitaire..cursus.LMD....M..2ème.cycle., na.rm=TRUE),
+    Etudiants.D = sum(Cycle.universitaire..cursus.LMD....D..3ème.cycle., na.rm=TRUE)
+    ) %>%
+  ungroup() 
+
+
+ens.tit <- read.table("../data/fr-esr-enseignants-titulaires-esr-public.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  mutate(
+    Catégorie = recode(Code.categorie.personnels,
+                       "MCF" = "EC",
+                       "PR" = "EC")
   ) %>%
-  mutate(Taux.d.encadrement = ens / etu * 100) %>%
-  group_by(PerimEx) %>%
-  mutate(Evolution = Taux.d.encadrement / first(Taux.d.encadrement) * 100)
+  group_by(Rentrée = Rentrée, Catégorie) %>%
+  summarise(effectif = sum(effectif, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Catégorie, names_prefix = "Titulaires.", values_from = effectif, values_fill = 0)
 
-tde.perimex %>%
-  ggplot(aes(x=Rentrée,y=Taux.d.encadrement,color=PerimEx,fill=PerimEx)) +
-  geom_line(aes(group=PerimEx)) +
-  geom_point(shape=21,size=3,stroke=2,color="white") +
-  scale_color_brewer(palette="Paired") +
-  scale_fill_brewer(palette="Paired") +
-  xlab("Rentrée") + ylab("Taux d'encadrement") +
+
+
+ens.np <- read.table("../data/fr-esr-enseignants-nonpermanents-esr-public.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  mutate(
+    Catégorie = recode(code_categorie_persg,
+                       "PR ASS-INV" = "EC",
+                       "MCF ASS-INV" = "EC", 
+                       "ASS INV (corps NR)" = "EC",
+                       "CONT 2D" = "AM2D")
+  ) %>%
+  group_by(Rentrée = Rentrée, Catégorie) %>%
+  summarise(effectif = sum(effectif, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Catégorie, names_prefix = "Contractuels.", values_from = effectif, values_fill = 0)
+
+
+tde <- full_join(etu, ens.tit) %>% full_join(ens.np) %>% na.omit()
+```
+
+### LM vs LMD 
+
+```{r calc.LMvsD}
+tde %>% 
+  pivot_longer(starts_with("Etudiants"), names_to = "Série", values_to = "Valeur") %>%
+  ggplot(aes(x=Rentrée,y=Valeur,color=Série)) + 
+  geom_line() + geom_point()+
   theme_cpesr_cap()
 ```
 
-```{r contexte.perimex.evol}
-tde.perimex %>%
-  ggplot(aes(x=Rentrée,y=Evolution,color=PerimEx,fill=PerimEx)) +
-  geom_line(aes(group=PerimEx)) +
-  geom_point(shape=21,size=3,stroke=2,color="white") +
-  scale_color_brewer(palette="Paired") +
-  scale_fill_brewer(palette="Paired") +
-  xlab("Rentrée") + ylab("Taux d'encadrement (valeur 100 pour 2010)") +
+
+```{r calc.LMvsD.tde}
+tde %>% 
+  mutate(
+    tde.LMD = Titulaires.EC / Etudiants *100,
+    tde.LM = Titulaires.EC / Etudiants.LM *100) %>%
+  pivot_longer(starts_with("tde"), names_to = "Série", values_to = "Valeur") %>%
+  ggplot(aes(x=Rentrée,y=Valeur,color=Série)) + 
+  geom_line() + geom_point() +
+  ggtitle("Nombre d'EC titulaires pour 100 étudiants : D compris ou non") +
   theme_cpesr_cap()
 ```
+
+
+### Titulaires EC vs AM2D
+
+
+```{r calc.tit}
+tde %>% 
+  pivot_longer(starts_with("Titulaires"), names_to = "Série", values_to = "Valeur") %>%
+  ggplot(aes(x=Rentrée,y=Valeur,color=Série)) + 
+  geom_line() + geom_point() +
+  expand_limits(y=0) +
+  theme_cpesr_cap()
+```
+
+
+```{r calc.tit.tde}
+tde %>% 
+  mutate(
+    tde.EC = Titulaires.EC / Etudiants *100,
+    tde.AM2D = Titulaires.AM2D / Etudiants.LM *100,
+    tde.Titulaires = (Titulaires.EC+Titulaires.AM2D) / Etudiants.LM *100) %>%
+  pivot_longer(starts_with("tde"), names_to = "Série", values_to = "Valeur") %>%
+  ggplot(aes(x=Rentrée,y=Valeur,color=Série)) + 
+  geom_line() + geom_point()+
+  theme_cpesr_cap() +
+  ggtitle("Nombre de titulaires pour 100 étudiants : EC, AM2D ou les deux")
+```
+
+### Contractuels
+
+```{r calc.cont}
+tde %>% 
+  pivot_longer(starts_with("Contractuels"), names_to = "Série", values_to = "Valeur") %>%
+  ggplot(aes(x=Rentrée,y=Valeur,color=Série)) + 
+  geom_line() + geom_point() +
+  expand_limits(y=0) +
+  theme_cpesr_cap()
+```
+
+
+```{r calc.cont.tde}
+tde %>% 
+  mutate(
+    tde.Contractuels = (Contractuels.AM2D+Contractuels.ATER+`Contractuels.DOCT AVEC ENS`+`Contractuels.DOCT SANS ENS`+Contractuels.EC+`Contractuels.LECTEUR ET REP`+`Contractuels.MAITRE LANGUE`+Contractuels.LRU) / Etudiants *100,
+    tde.Enseignants = (Contractuels.AM2D+Contractuels.ATER+`Contractuels.DOCT AVEC ENS`+Contractuels.EC+`Contractuels.LECTEUR ET REP`+`Contractuels.MAITRE LANGUE`+Contractuels.LRU) / Etudiants *100,
+    tde.Hors_doc = (Contractuels.AM2D+Contractuels.ATER+Contractuels.EC+`Contractuels.LECTEUR ET REP`+`Contractuels.MAITRE LANGUE`+Contractuels.LRU) / Etudiants *100,
+    tde.Hors_doc_et_langues = (Contractuels.AM2D+Contractuels.ATER+Contractuels.LRU) / Etudiants *100,
+) %>%
+  pivot_longer(starts_with("tde"), names_to = "Série", values_to = "Valeur") %>%
+  ggplot(aes(x=Rentrée,y=Valeur,color=Série)) + 
+  geom_line() + geom_point()+
+  theme_cpesr_cap() +
+  ggtitle("Nombre de contractuels pour 100 étudiants : différents périmètres")
+```
+
+
+### Méthode retenue
+
+```{r calc.final}
+tde %>% 
+  mutate(
+    tde.enseignants = (Titulaires.EC+Titulaires.AM2D+Contractuels.AM2D+Contractuels.ATER+`Contractuels.DOCT AVEC ENS`+Contractuels.EC+`Contractuels.LECTEUR ET REP`+`Contractuels.MAITRE LANGUE`+Contractuels.LRU) / Etudiants.LM *100,
+    tde.titulaires = (Titulaires.EC+Titulaires.AM2D) / Etudiants.LM *100
+    
+) %>%
+  pivot_longer(starts_with("tde"), names_to = "Série", values_to = "Valeur") %>%
+  ggplot(aes(x=Rentrée,y=Valeur,color=Série)) + 
+  geom_line() + geom_point()+
+  theme_cpesr_cap() +
+  ggtitle("Nombre d'enseignants pour 100 étudiants") +
+  expand_limits(y=0)
+```
+
+
 
 ## Description des données 
 
@@ -141,7 +253,7 @@ uais.etu <- list(
 
 
 ```{r data}
-etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
+etu <- read.table("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv",
                   header=TRUE, sep=';', quote='"') %>%
   filter(Attention != "* Attention : doubles comptes, établissement-composante") %>%
   transmute(
@@ -149,23 +261,43 @@ etu <- read.table("fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-pa
     Rentrée = rentree,
     Etudiants = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE) %>%
   group_by(Rentrée,UAI) %>%
-  summarise(Etudiants = sum(Etudiants)) %>%
+  summarise(
+    Etudiants = sum(Etudiants),
+    Etudiants.LM = sum(Cycle.universitaire..cursus.LMD....L..1er.cycle.)+sum(Cycle.universitaire..cursus.LMD....M..2ème.cycle.),
+    Etudiants.D = sum(Cycle.universitaire..cursus.LMD....D..3ème.cycle.)
+    ) %>%
   ungroup() %>%
   left_join(kpiESR::esr.etab %>% select(UAI,Type.établissement=Groupe))
 
-ens <- read.table("fr-esr-enseignants-titulaires-esr-public.csv",
+ens.tit <- read.table("../data/fr-esr-enseignants-titulaires-esr-public.csv",
                   header=TRUE, sep=';', quote='"') %>%
   transmute(
-    UAI = Identifiant.établissement,
+    #UAI = Identifiant.établissement,
+    UAI = etablissement_id_uai_source,
     Etablissement = as.factor(Établissement),
     Région = as.factor(Région),
     Rentrée = Rentrée,
     Enseignants = effectif
   ) %>%
   group_by(UAI, Etablissement, Région, Rentrée) %>%
-  summarise(Enseignants = sum(Enseignants, na.rm = TRUE)) %>%
+  summarise(Titulaires = sum(Enseignants, na.rm = TRUE)) %>%
   ungroup() %>%
   left_join(kpiESR::esr.etab %>% select(UAI,Type.établissement=Groupe))
+
+ens.np <- read.table("../data/fr-esr-enseignants-nonpermanents-esr-public.csv",
+                  header=TRUE, sep=';', quote='"') %>%
+  transmute(
+    UAI = etablissement_id_uai,
+    Etablissement = as.factor(Établissement),
+    Région = as.factor(Région),
+    Rentrée = Rentrée,
+    Enseignants = effectif
+  ) %>%
+  group_by(UAI, Etablissement, Région, Rentrée) %>%
+  summarise(Titulaires = sum(Enseignants, na.rm = TRUE)) %>%
+  ungroup() %>%
+  left_join(kpiESR::esr.etab %>% select(UAI,Type.établissement=Groupe))
+
 
 tde <- full_join(ens, etu) %>%
   filter(Rentrée > 2010, Rentrée < 2020) %>%

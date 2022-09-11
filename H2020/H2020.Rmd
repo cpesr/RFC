@@ -1,0 +1,131 @@
+---
+title: "H2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.retina = 2, fig.asp = 9/16)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/H2020")
+
+h2020 <- read.csv2("appels-a-projets-horizon-2020-projets-retenus-et-participants-identifies0.csv", dec='.')
+```
+
+Source : https://data.enseignementsup-recherche.gouv.fr/explore/dataset/appels-a-projets-horizon-2020-projets-retenus-et-participants-identifies0/export/
+
+```{r colname}
+colnames(h2020)
+```
+
+## Total des financements par pays
+
+```{r country, results='asis'}
+df <- h2020 %>%
+  group_by(country_name) %>%
+  summarise(funding = sum(funding)) %>%
+  arrange(desc(funding)) %>%
+  mutate(funding = round(funding/10e6,2))
+
+sorted_cn <- df$country_name
+
+df %>% ggcpesrthemes::spoiler_table()
+```
+
+```{r country.plot}
+h2020 %>%
+  group_by(country_name) %>%
+  summarise(funding = sum(funding)) %>%
+  arrange(desc(funding)) %>%
+  mutate(funding = round(funding/10e6,2)) %>%
+  head(10) %>%
+  ggplot(aes(y=reorder(country_name,funding),x=funding)) +
+  geom_col()
+```
+
+
+## Total des financements par type de participant
+
+```{r participant_type_name}
+h2020 %>%
+  group_by(participant_type_name) %>%
+  summarise(funding = sum(funding)) %>%
+  arrange(desc(funding)) %>%
+  mutate(funding = round(funding/10e6,2)) %>%
+  kableExtra::kable()
+```
+
+```{r participant_type_name.plot}
+h2020 %>%
+  group_by(participant_type_name) %>%
+  summarise(funding = sum(funding)) %>%
+  arrange(desc(funding)) %>%
+  mutate(funding = round(funding/10e6,2)) %>%
+  head(10) %>%
+  ggplot(aes(y=reorder(participant_type_name,funding),x=funding)) +
+  geom_col()
+```
+
+
+
+
+## Total des financements par type de participant et par pays.
+
+```{r country_participant_type_name, results='asis'}
+h2020 %>%
+  mutate(country_name = factor(country_name, levels = sorted_cn)) %>%
+  group_by(country_name, participant_type_name) %>%
+  summarise(funding = sum(funding)) %>%
+  arrange(country_name, funding) %>%
+  mutate(funding = round(funding/10e6,2)) %>%
+  spoiler_table()
+```
+
+```{r country_name_participant_type_name}
+h2020 %>%
+  mutate(country_name = factor(country_name, levels = rev(sorted_cn))) %>%
+  filter(country_name %in% head(sorted_cn, 10)) %>%
+  group_by(country_name, participant_type_name) %>%
+  summarise(funding = sum(funding)) %>%
+  mutate(funding = round(funding/10e6,2)) %>%
+  ggplot(aes(y=country_name,x=funding,fill=participant_type_name)) +
+  geom_col()
+```
+
+
+## Total des financements par type de participant et par année
+
+```{r participant_type_name_year}
+h2020 %>%
+  group_by(start_year = str_sub(start_date,1,4), participant_type_name) %>%
+  summarise(funding = sum(funding)) %>%
+  #mutate(funding = round(funding/10e6,2)) %>%
+  ggplot(aes(x=start_year,y=funding,fill=participant_type_name, group=participant_type_name)) +
+  geom_area()
+```
+
+
+## Comparaisons
+
+
+```{r country_participant_type_name.ratio}
+h2020 %>%
+  mutate(country_name = factor(country_name, levels = rev(sorted_cn))) %>%
+  filter(country_name %in% head(sorted_cn, 10)) %>%
+  group_by(country_name, participant_type_code) %>%
+  summarise(funding = sum(funding)) %>%
+  group_by(country_name) %>% 
+  mutate(ratio = funding / sum(funding)) %>%
+  filter(participant_type_code %in% c("Org. privés","Ens. supérieur","Recherche")) %>%
+  ggplot(aes(y=reorder(country_name,ratio,FUN=first),x=ratio,fill=participant_type_code)) +
+  geom_col() +
+  facet_grid(.~participant_type_code) +
+  ylab("") +
+  scale_x_continuous(labels=scales::percent) +
+  ggtitle("Répartition des subventions H2020 par type de participant", "pour les 10 pays ayant reçu le plus de financements") +
+  theme(legend.position = "None") +
+  cpesr_cap()
+```
