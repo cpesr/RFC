@@ -1,0 +1,34 @@
+---
+title: "BigData"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(kpiESR)
+
+cec <- read.csv2("../data/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi.csv", dec = ".") %>%
+  group_by(Rentrée = Année, Statut.regroupé) %>%
+  summarise(ETPT = round(sum(Effectif.au.31.12..en.ETPT.))) %>%
+  pivot_wider(names_from = Statut.regroupé, values_from = ETPT, names_prefix = "EPSTEPIC_")
+
+bigdata <- kpiESR::esr %>%
+  filter(Groupe == "Ensemble") %>%
+  transmute(Rentrée, 
+         Etudiants = kpi.ETU.P.effectif, 
+         EEC_Permanents = kpi.ENS.S.titulaires, 
+         EEC_Non_Permanents = kpi.ENS.P.effectif - kpi.ENS.S.titulaires,
+         BIATSS_Permanents = kpi.BIA.S.titulaires,
+         BIATSS_Non_Permanents = kpi.BIA.P.effectif - kpi.BIA.S.titulaires) %>%
+  full_join(cec)
+
+write.csv(bigdata,"bigdata.csv", row.names = FALSE)
+```
+
+[bigdata.csv](bigdata.csv)
+
+```{r bigdata}
+bigdata %>% kableExtra::kable()
+```
+
