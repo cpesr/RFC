@@ -1,0 +1,121 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.asp=9/16, fig.retina = 2)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source="fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public")
+```
+
+```{r etl, eval=FALSE}
+sise <- read.csv2("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv", dec=".", stringsAsFactors=TRUE) %>%
+  group_by(
+    Rentrée = rentree,
+    Type.d.établissement,
+    Etablissement,
+    pid = etablissement_id_paysage_actuel,
+    Secteur.disciplinaire,
+    SEXE,
+    DN_DE,
+    Attractivité.internationale,
+    LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
+    NIVEAU
+  ) %>%
+  summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE)) %>%
+  ungroup()
+
+save(sise, file="sise.RData")
+```
+```{r load}
+load(file="sise.RData")
+```
+
+
+## Informatique
+
+### Effectifs
+
+```{r info}
+info <- sise %>%
+  filter(Secteur.disciplinaire == "Informatique")
+```
+
+
+```{r info.LMD, results='asis'}
+info.LMD <- info %>%
+  group_by(Rentrée,LMD) %>%
+  summarise(Etudiants = sum(Etudiants)) 
+
+info.LMD %>% pivot_wider(names_from = LMD, values_from = Etudiants) %>% spoiler_table()
+```
+
+```{r info.LMD.plot}
+info.LMD %>%
+  mutate(LMD = fct_rev(LMD)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, fill=LMD, group_by(LMD))) +
+  geom_area(color="white") +
+  theme_cpesr_cap()
+```
+
+### Type d'établissement
+
+```{r info.type, results='asis'}
+info.type <- info %>%
+  group_by(Rentrée,Type.d.établissement,LMD) %>%
+  summarise(Etudiants = sum(Etudiants)) 
+
+info.type %>% pivot_wider(names_from = LMD, values_from = Etudiants) %>% spoiler_table()
+```
+
+```{r info.type.plot}
+info.type %>%
+  mutate(LMD = fct_rev(LMD)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, fill=LMD, group_by(LMD))) +
+  geom_area(color="white") +
+  facet_wrap(Type.d.établissement~., scales = "free_y")+
+  theme_cpesr_cap()
+```
+
+
+### Attractivité internationale 
+
+```{r info.att, results='asis'}
+info.att <- info %>%
+  group_by(Rentrée,Attractivité.internationale,LMD) %>%
+  summarise(Etudiants = sum(Etudiants)) 
+
+info.att %>% pivot_wider(names_from = LMD, values_from = Etudiants) %>% spoiler_table()
+```
+
+```{r info.att.plot}
+info.att %>%
+  mutate(LMD = fct_rev(LMD)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, fill=LMD, group_by(LMD))) +
+  geom_area(color="white") +
+  facet_wrap(Attractivité.internationale~., scales = "free_y", labeller = as_labeller(label_wrap_gen(50))) +
+  theme_cpesr_cap()
+```
+
+### Niveau
+
+```{r info.niveau, results='asis'}
+info.niveau <- info %>%
+  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-")) %>%
+  summarise(Etudiants = sum(Etudiants)) 
+
+info.niveau %>% pivot_wider(names_from = Niveau, values_from = Etudiants) %>% spoiler_table()
+```
+
+```{r info.niveau.plot}
+info.niveau %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, fill=Niveau, group_by(Niveau))) +
+  geom_area(color="white") +
+  facet_wrap(Niveau~., labeller = as_labeller(label_wrap_gen(50))) +
+  theme(legend.position = "None") +
+  theme_cpesr_cap()
+```
