@@ -1,6 +1,20 @@
 Untitled
 ================
 
+## Tout
+
+    ## `summarise()` has grouped output by 'Rentrée'. You can override using the
+    ## `.groups` argument.
+
+<img src="sise_files/figure-gfm/tout-1.png" width="672" />
+
+## Disciplines
+
+    ## `summarise()` has grouped output by 'LMD'. You can override using the `.groups`
+    ## argument.
+
+<img src="sise_files/figure-gfm/disc-1.png" width="672" />
+
 ## Informatique
 
 ### Effectifs

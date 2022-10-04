@@ -35,6 +35,31 @@ save(sise, file="sise.RData")
 load(file="sise.RData")
 ```
 
+## Tout 
+
+```{r tout}
+sise %>% 
+  mutate(LMD = fct_rev(LMD)) %>%
+  group_by(Rentrée, LMD) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, fill=LMD, group_by(LMD))) +
+  geom_area(color="white") +
+  scale_y_continuous(labels = ~ .x / 1e6, name = "Etudiants (millions)") +
+  theme_cpesr_cap()
+```
+
+
+## Disciplines
+
+```{r disc, results='asis', fig.asp=4/3}
+sise %>% 
+  mutate(LMD = fct_rev(LMD)) %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(LMD, Secteur.disciplinaire) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  ggplot(aes(y=reorder(Secteur.disciplinaire,Etudiants, FUN=sum),x=Etudiants,fill=LMD)) +
+  geom_col()
+```
 
 ## Informatique
 
