@@ -48,3 +48,20 @@ ens %>%
   geom_boxplot() +
   facet_grid(Grandes.disciplines~PerimEx)
 ```
+
+
+
+```{r evol.agr}
+ens %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  filter(Grandes.disciplines %in% c("Sciences","Droit, économie et gestion","Lettres et sciences humaines","Médecine")) %>%
+  group_by(Rentrée,PerimEx,Grandes.disciplines) %>% 
+  summarise(Homme = sum(Homme), Femme=sum(Femme)) %>%
+  mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
+  group_by(PerimEx,Grandes.disciplines) %>%
+  mutate(evol = Taux.féminité / first(Taux.féminité) * 100) %>%
+  mutate(Rentrée = as.character(Rentrée)) %>%
+  ggplot(aes(x=Rentrée,y=evol, color=PerimEx, group = PerimEx)) +
+  geom_line() +
+  facet_grid(Grandes.disciplines)
+```
