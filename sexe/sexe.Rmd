@@ -1,0 +1,50 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(kpiESR)
+library(ggcpesrthemes)
+
+theme_set(theme_cpesr())
+```
+
+```{r load}
+ens <- read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv") %>%
+  group_by(Rentrée, pid = etablissement_id_paysage_actuel, Sexe, Grandes.disciplines) %>%
+  summarise(effectif = sum(effectif)) %>%
+  pivot_wider(names_from = Sexe, values_from = effectif) %>%
+  mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
+  left_join(kpiESR::esr.etab) %>%
+  mutate(PerimEx = case_when(
+    PerimEx == "ISITE" ~ "ISITE",
+    PerimEx == "IDEx" ~ "IDEx",
+    TRUE ~ "NINI"
+  )) 
+
+```
+
+```{r map}
+ens %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  ggplot(aes(y=PerimEx,x=Taux.féminité)) +
+  geom_boxplot() +
+  facet_wrap(Grandes.disciplines~.)
+```
+
+
+```{r evol, fig.asp=16/9}
+ens %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  filter(Grandes.disciplines %in% c("Sciences","Droit, économie et gestion","Lettres et sciences humaines","Médecine")) %>%
+  group_by(pid,Grandes.disciplines) %>% 
+  mutate(evol = Taux.féminité / first(Taux.féminité) * 100) %>%
+  mutate(Rentrée = as.character(Rentrée)) %>%
+  ggplot(aes(x=Rentrée,y=evol)) +
+  geom_boxplot() +
+  facet_grid(Grandes.disciplines~PerimEx)
+```
