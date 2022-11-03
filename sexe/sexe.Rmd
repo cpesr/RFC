@@ -13,7 +13,8 @@ theme_set(theme_cpesr())
 ```
 
 ```{r load}
-ens <- read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv") %>%
+ens.raw <- read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv") 
+ens <- ens.raw %>%
   group_by(Rentrée, pid = etablissement_id_paysage_actuel, Sexe, Grandes.disciplines) %>%
   summarise(effectif = sum(effectif)) %>%
   pivot_wider(names_from = Sexe, values_from = effectif) %>%
@@ -56,12 +57,21 @@ ens %>%
   filter(Groupe == "Universités et assimilés") %>%
   filter(Grandes.disciplines %in% c("Sciences","Droit, économie et gestion","Lettres et sciences humaines","Médecine")) %>%
   group_by(Rentrée,PerimEx,Grandes.disciplines) %>% 
-  summarise(Homme = sum(Homme), Femme=sum(Femme)) %>%
+  summarise(Homme = sum(Homme,na.rm = TRUE), Femme=sum(Femme, na.rm = TRUE)) %>%
   mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
   group_by(PerimEx,Grandes.disciplines) %>%
   mutate(evol = Taux.féminité / first(Taux.féminité) * 100) %>%
   mutate(Rentrée = as.character(Rentrée)) %>%
   ggplot(aes(x=Rentrée,y=evol, color=PerimEx, group = PerimEx)) +
   geom_line() +
-  facet_grid(Grandes.disciplines)
+  facet_grid(Grandes.disciplines~.)
+```
+
+
+```{r check}
+ens %>%
+  filter(Groupe == "Universités et assimilés", PerimEx == "ISITE") %>%
+  group_by(Etablissement) %>% 
+  summarise(Rentrée.min = min(Rentrée))
+
 ```

@@ -1,0 +1,77 @@
+---
+title: "Immobilier"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+```
+
+```{r load}
+imo <- read.csv2("../data/fr-esr-patrimoine-immobilier-des-operateurs-de-l-enseignement-superieur.csv", dec='.', na.strings = "") %>%
+  mutate(
+    Domaine.bat. = recode(Domaine.bat.,"PUBLIC" = "public"),
+    Catégorie.ERP = recode(Catégorie.ERP,
+                           "1re : au-dessus de 1500 personnes" = "1 : 1500- personnes",
+                           "3e : de 301 à 700 personnes" = "3: 301-700 personnes",
+                           "2e : de 701 à 1500 personnes" = "2: 701-1500 personnes",
+                           "4e : 300 personnes et au-dessous, à l'exception des établissements compris dans la 5e catégorie" = "4: -300 personnes (hors 5)",
+                           "5e : établissements accueillant un nombre de personnes inférieur au seuil dépendant du type d'établissement" = "5 : inférieur au seuil")
+  )
+
+colnames(imo)
+```
+
+```{r explo.fun}
+
+explore <- function(var) {
+  
+  imo.explo <- imo %>%
+    group_by(Année, var = !!sym(var)) %>%
+    summarise(nb_bat = n())
+  
+
+  p1 <- imo.explo %>%
+    ggplot(aes(x=Année,y=nb_bat,color=var)) +
+      geom_line(size=1) + geom_point(shape=21,size=3,stroke=1, fill="white") +
+      ylab(var)
+  
+  p2 <- imo.explo %>%
+    arrange(Année) %>%
+    group_by(var) %>%
+    mutate(val100 = nb_bat / first(nb_bat) * 100) %>%
+    na.omit() %>%
+    ggplot(aes(x=Année,y=val100,color=var)) +
+      geom_line(size=1) + geom_point(shape=21,size=3,stroke=1, fill="white") +
+      ylab(var)
+
+  p3 <- imo.explo %>%
+    ggplot(aes(x=Année,y=nb_bat,fill=var)) +
+      geom_area(color="white") +
+      ylab(var)
+
+  p4 <- imo.explo %>%
+    ungroup() %>%
+    filter(Année %in% range(Année)) %>%
+    ggplot(aes(y=reorder(var,nb_bat,FUN=last),x=nb_bat,fill=var)) +
+      geom_col(color="white") +
+      facet_grid(Année~.) +
+      ylab(var)
+  
+  cat("\n\n## ",var,"\n\n")
+  print(p1)
+  print(p2)
+  print(p3)
+  print(p4)
+  cat("\n\n")
+
+}
+```
+
+```{r explo.loop, results='asis'}
+for(var in colnames(imo)[c(11:20,22,23,25,27,31)])
+  explore(var)
+```
