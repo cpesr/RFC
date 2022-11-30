@@ -7,6 +7,7 @@ output: github_document
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(ggcpesrthemes)
+theme_set(theme_cpesr())
 ```
 
 ## Source : BOAMP
@@ -73,19 +74,8 @@ boamp <- boamp.raw%>%
     nature = factor(nature_libelle),
     annee = str_sub(dateparution,1,4),
     dateparution = dateparution,
-    donnees = str_to_lower(DONNEES),
-    
-    detection = case_when(
-      str_detect(objet, "[Cc]onseil") & ! str_detect(objet, "salle") ~ "Conseil",
-      str_detect(objet, "[Aa]ccompagnement") ~ "Accompagnement",
-      str_detect(objet, "[Aa]ssistance") ~ "Assistance",
-      str_detect(descripteur, "Etude") ~ "Etude"
-    )
+    donnees = str_to_lower(DONNEES)
   ) 
-
-avis <- boamp %>% filter(nature == "Avis de marché") %>% group_by(idweb) %>% slice_head(n=1) %>% ungroup()
-resultat <- boamp %>% filter(nature == "Résultat de marché") %>% group_by(idweb) %>% slice_head(n=1) %>% ungroup()
-service <- boamp %>% filter(type == "Services")
 ```
 
 
@@ -94,25 +84,13 @@ colnames(boamp) %>% spoiler_table("Variables")
 ```
 
 
-## Résultats
-
-### Descripteur
-
-```{r res.descripteur, results='asis'}
-resultat %>%
-  separate_rows(descripteur, sep = ";") %>%
-  group_by(descripteur) %>%
-  summarise(nb = n()) %>%
-  arrange(desc(nb)) %>%
-  spoiler_table()
-```
 
 
 
-### Type
+## Types
 
-```{r resultat.type}
-resultat %>%
+```{r type}
+boamp %>%
   mutate(type = ifelse(str_detect(type,","),"Multi",as.character(type))) %>%
   group_by(annee, type) %>%
   summarise(nb = n()) %>%
@@ -120,8 +98,8 @@ resultat %>%
   geom_area()
 ```
 
-```{r avis.type2}
-resultat %>%
+```{r type2}
+boamp %>%
   mutate(type = ifelse(str_detect(type,","),"Multi",as.character(type))) %>%
   group_by(annee, type) %>%
   summarise(nb = n()) %>%
@@ -130,46 +108,15 @@ resultat %>%
   geom_area(position = "fill")
 ```
 
-### Détection
-
-```{r resultat.detection}
-resultat %>%
-  group_by(annee, detection) %>%
-  summarise(nb = n()) %>%
-  filter(!is.na(detection)) %>%
-  ggplot(aes(x=annee,y=nb,fill=detection,group=detection)) +
-  geom_area()
-```
-
-#### Titulaires
-
-```{r resultat.detection.titulaires}
-resultat %>%
-  filter(!is.na(detection)) %>%
-  group_by(titulaire) %>%
-  summarise(nb = n()) %>%
-  arrange(desc(nb)) %>%
-  select(nb, everything()) %>%
-  spoiler_table()
-```
-
-
-```{r titulaires.donnees}
-consultants <- c("inddigo","dual","ernst","gemini","deloitte","ineum")
-
-
-resultat %>%
-  filter(!is.na(detection)) %>%
-  mutate(consultant = str_detect(donnees,paste(consultants, collapse = "|"))) %>%
-  group_by(titulaire,consultant) %>%
-  summarise(nb = n()) %>%
-  arrange(desc(nb)) %>%
-  select(nb, consultant, everything()) %>%
-  spoiler_table()
-```
-
-
 ## Services
+
+Réduction des données aux services.
+
+```{r service}
+service <- boamp %>%
+  filter(type == "Services")
+```
+
 
 ### Nature
 
@@ -181,7 +128,9 @@ service %>%
   geom_area()
 ```
 
-### Derniere ligne seulement
+## Ligne plus récente seulement
+
+Réduction des données à la ligne la plus récente par identifiant.
 
 ```{r service.nature.last}
 service.slice <- service %>%
@@ -199,7 +148,7 @@ service.slice %>%
 
 
 
-### Descripteur
+## Descripteur
 
 ```{r service.descripteur}
 top10 <- service.slice %>%
@@ -207,7 +156,7 @@ top10 <- service.slice %>%
   group_by(descripteur) %>%
   summarise(nb = n()) %>%
   arrange(desc(nb)) %>%
-  head(10) %>%
+  head(11) %>%
   pull(descripteur)
 
 service.slice %>%
@@ -215,54 +164,102 @@ service.slice %>%
   group_by(annee,descripteur) %>%
   summarise(nb = n()) %>%
   ggplot(aes(x=annee,y=nb,fill=descripteur,group=descripteur)) +
+  geom_area() +
+  guides(fill = guide_legend(nrow=4))
+```
+
+
+## Mots clés
+
+Détection de "conseil", "accompagnement" et "assistance" dans objet, et du descripteur "Etude".
+
+```{r motscles}
+service.motscles <- service.slice %>%
+  mutate(motcle = case_when(
+      str_detect(objet, "conseil") & ! str_detect(objet, "salle") ~ "Conseil",
+      str_detect(objet, "accompagnement") ~ "Accompagnement",
+      str_detect(objet, "assistance") ~ "Assistance",
+      str_detect(descripteur, "Etude") ~ "Etude"
+    )
+  ) %>%
+  filter(!is.na(motcle))
+
+service.motscles %>%
+  group_by(annee, motcle) %>%
+  summarise(nb = n()) %>%
+  filter(!is.na(motcle)) %>%
+  #mutate(motcle = fct_rev(factor(motcle))) %>%
+  ggplot(aes(x=annee,y=nb,fill=motcle,group=motcle)) +
   geom_area()
 ```
 
 
-### Détection
+## acheteur
 
-```{r service.detection}
-service.slice %>%
-  group_by(annee, detection) %>%
-  summarise(nb = n()) %>%
-  filter(!is.na(detection)) %>%
-  mutate(detection = fct_rev(factor(detection))) %>%
-  ggplot(aes(x=annee,y=nb,fill=detection,group=detection)) +
-  geom_area()
-```
-
-
-### Détection / Etablissements 
-
-```{r service.etab}
-service.slice %>%
-  filter(!is.na(detection)) %>%
-  group_by(acheteur) %>%
-  summarise(nb = n()) %>%
-  arrange(desc(nb)) %>%
-  spoiler_table()
-```
-
-```{r service.detection.etab}
-universites <- service.slice %>%
-  filter(!is.na(detection)) %>%
+```{r acheteur, results='asis'}
+acheteurs <- service.motscles %>%
   group_by(acheteur) %>%
   summarise(nb = n()) %>%
   arrange(desc(nb)) 
 
-universites %>%
-  head(20) %>%
-  ggplot(aes(x=nb,y=reorder(acheteur,nb))) +
-  geom_col() 
+acheteurs %>%
+  spoiler_table()
+```
+
+
+```{r acheteur.sample}
+service.motscles %>%
+  filter(acheteur %in% (acheteurs %>% head(20) %>% pull(acheteur))) %>%
+  group_by(acheteur, famille) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=nb,y=reorder(acheteur,nb), fill=famille)) +
+  geom_col()  +
+  guides(fill = guide_legend(nrow=2))
 ```
 
 
 ```{r service.detection.etab.list, results='asis'}
-for(ach in unique(universites %>% head(20) %>% pull(acheteur))) {
-  service.slice %>%
-    filter(!is.na(detection)) %>%
+for(ach in unique(acheteurs %>% head(20) %>% pull(acheteur))) {
+  service.motscles %>%
     filter(acheteur == ach) %>%
     select(objet,titulaire,famille,descripteur,nature) %>%
     spoiler_table(ach)
 }
 ```
+
+
+
+
+
+
+
+
+#### Titulaires
+
+```{r titulaires, results='asis'}
+service.motscles %>%
+  filter(nature == "Résultat de marché") %>%
+  group_by(titulaire) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) %>%
+  select(nb, everything()) %>%
+  spoiler_table()
+```
+
+
+Tentative de détection dans les données brutes : "inddigo","dual","ernst","gemini","deloitte","ineum"
+
+```{r titulaires.donnees, results='asis'}
+consultants <- c("inddigo","dual","ernst","gemini","deloitte","ineum")
+
+service.motscles %>%
+  filter(nature == "Résultat de marché") %>%
+  mutate(consultant = str_detect(donnees,paste(consultants, collapse = "|"))) %>%
+  group_by(titulaire,consultant) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) %>%
+  select(nb, consultant, everything()) %>%
+  spoiler_table()
+```
+
+
