@@ -1,0 +1,268 @@
+---
+title: "Marchés Publics"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+```
+
+## Source : BOAMP
+
+https://boamp-datadila.opendatasoft.com/explore/dataset/boamp/table/?q=universit%C3%A9
+
+```{r load}
+boamp.raw <- read.csv2("boamp-grep-universite.csv", na.strings = "")
+```
+
+```{r load.colnames, results='asis'}
+colnames(boamp.raw) %>% spoiler_table("Variables données brutes")
+```
+
+Période : `r range(boamp.raw$dateparution)`
+
+### Fix type na
+
+```{r fix, results='asis'}
+decripteur.type <- boamp.raw %>% 
+  filter(!is.na(type_marche_facette)) %>% 
+  group_by(descripteur_libelle, type_marche_facette) %>% 
+  summarise(nb =n()) %>% 
+  separate_rows(type_marche_facette) %>%
+  arrange(desc(nb)) %>%
+  group_by(descripteur_libelle) %>%
+  slice_head(n=1) %>%
+  arrange(desc(nb)) 
+
+boamp.raw <- boamp.raw %>%
+  left_join(decripteur.type %>% select(descripteur_libelle,type_marche_facette.fix = type_marche_facette)) %>%
+  mutate(type_marche_facette = ifelse(!is.na(type_marche_facette),type_marche_facette,type_marche_facette.fix)) %>%
+  select(-type_marche_facette.fix) %>%
+  mutate(descripteur_libelle.first = gsub(";.*","",descripteur_libelle)) %>%
+  left_join(decripteur.type %>% select(descripteur_libelle.first = descripteur_libelle, type_marche_facette.fix = type_marche_facette)) %>%
+  mutate(type_marche_facette = ifelse(!is.na(type_marche_facette),type_marche_facette,type_marche_facette.fix)) %>%
+  select(-type_marche_facette.fix)
+
+boamp.raw %>% filter(is.na(type_marche_facette)) %>% select(type_marche_facette,descripteur_libelle) %>% spoiler_table("Vérification")
+```
+
+### Data
+
+```{r data}
+clean_acheteur <- function(x) {
+  x <- str_to_lower(x)
+  x <- gsub("\\.","",x)
+  return(x)
+}
+
+boamp <- boamp.raw%>%
+  filter(str_detect(nomacheteur,"niversité")) %>%
+  transmute(
+    idweb,
+    objet = str_to_lower(objet),
+    famille = factor(famille_libelle),
+    acheteur = clean_acheteur(nomacheteur),
+    titulaire = gsub("[^a-z ]", "", str_to_lower(titulaire)),
+    perimetre = factor(perimetre),
+    type = factor(type_marche_facette),
+    procedure = factor(type_procedure),
+    sous_procedure = factor(soustype_procedure),
+    descripteur = descripteur_libelle,
+    nature = factor(nature_libelle),
+    annee = str_sub(dateparution,1,4),
+    dateparution = dateparution,
+    donnees = str_to_lower(DONNEES),
+    
+    detection = case_when(
+      str_detect(objet, "[Cc]onseil") & ! str_detect(objet, "salle") ~ "Conseil",
+      str_detect(objet, "[Aa]ccompagnement") ~ "Accompagnement",
+      str_detect(objet, "[Aa]ssistance") ~ "Assistance",
+      str_detect(descripteur, "Etude") ~ "Etude"
+    )
+  ) 
+
+avis <- boamp %>% filter(nature == "Avis de marché") %>% group_by(idweb) %>% slice_head(n=1) %>% ungroup()
+resultat <- boamp %>% filter(nature == "Résultat de marché") %>% group_by(idweb) %>% slice_head(n=1) %>% ungroup()
+service <- boamp %>% filter(type == "Services")
+```
+
+
+```{r data.colnames, results='asis'}
+colnames(boamp) %>% spoiler_table("Variables")
+```
+
+
+## Résultats
+
+### Descripteur
+
+```{r res.descripteur, results='asis'}
+resultat %>%
+  separate_rows(descripteur, sep = ";") %>%
+  group_by(descripteur) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) %>%
+  spoiler_table()
+```
+
+
+
+### Type
+
+```{r resultat.type}
+resultat %>%
+  mutate(type = ifelse(str_detect(type,","),"Multi",as.character(type))) %>%
+  group_by(annee, type) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=annee,y=nb,fill=type,group=type)) +
+  geom_area()
+```
+
+```{r avis.type2}
+resultat %>%
+  mutate(type = ifelse(str_detect(type,","),"Multi",as.character(type))) %>%
+  group_by(annee, type) %>%
+  summarise(nb = n()) %>%
+  na.omit() %>% filter(!annee %in% c(2015,2016,2017)) %>%
+  ggplot(aes(x=annee,y=nb,fill=type,group=type)) +
+  geom_area(position = "fill")
+```
+
+### Détection
+
+```{r resultat.detection}
+resultat %>%
+  group_by(annee, detection) %>%
+  summarise(nb = n()) %>%
+  filter(!is.na(detection)) %>%
+  ggplot(aes(x=annee,y=nb,fill=detection,group=detection)) +
+  geom_area()
+```
+
+#### Titulaires
+
+```{r resultat.detection.titulaires}
+resultat %>%
+  filter(!is.na(detection)) %>%
+  group_by(titulaire) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) %>%
+  select(nb, everything()) %>%
+  spoiler_table()
+```
+
+
+```{r titulaires.donnees}
+consultants <- c("inddigo","dual","ernst","gemini","deloitte","ineum")
+
+
+resultat %>%
+  filter(!is.na(detection)) %>%
+  mutate(consultant = str_detect(donnees,paste(consultants, collapse = "|"))) %>%
+  group_by(titulaire,consultant) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) %>%
+  select(nb, consultant, everything()) %>%
+  spoiler_table()
+```
+
+
+## Services
+
+### Nature
+
+```{r service.nature}
+service %>%
+  group_by(annee, nature) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=annee,y=nb,fill=nature,group=nature)) +
+  geom_area()
+```
+
+### Derniere ligne seulement
+
+```{r service.nature.last}
+service.slice <- service %>%
+  group_by(idweb) %>%
+  arrange(dateparution) %>%
+  slice_tail(n=1) %>%
+  ungroup()
+
+service.slice %>%
+  group_by(annee, nature) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=annee,y=nb,fill=nature,group=nature)) +
+  geom_area()
+```
+
+
+
+### Descripteur
+
+```{r service.descripteur}
+top10 <- service.slice %>%
+  filter(!str_detect(descripteur,";")) %>%
+  group_by(descripteur) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) %>%
+  head(10) %>%
+  pull(descripteur)
+
+service.slice %>%
+  mutate(descripteur = fct_rev(fct_other(descripteur,keep=top10, other_level = "Autre"))) %>%
+  group_by(annee,descripteur) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=annee,y=nb,fill=descripteur,group=descripteur)) +
+  geom_area()
+```
+
+
+### Détection
+
+```{r service.detection}
+service.slice %>%
+  group_by(annee, detection) %>%
+  summarise(nb = n()) %>%
+  filter(!is.na(detection)) %>%
+  mutate(detection = fct_rev(factor(detection))) %>%
+  ggplot(aes(x=annee,y=nb,fill=detection,group=detection)) +
+  geom_area()
+```
+
+
+### Détection / Etablissements 
+
+```{r service.etab}
+service.slice %>%
+  filter(!is.na(detection)) %>%
+  group_by(acheteur) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) %>%
+  spoiler_table()
+```
+
+```{r service.detection.etab}
+universites <- service.slice %>%
+  filter(!is.na(detection)) %>%
+  group_by(acheteur) %>%
+  summarise(nb = n()) %>%
+  arrange(desc(nb)) 
+
+universites %>%
+  head(20) %>%
+  ggplot(aes(x=nb,y=reorder(acheteur,nb))) +
+  geom_col() 
+```
+
+
+```{r service.detection.etab.list, results='asis'}
+for(ach in unique(universites %>% head(20) %>% pull(acheteur))) {
+  service.slice %>%
+    filter(!is.na(detection)) %>%
+    filter(acheteur == ach) %>%
+    select(objet,titulaire,famille,descripteur,nature) %>%
+    spoiler_table(ach)
+}
+```
