@@ -1,0 +1,73 @@
+---
+title: "Elections pros"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.retina = 2, fig.asp = 9/16)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://www.fonction-publique.gouv.fr/stats-rapides")
+theme_set(theme_cpesr(minor_grid = FALSE) + theme(legend.position = "right", axis.text = element_text(rel(1.5))))
+
+ep <- read.csv2("elections-pro.csv") %>%
+  mutate(Année = as.integer(Année))
+```
+
+## taux de participation
+
+```{r tdp}
+ep %>%
+  ggplot(aes(x=Année, y=Taux.de.participation, color=Périmètre, group=Périmètre)) +
+  geom_line(size=1) + geom_point(shape=21,size=3,stroke=1, fill="white") +
+  geom_text(aes(label=paste(Taux.de.participation,"%")), nudge_y = -4, show.legend = FALSE) +
+  expand_limits(y=0) +
+  scale_x_continuous(breaks = unique(ep$Année)) +
+  scale_y_continuous(name="Taux de participation") +
+  ggtitle("Taux de participation aux élections professionnelles", subtitle = "MESR et fonction publique d'Etat (FPE)") +
+  cpesr_cap() 
+  
+```
+
+
+
+## Participants
+
+```{r participants}
+ep %>%
+  filter(Périmètre == "MESR") %>%
+  pivot_longer(c(Inscrits,Votants)) %>%
+  mutate(Année = as.character(Année)) %>%
+  ggplot(aes(x=Année, y=value, fill=name)) +
+  geom_col() +
+  geom_text(aes(label=paste(round(value/1000),"k"), color=name), 
+            size=5,
+            position = position_stack(vjust = 0.5), show.legend = FALSE) +
+  expand_limits(y=0) +
+  #scale_x_continuous(breaks = unique(ep$Année)) +
+  scale_y_continuous(name="Effectifs (milliers)", labels = ~ paste(round(.x/1000),"k")) +
+  scale_fill_brewer(palette = "Paired", name = "Effectifs") +
+  scale_color_manual(values = c("black","white")) +
+  ggtitle("Inscrits et votants aux élections professionnelles du MESR") +
+  cpesr_cap() 
+```
+
+
+
+## Votants
+
+```{r votats}
+ep %>%
+  group_by(Périmètre) %>%
+  mutate(VotantsV100 = Votants / first(Votants) * 100) %>%
+  ggplot(aes(x=Année, y=VotantsV100, color=Périmètre, group=Périmètre)) +
+  geom_line(size=1) + geom_point(shape=21,size=3,stroke=1, fill="white") +
+  geom_text(aes(label=round(VotantsV100)), nudge_y = -4, show.legend = FALSE) +
+  scale_x_continuous(breaks = unique(ep$Année)) +
+  scale_y_continuous(name="Votants (valeur 100 en 2011)") +
+  ggtitle("Nombre de votants aux élections professionnelles MESR et FPE", subtitle = "Valeur 100 en 2011") +
+  cpesr_cap() 
+  
+```

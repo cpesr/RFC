@@ -10,6 +10,9 @@ library(ggcpesrthemes)
 theme_set(theme_cpesr())
 ```
 
+
+https://www.economie.gouv.fr/daj/marches-sans-publicite-ni-mise-en-concurrence-prealable-2020
+
 ## Source : BOAMP
 
 https://boamp-datadila.opendatasoft.com/explore/dataset/boamp/table/?q=universit%C3%A9
@@ -222,7 +225,7 @@ service.motscles %>%
 for(ach in unique(acheteurs %>% head(20) %>% pull(acheteur))) {
   service.motscles %>%
     filter(acheteur == ach) %>%
-    select(objet,titulaire,famille,descripteur,nature) %>%
+    select(idweb, dateparution, objet,titulaire,famille,descripteur,nature) %>%
     spoiler_table(ach)
 }
 ```
