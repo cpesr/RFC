@@ -40,11 +40,11 @@ ep %>%
   filter(Périmètre == "MESR") %>%
   pivot_longer(c(Inscrits,Votants)) %>%
   mutate(Année = as.character(Année)) %>%
+  group_by(name) %>%
   ggplot(aes(x=Année, y=value, fill=name)) +
-  geom_col() +
+  geom_col(position = "identity") +
   geom_text(aes(label=paste(round(value/1000),"k"), color=name), 
-            size=5,
-            position = position_stack(vjust = 0.5), show.legend = FALSE) +
+            nudge_y = -20000, size=5, show.legend = FALSE) +
   expand_limits(y=0) +
   #scale_x_continuous(breaks = unique(ep$Année)) +
   scale_y_continuous(name="Effectifs (milliers)", labels = ~ paste(round(.x/1000),"k")) +
@@ -62,6 +62,7 @@ ep %>%
 ep %>%
   group_by(Périmètre) %>%
   mutate(VotantsV100 = Votants / first(Votants) * 100) %>%
+  
   ggplot(aes(x=Année, y=VotantsV100, color=Périmètre, group=Périmètre)) +
   geom_line(size=1) + geom_point(shape=21,size=3,stroke=1, fill="white") +
   geom_text(aes(label=round(VotantsV100)), nudge_y = -4, show.legend = FALSE) +
