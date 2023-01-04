@@ -13,7 +13,30 @@ theme_set(theme_cpesr())
 ```
 
 ```{r load}
-ens.raw <- read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv") 
+ens.raw <- bind_rows(
+  read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv") %>% 
+    mutate(type = "permanent"),
+  read.csv2("../data/fr-esr-enseignants-nonpermanents-esr-public.csv") %>% 
+    mutate(
+      type = "non permanent",
+      Sexe = recode(Sexe,  "Féminin" = "Femme", "Masculin" = "Homme"),
+      Code.groupe.CNU = as.character(Code.groupe.CNU)
+    )
+) %>% 
+  arrange(etablissement_actuel_lib,Sexe,Rentrée)
+
+ens.type <- ens.raw %>%
+  group_by(Rentrée, type, pid = etablissement_id_paysage_actuel, Sexe, Grandes.disciplines) %>%
+  summarise(effectif = sum(effectif)) %>%
+  pivot_wider(names_from = Sexe, values_from = effectif) %>%
+  mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
+  left_join(kpiESR::esr.etab) %>%
+  mutate(PerimEx = case_when(
+    PerimEx == "ISITE" ~ "ISITE",
+    PerimEx == "IDEx" ~ "IDEx",
+    TRUE ~ "NINI"
+  )) 
+
 ens <- ens.raw %>%
   group_by(Rentrée, pid = etablissement_id_paysage_actuel, Sexe, Grandes.disciplines) %>%
   summarise(effectif = sum(effectif)) %>%
@@ -25,8 +48,28 @@ ens <- ens.raw %>%
     PerimEx == "IDEx" ~ "IDEx",
     TRUE ~ "NINI"
   )) 
-
 ```
+
+## Taux de féminité enseignant : Permanents vs non permanents 
+
+```{r pvsnp}
+ens.type %>%
+  ungroup() %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  group_by(Etablissement,type) %>%
+  summarise(Homme = sum(Homme, na.rm = TRUE), Femme = sum(Femme, na.rm = TRUE)) %>%
+  mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
+  select(-Femme,-Homme) %>%
+  pivot_wider(values_from = Taux.féminité, names_from = type) %>%
+
+  ggplot(aes(y=`non permanent`,x=permanent,label=Etablissement)) +
+  geom_point() + ggrepel::geom_text_repel()
+```
+
+
+## IDEX, ISITE 
+
 
 ```{r map}
 ens %>%
@@ -73,5 +116,57 @@ ens %>%
   filter(Groupe == "Universités et assimilés", PerimEx == "ISITE") %>%
   group_by(Etablissement) %>% 
   summarise(Rentrée.min = min(Rentrée))
+```
 
+
+## Taux féminité vs PIA
+
+```{r pia}
+pidfix.raw <- read.csv2("fr-cpesrtmp-pidfix.csv") 
+pidfix <- pidfix.raw$pid.dst
+names(pidfix) <- pidfix.raw$pid.src
+
+fin <- read.csv2("../data/fr-esr-operateurs-indicateurs-financiers.csv", na.strings="", dec=".") %>%
+    group_by(pid = recode(id...paysage,!!!pidfix)) %>%
+    summarise(
+      ANR.hors.PIA = sum(ANR.hors.investissements.d.avenir,na.rm = TRUE),
+      ANR.PIA = sum(ANR.investissements.d.avenir,na.rm = TRUE),
+      budget = sum(Produits.de.fonctionnement.encaissables, na.rm = TRUE)) 
+
+
+anr <- ens %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  group_by(pid,Etablissement,Comparable,PerimEx) %>%
+  summarise(Homme = sum(Homme, na.rm = TRUE), Femme = sum(Femme, na.rm = TRUE)) %>%
+  mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
+  left_join(fin)
+```
+
+
+
+```{r anr} 
+anr %>%
+  filter(Comparable) %>%
+  ggplot(aes(y=(ANR.hors.PIA+ANR.PIA),x=Taux.féminité, label = Etablissement, color=PerimEx)) +
+  geom_point() +
+  scale_y_continuous(labels = ~ paste(.x/1e6,"M€"))
+```
+ 
+ 
+```{r anr.hors.pia} 
+anr %>%
+  filter(Comparable) %>%
+  ggplot(aes(y=ANR.hors.PIA,x=Taux.féminité, label = Etablissement, color=PerimEx)) +
+  geom_point() +
+  scale_y_continuous(labels = ~ paste(.x/1e6,"M€"))
+``` 
+ 
+ 
+```{r anr.pia} 
+anr %>%
+  filter(Comparable) %>%
+  ggplot(aes(y=ANR.PIA,x=Taux.féminité, label = Etablissement, color=PerimEx)) +
+  geom_point() +
+  scale_y_continuous(labels = ~ paste(.x/1e6,"M€"))
 ```
