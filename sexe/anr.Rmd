@@ -1,0 +1,151 @@
+---
+title: "ANR"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_set(theme_cpesr())
+```
+
+```{r data, cache = TRUE}
+prenoms <- read.csv2("nat2021.csv") %>%
+  group_by(
+    prenom = preusuel, 
+    sexe = factor(sexe, labels = c("Homme","Femme"))) %>%
+  summarise(nombre = sum(nombre)) %>%
+  pivot_wider(names_from = sexe, values_from = nombre, values_fill = 0) %>%
+  mutate(sexe = case_when(
+    Homme > Femme * 100 ~ "Homme",
+    Femme > Homme * 100 ~ "Femme",
+    TRUE ~ NA_character_
+  )) %>%
+  select(prenom,sexe)
+
+anr <- bind_rows(
+  left_join(
+    read.csv2("../data/anr-dgpie-depuis-2010-projets-finances-20221122-projets.csv", dec='.'),
+    read.csv2("../data/anr-dgpie-depuis-2010-projets-finances-20221122-partenaires.csv") %>%
+      select(Projet.Code_Decision_ANR, Projet.Partenaire.Responsable_scientifique.Prenom) %>%
+      unique() ) %>% 
+    mutate(type = "DGPIE"),
+  left_join(
+    read.csv2("../data/anr-dos-2005-2009-projets-finances-20210826-projets.csv", dec='.'),
+    read.csv2("../data/anr-dos-2005-2009-projets-finances-20210826-partenaires.csv") %>%
+      select(Projet.Code_Decision_ANR, Projet.Partenaire.Responsable_scientifique.Prenom) %>%
+      unique() ) %>% 
+    mutate(type = "DOS"),
+  left_join(
+    read.csv2("../data/anr-dos-depuis-2010-projets-finances-20230104-projets.csv", dec='.'),
+    read.csv2("../data/anr-dos-depuis-2010-projets-finances-20230104-partenaires.csv") %>%
+      select(Projet.Code_Decision_ANR, Projet.Partenaire.Responsable_scientifique.Prenom) %>%
+      unique() ) %>% 
+    mutate(type = "DOS")
+) %>%
+  mutate(prenom = str_to_upper(Projet.Partenaire.Responsable_scientifique.Prenom)) %>%
+  left_join(prenoms)
+```
+
+
+https://www.data.gouv.fr/fr/datasets/anr-02-projets-anr-dgpie-detail-des-projets-et-des-partenaires/
+
+https://www.data.gouv.fr/fr/datasets/anr-01-projets-anr-dos-detail-des-projets-et-des-partenaires/
+
+https://www.insee.fr/fr/statistiques/2540004?sommaire=4767262
+
+
+## Nombre de projets
+
+```{r anr.nb}
+anr %>%
+  group_by(sexe) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=sexe,y=nb)) + geom_col()
+```
+
+
+## Nombre de projets par type
+
+```{r anr.type}
+anr %>%
+  group_by(sexe,type) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=sexe,y=nb)) + geom_col() +
+  facet_wrap(type~.,scales = "free_y")
+```
+
+
+## Taux de porteuses scientifiques par année
+
+```{r anr.taux}
+anr %>%
+  group_by(sexe,AAP.Edition) %>%
+  summarise(nb = n()) %>%
+  filter(!is.na(sexe)) %>%
+  pivot_wider(names_from = sexe, values_from = nb) %>%
+  mutate(Taux.féminité = Femme / (Homme+Femme)) %>%
+  ggplot(aes(x=AAP.Edition,y=Taux.féminité)) + geom_line()
+```
+
+
+
+
+
+## Financement de projets
+
+```{r fin.nb}
+anr %>%
+  group_by(sexe) %>%
+  summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>%
+  ggplot(aes(x=sexe,y=Financement)) + geom_col()
+```
+
+
+## Nombre de projets par type
+
+```{r fin.type}
+anr %>%
+  group_by(sexe,type) %>%
+  summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>%
+  ggplot(aes(x=sexe,y=Financement)) + geom_col() +
+  facet_wrap(type~.,scales = "free_y")
+```
+
+
+## Taux de financement aux porteuses scientifiques par année
+
+```{r fin.taux}
+anr %>%
+  group_by(sexe,AAP.Edition) %>%
+  summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>%
+  filter(!is.na(sexe)) %>%
+  pivot_wider(names_from = sexe, values_from = Financement) %>%
+  mutate(Taux.féminité = Femme / (Homme+Femme)) %>%
+  ggplot(aes(x=AAP.Edition,y=Taux.féminité)) + geom_line()
+```
+
+
+
+## Financement median par sexe
+
+```{r fin.med}
+anr %>%
+  group_by(sexe,AAP.Edition) %>%
+  summarise(Financement.median = median(Projet.Aide_allouee,na.rm = TRUE)) %>%
+  na.omit() %>%
+  ggplot(aes(x=AAP.Edition,y=Financement.median,color=sexe,group=sexe)) + geom_line()
+```
+
+## Financement median par sexe
+
+```{r fin.med.2010}
+anr %>%
+  filter(AAP.Edition >= 2010) %>%
+  group_by(sexe,AAP.Edition) %>%
+  summarise(Financement.median = median(Projet.Aide_allouee,na.rm = TRUE)) %>%
+  na.omit() %>%
+  ggplot(aes(x=AAP.Edition,y=Financement.median,color=sexe,group=sexe)) + geom_line()
+```
