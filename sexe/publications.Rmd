@@ -1,0 +1,115 @@
+---
+title: "Publications"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_set(theme_cpesr())
+```
+
+
+https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-export-des-productions-scientifiques-exposes-dans-scanr-publications-thes/information/
+
+```{r load, include=FALSE}
+scanr <- read.csv2("publications.csv", quote = '') 
+publications <- scanr %>% 
+  filter(productionType == "publication") %>%
+  mutate(
+    Année = ifelse(publicationDate < "2023", as.integer(publicationDate), NA),
+    Femmes = as.integer(Femmes),
+    Hommes = as.integer(Hommes),
+    firstAuthor = as.factor(firstAuthor))
+```
+
+```{r pubdate}
+publications %>%
+  group_by(Année) %>%
+  summarize(nb = n()) %>%
+  ggplot(aes(x=Année,y=nb)) + geom_col()
+```
+
+## Publication-personnes
+
+```{r pubaa}
+publications %>%
+  filter(Année >=2013, Année <2022) %>%
+  group_by(Année) %>%
+  summarise(across(c("Femmes","Hommes"),sum)) %>%
+  pivot_longer(c("Femmes","Hommes"), names_to = "Sexe", values_to = "Publication_personnes") %>%
+  ggplot(aes(x=Année,y=Publication_personnes, color=Sexe)) +
+    geom_line() +
+    expand_limits(y=0)
+```
+
+## Sexe des auteurs
+
+```{r pubsexe}
+publications %>%
+  filter(Année >=2013, Année <2022) %>%
+  mutate(Sexe = case_when(
+    Femmes > 0 & Hommes > 0 ~ "Mixte",
+    Femmes == 0 & Hommes > 0 ~ "Masculin",
+    Femmes > 0 & Hommes == 0 ~ "Féminin",
+    TRUE ~ NA_character_
+  )) %>%
+  group_by(Année, Sexe) %>%
+  summarise(nb = n()) %>%
+  na.omit() %>%
+  ggplot(aes(x=Année,y=nb, color=Sexe)) +
+    geom_line() +
+    expand_limits(y=0)
+```
+
+
+```{r pubsexe.facet}
+publications %>%
+  filter(Année >=2013, Année <2022) %>%
+  mutate(Sexe = case_when(
+    Femmes > 0 & Hommes > 0 ~ "Mixte",
+    Femmes == 0 & Hommes > 0 ~ "Masculin",
+    Femmes > 0 & Hommes == 0 ~ "Féminin",
+    TRUE ~ NA_character_
+  )) %>%
+  filter(startsWith(domaine,"0.")) %>%
+  group_by(Année, Sexe, domaine) %>%
+  summarise(nb = n()) %>%
+  na.omit() %>%
+  ggplot(aes(x=Année,y=nb, color=Sexe)) +
+    geom_line() +
+    expand_limits(y=0) +
+  facet_wrap(domaine~., scales = "free_y")
+```
+
+
+
+## Premier auteur
+
+```{r premaut}
+publications %>%
+  filter(Année >=2013, Année <2022) %>%
+  group_by(Année, firstAuthor) %>%
+  summarise(nb = n()) %>%
+  na.omit() %>%
+  ggplot(aes(x=Année,y=nb, color=firstAuthor)) +
+    geom_line() +
+    expand_limits(y=0)
+```
+
+### Premier auteur des articles mixtes
+
+```{r premautmixte}
+publications %>%
+  filter(Année >=2013, Année <2022) %>%
+  filter(Femmes >0 & Hommes >0) %>%
+  group_by(Année, firstAuthor) %>%
+  summarise(nb = n()) %>%
+  na.omit() %>%
+  ggplot(aes(x=Année,y=nb, color=firstAuthor)) +
+    geom_line() +
+    expand_limits(y=0)
+```
+
