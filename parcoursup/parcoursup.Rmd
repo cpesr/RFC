@@ -24,6 +24,8 @@ spoilerTable <- function(df) {
 
 ```
 
+
+
 ## Données 
 
 - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/information/
@@ -60,6 +62,7 @@ apb <- apb.raw %>%
 
 ps18 <- read.csv2("../data/fr-esr-parcoursup-2018.csv",dec='.')
 ps19 <- read.csv2("../data/fr-esr-parcoursup-2019.csv",dec='.')
+
 ps20 <- read.csv2("../data/fr-esr-parcoursup-2020-xls.csv",dec=',') %>%
   rename(
     Libellé.formation = Filière.de.formation.détaillée,
@@ -68,13 +71,20 @@ ps20 <- read.csv2("../data/fr-esr-parcoursup-2020-xls.csv",dec=',') %>%
   ) %>%
   select(-X..d.admis.néo.bacheliers.issus.du.même.établissement..BTS.CPGE.)
 
-ps21 <- read.csv2("../data/fr-esr-parcoursup-2021.csv",dec='.') %>%
+ps21 <- read.csv2("../data/fr-esr-parcoursup_2021.csv",dec='.') %>%
   rename(
     Libellé.formation = Filière.de.formation.détaillée,
     Filière.de.formation.détaillée = Filière.de.formation.détaillée.bis
   ) 
 
-ps <- bind_rows(apb,ps18,ps19,ps20,ps21) %>%
+ps22 <- read.csv2("../data/fr-esr-parcoursup.csv",dec='.') %>%
+  rename(
+    Libellé.formation = Filière.de.formation.détaillée,
+    Filière.de.formation.détaillée = Filière.de.formation.détaillée.bis
+  ) 
+
+
+ps <- bind_rows(apb,ps18,ps19,ps20,ps21,ps22) %>%
   mutate(Filière.de.formation.très.agrégée = fct_recode(
     factor(Filière.de.formation.très.agrégée),
     DUT_BUT = "DUT",

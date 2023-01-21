@@ -129,10 +129,10 @@ names(pidfix) <- pidfix.raw$pid.src
 fin <- read.csv2("../data/fr-esr-operateurs-indicateurs-financiers.csv", na.strings="", dec=".") %>%
     group_by(pid = recode(id...paysage,!!!pidfix)) %>%
     summarise(
-      ANR.hors.PIA = sum(ANR.hors.investissements.d.avenir,na.rm = TRUE),
-      ANR.PIA = sum(ANR.investissements.d.avenir,na.rm = TRUE),
-      budget = sum(Produits.de.fonctionnement.encaissables, na.rm = TRUE)) 
-
+      ANR.hors.PIA = mean(ANR.hors.investissements.d.avenir,na.rm = TRUE),
+      ANR.PIA = mean(ANR.investissements.d.avenir,na.rm = TRUE),
+      SCSP = mean(Produits.de.fonctionnement.encaissables - Ressources.propres.encaissables, na.rm = TRUE),
+      Budget = mean(Produits.de.fonctionnement.encaissables, na.rm = TRUE) ) 
 
 anr <- ens %>%
   filter(Rentrée == max(Rentrée)) %>%
@@ -149,7 +149,7 @@ anr <- ens %>%
 anr %>%
   filter(Comparable) %>%
   ggplot(aes(y=(ANR.hors.PIA+ANR.PIA),x=Taux.féminité, label = Etablissement, color=PerimEx)) +
-  geom_point() +
+  geom_point() + 
   scale_y_continuous(labels = ~ paste(.x/1e6,"M€"))
 ```
  
@@ -169,4 +169,27 @@ anr %>%
   ggplot(aes(y=ANR.PIA,x=Taux.féminité, label = Etablissement, color=PerimEx)) +
   geom_point() +
   scale_y_continuous(labels = ~ paste(.x/1e6,"M€"))
+```
+
+
+
+
+```{r anr.norm} 
+anr %>%
+  filter(Comparable) %>%
+  ggplot(aes(y=(SCSP/(Homme+Femme)),x=Taux.féminité, label = Etablissement, color=PerimEx)) +
+  geom_point() + 
+  scale_y_continuous(labels = ~ paste(.x/1e3,"k€"))
+```
+
+
+```{r anr.norm} 
+anr %>%
+  filter(Comparable) %>%
+  pivot_longer(c(SCSP,ANR.PIA,ANR.hors.PIA), values_to = "Montant", names_to = "Ressource") %>%
+  mutate(Montant.par.EEC = Montant / (Homme+Femme)) %>%
+  mutate(Taux.féminité.cut = cut(Taux.féminité,c(0,0.4,0.45,0.5,1))) %>%
+  ggplot(aes(y=Montant.par.EEC,x=Taux.féminité.cut, label = Etablissement, fill=Ressource)) +
+  geom_boxplot() +
+  facet_wrap(Ressource~.,scales = "free_y") 
 ```

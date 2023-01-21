@@ -1,0 +1,169 @@
+---
+title: "Insertion Pro"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+
+theme_cpesr_setup(author = "Julien Gossa", source = "SIES, DEPP, https://github.com/cpesr/RFC/tree/main/insertion-pro")
+
+ip <- read.csv2("../data/fr-esr-insertion_professionnelle-master_donnees_nationales.csv", dec='.', na.strings = c("","nd","ns"))
+
+iplp <- read.csv2("../data/fr-esr-insertion_professionnelle-lp_donnees_nationales.csv", dec='.', na.strings = c("","nd","ns"))
+
+ipvp <- bind_rows(
+  readxl::read_xlsx("../data/lyc-ens-professionnels-sortis-en-2021-120082.xlsx", skip = 2, sheet = 3) %>% 
+    filter(Spécialité == "_Ensemble") %>%
+    transmute(Année = 2021, 
+           Diplôme = `Niveau de formation (regroupé)`, 
+           Taux.PE = `Taux (a)=(2)/(1)`, 
+           Taux.IP.sortants.6mois = `Taux (b)=(4)/(3)`, 
+           Taux.IP.6mois = `Part en emploi 6 mois après la sortie (d)=(4)/(1)`),
+  readxl::read_xlsx("../data/indicateurs-d-clin-s-par-formation-fine-niveau-national-pour-la-voie-professionnelle-scolaire-pour-les-jeunes-sortants-en-2020-115621_0.xlsx", skip = 2, sheet = 3) %>%
+    filter(Spécialité == "_Ensemble") %>%
+    transmute(Année = 2020, 
+           Diplôme = `Niveau de formation (regroupé)`, 
+           Taux.PE = `Taux (a)=(2)/(1)`, 
+           Taux.IP.sortants.6mois = `Taux (b)=(4)/(3)`, 
+           Taux.IP.sortants.12mois = `Taux (c)=(5)/(3)`, )
+  # readxl::read_xlsx("../data/national-pour-la-voie-pro-scolaire---sortants-2019-115627.xlsx", skip = 2, sheet = 3) %>% 
+  # mutate(Année = 2019) 
+) 
+  
+
+
+```
+
+https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-master_donnees_nationales/export/
+
+https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-lp_donnees_nationales/export/
+
+https://www.education.gouv.fr/l-insertion-des-jeunes-apres-une-formation-en-voie-professionnelle-307956
+
+```{r 18mois, fig.asp=3/3}
+ip %>%
+  filter(Genre == "femmes et hommes") %>%
+  filter(situation == "18 mois après le diplôme") %>%
+  group_by(Secteur.disciplinaire, Code.du.domaine) %>%
+  summarise(Taux.d.insertion = mean(Taux.d.insertion)) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  ggplot(aes(x=Taux.d.insertion,y=reorder(Secteur.disciplinaire, Taux.d.insertion), fill=Code.du.domaine)) +
+  geom_col() +
+  ggtitle("Taux d'insertion professionnelle à 18 mois des diplomés de Master", "Moyenne 2011-2019") +
+  theme(plot.title = element_text(hjust = 1), axis.title.y = element_blank())
+```
+
+```{r 30mois, fig.asp=3/3}
+ip %>%
+  filter(Genre == "femmes et hommes") %>%
+  filter(situation == "30 mois après le diplôme") %>%
+  group_by(Secteur.disciplinaire, Code.du.domaine) %>%
+  summarise(Taux.d.insertion = mean(Taux.d.insertion)) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  ggplot(aes(x=Taux.d.insertion,y=reorder(Secteur.disciplinaire, Taux.d.insertion), fill=Code.du.domaine)) +
+  geom_col() +
+  ggtitle("Taux d'insertion professionnelle à 30 mois des diplomés de Master", "Moyenne 2011-2019") +
+  theme(plot.title = element_text(hjust = 1), axis.title.y = element_blank())
+```
+
+### Chimie vs. socio
+
+```{r Chimie, fig.asp=9/16}
+ip %>%
+  filter(Secteur.disciplinaire %in% c("Chimie", "Sociologie, démographie")) %>%
+  filter(Genre == "femmes et hommes") %>%
+  #filter(situation == "30 mois après le diplôme") %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  ggplot(aes(x=Année, y=Taux.d.insertion, color = Secteur.disciplinaire, 
+             group = paste(Secteur.disciplinaire,situation))) +
+  geom_point() + geom_line() +
+  facet_grid(.~situation) +
+  ggtitle("Taux d'insertion professionnelle à 30 mois des diplomés de Master") +
+  theme(plot.title = element_text(hjust = 1), axis.title.y = element_blank())
+```
+
+
+## LP 
+
+```{r lp.18mois, fig.asp=3/3}
+iplp %>%
+  filter(Genre == "femmes et hommes") %>%
+  filter(situation == "18 mois après le diplôme") %>%
+  group_by(Secteur.disciplinaire, Code.du.domaine) %>%
+  summarise(Taux.d.insertion = mean(Taux.d.insertion)) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  ggplot(aes(x=Taux.d.insertion,y=reorder(Secteur.disciplinaire, Taux.d.insertion), fill=Code.du.domaine)) +
+  geom_col() +
+  ggtitle("Taux d'insertion professionnelle à 18 mois des diplomés de LP", "Moyenne 2011-2019") +
+  theme(plot.title = element_text(hjust = 1), axis.title.y = element_blank())
+```
+
+
+```{r lp.30mois, fig.asp=3/3}
+iplp %>%
+  filter(Taux.d.insertion > 50) %>% 
+  filter(Genre == "femmes et hommes") %>%
+  filter(situation == "30 mois après le diplôme") %>%
+  group_by(Secteur.disciplinaire, Code.du.domaine) %>%
+  summarise(Taux.d.insertion = mean(Taux.d.insertion)) %>%
+  filter(!is.na(Taux.d.insertion)) %>% 
+  ggplot(aes(x=Taux.d.insertion,y=reorder(Secteur.disciplinaire, Taux.d.insertion), fill=Code.du.domaine)) +
+  geom_col() +
+  ggtitle("Taux d'insertion professionnelle à 30 mois des diplomés de LP", "Moyenne 2011-2019") +
+  theme(plot.title = element_text(hjust = 1), axis.title.y = element_blank())
+```
+
+
+
+### Informatique vs. socio
+
+```{r lp.infosocio, fig.asp=9/16}
+iplp %>%
+  filter(Secteur.disciplinaire %in% c("Informatique", "Sociologie, démographie")) %>%
+  filter(Genre == "femmes et hommes") %>%
+  #filter(situation == "30 mois après le diplôme") %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  ggplot(aes(x=Année, y=Taux.d.insertion, color = Secteur.disciplinaire, 
+             group = paste(Secteur.disciplinaire,situation))) +
+  geom_point() + geom_line() +
+  facet_grid(.~situation) +
+  ggtitle("Taux d'insertion professionnelle à 30 mois des diplomés de Master") +
+  theme(plot.title = element_text(hjust = 1), axis.title.y = element_blank())
+```
+
+
+## Socio vs Voie Pro 
+
+```{r sociovsvp}
+bind_rows(ip,iplp) %>% 
+  filter(Secteur.disciplinaire == "Sociologie, démographie") %>%
+  mutate(Diplôme = recode(Diplôme,
+                          "LICENCE PRO" = "LP",
+                          "MASTER LMD" = "Master")) %>%
+  mutate(Diplôme = paste(Diplôme, "Socio.\ndémo.", sep = '\n')) %>%
+  filter(Genre == "femmes et hommes") %>%
+  filter(situation == "18 mois après le diplôme") %>%
+  group_by(Diplôme, Voie = "Universitaire") %>%
+  summarise(Taux.IP = mean(Taux.d.insertion)) %>%
+  bind_rows(
+    ipvp %>%
+      filter(Année == 2020, Diplôme != "_Ensemble") %>%
+      transmute(
+        Diplôme,
+        Voie = "Professionnelle",
+        Taux.IP = Taux.IP.sortants.12mois
+      )
+  ) %>%
+  ggplot(aes(x = reorder(Diplôme, -Taux.IP), y = Taux.IP, fill = Voie)) + 
+  geom_col(alpha=0.6) +
+  scale_y_continuous(labels = ~ paste(.x,"%"), name = "Taux d'insertion professionnelle") +
+  xlab("Diplôme") +
+  ggtitle("Insertion professionnelle des voies universitaires « Sociologie, démographie »,\net des sortants de la voies professionnelles (hors poursuite d'étude)") +
+  theme(legend.position = "right") +
+  theme_cpesr_cap(x_grid = FALSE, source = "SIES, DEPP, https://github.com/cpesr/RFC/tree/main/insertion-pro\nVoies universitaires : moyenne des taux d'IP à 18 mois entre 2011 et 2019 ; Voies pros : taux d'IP à 12 mois en 2020") 
+```
+

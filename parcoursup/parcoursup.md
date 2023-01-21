@@ -3,10 +3,10 @@ Parcoursup
 
 ## Données
 
--   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/information/>
--   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup_2020/information/>
--   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2019/information/>
--   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2018/information/>
+- <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/information/>
+- <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup_2020/information/>
+- <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2019/information/>
+- <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2018/information/>
 
 <details>
 <summary>
@@ -132,14 +132,14 @@ Voir les données
 | Dont.taux.d.accès.des.candidats.ayant.un.bac.technologique.ayant.postulé.à.la.formation                                                          |
 | COD_AFF_FORM                                                                                                                                     |
 | Commune.de.l.établissement                                                                                                                       |
+| Filière.de.formation.1                                                                                                                           |
+| Concours.communs.et.banque.d.épreuves                                                                                                            |
 | Dont.effectif.des.admis.néo.bacheliers.avec.mention.Très.Bien.avec.félicitations.au.bac                                                          |
 | X..d.admis.néo.bacheliers.avec.mention.Très.Bien.avec.félicitations.au.bac                                                                       |
 | Dont…d.admis.avec.mention..BG.                                                                                                                   |
 | Dont…d.admis.avec.mention..BT.                                                                                                                   |
 | Dont…d.admis.avec.mention..BP.                                                                                                                   |
 | list_com                                                                                                                                         |
-| LIB_FOR_VOE_INS                                                                                                                                  |
-| detail_forma2                                                                                                                                    |
 | etablissement_id_paysage                                                                                                                         |
 | composante_id_paysage                                                                                                                            |
 | rdda                                                                                                                                             |
@@ -184,24 +184,24 @@ Voir les données
 Voir les données
 </summary>
 
-|       | Session | Établissement                                 | Filière.de.formation                      | Filière.de.formation.détaillée | places | candidats | rdda | ratio |
-|:------|:--------|:----------------------------------------------|:------------------------------------------|:-------------------------------|:-------|:----------|:-----|:------|
-| 1     | 2016    | Université Paris 2 Panthéon - Assas           | Arts, Lettres, Langues, SHS               | Information et communication   | 30     | 5001      | 31   | 0.01  |
-| 2     | 2016    | Université Paris 1 Panthéon Sorbonne          | Droit - Sciences Politiques               | Science politique              | 53     | 4868      | 40   | 0.01  |
-| 3     | 2016    | Université Sorbonne Nouvelle Paris 3          | Arts, Lettres, Langues, SHS               | Information et communication   | 112    | 8387      | 73   | 0.01  |
-| 4     | 2017    | Université Sorbonne Nouvelle Paris 3          | Arts, Lettres, Langues, SHS               | Information et communication   | 112    | 9252      | 83   | 0.01  |
-| …     | …       | NA                                            | NA                                        | NA                             | …      | …         | …    | …     |
-| 13719 | 2020    | Université de Bordeaux - Antenne de Périgueux | Licence - Droit-économie-gestion          | Droit                          | 30     | 557       | 4764 | 8.55  |
-| 13720 | 2021    | Université Savoie Mont Blanc - Bourget-du-Lac | Licence - Sciences - technologies - santé | Informatique                   | 5      | 47        | 436  | 9.28  |
-| 13721 | 2021    | Université de Bordeaux - Antenne d’Agen       | Licence - Droit-économie-gestion          | Droit                          | 30     | 864       | 8113 | 9.39  |
-| 13722 | 2020    | Université de Bordeaux - Antenne d’Agen       | Licence - Droit-économie-gestion          | Droit                          | 30     | 537       | 7294 | 13.58 |
+|       | Session | Établissement                                 | Filière.de.formation                                                                                              | Filière.de.formation.détaillée | places | candidats | rdda | ratio |
+|:------|:--------|:----------------------------------------------|:------------------------------------------------------------------------------------------------------------------|:-------------------------------|:-------|:----------|:-----|:------|
+| 1     | 2016    | Université Paris 2 Panthéon - Assas           | Arts, Lettres, Langues, SHS                                                                                       | Information et communication   | 30     | 5001      | 31   | 0.01  |
+| 2     | 2016    | Université Paris 1 Panthéon Sorbonne          | Droit - Sciences Politiques                                                                                       | Science politique              | 53     | 4868      | 40   | 0.01  |
+| 3     | 2016    | Université Sorbonne Nouvelle Paris 3          | Arts, Lettres, Langues, SHS                                                                                       | Information et communication   | 112    | 8387      | 73   | 0.01  |
+| 4     | 2017    | Université Sorbonne Nouvelle Paris 3          | Arts, Lettres, Langues, SHS                                                                                       | Information et communication   | 112    | 9252      | 83   | 0.01  |
+| …     | …       | NA                                            | NA                                                                                                                | NA                             | …      | …         | …    | …     |
+| 13719 | 2020    | Université de Bordeaux - Antenne de Périgueux | Licence - Droit-économie-gestion                                                                                  | Droit                          | 30     | 557       | 4764 | 8.55  |
+| 13720 | 2021    | Université Savoie Mont Blanc - Bourget-du-Lac | Licence - Portail Informatique - Informatique (tronc commun en L1 avec Mathématiques et Sciences et technologies) | Informatique                   | 5      | 47        | 436  | 9.28  |
+| 13721 | 2021    | Université de Bordeaux - Antenne d’Agen       | Licence - Portail Droit                                                                                           | Droit                          | 30     | 864       | 8113 | 9.39  |
+| 13722 | 2020    | Université de Bordeaux - Antenne d’Agen       | Licence - Droit-économie-gestion                                                                                  | Droit                          | 30     | 537       | 7294 | 13.58 |
 
 </details>
 
-    ## Scale for 'x' is already present. Adding another scale for 'x', which will
-    ## replace the existing scale.
+    ## Scale for x is already present.
+    ## Adding another scale for x, which will replace the existing scale.
 
-    ## Warning: Removed 1315 rows containing non-finite values (stat_ecdf).
+    ## Warning: Removed 1315 rows containing non-finite values (`stat_ecdf()`).
 
 ![](parcoursup_files/figure-gfm/licsec.ts-1.png)<!-- -->
 
@@ -278,6 +278,8 @@ Voir les données
     ## `summarise()` has grouped output by 'Accessibilité'. You can override using the
     ## `.groups` argument.
 
+    ## Warning: Removed 3 rows containing missing values (`geom_col()`).
+
 ![](parcoursup_files/figure-gfm/tda.adm.fil.per-1.png)<!-- -->
 
 ### Taille formation
@@ -313,10 +315,10 @@ Voir les données
 
 ![](parcoursup_files/figure-gfm/deg.admis-1.png)<!-- -->
 
-    ## Warning: Removed 2 rows containing non-finite values (stat_boxplot).
+    ## Warning: Removed 2 rows containing non-finite values (`stat_boxplot()`).
 
 ![](parcoursup_files/figure-gfm/deg.tda-1.png)<!-- -->
 
-    ## Warning: Removed 1 rows containing missing values (geom_point).
+    ## Warning: Removed 1 rows containing missing values (`geom_point()`).
 
 ![](parcoursup_files/figure-gfm/deg.tda.taille-1.png)<!-- -->
