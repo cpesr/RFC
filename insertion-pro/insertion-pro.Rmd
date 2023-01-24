@@ -4,7 +4,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 library(tidyverse)
 library(ggcpesrthemes)
 theme_set(theme_cpesr())
@@ -165,5 +165,63 @@ bind_rows(ip,iplp) %>%
   ggtitle("Insertion professionnelle des voies universitaires « Sociologie, démographie »,\net des sortants de la voies professionnelles (hors poursuite d'étude)") +
   theme(legend.position = "right") +
   theme_cpesr_cap(x_grid = FALSE, source = "SIES, DEPP, https://github.com/cpesr/RFC/tree/main/insertion-pro\nVoies universitaires : moyenne des taux d'IP à 18 mois entre 2011 et 2019 ; Voies pros : taux d'IP à 12 mois en 2020") 
+```
+
+```{r sociovsvp.fake}
+bind_rows(ip,iplp) %>% 
+  filter(Secteur.disciplinaire == "Sociologie, démographie") %>%
+  mutate(Diplôme = recode(Diplôme,
+                          "LICENCE PRO" = "LP",
+                          "MASTER LMD" = "Master")) %>%
+  mutate(Diplôme = paste(Diplôme, "Socio.\ndémo.", sep = '\n')) %>%
+  filter(Genre == "femmes et hommes") %>%
+  filter(situation == "18 mois après le diplôme") %>%
+  group_by(Diplôme, Voie = "Universitaire") %>%
+  summarise(Taux.IP = mean(Taux.d.insertion)/2) %>%
+  bind_rows(
+    ipvp %>%
+      filter(Année == 2020, Diplôme != "_Ensemble") %>%
+      transmute(
+        Diplôme,
+        Voie = "Professionnelle",
+        Taux.IP = Taux.IP.sortants.12mois *1.5
+      )
+  ) %>%
+  ggplot(aes(x = reorder(Diplôme, -Taux.IP), y = Taux.IP, fill = Voie)) + 
+  geom_col(alpha=0.6) +
+  scale_y_continuous(labels = ~ paste(.x,"%"), name = "Taux d'insertion professionnelle") +
+  xlab("Diplôme") +
+  ggtitle("Insertion professionnelle des voies universitaires « Sociologie, démographie »,\net des sortants de la voies professionnelles (hors poursuite d'étude)", subtitle = "Données complètement fake, ne surtout pas prendre au sérieux") +
+  theme(legend.position = "right") +
+  theme_cpesr_cap(x_grid = FALSE, source = "SIES, DEPP, https://github.com/cpesr/RFC/tree/main/insertion-pro\nVoies universitaires : moyenne des taux d'IP à 18 mois entre 2011 et 2019 ; Voies pros : taux d'IP à 12 mois en 2020") 
+```
+
+
+```{r socio.contrat}
+ips <- ip %>%
+  filter(Secteur.disciplinaire == "Sociologie, démographie") %>%
+  filter(Genre == "femmes et hommes") %>%
+  filter(Année == "2019") %>%
+  filter(situation == "30 mois après le diplôme")
+
+  bind_rows(
+    ips %>% 
+      pivot_longer(Prof..libérale..indépendant..chef.d.entreprise:Volontariat.international) %>% 
+      transmute(type="Statut",name,value), 
+    ips %>% 
+      pivot_longer(Vous.même:Un.particulier) %>% 
+      transmute(type="Employeur",name,value)) %>%
+  filter(value > 0) %>%
+  arrange(type,value) %>%
+  mutate(name = factor(name,levels=name)) %>%
+  mutate(type = fct_rev(factor(type))) %>%
+  ggplot(aes(y=reorder(name,name),x=value,fill=type)) + 
+    geom_col() +
+    #facet_wrap(.~type,scales = "free_y", ncol = 1) +
+    ylab("") +
+    scale_x_continuous(labels=~ paste0(.x,"%"), name="Part des en emplois") +
+    ggtitle("Statuts et employeurs des diplômés de Master sociologie/démographie", subtitle = "Diplômés 2019, à 30 mois") +
+    theme(plot.title = element_text(hjust = 1), legend.position = "right")
+
 ```
 

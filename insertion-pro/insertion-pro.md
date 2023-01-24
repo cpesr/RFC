@@ -43,3 +43,10 @@ Insertion Pro
     ## `.groups` argument.
 
 ![](insertion-pro_files/figure-gfm/sociovsvp-1.png)<!-- -->
+
+    ## `summarise()` has grouped output by 'Diplôme'. You can override using the
+    ## `.groups` argument.
+
+![](insertion-pro_files/figure-gfm/sociovsvp.fake-1.png)<!-- -->
+
+![](insertion-pro_files/figure-gfm/socio.contrat-1.png)<!-- -->
