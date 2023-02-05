@@ -31,6 +31,9 @@ Immobilier
     ## `summarise()` has grouped output by 'Année'. You can override using the
     ## `.groups` argument.
 
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+
 ## Etat.santé
 
 ![](immobilier_files/figure-gfm/explo.loop-1.png)<!-- -->![](immobilier_files/figure-gfm/explo.loop-2.png)<!-- -->![](immobilier_files/figure-gfm/explo.loop-3.png)<!-- -->
@@ -160,3 +163,13 @@ Immobilier
 ## Bilan.carbone
 
 ![](immobilier_files/figure-gfm/explo.loop-57.png)<!-- -->![](immobilier_files/figure-gfm/explo.loop-58.png)<!-- -->![](immobilier_files/figure-gfm/explo.loop-59.png)<!-- -->![](immobilier_files/figure-gfm/explo.loop-60.png)<!-- -->
+
+## Classement GES
+
+    ## Warning: remplacement de l'importation précédente 'ggthemes::theme_map' par
+    ## 'cowplot::theme_map' lors du chargement de 'kpiESR'
+
+    ## `summarise()` has grouped output by 'etab'. You can override using the
+    ## `.groups` argument.
+
+![](immobilier_files/figure-gfm/class.ges-1.png)<!-- -->

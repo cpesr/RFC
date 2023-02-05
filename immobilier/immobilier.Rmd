@@ -8,6 +8,8 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(ggcpesrthemes)
 theme_set(theme_cpesr())
+
+theme_cpesr_setup(authors = "Julien Gossa", source = "SIES https://github.com/cpesr/RFC/blob/main/immobilier/immobilier.md")
 ```
 
 ```{r load}
@@ -25,7 +27,7 @@ imo <- read.csv2("../data/fr-esr-patrimoine-immobilier-des-operateurs-de-l-ensei
 colnames(imo)
 ```
 
-```{r explo.fun}
+```{r explo.fun, cache=TRUE}
 
 explore <- function(var) {
   
@@ -74,4 +76,30 @@ explore <- function(var) {
 ```{r explo.loop, results='asis'}
 for(var in colnames(imo)[c(11:20,22,23,25,27,31)])
   explore(var)
+```
+
+
+
+## Classement GES
+
+```{r class.ges, fig.asp=4/3}
+imo %>% 
+  filter(Année == 2022) %>%
+  left_join(
+    kpiESR::esr.etab %>% select(pid, etab=Etablissement, Groupe),
+    by = c(Paysage_id = "pid")) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  group_by(etab, GES = fct_rev(as.factor(GES))) %>%
+  summarise(Nombre.bâtiments = n()) %>%
+  group_by(etab) %>%
+  mutate(score = sum(ifelse(GES %in% c("G","F"), Nombre.bâtiments, 0), na.rm = TRUE)) %>%
+  #filter(score!=0) %>%
+  #View() 
+  ggplot(aes(y=reorder(etab,score),x=Nombre.bâtiments, fill = GES, group=!is.na(GES))) + 
+  geom_col() +
+  scale_fill_brewer(palette="RdBu", na.value="grey50") +
+  ggtitle("Nombre de bâtiments par classe GES dans les universités") +
+  theme(axis.title.y = element_blank(), legend.position = "right", plot.title = element_text(hjust=1)) +
+  cpesr_cap() 
+  
 ```

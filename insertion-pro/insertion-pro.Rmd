@@ -207,10 +207,17 @@ ips <- ip %>%
   bind_rows(
     ips %>% 
       pivot_longer(Prof..libérale..indépendant..chef.d.entreprise:Volontariat.international) %>% 
-      transmute(type="Statut",name,value), 
+      transmute(type="Contrat",name,value), 
     ips %>% 
       pivot_longer(Vous.même:Un.particulier) %>% 
-      transmute(type="Employeur",name,value)) %>%
+      transmute(type="Employeur",name,value),
+    ips %>% 
+      pivot_longer(Agriculture..sylviculture.et.pêche:Autres.activités.de.service) %>% 
+      transmute(type="Métier",name,value),
+    ips %>% 
+      pivot_longer(Agriculteur:Employé.de.bureau..de.commerce..personnel.de.service) %>% 
+      transmute(type="Statut",name,value)
+    ) %>%
   filter(value > 0) %>%
   arrange(type,value) %>%
   mutate(name = factor(name,levels=name)) %>%

@@ -1,0 +1,66 @@
+---
+title: "cpge"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://data.education.gouv.fr/explore/dataset/fr-en-effectifs-etudiants-cpge-par-annee-et-par-sexe/
+
+```{r load}
+df <- read.csv2("../data/fr-en-effectifs-etudiants-cpge-par-annee-et-par-sexe.csv", dec='.')
+
+colnames(df)
+```
+
+## Explorations
+
+### Ministère
+
+```{r ministère}
+df %>% 
+  replace(is.na(.), 0) %>%
+  mutate(Effectif = rowSums(across(Nombre.de.garçons.dans.le.public:Nombre.de.filles.dans.le.privé)))  %>%
+  group_by(Rentrée.Scolaire,Ministère) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Ministère)) + geom_line()
+```
+
+
+### Filière
+
+```{r filière}
+df %>% 
+  replace(is.na(.), 0) %>%
+  mutate(Effectif = rowSums(across(Nombre.de.garçons.dans.le.public:Nombre.de.filles.dans.le.privé)))  %>%
+  group_by(Rentrée.Scolaire,Filière) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Filière)) + geom_line()
+```
+
+### Année
+
+```{r Année}
+df %>% 
+  replace(is.na(.), 0) %>%
+  mutate(Effectif = rowSums(across(Nombre.de.garçons.dans.le.public:Nombre.de.filles.dans.le.privé)))  %>%
+  group_by(Rentrée.Scolaire,Année) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Année)) + 
+  geom_line(size=1) +
+  ggtitle("Efectifs étudiants en CPGE en 1re et 2e année") +
+  cpesr_cap()
+```
