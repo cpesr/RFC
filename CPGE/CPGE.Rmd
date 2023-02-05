@@ -36,7 +36,9 @@ df %>%
   mutate(Effectif = rowSums(across(Nombre.de.garçons.dans.le.public:Nombre.de.filles.dans.le.privé)))  %>%
   group_by(Rentrée.Scolaire,Ministère) %>%
   summarise(Effectif = sum(Effectif)) %>%
-  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Ministère)) + geom_line()
+  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Ministère)) + 
+  geom_line() +
+  expand_limits(y=0)
 ```
 
 
@@ -48,7 +50,9 @@ df %>%
   mutate(Effectif = rowSums(across(Nombre.de.garçons.dans.le.public:Nombre.de.filles.dans.le.privé)))  %>%
   group_by(Rentrée.Scolaire,Filière) %>%
   summarise(Effectif = sum(Effectif)) %>%
-  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Filière)) + geom_line()
+  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Filière)) + 
+  geom_line() +
+  expand_limits(y=0)
 ```
 
 ### Année
@@ -63,4 +67,23 @@ df %>%
   geom_line(size=1) +
   ggtitle("Efectifs étudiants en CPGE en 1re et 2e année") +
   cpesr_cap()
+```
+
+
+
+### Public/Privé
+
+```{r Secteur}
+df %>% 
+  replace(is.na(.), 0) %>%
+  mutate(
+    Public = rowSums(across(Nombre.de.garçons.dans.le.public:Nombre.de.filles.dans.le.public)),
+    Privé = rowSums(across(Nombre.de.garçons.dans.le.privé:Nombre.de.filles.dans.le.privé))
+    )  %>%
+  pivot_longer(c(Public,Privé), names_to = "Secteur", values_to = "Effectif") %>%
+  group_by(Rentrée.Scolaire,Secteur) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ggplot(aes(x=Rentrée.Scolaire, y = Effectif, color = Secteur))  + 
+  geom_line() +
+  expand_limits(y=0)
 ```

@@ -30,3 +30,7 @@ CPESR
     ## ℹ Please use `linewidth` instead.
 
 <img src="CPGE_files/figure-gfm/Année-1.png" width="672" />
+
+### Public/Privé
+
+<img src="CPGE_files/figure-gfm/Secteur-1.png" width="672" />
