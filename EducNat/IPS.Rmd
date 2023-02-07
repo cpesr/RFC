@@ -1,0 +1,208 @@
+---
+title: "IPS"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/blob/main/EducNat/IPS.md")
+```
+
+## Données 
+
+- https://data.education.gouv.fr/explore/dataset/fr-en-ips_ecoles_v2
+- https://data.education.gouv.fr/explore/dataset/fr-en-ips_colleges
+- https://data.education.gouv.fr/explore/dataset/fr-en-ips_lycees
+
+```{r load.ecole}
+ips.ecole <- read.csv2("../data/fr-en-ips_ecoles_v2.csv", dec='.')
+
+colnames(ips.ecole)
+```
+
+```{r load.college}
+ips.college <- read.csv2("../data/fr-en-ips_colleges.csv", dec='.')
+
+colnames(ips.college)
+```
+
+```{r load.lycee}
+ips.lycee <- read.csv2("../data/fr-en-ips_lycees.csv", dec='.')
+
+colnames(ips.lycee)
+```
+
+```{r load.ips}
+ips <- bind_rows(
+  ips.ecole %>% mutate(Niveau = "Ecole"),
+  ips.college %>% mutate(Niveau = "Collège"),
+  ips.lycee %>% 
+    rename(
+      Rentrée.scolaire = rentree_scolaire,
+      Académie = academie,
+      Code.du.département = code_du_departement,
+      Département = departement,
+      UAI = uai,
+      Nom.de.l.établissment = nom_de_l_etablissment,
+      Code.INSEE.de.la.commune = code_insee_de_la_commune,
+      Nom.de.la.commune = nom_de_la_commune,
+      Secteur = secteur,
+      IPS = ips_ensemble_gt_pro
+    ) %>% mutate(Niveau = "Lycée")
+  ) %>%
+  mutate(
+    Niveau = factor(Niveau, levels = c("Ecole","Collège","Lycée")),
+    Rentrée = str_sub(Rentrée.scolaire,1,4)
+  )
+
+colnames(ips)
+```
+
+## Explorations
+
+### Départements
+
+```{r ecole.dpt, fig.asp=16/9}
+ips.ecole %>%
+  ggplot(aes(y=reorder(Code.du.département,IPS, FUN=mean),x=IPS)) +
+  geom_boxplot() 
+```
+
+```{r college.dpt, fig.asp=16/9}
+ips.college %>%
+  ggplot(aes(y=reorder(Code.du.département,IPS, FUN=mean),x=IPS)) +
+  geom_boxplot() 
+```
+
+```{r lycee.dpt, fig.asp=16/9}
+ips.lycee %>%
+  rename(
+    Code.du.département = code_du_departement,
+    IPS = ips_ensemble_gt_pro
+  ) %>%
+  ggplot(aes(y=reorder(Code.du.département,IPS, FUN=mean),x=IPS)) +
+  geom_boxplot() 
+```
+
+### Académie 
+
+
+```{r ecole.aca, fig.asp=16/9}
+ips.ecole %>%
+  ggplot(aes(y=reorder(Académie,IPS, FUN=mean),x=IPS)) +
+  geom_boxplot() 
+```
+
+```{r college.aca, fig.asp=16/9}
+ips.college %>%
+  ggplot(aes(y=reorder(Académie,IPS, FUN=mean),x=IPS)) +
+  geom_boxplot() 
+```
+
+```{r lycee.aca, fig.asp=16/9}
+ips.lycee %>%
+  rename(
+    Académie = academie,
+    IPS = ips_ensemble_gt_pro
+  ) %>%
+  ggplot(aes(y=reorder(Académie,IPS, FUN=mean),x=IPS)) +
+  geom_boxplot() 
+```
+
+
+## Privé public
+
+```{r pp}
+ips %>%
+  ggplot(aes(x=Secteur, y=IPS, fill=Secteur)) +
+  geom_boxplot() +
+  facet_grid(.~Niveau) +
+  scale_y_continuous(breaks=seq(40,160,by=20))
+```
+
+```{r pp.evol}
+ips %>%
+  group_by(Rentrée,Secteur,Niveau) %>%
+  summarize(IPS.median = median(IPS)) %>%
+  group_by(Secteur,Niveau) %>%
+  arrange(Rentrée) %>%
+  mutate(IPS.median.diff = IPS.median - first(IPS.median)) %>%
+  ggplot(aes(x=Rentrée, y=IPS.median.diff, color=Secteur, group=Secteur)) +
+  geom_line() +
+  facet_grid(.~Niveau) 
+```
+
+
+
+### Type lycée
+
+```{r type.lyc}
+ips %>%
+  filter(Niveau == "Lycée") %>%
+  ggplot(aes(x=Secteur, y=IPS, fill=Secteur)) +
+  geom_boxplot() +
+  facet_grid(.~type_de_lycee) +
+  scale_y_continuous(breaks=seq(40,160,by=20))
+```
+
+
+```{r type.lyc.voie}
+ips %>%
+  filter(Niveau == "Lycée") %>%
+  select(-IPS) %>%
+  pivot_longer(c(ips_voie_gt, ips_voie_pro), values_to = "IPS", names_to = "Voie", names_prefix = "ips_voie_") %>%
+  ggplot(aes(x=Secteur, y=IPS, fill=Secteur)) +
+  geom_boxplot() +
+  facet_grid(.~Voie) +
+  scale_y_continuous(breaks=seq(40,160,by=20))
+```
+
+```{r type.lyc.rentrée}
+ips %>%
+  filter(Niveau == "Lycée") %>%
+  select(-IPS) %>%
+  pivot_longer(c(ips_voie_gt, ips_voie_pro), values_to = "IPS", names_to = "Voie", names_prefix = "ips_voie_") %>%
+  group_by(Rentrée,Voie,Secteur) %>%
+  summarize(IPS.median = median(IPS, na.rm=TRUE)) %>%
+  group_by(Secteur,Voie) %>%
+  arrange(Rentrée) %>%
+  mutate(IPS.median.diff = IPS.median - first(IPS.median)) %>%
+
+  ggplot(aes(x=Rentrée, y=IPS.median.diff, color=Secteur, group=Secteur)) +
+  geom_line() +
+  facet_grid(.~Voie) +
+  scale_y_continuous(breaks=seq(40,160,by=20))
+```
+
+
+### Type lycée par IPS / département
+
+```{r type.ips.dpt}
+ips %>%
+  filter(Niveau == "Lycée") %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(Code.du.département) %>%
+  summarise(
+    IPS.median = median(IPS),
+    Nb.LEGT = sum(type_de_lycee == "LEGT"),
+    Nb.LP = sum(type_de_lycee == "LP"),
+    Nb.LPO = sum(type_de_lycee == "LPO")
+  ) %>%
+  mutate(Taux.LEGT = Nb.LEGT / (Nb.LEGT+Nb.LP+Nb.LPO)) %>%
+  ggplot(aes(x=IPS.median,y=Taux.LEGT,label=Code.du.département)) +
+  geom_smooth(method = "lm") +
+  geom_point() +
+  ggrepel::geom_text_repel(max.overlaps = 5) +
+  scale_y_continuous(labels=scales::percent, name="Taux de lycées général & technologique") +
+  cpesr_cap()
+```
+
+

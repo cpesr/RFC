@@ -1,0 +1,47 @@
+---
+title: "TIMSS"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://data.education.gouv.fr/explore/dataset/fr-en-eleves-par-niveaux-timms
+- https://data.education.gouv.fr/explore/dataset/fr-en-scores-timms
+
+```{r load.eleve}
+eleves <- read.csv2("../data/fr-en-eleves-par-niveaux-timms.csv", dec='.')
+colnames(eleves)
+```
+
+```{r load.scores}
+scores <- read.csv2("../data/fr-en-scores-timms.csv", dec='.')
+colnames(scores)
+```
+
+
+## Explorations
+
+### Score moyen
+
+```{r score.fr, fig.width=10, fig.height=10}
+scores %>%
+  filter(Pays %in% c("France","UE","Moyenne européenne","Membres de l'Union européenne \n(19 pays, 2 nations, 1 communauté)", "Membres de l'OCDE \n(24 pays, 2 nations, 1 communauté)" )) %>%
+  ggplot(aes(x=Pays,y=Score.moyen, fill = Pays)) +
+  geom_col() +
+  facet_wrap(Discipline~Domaine)
+```
+
+

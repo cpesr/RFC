@@ -1,0 +1,145 @@
+---
+title: "Réussite"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+## Données 
+
+- https://data.education.gouv.fr/explore/dataset/fr-en-indicateurs-de-resultat-des-lycees-denseignement-general-et-technologique
+- https://data.education.gouv.fr/explore/dataset/fr-en-indicateurs-de-resultat-des-lycees-denseignement-professionnels
+- https://data.education.gouv.fr/explore/dataset/fr-en-dnb-par-etablissement
+
+- https://data.education.gouv.fr/explore/dataset/fr-en-ips_ecoles_v2
+- https://data.education.gouv.fr/explore/dataset/fr-en-ips_colleges
+- https://data.education.gouv.fr/explore/dataset/fr-en-ips_lycees
+
+
+```{r load.brevet}
+percent_to_numeric <- function(x) {
+  x <- gsub("%","",x)
+  x <- gsub(",",".",x)
+  as.numeric(x)
+}
+  
+
+brevet <- read.csv2("../data/fr-en-dnb-par-etablissement.csv", dec='.') %>%
+  mutate(Taux.de.réussite = percent_to_numeric(Taux.de.réussite))
+colnames(brevet)
+```
+
+```{r load.legt}
+legt <- read.csv2("../data/fr-en-indicateurs-de-resultat-des-lycees-denseignement-general-et-technologique.csv", dec='.')
+colnames(legt)
+```
+
+```{r load.lp}
+lp <- read.csv2("../data/fr-en-indicateurs-de-resultat-des-lycees-denseignement-professionnels.csv", dec='.')
+colnames(lp)
+```
+
+
+```{r load.ips}
+ips.ecole <- read.csv2("../data/fr-en-ips_ecoles_v2.csv", dec='.')
+ips.college <- read.csv2("../data/fr-en-ips_colleges.csv", dec='.')
+ips.lycee <- read.csv2("../data/fr-en-ips_lycees.csv", dec='.')
+ips <- bind_rows(
+  ips.ecole %>% mutate(Niveau = "Ecole"),
+  ips.college %>% mutate(Niveau = "Collège"),
+  ips.lycee %>% 
+    rename(
+      Rentrée.scolaire = rentree_scolaire,
+      Académie = academie,
+      Code.du.département = code_du_departement,
+      Département = departement,
+      UAI = uai,
+      Nom.de.l.établissment = nom_de_l_etablissment,
+      Code.INSEE.de.la.commune = code_insee_de_la_commune,
+      Nom.de.la.commune = nom_de_la_commune,
+      Secteur = secteur,
+      IPS = ips_ensemble_gt_pro
+    ) %>% mutate(Niveau = "Lycée")
+  ) %>%
+  mutate(
+    Niveau = factor(Niveau, levels = c("Ecole","Collège","Lycée")),
+    Rentrée = as.numeric(str_sub(Rentrée.scolaire,1,4))
+  )
+
+colnames(ips)
+```
+
+## Explorations
+
+### Collèges 
+
+```{r college.reussite}
+college.ips <- inner_join(
+  brevet %>% filter(Session == 2021),
+  ips %>% filter(Rentrée == 2020),
+  by = c(Numero.d.etablissement = "UAI")
+) 
+
+college.ips %>%
+  ggplot(aes(x=IPS,y=Taux.de.réussite)) + geom_point()
+```
+
+```{r college.tb}
+college.ips %>%
+  mutate(taux.TB = Admis.Mention.très.bien / Inscrits) %>%
+  ggplot(aes(x=IPS,y=taux.TB)) + geom_point()
+```
+```{r college.btb}
+college.ips %>%
+  mutate(taux.BTB = (Admis.Mention.très.bien+Admis.Mention.bien) / Inscrits) %>%
+  ggplot(aes(x=IPS,y=taux.BTB)) + geom_point(size=0.1) + geom_smooth() +
+  scale_y_continuous(labels = scales::percent, name = "Taux de mention B ou TB au DNB") +
+  xlab("Indice de position sociale (IPS)") +
+  ggtitle("Collèges de France", subtitle ="selon leur taux de mention bien ou très bien au DNB et leur indice de position sociale")
+```
+
+
+```{r college.btb.et}
+college.ips %>%
+  mutate(taux.BTB = (Admis.Mention.très.bien+Admis.Mention.bien) / Inscrits) %>%
+  ggplot(aes(x=Ecart.type.de.l.IPS,y=taux.BTB)) + geom_point(size=0.1) + geom_smooth() +
+  scale_y_continuous(labels = scales::percent, name = "Taux de mention B/TB au DNB") +
+  xlab("Ecart-type de l'Indice de position sociale (IPS)") +
+  ggtitle("Collèges de France", subtitle ="selon leur taux de mention B ou TB  au DNB et l'écart-type de l'indice de position sociale")
+```
+
+
+
+### Lycées 
+
+```{r lycee.reussite}
+lycee.ips <- inner_join(
+  legt %>% filter(Annee == 2021),
+  ips %>% filter(Rentrée == 2020),
+  by = c("UAI")
+) 
+
+lycee.ips %>%
+  ggplot(aes(x=IPS,y=Taux.de.reussite...Toutes.series)) + geom_point()
+```
+
+```{r lycee.mention}
+lycee.ips %>%
+  ggplot(aes(x=IPS,y=Taux.de.mentions...Toutes.series/100)) + geom_point(size=0.1) + geom_smooth() +
+  scale_y_continuous(labels = scales::percent, name = "Taux de mention au Bac") +
+  xlab("Indice de position sociale (IPS)") +
+  ggtitle("Lycées d'enseignement général et technologique de France", subtitle ="selon leur taux de mention au Bac et leur indice de position sociale")
+```
