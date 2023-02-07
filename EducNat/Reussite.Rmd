@@ -13,7 +13,7 @@ knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
 library(tidyverse)
 library(ggcpesrthemes)
 theme_set(theme_cpesr())
-theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/blob/main/EducNat/Reussite.md")
 ```
 
 ## Données 
@@ -108,7 +108,8 @@ college.ips %>%
   ggplot(aes(x=IPS,y=taux.BTB)) + geom_point(size=0.1) + geom_smooth() +
   scale_y_continuous(labels = scales::percent, name = "Taux de mention B ou TB au DNB") +
   xlab("Indice de position sociale (IPS)") +
-  ggtitle("Collèges de France", subtitle ="selon leur taux de mention bien ou très bien au DNB et leur indice de position sociale")
+  ggtitle("Collèges de France", subtitle ="selon leur taux de mention bien ou très bien au DNB et leur indice de position sociale") + 
+  cpesr_cap()
 ```
 
 
@@ -141,5 +142,6 @@ lycee.ips %>%
   ggplot(aes(x=IPS,y=Taux.de.mentions...Toutes.series/100)) + geom_point(size=0.1) + geom_smooth() +
   scale_y_continuous(labels = scales::percent, name = "Taux de mention au Bac") +
   xlab("Indice de position sociale (IPS)") +
-  ggtitle("Lycées d'enseignement général et technologique de France", subtitle ="selon leur taux de mention au Bac et leur indice de position sociale")
+  ggtitle("Lycées d'enseignement général et technologique de France", subtitle ="selon leur taux de mention au Bac et leur indice de position sociale") +
+  cpesr_cap()
 ```
