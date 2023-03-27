@@ -191,5 +191,19 @@ anr %>%
   mutate(Taux.féminité.cut = cut(Taux.féminité,c(0,0.4,0.45,0.5,1))) %>%
   ggplot(aes(y=Montant.par.EEC,x=Taux.féminité.cut, label = Etablissement, fill=Ressource)) +
   geom_boxplot() +
-  facet_wrap(Ressource~.,scales = "free_y") 
+  facet_wrap(Ressource~.,scales = "free_y") +
+  expand_limits(y=0)
+```
+
+
+```{r anr.line} 
+anr %>%
+  filter(Comparable) %>%
+  pivot_longer(c(SCSP,ANR.PIA,ANR.hors.PIA), values_to = "Montant", names_to = "Ressource") %>%
+  mutate(Montant.par.EEC = Montant / (Homme+Femme)) %>%
+  mutate(Taux.féminité.cut = cut(Taux.féminité,c(0,0.4,0.45,0.5,1))) %>%
+  ggplot(aes(y=Montant.par.EEC,x=Taux.féminité, label = Etablissement, fill=Ressource)) +
+  geom_point() + geom_smooth(method="lm") +
+  facet_wrap(Ressource~.,scales = "free_y") +
+  expand_limits(y=0)
 ```

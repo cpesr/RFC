@@ -122,6 +122,13 @@ college.ips %>%
   ggtitle("Collèges de France", subtitle ="selon leur taux de mention B ou TB  au DNB et l'écart-type de l'indice de position sociale")
 ```
 
+```{r college.inscrits}
+college.ips %>%
+  ggplot(aes(x=IPS,y=Inscrits)) + geom_point(size=0.1) + geom_smooth() +
+  xlab("Ecart-type de l'Indice de position sociale (IPS)") 
+```
+
+
 
 
 ### Lycées 
@@ -145,3 +152,13 @@ lycee.ips %>%
   ggtitle("Lycées d'enseignement général et technologique de France", subtitle ="selon leur taux de mention au Bac et leur indice de position sociale") +
   cpesr_cap()
 ```
+
+
+```{r lycee.taille}
+lycee.ips %>%
+  ggplot(aes(x=IPS,y=Presents...Toutes.series)) + geom_point(size=0.1) + geom_smooth() +
+  cpesr_cap()
+```
+
+
+

@@ -329,6 +329,10 @@ CPESR
 
 <img src="Reussite_files/figure-gfm/college.btb.et-1.png" width="672" />
 
+    ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+<img src="Reussite_files/figure-gfm/college.inscrits-1.png" width="672" />
+
 ### Lycées
 
 <img src="Reussite_files/figure-gfm/lycee.reussite-1.png" width="672" />
@@ -336,3 +340,7 @@ CPESR
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
 <img src="Reussite_files/figure-gfm/lycee.mention-1.png" width="672" />
+
+    ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+<img src="Reussite_files/figure-gfm/lycee.taille-1.png" width="672" />

@@ -25,28 +25,49 @@ prenoms <- read.csv2("nat2021.csv") %>%
   )) %>%
   select(prenom,sexe)
 
-anr <- bind_rows(
-  left_join(
-    read.csv2("../data/anr-dgpie-depuis-2010-projets-finances-20221122-projets.csv", dec='.'),
-    read.csv2("../data/anr-dgpie-depuis-2010-projets-finances-20221122-partenaires.csv") %>%
-      select(Projet.Code_Decision_ANR, Projet.Partenaire.Responsable_scientifique.Prenom) %>%
-      unique() ) %>% 
-    mutate(type = "DGPIE"),
-  left_join(
-    read.csv2("../data/anr-dos-2005-2009-projets-finances-20210826-projets.csv", dec='.'),
-    read.csv2("../data/anr-dos-2005-2009-projets-finances-20210826-partenaires.csv") %>%
-      select(Projet.Code_Decision_ANR, Projet.Partenaire.Responsable_scientifique.Prenom) %>%
-      unique() ) %>% 
-    mutate(type = "DOS"),
-  left_join(
-    read.csv2("../data/anr-dos-depuis-2010-projets-finances-20230104-projets.csv", dec='.'),
-    read.csv2("../data/anr-dos-depuis-2010-projets-finances-20230104-partenaires.csv") %>%
-      select(Projet.Code_Decision_ANR, Projet.Partenaire.Responsable_scientifique.Prenom) %>%
-      unique() ) %>% 
-    mutate(type = "DOS")
-) %>%
+projets <- bind_rows(
+    read.csv2("../data/anr-dgpie-depuis-2010-projets-finances-20221122-projets.csv", dec='.') %>%
+    mutate(type = "DGPIE",
+           édition = Action.Edition),
+    read.csv2("../data/anr-dos-2005-2009-projets-finances-20210826-projets.csv", dec='.') %>% 
+    mutate(type = "DOS",
+           édition = AAP.Edition),
+    read.csv2("../data/anr-dos-depuis-2010-projets-finances-20230104-projets.csv", dec='.') %>%
+    mutate(type = "DOS",
+           édition = AAP.Edition)
+) 
+
+partenaires <- bind_rows(
+  read.csv2("../data/anr-dgpie-depuis-2010-projets-finances-20221122-partenaires.csv") %>% filter(Projet.Partenaire.Est_coordinateur == "True"),
+  read.csv2("../data/anr-dos-2005-2009-projets-finances-20210826-partenaires.csv"),
+  read.csv2("../data/anr-dos-depuis-2010-projets-finances-20230104-partenaires.csv")
+) %>% 
+  select(Projet.Code_Decision_ANR, Projet.Partenaire.Est_coordinateur, Projet.Partenaire.Responsable_scientifique.Prenom, Projet.Partenaire.Responsable_scientifique.Nom) %>%
+  unique() %>%
   mutate(prenom = str_to_upper(Projet.Partenaire.Responsable_scientifique.Prenom)) %>%
   left_join(prenoms)
+
+partenaires.stats <- full_join(
+  partenaires %>%
+    group_by(Projet.Code_Decision_ANR) %>%
+    summarise(
+      nb.partenaires = n(),
+      nb.femmes = sum(sexe == "Femme", na.rm=TRUE),
+      nb.hommes = sum(sexe == "Homme", na.rm=TRUE)
+    ) %>%
+    mutate(sexe = case_when(
+      nb.femmes == nb.partenaires ~ "Féminin",
+      nb.hommes == nb.partenaires ~ "Masculin",
+      nb.femmes > 0 & nb.hommes > 0 ~ "Mixte",
+      TRUE ~ NA_character_
+    )),
+    partenaires %>%
+      filter(Projet.Partenaire.Est_coordinateur == "True") %>%
+      transmute(Projet.Code_Decision_ANR, sexe.coordinateur = sexe)
+)
+    
+
+anr <- left_join(projets, partenaires.stats)
 ```
 
 
@@ -77,18 +98,36 @@ anr %>%
   facet_wrap(type~.,scales = "free_y")
 ```
 
+## Nombre de projets par sexe du coordinateur
+
+```{r anr.nb.coord}
+anr %>%
+  group_by(sexe.coordinateur,type) %>%
+  summarise(nb = n()) %>%
+  ggplot(aes(x=sexe.coordinateur,y=nb)) + geom_col() +
+  facet_wrap(type~.,scales = "free_y")
+
+```
+
+### Nombre de porteurs par type
+
+```{r anr.type.nb}
+anr %>%
+  ggplot(aes(x=type,y=nb.partenaires)) + geom_boxplot()
+```
+
+Pour les DGPIE, un seul porteur scientifique est indiqué. 
 
 ## Taux de porteuses scientifiques par année
 
 ```{r anr.taux}
 anr %>%
-  group_by(sexe,AAP.Edition) %>%
-  summarise(nb = n()) %>%
-  filter(!is.na(sexe)) %>%
-  pivot_wider(names_from = sexe, values_from = nb) %>%
-  mutate(Taux.féminité = Femme / (Homme+Femme)) %>%
-  ggplot(aes(x=AAP.Edition,y=Taux.féminité)) + geom_line()
+  group_by(édition,type) %>%
+  summarise(Taux.féminité = sum(nb.femmes) / (sum(nb.femmes)+sum(nb.hommes))) %>%
+  ggplot(aes(x=édition,y=Taux.féminité,color=type)) + geom_line()
 ```
+
+
 
 
 
@@ -104,30 +143,64 @@ anr %>%
 ```
 
 
-## Nombre de projets par type
+## Financement de projets par type
 
 ```{r fin.type}
 anr %>%
   group_by(sexe,type) %>%
   summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>%
-  ggplot(aes(x=sexe,y=Financement)) + geom_col() +
-  facet_wrap(type~.,scales = "free_y")
+  ggplot(aes(x=sexe,y=Financement,fill=sexe)) + geom_col() +
+  facet_wrap(type~.) +
+  scale_y_continuous(labels = ~ paste(.x / 1e9, "Md€"), breaks = seq(0,10,2)*1e9)
 ```
+## Financement de projets par type pour les coordinateurs
 
+```{r fin.type.coord}
+anr %>%
+  group_by(sexe.coordinateur,type) %>%
+  summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>% 
+  ggplot(aes(x=sexe.coordinateur,y=Financement,fill=sexe.coordinateur)) + geom_col() +
+  facet_wrap(type~.) +
+  scale_y_continuous(labels = ~ paste(.x / 1e9, "Md€"), breaks = seq(0,10,2)*1e9)
+```
 
 ## Taux de financement aux porteuses scientifiques par année
 
 ```{r fin.taux}
 anr %>%
-  group_by(sexe,AAP.Edition) %>%
+  group_by(sexe,édition,type) %>%
   summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>%
-  filter(!is.na(sexe)) %>%
-  pivot_wider(names_from = sexe, values_from = Financement) %>%
-  mutate(Taux.féminité = Femme / (Homme+Femme)) %>%
-  ggplot(aes(x=AAP.Edition,y=Taux.féminité)) + geom_line()
+  #filter(!is.na(sexe)) %>%
+  #pivot_wider(names_from = sexe, values_from = Financement) 
+  ggplot(aes(x=édition,y=Financement,color=sexe)) + geom_line() +
+  facet_wrap(type~.,scales = "free_y")
 ```
 
+```{r fin.taux.col}
+anr %>%
+  group_by(sexe,édition,type) %>%
+  summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>%
+  #filter(!is.na(sexe)) %>%
+  #pivot_wider(names_from = sexe, values_from = Financement) 
+  #filter(!is.na(sexe)) %>%
+  ggplot(aes(x=édition,y=Financement,fill=sexe)) + geom_col(position="fill") +
+  facet_wrap(type~.,scales = "free_y")
+```
 
+Attention : 2014 correspond à une année avec extrêmement peu de projets DGPIE
+
+
+```{r fin.taux.col.2010}
+anr %>%
+  group_by(sexe,édition,type) %>%
+  summarise(Financement = sum(Projet.Aide_allouee,na.rm = TRUE)) %>%
+  #filter(!is.na(sexe)) %>%
+  #pivot_wider(names_from = sexe, values_from = Financement) 
+  filter(!is.na(sexe)) %>%
+  filter(édition >= 2010) %>%
+  ggplot(aes(x=édition,y=Financement,fill=sexe)) + geom_col(position="fill") +
+  facet_wrap(type~.,scales = "free_y")
+```
 
 ## Financement median par sexe
 
@@ -139,7 +212,7 @@ anr %>%
   ggplot(aes(x=AAP.Edition,y=Financement.median,color=sexe,group=sexe)) + geom_line()
 ```
 
-## Financement median par sexe
+## Financement median par sexe à partir de 2010
 
 ```{r fin.med.2010}
 anr %>%
@@ -149,3 +222,52 @@ anr %>%
   na.omit() %>%
   ggplot(aes(x=AAP.Edition,y=Financement.median,color=sexe,group=sexe)) + geom_line()
 ```
+
+
+## Coordinateurs
+
+```{r coord.projet}
+anr %>%
+  group_by(sexe.coordinateur,édition,type) %>%
+  summarise(nb.projets = n()) %>%
+  ggplot(aes(x=édition,y=nb.projets,color=sexe.coordinateur)) + geom_line() +
+  facet_wrap(type~.,scales = "free_y")
+```
+
+```{r coord.fin}
+anr %>%
+  group_by(sexe.coordinateur,édition,type) %>%
+  summarise(financement = sum(Projet.Aide_allouee)) %>%
+  ggplot(aes(x=édition,y=financement,color=sexe.coordinateur)) + geom_line() +
+  facet_wrap(type~.,scales = "free_y")
+```
+
+## Taux porteuse + financement
+
+```{r anr.taux.dos}
+
+anr %>%
+  filter(type == "DOS", édition >= 2010) %>%
+  group_by(édition) %>%
+  summarise(Part.responsables = sum(nb.femmes) / (sum(nb.femmes)+sum(nb.hommes))) %>%
+  left_join(anr %>%
+    filter(type == "DOS", édition >= 2010) %>%
+    group_by(édition, sexe.coordinateur) %>%
+    summarise(
+      nb = n(),
+      financement = sum(Projet.Aide_allouee)
+      ) %>%
+    filter(!is.na(sexe.coordinateur)) %>%
+    group_by(édition) %>%
+    mutate(
+      Part.coordinatrices = nb / sum(nb),
+      Part.financement = financement / sum(financement)) %>%
+    filter(sexe.coordinateur == "Femme") 
+) %>%
+  pivot_longer(starts_with("Part")) %>%
+  ggplot(aes(x=édition,y=value,color=name)) + geom_line() +
+  expand_limits(y=0) +
+  scale_x_continuous(breaks=scales::pretty_breaks()) +
+  scale_y_continuous(labels = scales::percent, name="Part") 
+```
+
