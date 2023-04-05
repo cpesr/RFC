@@ -302,7 +302,7 @@ licence %>%
 ### Taille formation
 
 ```{r taille}
-session.palette <- RColorBrewer::brewer.pal(8,"RdBu")[c(1,3,5:8)]
+session.palette <- RColorBrewer::brewer.pal(9,"RdBu")[c(1,3,5:9)]
 licence %>% 
   filter(!is.na(taille)) %>%
   group_by(Session, taille) %>% 

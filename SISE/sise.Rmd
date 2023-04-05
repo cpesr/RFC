@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "SISE"
 output: github_document
 ---
 
@@ -19,12 +19,13 @@ sise <- read.csv2("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public
     Type.d.établissement,
     Etablissement,
     pid = etablissement_id_paysage_actuel,
+    Grande.discipline,
     Secteur.disciplinaire,
     SEXE,
     DN_DE,
     Attractivité.internationale,
     LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
-    NIVEAU
+    NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
   ) %>%
   summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE)) %>%
   ungroup()
@@ -51,6 +52,16 @@ sise %>%
 
 ## Disciplines
 
+```{r gdisc, results='asis', fig.asp=9/16}
+sise %>% 
+  mutate(LMD = fct_rev(LMD)) %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(LMD, Grande.discipline) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  ggplot(aes(y=reorder(Grande.discipline,Etudiants, FUN=sum),x=Etudiants,fill=LMD)) +
+  geom_col()
+```
+
 ```{r disc, results='asis', fig.asp=4/3}
 sise %>% 
   mutate(LMD = fct_rev(LMD)) %>%
@@ -60,6 +71,75 @@ sise %>%
   ggplot(aes(y=reorder(Secteur.disciplinaire,Etudiants, FUN=sum),x=Etudiants,fill=LMD)) +
   geom_col()
 ```
+
+
+### L3 vs M1
+
+```{r l3m1.niveaux}
+sise %>%
+  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-")) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, fill=Niveau)) +
+  geom_area(color="white") +
+  facet_wrap(Niveau~., labeller = as_labeller(label_wrap_gen(50))) +
+  theme(legend.position = "None") +
+  theme_cpesr_cap()
+```
+
+
+
+```{r l3m1}
+sise %>%
+  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-")) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  filter(Niveau %in% c("L-03","M-01")) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line(linewidth = 1.5) + geom_point(shape = 21, stroke = 2, size = 2, fill="white") + 
+  theme(legend.position = "None") +
+  theme_cpesr_cap()
+```
+
+```{r l3m1.decal}
+sise %>%
+  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-")) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  filter(Niveau %in% c("L-03","M-01")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L-03", Rentrée-1,Rentrée)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line(linewidth = 1.5) + geom_point(shape = 21, stroke = 2, size = 2, fill="white") + 
+  theme(legend.position = "None") +
+  theme_cpesr_cap()
+```
+
+
+```{r l3m1.gd}
+sise %>%
+  filter(Grande.discipline != "Santé") %>%
+  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-"), Grande.discipline) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  filter(Niveau %in% c("L-03","M-01")) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line(linewidth = 1) + geom_point(shape = 21, stroke = 1.5, size = 1.5, fill="white") + 
+  facet_wrap(Grande.discipline~., scales = "free_y") +
+  theme(legend.position = "None") +
+  theme_cpesr_cap()
+```
+
+```{r l3m1.gd.decal}
+sise %>%
+  filter(Grande.discipline != "Santé") %>%
+  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-"), Grande.discipline) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  filter(Niveau %in% c("L-03","M-01")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L-03", Rentrée-1,Rentrée)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line(linewidth = 1) + geom_point(shape = 21, stroke = 1.5, size = 1.5, fill="white") + 
+  facet_wrap(Grande.discipline~., scales = "free_y") +
+  theme(legend.position = "None") +
+  theme_cpesr_cap()
+```
+
+
 
 ## Informatique
 
@@ -144,3 +224,5 @@ info.niveau %>%
   theme(legend.position = "None") +
   theme_cpesr_cap()
 ```
+
+

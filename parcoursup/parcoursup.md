@@ -142,6 +142,7 @@ Voir les données
 | list_com                                                                                                                                         |
 | etablissement_id_paysage                                                                                                                         |
 | composante_id_paysage                                                                                                                            |
+| cod_aff_form                                                                                                                                     |
 | rdda                                                                                                                                             |
 | Taux.sélection                                                                                                                                   |
 | taux.accès                                                                                                                                       |
@@ -174,6 +175,7 @@ Voir les données
 |    2019 |   2 |
 |    2020 | 420 |
 |    2021 | 470 |
+|    2022 | 554 |
 
 </details>
 
@@ -184,24 +186,24 @@ Voir les données
 Voir les données
 </summary>
 
-|       | Session | Établissement                                 | Filière.de.formation                                                                                              | Filière.de.formation.détaillée | places | candidats | rdda | ratio |
-|:------|:--------|:----------------------------------------------|:------------------------------------------------------------------------------------------------------------------|:-------------------------------|:-------|:----------|:-----|:------|
-| 1     | 2016    | Université Paris 2 Panthéon - Assas           | Arts, Lettres, Langues, SHS                                                                                       | Information et communication   | 30     | 5001      | 31   | 0.01  |
-| 2     | 2016    | Université Paris 1 Panthéon Sorbonne          | Droit - Sciences Politiques                                                                                       | Science politique              | 53     | 4868      | 40   | 0.01  |
-| 3     | 2016    | Université Sorbonne Nouvelle Paris 3          | Arts, Lettres, Langues, SHS                                                                                       | Information et communication   | 112    | 8387      | 73   | 0.01  |
-| 4     | 2017    | Université Sorbonne Nouvelle Paris 3          | Arts, Lettres, Langues, SHS                                                                                       | Information et communication   | 112    | 9252      | 83   | 0.01  |
-| …     | …       | NA                                            | NA                                                                                                                | NA                             | …      | …         | …    | …     |
-| 13719 | 2020    | Université de Bordeaux - Antenne de Périgueux | Licence - Droit-économie-gestion                                                                                  | Droit                          | 30     | 557       | 4764 | 8.55  |
-| 13720 | 2021    | Université Savoie Mont Blanc - Bourget-du-Lac | Licence - Portail Informatique - Informatique (tronc commun en L1 avec Mathématiques et Sciences et technologies) | Informatique                   | 5      | 47        | 436  | 9.28  |
-| 13721 | 2021    | Université de Bordeaux - Antenne d’Agen       | Licence - Portail Droit                                                                                           | Droit                          | 30     | 864       | 8113 | 9.39  |
-| 13722 | 2020    | Université de Bordeaux - Antenne d’Agen       | Licence - Droit-économie-gestion                                                                                  | Droit                          | 30     | 537       | 7294 | 13.58 |
+|       | Session | Établissement                              | Filière.de.formation                    | Filière.de.formation.détaillée       | places | candidats | rdda | ratio |
+|:------|:--------|:-------------------------------------------|:----------------------------------------|:-------------------------------------|:-------|:----------|:-----|:------|
+| 1     | 2016    | Université Paris 2 Panthéon - Assas        | Arts, Lettres, Langues, SHS             | Information et communication         | 30     | 5001      | 31   | 0.01  |
+| 2     | 2016    | Université Paris 1 Panthéon Sorbonne       | Droit - Sciences Politiques             | Science politique                    | 53     | 4868      | 40   | 0.01  |
+| 3     | 2016    | Université Sorbonne Nouvelle Paris 3       | Arts, Lettres, Langues, SHS             | Information et communication         | 112    | 8387      | 73   | 0.01  |
+| 4     | 2017    | Université Sorbonne Nouvelle Paris 3       | Arts, Lettres, Langues, SHS             | Information et communication         | 112    | 9252      | 83   | 0.01  |
+| …     | …       | NA                                         | NA                                      | NA                                   | …      | …         | …    | …     |
+| 17103 | 2022    | Université Lumière - Lyon 2                | Licence - Droit-économie-gestion        | Administration économique et sociale | 2      | 158       | 2798 | 17.71 |
+| 17104 | 2022    | Université Lyon 2 - Campus Porte des Alpes | Licence - Sciences humaines et sociales | Sociologie                           | 12     | 141       | 2549 | 18.08 |
+| 17105 | 2022    | Université Lumière - Lyon 2                | Licence - Droit-économie-gestion        | Administration économique et sociale | 5      | 105       | 2168 | 20.65 |
+| 17106 | 2022    | Université Lumière - Lyon 2                | Licence - Droit-économie-gestion        | Administration économique et sociale | 1      | 67        | 2369 | 35.36 |
 
 </details>
 
     ## Scale for x is already present.
     ## Adding another scale for x, which will replace the existing scale.
 
-    ## Warning: Removed 1315 rows containing non-finite values (`stat_ecdf()`).
+    ## Warning: Removed 1869 rows containing non-finite values (`stat_ecdf()`).
 
 ![](parcoursup_files/figure-gfm/licsec.ts-1.png)<!-- -->
 
@@ -217,8 +219,8 @@ Disponibilité des données :
     ## `summarise()` has grouped output by 'Session'. You can override using the
     ## `.groups` argument.
 
-    ## # A tibble: 8 × 3
-    ## # Groups:   Session [6]
+    ## # A tibble: 9 × 3
+    ## # Groups:   Session [7]
     ##   Session check     n
     ##     <int> <lgl> <int>
     ## 1    2016 FALSE  1353
@@ -229,6 +231,7 @@ Disponibilité des données :
     ## 6    2020 TRUE   3028
     ## 7    2021 FALSE     8
     ## 8    2021 TRUE   3206
+    ## 9    2022 TRUE   3384
 
 ![](parcoursup_files/figure-gfm/tda.ecdf-1.png)<!-- -->
 
@@ -241,11 +244,11 @@ Voir les données
 
 | Accessibilité | nb.Licences | nb.admis | part.licences | part.admis |
 |:--------------|------------:|---------:|:--------------|:-----------|
-| \[0,0.2)      |         314 |    12838 | 5.0%          | 2.12%      |
-| \[0.2,0.5)    |        1090 |   122179 | 17.5%         | 20.18%     |
-| \[0.5,0.8)    |        1269 |   150370 | 20.4%         | 24.83%     |
-| \[0.8,1)      |        1832 |   167800 | 29.4%         | 27.71%     |
-| \[1,1.01\]    |        1729 |   152342 | 27.7%         | 25.16%     |
+| \[0,0.2)      |         513 |    22030 | 5.3%          | 2.46%      |
+| \[0.2,0.5)    |        1735 |   185104 | 18.0%         | 20.66%     |
+| \[0.5,0.8)    |        1888 |   218914 | 19.6%         | 24.43%     |
+| \[0.8,1)      |        2944 |   256459 | 30.6%         | 28.62%     |
+| \[1,1.01\]    |        2538 |   213593 | 26.4%         | 23.84%     |
 
 </details>
 
