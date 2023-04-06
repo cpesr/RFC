@@ -25,6 +25,7 @@ read.sise.2019 <- function(file, rentrée.max = Inf) {
       Secteur.disciplinaire,
       SEXE,
       DN_DE,
+      INSPE = (ETABLISSEMENT_TYPE == "ESPE"),
       Attractivité.internationale,
       LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
       NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
@@ -49,6 +50,7 @@ read.sise <- function(file, rentrée.max = Inf) {
       Secteur.disciplinaire,
       SEXE,
       DN_DE,
+      INSPE = (ESPE...INSPE != ""),
       Attractivité.internationale,
       LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
       NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
@@ -147,6 +149,21 @@ sise %>%
   scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
   ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" )
 ```
+```{r l3m1.decal.inspe}
+sise %>%
+  filter(!INSPE) %>%
+  group_by(Rentrée,Niveau = paste(LMD, substr(NIVEAU,2,2), sep="")) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  filter(Niveau %in% c("L3","M1")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L3", Rentrée+1,Rentrée)) %>%
+  filter(Rentrée != 2012, Rentrée != 2022) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line(linewidth = 1.5) + geom_point(shape = 21, stroke = 2, size = 2, fill="white") + 
+  scale_x_continuous(labels = ~ paste0("L3 ", .x-1,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
+  scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
+  ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" , subtitle = "Hors INSPE")
+```
+
 
 ```{r l3m1.gd}
 sise %>%
@@ -174,6 +191,22 @@ sise %>%
   scale_x_continuous(labels = ~ paste0("L3 ", .x-1,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
   scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
   ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" ,  subtitle = "Par grande discipline" )+
+  facet_wrap(Grande.discipline~., scales = "free_y") 
+```
+
+```{r l3m1.gd.decal.inspe}
+sise %>%
+  filter(Grande.discipline != "Santé", !INSPE) %>%
+  group_by(Rentrée,Niveau = paste(LMD, substr(NIVEAU,2,2), sep=""), Grande.discipline) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  filter(Niveau %in% c("L3","M1")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L3", Rentrée+1,Rentrée)) %>%
+  filter(Rentrée != 2012, Rentrée != 2022) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line(linewidth = 1) + geom_point(shape = 21, stroke = 1.5, size = 1.5, fill="white") + 
+  scale_x_continuous(labels = ~ paste0("L3 ", .x-1,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
+  scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
+  ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" ,  subtitle = "Par grande discipline, hors INSPE" )+
   facet_wrap(Grande.discipline~., scales = "free_y") 
 ```
 

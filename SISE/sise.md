@@ -37,6 +37,11 @@ SISE
 
 <img src="sise_files/figure-gfm/l3m1.decal-1.png" width="672" />
 
+    ## `summarise()` has grouped output by 'Rentrée'. You can override using the
+    ## `.groups` argument.
+
+<img src="sise_files/figure-gfm/l3m1.decal.inspe-1.png" width="672" />
+
     ## `summarise()` has grouped output by 'Rentrée', 'Niveau'. You can override using
     ## the `.groups` argument.
 
@@ -46,6 +51,11 @@ SISE
     ## the `.groups` argument.
 
 <img src="sise_files/figure-gfm/l3m1.gd.decal-1.png" width="672" />
+
+    ## `summarise()` has grouped output by 'Rentrée', 'Niveau'. You can override using
+    ## the `.groups` argument.
+
+<img src="sise_files/figure-gfm/l3m1.gd.decal.inspe-1.png" width="672" />
 
     ## `summarise()` has grouped output by 'Rentrée', 'Niveau'. You can override using
     ## the `.groups` argument.
