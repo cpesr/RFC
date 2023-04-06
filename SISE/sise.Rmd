@@ -13,25 +13,60 @@ theme_cpesr_setup(authors = "Julien Gossa", source="fr-esr-sise-effectifs-d-etud
 ```
 
 ```{r etl, eval=FALSE}
-sise <- read.csv2("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv", dec=".", stringsAsFactors=TRUE) %>%
-  group_by(
-    Rentrée = rentree,
-    Type.d.établissement,
-    Etablissement,
-    pid = etablissement_id_paysage_actuel,
-    Grande.discipline,
-    Secteur.disciplinaire,
-    SEXE,
-    DN_DE,
-    Attractivité.internationale,
-    LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
-    NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
-  ) %>%
-  summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE)) %>%
-  ungroup()
+read.sise.2019 <- function(file, rentrée.max = Inf) {
+  df <- read.csv2(file, dec=".", stringsAsFactors=TRUE) %>%
+    filter(RENTREE < rentrée.max) %>%
+    group_by(
+      Rentrée = RENTREE,
+      Type.d.établissement,
+      Etablissement,
+      pid = Identifiant.Paysage,
+      Grande.discipline,
+      Secteur.disciplinaire,
+      SEXE,
+      DN_DE,
+      Attractivité.internationale,
+      LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
+      NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
+    ) %>%
+    summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE)) %>%
+    ungroup()
+  return(df)
+}
+
+#df <- read.sise.2019("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.2019.csv")
+
+
+read.sise <- function(file, rentrée.max = Inf) {
+  read.csv2(file, dec=".", stringsAsFactors=TRUE) %>%
+    filter(rentree < rentrée.max) %>%
+    group_by(
+      Rentrée = rentree,
+      Type.d.établissement,
+      Etablissement,
+      pid = etablissement_id_paysage_actuel,
+      Grande.discipline,
+      Secteur.disciplinaire,
+      SEXE,
+      DN_DE,
+      Attractivité.internationale,
+      LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
+      NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
+    ) %>%
+    summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE)) %>%
+    ungroup()
+}
+
+
+
+sise <- read.sise("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv")
+sise <- bind_rows(sise,
+  read.sise.2019("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.2019.csv", rentrée.max = min(sise$Rentrée))
+)
 
 save(sise, file="sise.RData")
 ```
+
 ```{r load}
 load(file="sise.RData")
 ```
@@ -101,16 +136,17 @@ sise %>%
 
 ```{r l3m1.decal}
 sise %>%
-  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-")) %>%
+  group_by(Rentrée,Niveau = paste(LMD, substr(NIVEAU,2,2), sep="")) %>%
   summarise(Etudiants = sum(Etudiants)) %>%
-  filter(Niveau %in% c("L-03","M-01")) %>%
-  mutate(Rentrée = ifelse(Niveau == "L-03", Rentrée-1,Rentrée)) %>%
+  filter(Niveau %in% c("L3","M1")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L3", Rentrée+1,Rentrée)) %>%
+  filter(Rentrée != 2012, Rentrée != 2022) %>%
   ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
   geom_line(linewidth = 1.5) + geom_point(shape = 21, stroke = 2, size = 2, fill="white") + 
-  theme(legend.position = "None") +
-  theme_cpesr_cap()
+  scale_x_continuous(labels = ~ paste0("L3 ", .x-1,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
+  scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
+  ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" )
 ```
-
 
 ```{r l3m1.gd}
 sise %>%
@@ -128,17 +164,35 @@ sise %>%
 ```{r l3m1.gd.decal}
 sise %>%
   filter(Grande.discipline != "Santé") %>%
-  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-"), Grande.discipline) %>%
+  group_by(Rentrée,Niveau = paste(LMD, substr(NIVEAU,2,2), sep=""), Grande.discipline) %>%
   summarise(Etudiants = sum(Etudiants)) %>%
-  filter(Niveau %in% c("L-03","M-01")) %>%
-  mutate(Rentrée = ifelse(Niveau == "L-03", Rentrée-1,Rentrée)) %>%
+  filter(Niveau %in% c("L3","M1")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L3", Rentrée+1,Rentrée)) %>%
+  filter(Rentrée != 2012, Rentrée != 2022) %>%
   ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
   geom_line(linewidth = 1) + geom_point(shape = 21, stroke = 1.5, size = 1.5, fill="white") + 
-  facet_wrap(Grande.discipline~., scales = "free_y") +
-  theme(legend.position = "None") +
-  theme_cpesr_cap()
+  scale_x_continuous(labels = ~ paste0("L3 ", .x-1,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
+  scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
+  ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" ,  subtitle = "Par grande discipline" )+
+  facet_wrap(Grande.discipline~., scales = "free_y") 
 ```
 
+
+```{r l3m1.univ.decal, fig.width=10, fig.height=20, fig.asp=NULL}
+sise %>%
+  filter(Type.d.établissement %in% c("Université")) %>%
+  group_by(Rentrée,Niveau = paste(LMD, substr(NIVEAU,2,2), sep=""), Etablissement) %>%
+  summarise(Etudiants = sum(Etudiants, na.rm = TRUE)) %>%
+  filter(Niveau %in% c("L3","M1")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L3", Rentrée+1,Rentrée)) %>%
+  filter(Rentrée != 2012, Rentrée != 2022) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line() + #geom_point(shape = 21, stroke = 1.5, size = 1.5, fill="white") + 
+  scale_x_continuous(labels = ~ paste0("L3 ", .x-1,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
+  scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
+  ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" ,  subtitle = "Par grande discipline" )+
+  facet_wrap(Etablissement~., scales = "free_y", ncol = 4) 
+```
 
 
 ## Informatique
