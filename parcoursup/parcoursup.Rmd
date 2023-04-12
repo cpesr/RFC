@@ -9,7 +9,7 @@ knitr::opts_chunk$set(fig.asp=9/16)
 library(tidyverse)
 library(ggcpesrthemes)
 
-theme_cpesr_setup(authors="Julien Gossa",source="https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/")
+theme_cpesr_setup(authors="Julien Gossa", source="https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/")
 
 theme_set(theme_cpesr())
 
@@ -33,7 +33,7 @@ spoilerTable <- function(df) {
 - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2019/information/
 - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2018/information/
 
-```{r load, results='asis'}
+```{r load, results='asis', eval=FALSE}
 apb.raw <- read.csv2("../data/fr-esr-apb_voeux-et-admissions.csv", na.strings = c("inconnu","ns"), dec=".") 
 apb <- apb.raw %>% 
   transmute(
@@ -109,9 +109,11 @@ ps <- bind_rows(apb,ps18,ps19,ps20,ps21,ps22) %>%
                  breaks=c(0,35,70,140,280,100000))
   )
 
+save(ps, file="ps.RData")
 ```
 
 ```{r load.data, results='asis'}
+load("ps.RData")
 colnames(ps) %>% spoilerTable()
 ```
 

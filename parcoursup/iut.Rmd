@@ -1,0 +1,35 @@
+---
+title: "IUT"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+```{r load}
+load("ps.RData")
+
+iut.22 <- ps %>%
+  filter(Session == 2022, Filière.de.formation.très.agrégée == "DUT_BUT") 
+```
+
+## Taux d'accès des IUT par spécialité
+
+```{r ta.spé, fig.asp=4/3}
+iut.22 %>%
+  ggplot(aes(x=taux.accès,y=reorder(Filière.de.formation.détaillée,taux.accès, FUN = mean))) +
+  geom_boxplot() +
+  scale_x_discrete(labels = scales::percent) +
+  scale_y_discrete(labels = ~ str_wrap(.x,50), name = "") 
+```
+

@@ -149,6 +149,7 @@ sise %>%
   scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
   ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" )
 ```
+
 ```{r l3m1.decal.inspe}
 sise %>%
   filter(!INSPE) %>%
