@@ -12,7 +12,7 @@ knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
 
 library(tidyverse)
 library(ggcpesrthemes)
-theme_set(theme_cpesr())
+theme_set(theme_cpesr(x_grid = TRUE))
 theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
 ```
 
@@ -29,7 +29,8 @@ iut.22 <- ps %>%
 iut.22 %>%
   ggplot(aes(x=taux.accès,y=reorder(Filière.de.formation.détaillée,taux.accès, FUN = mean))) +
   geom_boxplot() +
-  scale_x_discrete(labels = scales::percent) +
-  scale_y_discrete(labels = ~ str_wrap(.x,50), name = "") 
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_discrete(labels = ~ str_wrap(.x,50), name = "") +
+  theme_cpesr(x_grid = TRUE)
 ```
 
