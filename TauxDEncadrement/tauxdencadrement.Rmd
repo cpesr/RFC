@@ -32,7 +32,7 @@ _Ce document est un brouillon de différentes visualisations. Il a seulement voc
 ```{r contexte}
 kpiESR::esr.pnl %>%
   filter(Groupe == "Ensemble") %>%
-  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
+  filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ENS.P.effectif","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
   mutate(kpi=factor(kpi,
                     levels=c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
                     labels=c("Enseignants\ntitulaires","Enseignants","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
@@ -50,7 +50,7 @@ kpiESR::esr %>%
   filter(Groupe == "Ensemble") %>%
   transmute(
     Rentrée,
-    Enseignants = kpi.ENS.S.enseignants,
+    Enseignants = kpi.ENS.P.effectif,
     Etudiants = kpi.ETU.S.cycle1_L+kpi.ETU.S.cycle2_M,
     TDE = round(kpi.K.ensPetu,2)) %>%
   na.omit() %>%
@@ -66,7 +66,7 @@ kpiESR::esr.pnl %>%
   filter(kpi %in% c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.ETU.P.effectif","kpi.FIN.P.ressources","kpi.K.ensPetu","kpi.K.resPetu")) %>%
   mutate(kpi=factor(kpi,
                     levels=c("kpi.ENS.S.titulaires","kpi.ENS.S.enseignants","kpi.K.ensPetu","kpi.FIN.P.ressources","kpi.K.resPetu","kpi.ETU.P.effectif"),
-                    labels=c("Enseignants\ntitulaires","Enseignants","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
+                    labels=c("Enseignants\ntitulaires","EC","Taux\nd'encadrement","Budget","Budget par\nétudiant","Etudiants"))) %>%
   ggplot(aes(x=Rentrée,y=evolution,color=kpi,fill=kpi)) +
   geom_line(aes(group=kpi)) +
   geom_point(shape=21,size=3,stroke=2,color="white") +
@@ -81,7 +81,7 @@ kpiESR::esr %>%
   filter(Etablissement == "Universités et assimilés") %>%
   transmute(
     Rentrée,
-    Enseignants = kpi.ENS.S.enseignants,
+    Enseignants = kpi.ENS.P.effectif,
     Etudiants = kpi.ETU.S.cycle1_L+kpi.ETU.S.cycle2_M,
     TDE = round(kpi.K.ensPetu,2)) %>%
   na.omit() %>%
@@ -1037,3 +1037,7 @@ read.table("fr-esr-enseignants-titulaires-esr-public.csv",
     scale_color_brewer(palette = "Set2") +
     theme_cpesr_cap()
 ```
+
+
+
+## 

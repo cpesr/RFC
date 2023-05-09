@@ -25,7 +25,7 @@ spoilerTable <- function(df) {
   cat("\n\n</details>\n")
 }
 
-pe <- read.csv2("data/fr-esr-taux-poursuite-enseignement-superieur-par-academie.csv", dec='.') %>% 
+pe <- read.csv2("../data/fr-esr-taux-poursuite-enseignement-superieur-par-academie.csv", dec='.') %>% 
   rename(
     Session = Rentrée...Session,
     Bacheliers = Nombre.total.de.bacheliers
@@ -276,7 +276,7 @@ cowplot::plot_grid(align = "hv", axis = "tblr",
 ```
 
 ```{r pe.pivot.norm.fun}
-pe_part_plot <- function(critere,palette="Set2") {
+pe_part <- function(critere) {
   pe.pivot %>%
     mutate(Critère = !!sym(critere)) %>%
     group_by(Session, Critère) %>%
@@ -289,8 +289,11 @@ pe_part_plot <- function(critere,palette="Set2") {
     mutate(PartEvol = Part - first(Part)) %>%
     mutate(Session17 = relevel(factor(Session),"2017")) %>% 
     arrange(Session17) %>% 
-    mutate(PartEvol17 = (Part - first(Part))*100) %>% 
+    mutate(PartEvol17 = (Part - first(Part))*100) 
+}
 
+pe_part_plot <- function(critere,palette="Set2") {
+ pe_part(critere) %>%
     ggplot(aes(x=Session,y=PartEvol17, group=Critère)) +
       geom_vline(xintercept = "2017") +
       geom_line(aes(fill=Critère,color=Critère), size=1) + 
@@ -305,6 +308,13 @@ pe_part_plot <- function(critere,palette="Set2") {
 
 pe_part_plot("Secteur")
 ```
+
+```{r pe.part.secteur, results='asis'}
+pe_part("Secteur") %>% 
+  arrange(Critère, Session) %>%
+  spoiler_table(trim = Inf)
+```
+
 
 ```{r pe.norm.criteres, fig.asp=9/16, fig.width=8}
 cowplot::plot_grid(align = "hv", axis = "tblr",
@@ -520,13 +530,15 @@ pe %>%
 
 
 ```{r diflux}
+last.session <- max(pe.pivot$Session)
+
 df <- pe.pivot %>%
-  filter(Session %in% c("2017","2020")) %>%
+  filter(Session %in% c("2017",last.session)) %>%
   group_by(Session, Série, Filière) %>%
   summarise(Poursuites = sum(Poursuites)) %>%
   group_by(Série, Filière) %>%
   mutate(Diff = Poursuites - first(Poursuites)) %>%
-  filter(Session == "2020") 
+  filter(Session == last.session) 
 
 df 
 df %>%
@@ -540,14 +552,18 @@ ggplot(aes(y = Diff, axis1 = Série, axis2=Filière)) +
 ```
 
 
+
+
 ```{r diflux2}
+knitr::knit_exit()
+
 df <- pe.pivot %>%
-  filter(Session %in% c("2017","2020")) %>%
+  filter(Session %in% c("2017",last.session)) %>%
   group_by(Session, Filière) %>%
   summarise(Poursuites = sum(Poursuites)) %>%
   group_by(Filière) %>%
   pivot_wider(values_from = Poursuites, names_from = Session, names_prefix = "Poursuites") %>%
-  mutate(diff = Poursuites2020 - Poursuites2017) %>%
+  mutate(diff = Poursuites2021 - Poursuites2017) %>%
   mutate(Filière = as.character(Filière)) 
 
 diflux <- bind_rows(
@@ -560,24 +576,24 @@ diflux <- bind_rows(
   ),
   transmute(df,
     id = paste("2017_",Filière),
-    Session = "2020",
+    Session = last.session,
     Cohorte = "Bacheliers 2017",
     Filière = Filière,
-    Effectif = min(Poursuites2017,Poursuites2020)
+    Effectif = min(Poursuites2017,Poursuites2021)
   ),
   transmute(df,
-    id = paste("2020_",Filière),
+    id = paste(last.session,"_",Filière),
     Session = "2017",
-    Cohorte = "Bacheliers 2020",
-    Filière = "Bacheliers 2020",
-    Effectif = -max(Poursuites2020-Poursuites2017,0)
+    Cohorte = paste("Bacheliers", last.session),
+    Filière = paste("Bacheliers", last.session),
+    Effectif = -max(Poursuites2021-Poursuites2017,0)
     ),
   transmute(df,
-    id = paste("2020_",Filière),
-    Session = "2020",
-    Cohorte = "Bacheliers 2020",
+    id = paste("2021_",Filière),
+    Session = "2021",
+    Cohorte = "Bacheliers 202A",
     Filière = Filière,
-    Effectif = max(Poursuites2020-Poursuites2017,0)
+    Effectif = max(Poursuites2021-Poursuites2017,0)
     )
 ) %>%
   mutate(Filière = factor(Filière, 

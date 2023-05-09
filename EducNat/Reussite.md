@@ -1,7 +1,7 @@
 Réussite
 ================
 CPESR
-2023-02-07
+2023-04-19
 
 ## Données
 
@@ -344,3 +344,9 @@ CPESR
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
 <img src="Reussite_files/figure-gfm/lycee.taille-1.png" width="672" />
+
+### Strasbourg
+
+    ## Warning: Removed 178 rows containing missing values (`geom_text_repel()`).
+
+<img src="Reussite_files/figure-gfm/college.btb.stras-1.png" width="672" />
