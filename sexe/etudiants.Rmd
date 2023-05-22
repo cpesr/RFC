@@ -1,0 +1,76 @@
+---
+title: "Sexe des étudiants"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public/export/
+
+```{r load, cache=TRUE}
+sise <- read.csv2("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv", dec=".", nrows = Inf) %>%
+  filter(Type.d.établissement == "Université" | str_detect(Etablissement, "niversité")) %>%
+  group_by(
+    Rentrée = rentree,
+    Grande.discipline = as.factor(Grande.discipline),
+    Discipline = as.factor(Discipline),
+    Secteur.disciplinaire = as.factor(Secteur.disciplinaire),
+    LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
+    Sexe = Sexe.de.l.étudiant) %>%
+  summarise(Effectif = sum(Effectif = Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE, na.rm = TRUE)) %>%
+  ungroup() 
+
+colnames(sise)
+```
+
+
+```{r disc, results='asis'}
+sise %>% 
+  select(Grande.discipline, Discipline, Secteur.disciplinaire) %>% 
+  unique() %>%
+  spoiler_table(trim = Inf)
+```
+
+
+## Explorations
+
+
+```{r sexe.secteur, fig.asp=4/3}
+sise %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(Grande.discipline, Secteur.disciplinaire,Sexe) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = Sexe, values_from = Effectif) %>%
+  mutate(Taux.féminité = Féminin / (Féminin+Masculin)) %>%
+  ggplot(aes(y=reorder(Secteur.disciplinaire,Taux.féminité),x=Taux.féminité,fill=Grande.discipline)) +
+  geom_col() 
+```
+
+
+```{r sexe.secteur.LMD, fig.asp=4/3}
+sise %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(Grande.discipline, Secteur.disciplinaire,Sexe,LMD) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = Sexe, values_from = Effectif) %>%
+  mutate(Taux.féminité = Féminin / (Féminin+Masculin)) %>%
+  arrange(LMD) %>%
+  ggplot(aes(y=reorder(Secteur.disciplinaire,Taux.féminité,FUN=first),x=Taux.féminité,fill=Grande.discipline)) +
+  geom_col() +
+  facet_grid(.~LMD)
+```
