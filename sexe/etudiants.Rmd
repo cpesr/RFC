@@ -19,6 +19,7 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/R
 ## Données 
 
 - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public/export/
+- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/export/
 
 ```{r load, cache=TRUE}
 sise <- read.csv2("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv", dec=".", nrows = Inf) %>%
@@ -61,6 +62,36 @@ sise %>%
 ```
 
 
+```{r sexe.secteur.effectif}
+sise %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(Grande.discipline, Secteur.disciplinaire,Sexe) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = Sexe, values_from = Effectif) %>%
+  mutate(Taux.féminité = Féminin / (Féminin+Masculin)) %>%
+  ggplot(aes(x=Féminin+Masculin, y=Taux.féminité, color=Grande.discipline)) +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label=Secteur.disciplinaire), size=3) +
+  scale_x_log10()
+```
+
+```{r sexe.secteur.effectif2, fig.}
+sise %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(Grande.discipline, Secteur.disciplinaire,Sexe) %>%
+  summarise(Effectif = sum(Effectif)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = Sexe, values_from = Effectif) %>%
+  mutate(Taux.féminité = Féminin / (Féminin+Masculin)) %>%
+  ggplot(aes(x=Masculin, y=Féminin, color=Grande.discipline)) +
+  geom_abline(slope=1, size=0.2, color="grey") +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label=Secteur.disciplinaire), size=3) +
+  theme(legend.position = "right")
+```
+
+
 ```{r sexe.secteur.LMD, fig.asp=4/3}
 sise %>%
   filter(Rentrée == max(Rentrée)) %>%
@@ -73,4 +104,113 @@ sise %>%
   ggplot(aes(y=reorder(Secteur.disciplinaire,Taux.féminité,FUN=first),x=Taux.féminité,fill=Grande.discipline)) +
   geom_col() +
   facet_grid(.~LMD)
+```
+
+
+
+### Numérique
+
+```{r load.num}
+cnu.num <- tribble(
+  ~code_section_cnu, ~Sections.CNU, ~Disc,
+  25L, "Mathématiques", "Math-Info",
+  26L, "Mathématiques appliquées et applications des mathématiques", "Math-Info",
+  27L, "Informatique", "Math-Info",
+  61L, "Génie informatique, automatique et traitement du signal", "Math-Info",
+  71L, "Sciences de l'information et de la communication", "Info-Com")
+
+ens.num <- read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv", dec='.') %>%
+  group_by(
+    Rentrée,
+    CNU = fct_other(as.factor(code_section_cnu), keep=cnu.num$code_section_cnu),
+    Discipline = fct_other(as.factor(Sections.CNU), keep=cnu.num$Sections.CNU)
+  ) %>%
+  summarise(Enseignants = sum(effectif)) %>%
+  ungroup()
+
+sise.num <- tribble(
+  ~Secteur.disciplinaire, ~Disc,
+  "Sciences de l'information et la communication", "Info-Com",
+  "Informatique", "Math-Info",
+  "Mathématique et informatique", "Math-Info",
+  "Mathématiques", "Math-Info")
+
+etu.num <- sise %>%
+  filter(LMD != "D") %>%
+  group_by(
+    Rentrée,
+    Discipline = fct_other(Secteur.disciplinaire,keep=sise.num$Secteur.disciplinaire),
+    Sexe
+  ) %>%
+  summarise(Etudiants = sum(Effectif)) %>%
+  pivot_wider(names_from = Sexe, values_from = Etudiants, names_prefix = "Etu.") %>%
+  group_by(Rentrée) %>%
+  mutate(
+    Part.étudiante.discipline = Etu.Féminin / (Etu.Féminin + Etu.Masculin),
+    Part.étudiante.total = Etu.Féminin / sum(Etu.Féminin + Etu.Masculin)
+  )
+```
+
+### Nombre d'enseignants tutilaires
+
+Attention, grosse rupture de série, sans doute dûe à des changements de périmètre.
+
+```{r evol.ens}
+ens.num %>%
+  filter(Discipline != "Other") %>%
+  ggplot(aes(x=Rentrée,y=Enseignants,color=Discipline)) +
+  geom_line() + geom_point() +
+  theme(legend.position = "right")
+```
+
+### Nombre d'étudiantes
+
+```{r evol.etu.fem}
+etu.num %>%
+  filter(Discipline != "Other") %>%
+  ggplot(aes(x=Rentrée,y=Etu.Féminin,color=Discipline)) +
+  geom_line() + geom_point() +
+  theme(legend.position = "right")
+```
+
+### Part des étudiantes dans la discipline
+
+
+
+```{r evol.etu.part}
+etu.num %>%
+  filter(Discipline != "Other") %>%
+  ggplot(aes(x=Rentrée,y=Part.étudiante.discipline,color=Discipline)) +
+  geom_line() + geom_point() +
+  theme(legend.position = "right")
+```
+
+### Part des étudiantes dans le total des étudiants.
+
+```{r evol.etu.parttot}
+etu.num %>%
+  filter(Discipline != "Other") %>%
+  ggplot(aes(x=Rentrée,y=Part.étudiante.total,color=Discipline)) +
+  geom_line() + geom_point() +
+  theme(legend.position = "right")
+```
+
+
+### Taux d'encadrement par les titulaires de la discipline
+
+```{r te}
+full_join(
+  left_join(etu.num, sise.num, by=c("Discipline" = "Secteur.disciplinaire")) %>%
+    group_by(Rentrée,Disc) %>%
+    summarise(Etudiants = sum(Etu.Féminin + Etu.Masculin)),
+  left_join(ens.num, cnu.num, by=c("Discipline" = "Sections.CNU")) %>%
+    group_by(Rentrée,Disc) %>%
+    summarise(Enseignants = sum(Enseignants))
+) %>%
+  mutate(Taux.encadrement = Enseignants / Etudiants * 100) %>%
+  filter(Rentrée > 2014) %>%
+  ggplot(aes(x=Rentrée,y=Taux.encadrement,color=Disc)) +
+  geom_line() + geom_point()
+
+
 ```

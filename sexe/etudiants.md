@@ -6,6 +6,7 @@ CPESR
 ## Données
 
 - <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public/export/>
+  -<https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-enseignants-titulaires-esr-public/export/>
 
 <!-- -->
 
@@ -82,6 +83,50 @@ Voir les données
 
 <img src="etudiants_files/figure-gfm/sexe.secteur-1.png" width="672" />
 
+    ## Warning: ggrepel: 19 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+<img src="etudiants_files/figure-gfm/sexe.secteur.effectif-1.png" width="672" />
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+
+    ## Warning: ggrepel: 42 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+<img src="etudiants_files/figure-gfm/sexe.secteur.effectif2, fig.-1.png" width="672" />
+
     ## Warning: Removed 3 rows containing missing values (`position_stack()`).
 
 <img src="etudiants_files/figure-gfm/sexe.secteur.LMD-1.png" width="672" />
+
+### Numérique
+
+### Nombre d’enseignants tutilaires
+
+Attention, grosse rupture de série, sans doute dûe à des changements de
+périmètre.
+
+<img src="etudiants_files/figure-gfm/evol.ens-1.png" width="672" />
+
+### Nombre d’étudiantes
+
+<img src="etudiants_files/figure-gfm/evol.etu.fem-1.png" width="672" />
+
+### Part des étudiantes dans la discipline
+
+<img src="etudiants_files/figure-gfm/evol.etu.part-1.png" width="672" />
+
+### Part des étudiantes dans le total des étudiants.
+
+<img src="etudiants_files/figure-gfm/evol.etu.parttot-1.png" width="672" />
+
+### Taux d’encadrement par les titulaires de la discipline
+
+    ## Joining, by = c("Rentrée", "Disc")
+
+    ## Warning: Removed 3 rows containing missing values (`geom_line()`).
+
+    ## Warning: Removed 3 rows containing missing values (`geom_point()`).
+
+<img src="etudiants_files/figure-gfm/te-1.png" width="672" />
