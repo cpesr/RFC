@@ -20,64 +20,6 @@ SISE
 
 <img src="sise_files/figure-gfm/disc-1.png" width="672" />
 
-### L3 vs M1
-
-    ## `summarise()` has grouped output by 'Rentrée'. You can override using the
-    ## `.groups` argument.
-
-<img src="sise_files/figure-gfm/l3m1.niveaux-1.png" width="672" />
-
-    ## `summarise()` has grouped output by 'Rentrée'. You can override using the
-    ## `.groups` argument.
-
-<img src="sise_files/figure-gfm/l3m1-1.png" width="672" />
-
-    ## `summarise()` has grouped output by 'Rentrée'. You can override using the
-    ## `.groups` argument.
-
-<img src="sise_files/figure-gfm/l3m1.decal-1.png" width="672" />
-
-    ## `summarise()` has grouped output by 'Rentrée'. You can override using the
-    ## `.groups` argument.
-
-<img src="sise_files/figure-gfm/l3m1.decal.inspe-1.png" width="672" />
-
-    ## `summarise()` has grouped output by 'Rentrée', 'Niveau'. You can override using
-    ## the `.groups` argument.
-
-<img src="sise_files/figure-gfm/l3m1.gd-1.png" width="672" />
-
-    ## `summarise()` has grouped output by 'Rentrée', 'Niveau'. You can override using
-    ## the `.groups` argument.
-
-<img src="sise_files/figure-gfm/l3m1.gd.decal-1.png" width="672" />
-
-    ## `summarise()` has grouped output by 'Rentrée', 'Niveau'. You can override using
-    ## the `.groups` argument.
-
-<img src="sise_files/figure-gfm/l3m1.gd.decal.inspe-1.png" width="672" />
-
-    ## `summarise()` has grouped output by 'Rentrée', 'Niveau'. You can override using
-    ## the `.groups` argument.
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-    ## `geom_line()`: Each group consists of only one observation. ℹ Do you need to
-    ## adjust the group aesthetic?
-
-<img src="sise_files/figure-gfm/l3m1.univ.decal-1.png" width="960" />
-
 ## Informatique
 
 ### Effectifs

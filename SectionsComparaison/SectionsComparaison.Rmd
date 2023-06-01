@@ -1,0 +1,131 @@
+---
+title: "Comparaison de sections CNU"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+emploisEC <- read.csv2("../data/cpesr-emplois-ec.csv", stringsAsFactors = TRUE) 
+
+sections <- c(4,19,2,1,22)
+thesection <- 4
+
+emplois.sections <- emploisEC %>%
+  filter(Périmètre == "Section", Périmètre.ID %in% sections) %>%
+  mutate(Section = sprintf("%02d", as.numeric(as.character(Périmètre.ID)))) %>%
+  mutate(highlight = (Périmètre.ID == thesection))
+
+```
+
+
+```{r postes.mcf}
+emplois.sections %>%
+  ggplot(aes(x=Année,y=Concours.Postes.MCF, color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Postes MCF") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Nombre de postes MCF mis au concours",subtitle = "tous articles confondus") +
+  expand_limits(y=0)
+```
+
+
+```{r postes.pr}
+emplois.sections %>%
+  ggplot(aes(x=Année,y=Concours.Postes.PR, color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Postes PR") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Nombre de postes PR mis au concours",subtitle = "tous articles confondus, hors agrégation")
+```
+
+```{r postes.pr.mcf}
+emplois.sections %>%
+  filter(Année >= 2010) %>%
+  ggplot(aes(x=Année,y=Concours.Postes.PR/Effectif.MCF*100, color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Postes PR pour 100 MCF") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Nombre de postes PR mis au concours pour 100 MCF",subtitle = "tous articles confondus, hors agrégation") 
+```
+
+
+```{r mcf}
+emplois.sections %>%
+  filter(Année >= 2010) %>%
+  ggplot(aes(x=Année,y=Effectif.MCF, color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Effectif MCF") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Effectif MCF") +
+  expand_limits(y=0)
+```
+
+```{r mcf.val100}
+emplois.sections %>%
+  filter(Année >= 2010) %>%
+  group_by(Section) %>%
+  mutate(val100 = Effectif.MCF / first(Effectif.MCF) * 100 ) %>%
+  ggplot(aes(x=Année,y=val100, color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Effectif MCF en valeur 100") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Effectif MCF en valeur 100 pour 2010") 
+```
+
+
+
+
+```{r pr}
+emplois.sections %>%
+  filter(Année >= 2010) %>%
+  ggplot(aes(x=Année,y=Effectif.PR, color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Effectif PR") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Effectif PR") +
+  expand_limits(y=0)
+```
+
+
+```{r pr.val100}
+emplois.sections %>%
+  filter(Année >= 2010) %>%
+  group_by(Section) %>%
+  mutate(val100 = Effectif.PR / first(Effectif.PR) * 100 ) %>%
+  ggplot(aes(x=Année,y=val100, color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Effectif PR en valeur 100") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Effectif PR en valeur 100 pour 2010") 
+```
+
+
+
+```{r per.ec}
+emplois.sections %>%
+  filter(Année >= 2010) %>%
+  group_by(Section) %>%
+  ggplot(aes(x=Année,y=Effectif.PR/(Effectif.MCF+Effectif.PR), color = Section, size=highlight)) +
+  geom_point() + geom_smooth(se=FALSE) +
+  scale_color_discrete(name="Section") +
+  scale_y_continuous(name = "Part des PR parmis les EC") +
+  scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
+  ggtitle("Part des PR parmis les EC") 
+```
+
