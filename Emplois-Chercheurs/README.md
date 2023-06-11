@@ -3,34 +3,40 @@ Emplois Chercheurs
 
 Données :
 
--   [Les recrutements externes et départs définitifs des personnels
-    permanents de niveau chercheur au sein des principaux organismes
-    publics de recherche, par discipline d’activité de recherche,
-    corps/catégorie de
-    personnel](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-epst-epic-fondations-chercheurs-recrutements-departs-discipline/export/)
--   [Les personnels titulaires des principaux organismes publics de
-    recherche, par sexe, corps/type de personnel, type de
-    contrat](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_titulaires_epst/export/)
--   [Les personnels des principaux organismes publics de recherche, par
-    type de contrat et type
-    d’emploi](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi/table/)
--   [Les personnels de soutien des principaux organismes publics de
-    recherche, par sexe, corps et
-    BAP](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_les-personnels-de-soutien-des-organismes-par-sexe-corps-et-bap/export/)
+- [Les recrutements externes et départs définitifs des personnels
+  permanents de niveau chercheur au sein des principaux organismes
+  publics de recherche, par discipline d’activité de recherche,
+  corps/catégorie de
+  personnel](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-epst-epic-fondations-chercheurs-recrutements-departs-discipline/export/)
+- [Les personnels titulaires des principaux organismes publics de
+  recherche, par sexe, corps/type de personnel, type de
+  contrat](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_titulaires_epst/export/)
+- [Les personnels des principaux organismes publics de recherche, par
+  type de contrat et type
+  d’emploi](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi/table/)
+- [Les personnels de soutien des principaux organismes publics de
+  recherche, par sexe, corps et
+  BAP](https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr_esr_tbes_les-personnels-de-soutien-des-organismes-par-sexe-corps-et-bap/export/)
 
 ## Recrutements et départs définitifs
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
 
 <img src="README_files/figure-gfm/ces.ensemble-1.png" width="672" />
 
 ### Par organisme
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/ces.orga-1.png" width="1536" />
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/ces.orga.free-1.png" width="1536" />
 
@@ -54,13 +60,13 @@ Données :
 
 ### Effectifs titulaires par organisme
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cet.orga-1.png" width="1152" />
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cet.orga.evol-1.png" width="1152" />
 
@@ -116,13 +122,13 @@ Données :
 
 ### Effectifs par Organisme
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cec2.orga-1.png" width="1152" />
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cec.orga.evol-1.png" width="1152" />
 
@@ -134,25 +140,25 @@ Données :
 
 ### Personnels de soutien par organisme
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cps.orga-1.png" width="1152" />
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cps.orga.evol-1.png" width="1152" />
 
 ### Personnels de soutien par BAP
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cps.bap-1.png" width="1152" />
 
-    ## geom_path: Each group consists of only one observation. Do you need to adjust
-    ## the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="README_files/figure-gfm/cps.bap.evol-1.png" width="1152" />
 
