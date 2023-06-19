@@ -293,3 +293,31 @@ sise %>%
   facet_wrap(Secteur.disciplinaire~., scales = "free_y", ncol=5, labeller = label_wrap_gen(25)) 
 ```
 
+
+## Export 2021
+
+```{r export, results='asis'}
+ export <- sise %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  group_by(
+    pid,
+    Niveau = case_when(
+      LMD == "L" & NIVEAU == "03" ~ "L3",
+      Diplôme == "Licence professionnelle" ~ "LP",
+      LMD == "M" & NIVEAU == "01" & Diplôme == "Master enseignement" ~ "M1_enseignement",
+      LMD == "M" & NIVEAU == "01" & Diplôme == "Autres masters" ~ "M1_autres",
+      TRUE ~ "Autres")
+  ) %>%
+  summarize(Etudiants = sum(Etudiants)) %>%
+  pivot_wider(names_from = Niveau, values_from = Etudiants, values_fill = 0) %>%
+  select(-Autres) %>%
+  mutate(M1 = M1_autres + M1_enseignement) %>%
+  left_join(kpiESR::esr.etab) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  select(Etablissement, L3:M1, PerimEx, Académie)
+
+write.csv(export, "export.csv", row.names = FALSE)
+
+export %>% spoiler_table(trim = Inf)
+```
+

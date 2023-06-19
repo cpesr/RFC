@@ -50,6 +50,32 @@ ens <- ens.raw %>%
   )) 
 ```
 
+## Taux de féminité des E-EC
+
+```{r tf.gobal.ec}
+ens.raw %>%
+  group_by(Rentrée, Catégorie = ifelse(Code.categorie.personnels == "AM2D","AM2D","EC"), Sexe) %>%
+  summarise(effectif = sum(effectif)) %>%
+  pivot_wider(names_from = Sexe, values_from = effectif) %>%
+  mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
+  arrange(Catégorie, Rentrée) %>%
+  kableExtra::kable()
+```
+
+
+## Taux de féminité des EC
+
+```{r tf.gobal.c}
+read.csv2("../data/fr_esr_tbes_titulaires_epst.csv", dec='.') %>%
+  group_by(Année, Catégorie = Catégorie.de.personnel, Sexe = sexe) %>%
+  summarise(effectif = sum(Effectifs.au.31.12..en.PP.)) %>%
+  pivot_wider(names_from = Sexe, values_from = effectif) %>%
+  mutate(Taux.féminité = Femme / (Femme+Homme)) %>%
+  arrange(Catégorie, Année) %>%
+  kableExtra::kable()
+```
+
+
 ## Taux de féminité enseignant : Permanents vs non permanents 
 
 ```{r pvsnp}
@@ -183,7 +209,7 @@ anr %>%
 ```
 
 
-```{r anr.norm} 
+```{r anr.norm2} 
 anr %>%
   filter(Comparable) %>%
   pivot_longer(c(SCSP,ANR.PIA,ANR.hors.PIA), values_to = "Montant", names_to = "Ressource") %>%
