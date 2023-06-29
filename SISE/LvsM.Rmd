@@ -300,6 +300,7 @@ sise %>%
  export <- sise %>%
   filter(Rentrée == max(Rentrée)) %>%
   group_by(
+    Rentrée,
     pid,
     Niveau = case_when(
       LMD == "L" & NIVEAU == "03" ~ "L3",
