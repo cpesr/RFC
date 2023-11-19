@@ -56,7 +56,7 @@ sur le taux d’emploi salarié en France
 
 <img src="insertion-pro-tes_files/figure-gfm/tds.vs.tip.dom-1.png" width="672" />
 
-## Redéploiment
+## Université de Lorraine
 
 <img src="insertion-pro-tes_files/figure-gfm/lorraine-1.png" width="672" />
 

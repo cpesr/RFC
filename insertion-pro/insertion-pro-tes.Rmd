@@ -211,7 +211,7 @@ ipm %>%
   facet_wrap(.~Code.du.domaine, scales="free")
 ```
 
-## Redéploiment
+## Université de Lorraine
 
 ```{r lorraine, fig.asp=9/16}
 ipm %>%
