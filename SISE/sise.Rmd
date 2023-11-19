@@ -80,10 +80,10 @@ load(file="sise.RData")
 ```{r tout}
 sise %>% 
   mutate(LMD = fct_rev(LMD)) %>%
-  group_by(Rentrée, LMD) %>%
-  summarise(Etudiants = sum(Etudiants)) %>%
-  ggplot(aes(x=Rentrée, y= Etudiants, fill=LMD, group_by(LMD))) +
-  geom_area(color="white") +
+  group_by(Rentrée = as.character(Rentrée), LMD) %>%
+  summarise(Etudiants = sum(Etudiants,na.rm = TRUE)) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, fill=LMD, group = LMD)) +
+  geom_area(color="white", alpha=0.6) +
   scale_y_continuous(labels = ~ .x / 1e6, name = "Etudiants (millions)") +
   theme_cpesr_cap()
 ```
@@ -196,4 +196,41 @@ info.niveau %>%
   theme_cpesr_cap()
 ```
 
+## Comparaison sise vs. stat
 
+```{r svss}
+stat <- read.csv2("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv")
+
+bind_rows(
+  stat %>%
+    filter(Attention != "* Attention : doubles comptes, établissement-composante") %>%
+    group_by(Rentrée = rentree) %>%
+    summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE)) %>%
+    mutate(dataset = "Stat"), 
+  sise %>%
+    group_by(Rentrée) %>%
+    summarise(Etudiants = sum(Etudiants)) %>%
+    mutate(dataset = "SISE")
+) %>%
+  ggplot(aes(x=Rentrée,y=Etudiants,color=dataset)) +
+  geom_line() + geom_point() +
+  scale_x_continuous(breaks = seq(2000,2025))
+```
+
+```{r svss}
+stat <- read.csv2("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv")
+
+bind_rows(
+  stat %>%
+    group_by(Rentrée = rentree) %>%
+    summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE)) %>%
+    mutate(dataset = "Stat"), 
+  sise %>%
+    group_by(Rentrée) %>%
+    summarise(Etudiants = sum(Etudiants)) %>%
+    mutate(dataset = "SISE")
+) %>%
+  ggplot(aes(x=Rentrée,y=Etudiants,color=dataset)) +
+  geom_line() + geom_point() +
+  scale_x_continuous(breaks = seq(2000,2025))
+```

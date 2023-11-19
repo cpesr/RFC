@@ -401,3 +401,30 @@ ps %>%
   expand_limits(y=0) + 
   theme_cpesr()
 ```
+
+
+```{r staps.tda}
+ps %>% 
+  filter(Session == 2022) %>%
+  filter(Filière.de.formation.très.agrégée == "Licence") %>%
+  mutate(admis.tot = sum(admis), .by = Filière.de.formation.détaillée) %>%
+  filter(admis.tot > 5000) %>%
+  ggplot(aes(x=taux.accès, y=reorder(Filière.de.formation.détaillée,-taux.accès))) +
+  geom_boxplot() +
+  expand_limits(x=0) + 
+  theme_cpesr()
+```
+
+
+```{r staps.tda.bac}
+ps %>% 
+  filter(Session == 2022) %>%
+  filter(Filière.de.formation.très.agrégée == "Licence") %>%
+  filter(Filière.de.formation.détaillée== "Sciences et Techniques des Activités Physiques et Sportives") %>%
+  select(Code.UAI.de.l.établissement, Filière.de.formation.très.détaillée, starts_with("Dont.taux.d.accès")) %>%
+  pivot_longer(starts_with("Dont.taux.d.accès")) %>%
+  ggplot(aes(x=value, y=reorder(name,-value))) +
+  geom_boxplot() +
+  expand_limits(x=0) + 
+  theme_cpesr()
+```
