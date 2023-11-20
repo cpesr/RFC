@@ -19,6 +19,7 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/R
 ## Données 
 
 - https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-master
+- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-master_donnees_nationales
 
 ```{r load}
 ipm <- read.csv2("../data/fr-esr-insertion_professionnelle-master.csv", dec='.', na.strings = c("","nd","ns","fe",".")) %>%
@@ -27,29 +28,55 @@ ipm <- read.csv2("../data/fr-esr-insertion_professionnelle-master.csv", dec='.',
   filter(Diplôme == "MASTER LMD", situation == "30 mois après le diplôme", Annee == 2020)
 
 ipmn <- read.csv2("../data/fr-esr-insertion_professionnelle-master_donnees_nationales.csv", dec='.', na.strings = c("","nd","ns","fe",".")) %>%
+  mutate(
+    Code.du.domaine = recode(Code.du.domaine, "ALL" = "Ensemble"),
+    Domaine = recode(Domaine,"Ensemble Masters LMD (hors Masters enseignement)" = "Ensemble Masters"),
+    Discipline = recode(Discipline,"Ensemble Masters LMD (hors Masters enseignement et hors Dauphine et Antilles-Guyane)" = "Ensemble Masters"),
+    Secteur.disciplinaire = recode(Secteur.disciplinaire,"Ensemble Masters LMD (hors Masters enseignement)" = "Ensemble Masters")
+  ) %>%
+  mutate(
+    Discipline = ifelse(Secteur.disciplinaire == "Ensemble Lettres, langues, arts", "Ensemble Lettres, langues, arts", Discipline),
+    Code.de.la.discipline = ifelse(Secteur.disciplinaire == "Ensemble Lettres, langues, arts", "disc06e", Code.de.la.discipline)
+    ) %>%
   filter(Diplôme == "MASTER LMD", situation == "30 mois après le diplôme", Genre == "femmes et hommes", Année == 2020) 
 
 
-levels.ipmn <- ipmn %>%
-  arrange(Code.du.domaine, -Taux.d.insertion) %>%
-  select(Code.du.domaine, Domaine, Code.de.la.discipline, Discipline, Code.du.secteur.disciplinaire, Secteur.disciplinaire, Taux.d.insertion) %>%
+levels.domaine <- ipmn %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  arrange(-Taux.d.insertion) %>%
+  select(Code=Code.du.domaine,Domaine) %>%
+  add_row(Code="Ensemble", Domaine="Ensemble Masters", .before = 0) %>%
   unique()
-  
-ipmn <- ipmn %>%  
-  mutate(
-    Code.du.domaine = factor(Code.du.domaine,levels=unique(levels.ipmn$Code.du.domaine)),
-    Domaine = factor(Domaine,levels=unique(levels.ipmn$Domaine)),
-    Code.de.la.discipline = factor(Code.de.la.discipline,levels=unique(levels.ipmn$Code.de.la.discipline)),
-    Discipline = factor(Discipline,levels=unique(levels.ipmn$Discipline)),
-    Code.du.secteur.disciplinaire = factor(Code.du.secteur.disciplinaire,levels=unique(levels.ipmn$Code.du.secteur.disciplinaire)),
-    Secteur.disciplinaire = factor(Secteur.disciplinaire,levels=unique(levels.ipmn$Secteur.disciplinaire))
-  )
+ipmn <- ipmn %>% mutate(
+    Code.du.domaine = factor(Code.du.domaine,levels=levels.domaine$Code),
+    Domaine = factor(Domaine,levels=levels.domaine$Domaine))
+
+
+levels.discipline <- ipmn %>%
+  summarise(Taux.d.insertion = mean(Taux.d.insertion), .by=c(Domaine,Code.de.la.discipline,Discipline)) %>%
+  arrange(Domaine, -Taux.d.insertion) %>%
+  select(Code=Code.de.la.discipline,Discipline) %>%
+  #add_row(Code="Ensemble", Discipline="Ensemble Masters", .before = 0) %>%
+  unique()
+ipmn <- ipmn %>% mutate(
+    Code.de.la.discipline = factor(Code.de.la.discipline,levels=levels.discipline$Code),
+    Discipline = factor(Discipline,levels=levels.discipline$Discipline))
+
+levels.secteur <- ipmn %>%
+  arrange(Domaine, -Taux.d.insertion) %>%
+  select(Code=Code.du.secteur.disciplinaire,Secteur.disciplinaire) %>%
+  #add_row(Code="Ensemble", Secteur.disciplinaire="Ensemble Masters", .before = 0) %>%
+  unique()
+ipmn <- ipmn %>% mutate(
+    Code.du.secteur.disciplinaire = factor(Code.du.secteur.disciplinaire,levels=levels.secteur$Code),
+    Secteur.disciplinaire = factor(Secteur.disciplinaire,levels=levels.secteur$Secteur.disciplinaire))
 
 summarise_taux <- function(x) {
   x %>%
   summarise(tdef = weighted.mean(Taux.d.emploi.salarié.en.France, Poids.de.la.discipline, na.rm=TRUE),
             tde = weighted.mean(Taux.d.emploi, Poids.de.la.discipline, na.rm=TRUE),
-            tdi = weighted.mean(Taux.d.insertion, Poids.de.la.discipline, na.rm=TRUE)) %>%
+            tdi = weighted.mean(Taux.d.insertion, Poids.de.la.discipline, na.rm=TRUE),
+            teer = weighted.mean(X..emplois.extérieurs.à.la.région.de.l.université, Poids.de.la.discipline, na.rm=TRUE)) %>%
   mutate(diff=tdef-tdi) %>%
   pivot_longer(c(tdef,tde,tdi), names_to ="Indicateur", values_to="Valeur") %>%
   mutate(Indicateur = factor(Indicateur,levels=c("tdi","tde","tdef"),
@@ -58,33 +85,58 @@ summarise_taux <- function(x) {
 
 pivot_taux <- function(x) {
   x %>%
-  pivot_longer(c(Taux.d.emploi.salarié.en.France,Taux.d.emploi,Taux.d.insertion), names_to ="Indicateur", values_to="Valeur") %>%
-  mutate(Indicateur = factor(Indicateur,
-                             levels=c("Taux.d.insertion","Taux.d.emploi","Taux.d.emploi.salarié.en.France"),
-                             labels = c("Taux d'insertion pro","Taux d'emploi","Taux d'emploi salarié en France")))
+    mutate(diff=Taux.d.emploi.salarié.en.France-Taux.d.insertion) %>%
+    pivot_longer(c(Taux.d.emploi.salarié.en.France,Taux.d.emploi,Taux.d.insertion), names_to ="Indicateur", values_to="Valeur") %>%
+    mutate(Indicateur = factor(Indicateur,
+                               levels=c("Taux.d.insertion","Taux.d.emploi","Taux.d.emploi.salarié.en.France"),
+                               labels = c("Taux d'insertion","Taux d'emploi","Taux d'emploi salarié en France")))
 }
 ```
 
+Note : l'absence de Discipline "Ensemble Lettres, langues, arts" est pénible à gérer
 
-Interprétation à vérifier : 
 
 - Taux d'insertion = diplômé en emploi / diplômés sur le marché du travail (emploi + chômage, ou taux d'emploi *net*)
 - Taux d'emploi = diplômés en emploi / diplômés 
-- Taux d'emploi en France = diplômés en emploi en France / diplômés 
+- Taux d'emploi salarié en France = diplômés en emploi seulement salarié en France / diplômés 
 
-## National
+Les données sont : diplômés de Masters hors MEEF de la session 2020, à 30 mois.
+
+## Taux d'insertion par domaine
 
 ```{r tde.dom, fig.asp=5/16}
 ipmn %>%
-  filter(str_detect(Secteur.disciplinaire,"Ensemble")) %>%
-  ggplot(aes(x=Taux.d.insertion,y=Domaine,fill=Domaine)) +
+  mutate(Ensemble=str_detect(Code.du.domaine,"Ensemble")) %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  ggplot(aes(x=Taux.d.insertion,y=Domaine,fill=Domaine,color=Ensemble)) +
   geom_col(alpha=0.8) +
   scale_x_continuous(labels = ~ scales::percent(.x/100), name="Taux d'insertion") +
   scale_y_discrete(limits=rev) +
+  scale_color_manual(values=c("white","black")) +
   theme(legend.position = "None")
 ```
 
-```{r tdi.disc, fig.asp=16/16}
+## Taux d'insertion par discipline
+
+```{r tde.disc, fig.asp=9/16}
+ipmn %>%
+  mutate(Ensemble=str_detect(Discipline,"Ensemble")) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  group_by(Ensemble,Domaine,Discipline) %>%
+  summarize(Taux.d.insertion = mean(Taux.d.insertion)) %>%
+  ggplot(aes(x=Taux.d.insertion,y=Discipline,fill=Domaine,color=Ensemble)) +
+  geom_col(alpha=0.8) +
+  scale_x_continuous(labels = ~ scales::percent(.x/100), name="Taux d'insertion") +
+  scale_y_discrete(name="Discipline", limits=rev) +
+  scale_color_manual(values=c("white","black")) +
+  theme(legend.position = "None")
+
+```
+Attention : les valeurs sont une moyenne imparfaite.
+
+## Taux d'insertion par secteur disciplinaire
+
+```{r tdi.secdisc, fig.asp=16/16}
 ipmn %>%
   mutate(Ensemble=str_detect(Secteur.disciplinaire,"Ensemble")) %>%
   filter(!is.na(Taux.d.insertion)) %>%
@@ -96,29 +148,49 @@ ipmn %>%
   theme(legend.position = "None")
 ```
 
+## Différents taux domaine
 
 ```{r tdx.dom}
 ipmn %>%
   filter(str_detect(Secteur.disciplinaire,"Ensemble")) %>% 
+  mutate(Ensemble=str_detect(Domaine,"Ensemble")) %>%
   mutate(diff=Taux.d.emploi.salarié.en.France-Taux.d.insertion) %>%
   pivot_taux() %>%
-  ggplot(aes(x=Code.du.domaine,y=Valeur,fill=Domaine)) +
+  ggplot(aes(x=Code.du.domaine,y=Valeur,fill=Domaine, color=Ensemble)) +
   geom_col(alpha=0.8) +
   scale_x_discrete(name="") +
   scale_y_continuous(labels = ~ scales::percent(.x/100), name="Taux") +
+  scale_color_manual(values=c("white","black")) +
   facet_grid(.~Indicateur) +
   theme(legend.position = "None")
 ```
 
 
+```{r tdx.dom2}
+ipmn %>%
+  filter(str_detect(Secteur.disciplinaire,"Ensemble")) %>% 
+  mutate(Ensemble=str_detect(Domaine,"Ensemble")) %>%
+  mutate(diff=Taux.d.emploi.salarié.en.France-Taux.d.insertion) %>%
+  pivot_taux() %>%
+  ggplot(aes(y=Code.du.domaine,x=Valeur,fill=Domaine,color=Ensemble)) +
+  geom_col(alpha=0.8) +
+  scale_y_discrete(name="", limits=rev) +
+  scale_x_continuous(labels = ~ scales::percent(.x/100), name="Taux") +
+  scale_color_manual(values=c("white","black")) +
+  facet_grid(Indicateur~.,  labeller = labeller(Indicateur = label_wrap_gen(25))) +
+  theme(legend.position = "None")
+```
+
+
+## Comparaison des différents taux par secteur disciplinaire
 
 ```{r tdx.disc, fig.asp=4/3}
 ipmn %>%
   mutate(Ensemble=str_detect(Secteur.disciplinaire,"Ensemble")) %>%
   filter(!is.na(Taux.d.insertion)) %>%
   group_by(Secteur.disciplinaire) %>%
-  pivot_taux() %>%
-  ggplot(aes(x=Valeur,y=Secteur.disciplinaire,color=Indicateur)) +
+  pivot_taux() %>% 
+  ggplot(aes(x=Valeur,y=reorder(Secteur.disciplinaire,-diff),color=Indicateur)) +
   geom_line(color="grey",size=1) + geom_point(aes(shape=Indicateur),size=2) +
   scale_x_continuous(name="Taux",label=~scales::percent(.x/100)) +
   scale_y_discrete(name="",limits=rev) +
@@ -127,7 +199,7 @@ ipmn %>%
 
 
 
-## Taux d'emploi salarié en France vs. Taux d'insertion pro (median, 2020, 30 mois, hors MEEF)
+## Comparaison des différents taux par établissement (tri par différence)
 
 ```{r tds.vs.tip, fig.asp=4/3}
 ipm %>%
@@ -142,6 +214,9 @@ ipm %>%
   guides(color=guide_legend(ncol=1), shape=guide_legend(ncol=1))
 ```
 
+## Comparaison des différents taux par établissement (tri par taux d'insertion)
+
+
 ```{r tds.vs.tip2, fig.asp=4/3}
 ipm %>%
   filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
@@ -154,6 +229,9 @@ ipm %>%
   ylab("") +
   guides(color=guide_legend(ncol=1), shape=guide_legend(ncol=1))
 ```
+
+## Comparaison des différents taux par établissement (tri par taux d'emploi salarié en France)
+
 
 ```{r tds.vs.tip3, fig.asp=4/3}
 ipm %>%
@@ -168,45 +246,55 @@ ipm %>%
   guides(color=guide_legend(ncol=1), shape=guide_legend(ncol=1))
 ```
 
-## Taux d'emploi salarié en France vs. Taux d'insertion pro vs. Taux d'emplois extérieur à la région (median, 2020, 30 mois, hors MEEF)
+## Comparaison différence [Taux d'emploi salarié en France - Taux d'insertion] et [Taux d'emplois extérieurs à la région]
 
 Attention : Le Taux emplois extérieur à la région est peut-être calculé sur le taux d'emploi salarié en France
 
 ```{r tds.vs.tip.vs.tee, fig.asp=3/4}
 ipm %>%
   filter(Établissement != "La Réunion") %>%
-  filter(Diplôme == "MASTER LMD", situation == "30 mois après le diplôme", Annee == 2020) %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
   filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
   group_by(Établissement) %>%
-  summarize(tds = median(Taux.d.emploi.salarié.en.France, na.rm=TRUE),
-            tdi = median(Taux.d.insertion, na.rm=TRUE),
-            tee = median(X..emplois.extérieurs.à.la.région.de.l.université,na.rm=TRUE)) %>%
-  mutate(diff=tds-tdi) %>%
-  ggplot(aes(x=diff,y=tee, label = Établissement)) +
+  summarise_taux() %>% 
+  select(Établissement, diff,teer) %>%
+  unique() %>%
+  ggplot(aes(x=diff,y=teer, label = Établissement)) +
   geom_point() + ggrepel::geom_text_repel(size = 3) +
-  xlab("Différence Taux d'insertion pro Taux d'emploi salarié en France") +
+  xlab("Taux d'emploi salarié en France - Taux d'insertion") +
   scale_y_continuous(name="Taux d'emplois extérieurs à la région de l'université", label=~scales::percent(.x/100))
-
 ```
 
 
+```{r tds.vs.tip.vs.tee.dom, fig.asp=3/4, fig.width=10}
+ipm %>%
+  filter(Établissement != "La Réunion") %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  group_by(Établissement,Domaine) %>%
+  summarise_taux() %>% 
+  select(Établissement, Domaine,diff,teer) %>%
+  unique() %>%
+  ggplot(aes(x=diff,y=teer, label = Établissement)) +
+  geom_point() + ggrepel::geom_text_repel(size = 3) +
+  xlab("Taux d'emploi salarié en France - Taux d'insertion") +
+  scale_y_continuous(name="Taux d'emplois extérieurs à la région de l'université", label=~scales::percent(.x/100)) +
+  facet_wrap(.~Domaine, scales = "free")
+```
 
-## Taux d'emploi salarié en France vs. Taux d'insertion pro (median, 2020, 30 mois, hors MEEF) par domaine
+
+## Comparaison des taux par établissement et domaine
 
 ```{r tds.vs.tip.dom, fig.asp=4/2, fig.height=14}
 ipm %>%
   filter(str_detect(Discipline,"Ensemble")) %>%
   filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
   group_by(Établissement, Code.du.domaine) %>%
-  summarize(tds = median(Taux.d.emploi.salarié.en.France, na.rm=TRUE),
-            tdi = median(Taux.d.insertion, na.rm=TRUE)) %>%
-  mutate(diff=tds-tdi) %>%
-  pivot_longer(c(tds,tdi)) %>%
-  ggplot(aes(x=value,y=reorder(Établissement,diff),color=name)) +
-  geom_line(color="grey") + geom_point(size=2) +
+  summarise_taux() %>%
+  ggplot(aes(x=Valeur,y=reorder(Établissement,diff),color=Indicateur)) +
+  geom_line(color="grey") + geom_point(aes(shape=Indicateur), size=1.5) +
   scale_x_continuous(name="Taux",label=~scales::percent(.x/100)) +
   ylab("") +
-  scale_color_discrete(name="Indicateur",labels=c("Taux d'insertion pro","Taux d'emploi salarié en France")) +
   guides(color=guide_legend(ncol=1)) +
   facet_wrap(.~Code.du.domaine, scales="free")
 ```
@@ -217,7 +305,7 @@ ipm %>%
 ipm %>%
   filter(Établissement == "Lorraine") %>%
   mutate(Ensemble = str_detect(Discipline,"Ensemble")) %>%
-  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
   group_by(Discipline) %>%
   summarise_taux() %>%
   ggplot(aes(x=Valeur,y=reorder(Discipline,Valeur,FUN = max),color=Indicateur)) +
@@ -231,7 +319,7 @@ ipm %>%
 ipm %>%
   filter(Établissement == "Lorraine") %>%
   mutate(Ensemble = str_detect(Discipline,"Ensemble")) %>%
-  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
   group_by(Discipline) %>%
   summarise_taux() %>%
   ggplot(aes(x=Valeur,y=reorder(Discipline,Valeur,FUN = min),color=Indicateur)) +
