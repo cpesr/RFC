@@ -96,6 +96,11 @@ sur le taux d’emploi salarié en France
 
 ## Université de Lorraine
 
+    ## Scale for colour is already present.
+    ## Adding another scale for colour, which will replace the existing scale.
+    ## Scale for shape is already present.
+    ## Adding another scale for shape, which will replace the existing scale.
+
 <img src="insertion-pro-tes_files/figure-gfm/lorraine-1.png" width="672" />
 
 <img src="insertion-pro-tes_files/figure-gfm/lorraine2-1.png" width="672" />
