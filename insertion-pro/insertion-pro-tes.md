@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2023-11-20
+2023-11-27
 
 ## Données
 
@@ -48,6 +48,10 @@ Attention : les valeurs sont une moyenne imparfaite.
     ## generated.
 
 <img src="insertion-pro-tes_files/figure-gfm/tdx.disc-1.png" width="672" />
+
+<img src="insertion-pro-tes_files/figure-gfm/tdx.disc2-1.png" width="672" />
+
+<img src="insertion-pro-tes_files/figure-gfm/tdx.disc3-1.png" width="672" />
 
 ## Comparaison des différents taux par établissement (tri par différence)
 
@@ -104,3 +108,5 @@ sur le taux d’emploi salarié en France
 <img src="insertion-pro-tes_files/figure-gfm/lorraine-1.png" width="672" />
 
 <img src="insertion-pro-tes_files/figure-gfm/lorraine2-1.png" width="672" />
+
+## Dispersion

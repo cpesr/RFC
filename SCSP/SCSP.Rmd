@@ -1,0 +1,229 @@
+---
+title: "SCSP"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr() + theme(plot.title = element_text(hjust=1)))
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+
+library(kpiESR)
+```
+
+## Données 
+
+- https://github.com/cpesr/kpiESR
+
+```{r scsp, fig.asp=4/3, results='asis'}
+rangs <- esr %>%
+  filter(Rentrée > 2013, Groupe == "Universités et assimilés") %>%
+  left_join(esr.etab) %>%
+  transmute(
+    Rentrée,
+    Etablissement,
+    Typologie,
+    PerimEx,
+    SCSP = kpi.FIN.S.SCSP,
+    SCSP_EEC = kpi.FIN.S.SCSP / kpi.ENS.P.effectif,
+    SCSP_Etu = kpi.FIN.S.SCSP / kpi.ETU.P.effectif,
+    SCSP_Etu_HorsDoc = kpi.FIN.S.SCSP / (kpi.ETU.S.cycle1_L+kpi.ETU.S.cycle2_M),
+    SCSPRessources_Etu_HorsDoc = kpi.FIN.P.ressources / (kpi.ETU.S.cycle1_L+kpi.ETU.S.cycle2_M)
+  ) %>%
+  pivot_longer(starts_with("SCSP"), names_to = "Indicateur", values_to = "Valeur") %>%
+  filter(!is.na(Valeur)) %>%
+  arrange(Rentrée) %>%
+  summarise(
+    Valeur100 = last(Valeur) / first(Valeur) * 100,
+    Valeur = last(Valeur),
+    .by = c(Etablissement, Typologie, PerimEx, Indicateur)
+  ) %>%
+  mutate(Rang = rank(-Valeur), Rang_Valeur100 = rank(-Valeur100)) %>%
+  mutate(Rang_Typologie = rank(-Valeur), .by=Typologie) %>%
+  mutate(Indicateur = factor(Indicateur, 
+    levels = c("SCSP","SCSP_EEC","SCSP_Etu","SCSP_Etu_HorsDoc","SCSPRessources_Etu_HorsDoc"),
+    labels  = c("SCSP","SCSP/E-EC","SCSP/Etudiant","SCSP/Etudiant(hors doc.)","Ressources/Etudiant(hors doc.)"))) %>%
+  mutate(PerimEx = factor(PerimEx,
+    levels=c("","ISITE","IDEx"),
+    labels=c("NINI","ISITE","IDEx")))
+
+write_csv(rangs,"fr-cpesr-scsp.csv")
+xlsx::write.xlsx(rangs,"fr-cpesr-scsp.xlsx")
+rangs %>% spoiler_table("Données")
+
+rangs <- rangs %>% 
+  filter(!Etablissement %in% 
+           c("Université Paris sciences et lettres", 
+             "Université Gustave Eiffel",
+             "Université de Guyane",
+             "Université de La Réunion",
+             "Université des Antilles",
+             "Université de la Polynésie Française",
+             "Université de la Nouvelle-Calédonie",
+             "Centre universitaire de Mayotte"))
+
+ln <- scales::label_number(accuracy = 1)
+
+str_label <-function(x) {
+  case_when(
+    x>1e6 ~ paste(round(x/1e6)),
+    x>17e3 ~ paste(round(x/1e3)),
+    TRUE ~ ln(x)
+  )
+}
+
+rankplot <- function(ind) {
+  df <- rangs %>% filter(Indicateur == ind) 
+    
+  max <- max(df$Valeur, na.rm = TRUE)
+  
+  df %>%
+  mutate(EtabRang = paste(Etablissement,"-",Rang)) %>%
+  ggplot(aes(y=reorder(EtabRang,-Rang),x=Valeur, fill=Valeur)) +
+  geom_col() + geom_point(color="black", shape=3) + 
+  geom_text(aes(label=str_label(Valeur)), hjust=1, x = max*1.2) +
+  expand_limits(x=max*1.15) +
+  scale_x_continuous(labels = ~ str_label(.x), name="SCSP") +
+  scale_y_discrete(name="") +
+  scale_fill_distiller(palette = "RdBu", guide = FALSE, direction = 1) 
+}
+
+diffplot <- function(ind) {
+  df <- rangs %>% filter(Indicateur == ind) 
+    
+  max <- max(df$Valeur100, na.rm = TRUE)
+  min <- max(df$Valeur100, na.rm = TRUE)
+  
+  df %>%
+  mutate(EtabRang = paste(Etablissement,"-",rank(-Valeur100))) %>%
+  ggplot(aes(y=reorder(EtabRang,Valeur100),x=Valeur100, fill=Valeur100)) +
+  geom_col() + geom_point(color="black", shape=3) + 
+  geom_text(aes(label=str_label(Valeur100)), hjust=1, x = max*1.2) +
+  geom_vline(xintercept = 100) +
+  expand_limits(x=max*1.15) +
+  scale_x_continuous(labels = ~ str_label(.x), name="SCSP") +
+  scale_y_discrete(name="") +
+  scale_fill_distiller(palette = "RdBu", guide = FALSE, direction = 1) 
+}
+```
+
+
+Téléchargement : [csv]("fr-cpesr-scsp.csv") [xlsx]("fr-cpesr-scsp.xlsx")
+
+
+
+
+## SCSP
+
+```{r rank.scsp, fig.asp=4/3}
+  rankplot("SCSP") +
+  ggtitle("Subvention pour charge de service public (SCSP)", subtitle = "2022-2023, en millions d'euros")
+```
+
+```{r val100.scsp, fig.asp=4/3}
+  diffplot("SCSP") +
+  ggtitle("Subvention pour charge de service public (SCSP)", subtitle = "2022-2023, en valeur 100 pour 2014")
+```
+
+## SCSP par E-EC
+
+```{r rank.scsp_eec, fig.asp=4/3}
+  rankplot("SCSP/E-EC") +
+  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = "2021-2022, en millions d'euros")
+```
+
+```{r val100.scsp_eec, fig.asp=4/3}
+  diffplot("SCSP/E-EC") +
+  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = "2021-2022, en valeur 100 pour 2014")
+```
+
+
+## SCSP par Etudiant
+
+
+```{r rank.scsp_etu, fig.asp=4/3}
+  rankplot("SCSP/Etudiant") +
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant", subtitle = "2022-2023, en milliers d'euros")
+```
+
+```{r val100.scsp_etu, fig.asp=4/3}
+  diffplot("SCSP/Etudiant") +
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant", subtitle = "2022-2023, en valeur 100 pour 2014")
+```
+
+
+
+
+## SCSP par Etudiant (hors doctorants)
+
+
+```{r rank.scsp_etuhd, fig.asp=4/3}
+  rankplot("SCSP/Etudiant(hors doc.)") +
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant (hors doc.)", subtitle = "2022-2023, en milliers d'euros")
+```
+
+```{r val100.scsp_etuhd, fig.asp=4/3}
+  diffplot("SCSP/Etudiant(hors doc.)") +
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant (hors doc.)", subtitle = "2022-2023, en valeur 100 pour 2014")
+```
+
+
+## Ressources par Etudiant (hors doctorants)
+
+
+
+```{r rank.scspres_etuhd, fig.asp=4/3}
+  rankplot("Ressources/Etudiant(hors doc.)") +
+  ggtitle("Total des ressources par étudiant (hors doc.)", subtitle = "2022-2023, en milliers d'euros")
+```
+
+```{r val100.scspres_etuhd, fig.asp=4/3}
+  diffplot("Ressources/Etudiant(hors doc.)") +
+  ggtitle("Total des ressources par étudiant (hors doc.)", subtitle = "2022-2023, en valeur 100 pour 2014")
+```
+
+
+
+```{r cmp.typo}
+rangs %>%
+  filter(!is.na(Typologie)) %>%
+  filter(Indicateur != "SCSP") %>%
+  ggplot(aes(x=Valeur,y=Typologie,fill=Typologie)) +
+  geom_violin() + ggbeeswarm::geom_beeswarm(size=0.2) +
+  facet_wrap(Indicateur~., scales = "free_x") +
+  scale_x_continuous(labels = ~ paste(.x/1e3,"k€"), name="") +
+  theme(legend.position = "None", axis.title.x = element_blank()) +
+  ggtitle("Quatre indicateurs en fonction de la typologie des établissements")
+```
+
+
+```{r cmp.perimex}
+rangs %>%
+  filter(!is.na(Typologie)) %>%
+  filter(Indicateur != "SCSP") %>%
+  ggplot(aes(x=Valeur,y=PerimEx,fill=PerimEx)) +
+  geom_violin() + ggbeeswarm::geom_beeswarm(size=0.2) +
+  facet_wrap(Indicateur~., scales = "free_x") +
+  scale_x_continuous(labels = ~ paste(.x/1e3,"k€"), name="") +
+  theme(legend.position = "None", axis.title.x = element_blank()) +
+  ggtitle("Quatre indicateurs en fonction du périmètre d'excellence (PérimEx)", subtitle = "Universités pluridisciplinaires ou scientifiques")
+```
+
+
+```{r cmp.perimex.typo}
+rangs %>%
+  filter(!is.na(Typologie)) %>%
+  filter(!str_detect(Typologie,"tertiaire")) %>%
+  ggplot(aes(x=Valeur,y=Typologie,fill=PerimEx)) +
+  geom_violin() + ggbeeswarm::geom_beeswarm(size=0.2) +
+  facet_wrap(Indicateur~., scales = "free_x") +
+  scale_x_continuous(labels = ~ str_label(.x), name="SCSP") +
+  theme(legend.position = "None")
+```

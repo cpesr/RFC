@@ -113,6 +113,7 @@ ipmn %>%
   scale_x_continuous(labels = ~ scales::percent(.x/100), name="Taux d'insertion") +
   scale_y_discrete(limits=rev) +
   scale_color_manual(values=c("white","black")) +
+  expand_limits(x=100) +
   theme(legend.position = "None") +
   ggtitle("Taux d'insertion des diplômés de Master par domaine disciplinaire","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
@@ -168,6 +169,7 @@ ipmn %>%
   scale_y_continuous(labels = ~ scales::percent(.x/100), name="Taux") +
   scale_color_manual(values=c("white","black")) +
   facet_grid(.~Indicateur) +
+  expand_limits(y=100) +
   theme(legend.position = "None") +
   ggtitle("Comparaison des trois taux des diplômés de Master","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
@@ -185,7 +187,8 @@ ipmn %>%
   scale_y_discrete(name="", limits=rev) +
   scale_x_continuous(labels = ~ scales::percent(.x/100), name="Taux") +
   scale_color_manual(values=c("white","black")) +
-  facet_grid(Indicateur~.,  labeller = labeller(Indicateur = label_wrap_gen(25))) +
+  expand_limits(x=100) +
+  facet_grid(Indicateur~.,  labeller = labeller(Indicateur = label_wrap_gen(20))) +
   theme(legend.position = "None") +
   ggtitle("Comparaison des trois taux des diplômés de Master","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
@@ -210,6 +213,38 @@ ipmn %>%
   cpesr_cap()
 ```
 
+```{r tdx.disc2, fig.asp=4/3}
+ipmn %>%
+  mutate(Ensemble=str_detect(Secteur.disciplinaire,"Ensemble")) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  group_by(Secteur.disciplinaire) %>%
+  pivot_taux() %>% 
+  ggplot(aes(x=Valeur,y=reorder(Secteur.disciplinaire,-Valeur,FUN=max),color=Indicateur)) +
+  geom_line(color="grey",size=1) + geom_point(aes(shape=Indicateur),size=2) +
+  scale_x_continuous(name="Taux",label=~scales::percent(.x/100)) +
+  scale_y_discrete(name="",limits=rev) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Comparaison des trois taux des diplômés de Master pas discipline","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
+  cpesr_cap()
+```
+
+
+```{r tdx.disc3, fig.asp=4/3}
+ipmn %>%
+  mutate(Ensemble=str_detect(Secteur.disciplinaire,"Ensemble")) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  group_by(Secteur.disciplinaire) %>%
+  pivot_taux() %>% 
+  ggplot(aes(x=Valeur,y=reorder(Secteur.disciplinaire,-Valeur,FUN=min),color=Indicateur)) +
+  geom_line(color="grey",size=1) + geom_point(aes(shape=Indicateur),size=2) +
+  scale_x_continuous(name="Taux",label=~scales::percent(.x/100)) +
+  scale_y_discrete(name="",limits=rev) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Comparaison des trois taux des diplômés de Master pas discipline","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
+  cpesr_cap()
+```
 
 
 ## Comparaison des différents taux par établissement (tri par différence)
@@ -359,4 +394,22 @@ ipm %>%
   ggtitle("Comparaison des trois taux des diplômés de Master à l'Université de Lorraine","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
   
+```
+
+## Dispersion 
+
+```{r disp, fig.asp=4/3}
+ipm %>%
+  mutate(Ensemble=str_detect(Discipline,"Ensemble")) %>%
+  filter(!is.na(Taux.d.insertion)) %>%
+  group_by(Discipline) %>%
+  pivot_taux() %>% 
+  ggplot(aes(x=Valeur,y=reorder(Discipline,-diff),color=Indicateur, fill=Indicateur)) +
+  geom_violin() +
+  scale_x_continuous(name="Taux",label=~scales::percent(.x/100)) +
+  scale_y_discrete(name="",limits=rev) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Comparaison des trois taux des diplômés de Master pas discipline","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
+  cpesr_cap()
 ```
