@@ -1,7 +1,7 @@
 SCSP
 ================
 CPESR
-2023-12-05
+2023-12-07
 
 ## Données
 
@@ -73,3 +73,13 @@ Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
 <img src="SCSP_files/figure-gfm/cmp.perimex-1.png" width="672" />
 
 <img src="SCSP_files/figure-gfm/cmp.perimex.typo-1.png" width="672" />
+
+## SCSP vs. MS
+
+    ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+    ## ℹ Please use `linewidth` instead.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+    ## generated.
+
+<img src="SCSP_files/figure-gfm/scsp.vs.ms-1.png" width="672" />
