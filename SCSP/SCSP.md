@@ -1,7 +1,7 @@
 SCSP
 ================
 CPESR
-2023-12-07
+2023-12-09
 
 ## Données
 
@@ -83,3 +83,7 @@ Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
     ## generated.
 
 <img src="SCSP_files/figure-gfm/scsp.vs.ms-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/scsp.vs.ms2-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/scsp.vs.ms3-1.png" width="672" />
