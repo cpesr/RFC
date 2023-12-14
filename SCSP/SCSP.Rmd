@@ -136,7 +136,7 @@ Téléchargement : [csv]("fr-cpesr-scsp.csv") [xlsx]("fr-cpesr-scsp.xlsx")
 
 ```{r rank.scsp_eec, fig.asp=4/3}
   rankplot("SCSP/E-EC") +
-  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = "2021-2022, en millions d'euros")
+  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = "2021-2022, en milliers d'euros")
 ```
 
 ```{r val100.scsp_eec, fig.asp=4/3}
