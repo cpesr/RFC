@@ -228,6 +228,52 @@ rangs %>%
   theme(legend.position = "None")
 ```
 
+## Rangs
+
+```{r rangs, fig.asp=4/2}
+l <- levels(rangs$Indicateur)
+l <- paste(rep(l,each=2),c("2022-2023","évolution"))
+rangs %>%
+  pivot_longer(starts_with("Valeur")) %>%
+  mutate(Rang = rank(-value), .by = c(Indicateur,name)) %>%
+  mutate(
+    name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
+    Indicateur2 = factor(paste(Indicateur,name),levels = l)
+    ) %>%
+  ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=Rang)) +
+  geom_point(size=6,shape=15) +
+  geom_text(aes(label=Rang), color="black", size=3.5) +
+  scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
+  theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), axis.title.x = element_blank()) +
+  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014")
+```
+
+
+```{r rangs.typo, fig.asp=4/2}
+l <- levels(rangs$Indicateur)
+l <- paste(rep(l,each=2),c("2022-2023","évolution"))
+rangs %>%
+  pivot_longer(starts_with("Valeur")) %>%
+  mutate(Rang = rank(-value), .by = c(Indicateur,name,Typologie)) %>%
+  mutate(RangNorm = scales::rescale(Rang), .by = c(Indicateur,name,Typologie)) %>%
+  mutate(
+    name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
+    Indicateur2 = factor(paste(Indicateur,name),levels = l)
+    ) %>%
+  mutate(Typologie=recode(Typologie,
+    "Université scientifique et/ou médicale"="Univ. scientifique\net/ou médicale",
+    "Université tertiaire - lettres et sciences Humaines" = "Univ. tertiaire\nLLA-SHS",
+    "Université tertiaire - droit et économie" = "Univ. tertiaire\ndroit et éco." 
+    )) %>%
+  ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=RangNorm)) +
+  geom_point(size=6,shape=15) +
+  geom_text(aes(label=Rang), color="black", size=3.5) +
+  scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
+  facet_grid(Typologie~., scales = "free_y", space = "free") +
+  theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), axis.title.x = element_blank()) +
+  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014, par typologie")
+```
+
 
 ## SCSP vs. MS
 

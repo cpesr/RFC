@@ -74,6 +74,12 @@ Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
 
 <img src="SCSP_files/figure-gfm/cmp.perimex.typo-1.png" width="672" />
 
+## Rangs
+
+<img src="SCSP_files/figure-gfm/rangs-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/rangs.typo-1.png" width="672" />
+
 ## SCSP vs. MS
 
     ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
