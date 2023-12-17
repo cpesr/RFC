@@ -1,7 +1,7 @@
 SCSP
 ================
 CPESR
-2023-12-15
+2023-12-17
 
 ## Données
 
@@ -30,6 +30,10 @@ Données
 
 Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
 [xlsx](%22fr-cpesr-scsp.xlsx%22)
+
+Dans la suite, les données sont limitées aux établissements en France
+métropolitaine, sans Paris Sciences et Lettres, dont les indicateurs
+sont trop hors-norme.
 
 ## SCSP
 
@@ -77,6 +81,8 @@ Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
 ## Rangs
 
 <img src="SCSP_files/figure-gfm/rangs-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/rangs.perimex-1.png" width="672" />
 
 <img src="SCSP_files/figure-gfm/rangs.typo-1.png" width="672" />
 

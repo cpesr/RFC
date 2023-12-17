@@ -118,6 +118,7 @@ diffplot <- function(ind) {
 Téléchargement : [csv]("fr-cpesr-scsp.csv") [xlsx]("fr-cpesr-scsp.xlsx")
 
 
+Dans la suite, les données sont limitées aux établissements en France métropolitaine, sans Paris Sciences et Lettres, dont les indicateurs sont trop hors-norme.
 
 
 ## SCSP
@@ -195,10 +196,17 @@ Téléchargement : [csv]("fr-cpesr-scsp.csv") [xlsx]("fr-cpesr-scsp.xlsx")
 rangs %>%
   filter(!is.na(Typologie)) %>%
   filter(Indicateur != "SCSP") %>%
+  mutate(Typologie=recode(Typologie,
+    "Université pluridisciplinaire avec santé" = "Univ. pluridisc. avec santé",
+    "Université pluridisciplinaire hors santé" = "Univ. pluridisc. hors santé",
+    "Université scientifique et/ou médicale"="Univ. scientifique et/ou médicale",
+    "Université tertiaire - lettres et sciences Humaines" = "Univ. tertiaire LLA-SHS",
+    "Université tertiaire - droit et économie" = "Univ. tertiaire DEG" 
+    )) %>%
   ggplot(aes(x=Valeur,y=Typologie,fill=Typologie)) +
   geom_violin() + ggbeeswarm::geom_beeswarm(size=0.2) +
   facet_wrap(Indicateur~., scales = "free_x") +
-  scale_x_continuous(labels = ~ paste(.x/1e3,"k€"), name="") +
+  scale_x_continuous(labels = ~ paste0(.x/1e3,"k€"), name="", breaks = scales::pretty_breaks()) +
   theme(legend.position = "None", axis.title.x = element_blank()) +
   ggtitle("Quatre indicateurs en fonction de la typologie des établissements")
 ```
@@ -238,15 +246,39 @@ rangs %>%
   mutate(Rang = rank(-value), .by = c(Indicateur,name)) %>%
   mutate(
     name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
+    ff = recode(name,"2022-2023"="bold","évolution"="plain"),
     Indicateur2 = factor(paste(Indicateur,name),levels = l)
     ) %>%
   ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=Rang)) +
   geom_point(size=6,shape=15) +
-  geom_text(aes(label=Rang), color="black", size=3.5) +
+  geom_text(aes(label=Rang,fontface=ff) , color="black", size=3.5) +
   scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
   theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), 
         axis.title.x = element_blank(), axis.title.y = element_blank()) +
   ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014")
+```
+
+
+```{r rangs.perimex, fig.asp=4/2}
+l <- levels(rangs$Indicateur)
+l <- paste(rep(l,each=2),c("2022-2023","évolution"))
+rangs %>%
+  pivot_longer(starts_with("Valeur")) %>%
+  mutate(Rang = rank(-value), .by = c(Indicateur,name,PerimEx)) %>%
+  mutate(RangNorm = scales::rescale(Rang), .by = c(Indicateur,name,PerimEx)) %>%
+  mutate(
+    name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
+    ff = recode(name,"2022-2023"="bold","évolution"="plain"),
+    Indicateur2 = factor(paste(Indicateur,name),levels = l)
+    ) %>%
+  ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=RangNorm)) +
+  geom_point(size=6,shape=15) +
+  geom_text(aes(label=Rang, fontface=ff), color="black", size=3.5) +
+  scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
+  facet_grid(PerimEx~., scales = "free_y", space = "free") +
+  theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), 
+        axis.title.x = element_blank(), axis.title.y = element_blank()) +
+  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014, par typologie")
 ```
 
 
@@ -259,6 +291,7 @@ rangs %>%
   mutate(RangNorm = scales::rescale(Rang), .by = c(Indicateur,name,Typologie)) %>%
   mutate(
     name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
+    ff = recode(name,"2022-2023"="bold","évolution"="plain"),
     Indicateur2 = factor(paste(Indicateur,name),levels = l)
     ) %>%
   mutate(Typologie=recode(Typologie,
@@ -268,7 +301,7 @@ rangs %>%
     )) %>%
   ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=RangNorm)) +
   geom_point(size=6,shape=15) +
-  geom_text(aes(label=Rang), color="black", size=3.5) +
+  geom_text(aes(label=Rang, fontface=ff), color="black", size=3.5) +
   scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
   facet_grid(Typologie~., scales = "free_y", space = "free") +
   theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), 
