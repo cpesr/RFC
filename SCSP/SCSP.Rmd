@@ -219,7 +219,7 @@ rangs %>%
   ggplot(aes(x=Valeur,y=PerimEx,fill=PerimEx)) +
   geom_violin() + ggbeeswarm::geom_beeswarm(size=0.2) +
   facet_wrap(Indicateur~., scales = "free_x") +
-  scale_x_continuous(labels = ~ paste(.x/1e3,"k€"), name="") +
+  scale_x_continuous(labels = ~ paste0(.x/1e3,"k€"), name="", breaks = scales::pretty_breaks()) +
   theme(legend.position = "None", axis.title.x = element_blank()) +
   ggtitle("Quatre indicateurs en fonction du périmètre d'excellence (PérimEx)", subtitle = "Universités pluridisciplinaires ou scientifiques")
 ```
@@ -278,7 +278,7 @@ rangs %>%
   facet_grid(PerimEx~., scales = "free_y", space = "free") +
   theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), 
         axis.title.x = element_blank(), axis.title.y = element_blank()) +
-  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014, par typologie")
+  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014, par PérimEx")
 ```
 
 
@@ -347,8 +347,9 @@ kpiESR::esr %>%
   ggplot(aes(x=Rentrée,y=diff, color=diff)) +
   geom_hline(yintercept = 1) +
   geom_line(size=1) + geom_point(shape = 21, stroke=2,size=2,fill="white") +
+  scale_x_continuous(breaks = seq(2009,2022)) +
   scale_y_continuous(labels = ~ paste(.x/1e6,"M€"), name = "SCSP-MS") +
   scale_color_distiller(palette="Reds") +
   ggtitle("Différence entre SCSP et masse salariale des universités") +
-  theme(legend.position = "None")
+  theme(legend.position = "None", panel.grid.minor.x = element_blank())
 ```
