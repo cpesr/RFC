@@ -7,10 +7,12 @@ output: github_document
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(ggcpesrthemes)
-theme_set(theme_cpesr())
+theme_set(theme_cpesr() + theme(legend.position="right"))
 
 theme_cpesr_setup(authors = "Julien Gossa", source = "SIES https://github.com/cpesr/RFC/blob/main/immobilier/immobilier.md")
 ```
+
+Source : https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-patrimoine-immobilier-des-operateurs-de-l-enseignement-superieur/
 
 ```{r load}
 imo <- read.csv2("../data/fr-esr-patrimoine-immobilier-des-operateurs-de-l-enseignement-superieur.csv", dec='.', na.strings = "") %>%
@@ -74,7 +76,8 @@ explore <- function(var) {
 ```
 
 ```{r explo.loop, results='asis'}
-for(var in colnames(imo)[c(11:20,22,23,25,27,31)])
+vars = c("Etat.santé","Type.bât.","Domaine.bat.","Propriétaire.bat.","Réglementation.générale","Catégorie.ERP","Type.ERP","Class..Monument.histo.","Etat.access.","Access..AdAP","Access..dérog.","Energie.class.","GES","Audit.energie","Bilan.carbone")
+for(var in vars)
   explore(var)
 ```
 
@@ -102,4 +105,62 @@ imo %>%
   theme(axis.title.y = element_blank(), legend.position = "right", plot.title = element_text(hjust=1)) +
   cpesr_cap() 
   
+```
+
+
+## Propriétaires
+
+```{r prop, fig.asp=16/9}
+prop <- imo %>% 
+  left_join(kpiESR::esr.etab,by = join_by(Paysage_id == pid)) %>%
+  summarise(
+     nb = n(),
+    .by = c(Année,Sigle,Propriétaire.bat.,Groupe,PerimEx)
+  ) %>% 
+  mutate(ratio = n() / sum(nb), .by = c(Année,Sigle)) %>%
+  filter(!is.na(Sigle))
+
+prop %>% 
+  filter(Année == max(Année)) %>%
+  filter(Propriétaire.bat. == "Tiers") %>%
+  ggplot(aes(x=ratio,y=reorder(Sigle,ratio),fill=Groupe)) +
+  geom_col() +
+  ggtitle("Ratio de bâtiment appartenant à un tiers")
+```
+
+```{r prop.univ, fig.asp=16/9}
+prop %>% 
+  filter(Année == max(Année)) %>%
+  filter(Propriétaire.bat. == "Tiers") %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  ggplot(aes(x=ratio,y=reorder(Sigle,ratio),fill=PerimEx)) +
+  geom_col() +
+  ggtitle("Ratio de bâtiment appartenant à un tiers")
+```
+
+
+```{r tiers, fig.asp=16/9}
+tiers <- imo %>% 
+  left_join(kpiESR::esr.etab,by = join_by(Paysage_id == pid)) %>%
+  filter(Propriétaire.bat. == "Tiers") %>%
+  summarise(
+     Année = min(Année),
+    .by = c(Sigle,Libellé.bât.ter,Type.bât., Domaine.bat.)
+  ) 
+```
+
+```{r tiers.2017, results='asis'}
+tiers %>%
+  filter(Année == min(Année)) %>%
+  summarise(nb = n(), .by = c(Année,Type.bât.,Domaine.bat.)) %>%
+  arrange(-nb) %>%
+  spoiler_table(trim = Inf, title = "En 2017")
+```
+
+```{r tiers.2018, results='asis'}
+tiers %>%
+  filter(Année > min(Année)) %>%
+  summarise(nb = n(), .by = c(Type.bât.,Domaine.bat.)) %>%
+  arrange(-nb) %>%
+  spoiler_table(trim = Inf,title = "Nouveaux après 2017")
 ```
