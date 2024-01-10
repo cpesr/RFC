@@ -16,7 +16,7 @@ CPESR
 
 - les données sont réduites aux universités, avec de possibles problèmes
   de périmètre avec les composantes
-- les violons montrent la distribution des universités sans dévolution
+- les boxplots montrent la distribution des universités sans dévolution
 - les points montrent les établissements avec dévolution, par vague
 - pour chaque indicateur, les critères sont montrés en :
   - nombre de bâtiments
