@@ -1,0 +1,133 @@
+---
+title: "Dévolution"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 4/4, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-patrimoine-immobilier-des-operateurs-de-l-enseignement-superieur/
+
+```{r load}
+imo <- read.csv2("../data/fr-esr-patrimoine-immobilier-des-operateurs-de-l-enseignement-superieur.csv", dec='.', na.strings = "") %>%
+  mutate(
+    Domaine.bat. = str_to_lower(Domaine.bat.),
+    Catégorie.ERP = recode(Catégorie.ERP,
+                           "1re : au-dessus de 1500 personnes" = "1 : 1500- personnes",
+                           "3e : de 301 à 700 personnes" = "3: 301-700 personnes",
+                           "2e : de 701 à 1500 personnes" = "2: 701-1500 personnes",
+                           "4e : 300 personnes et au-dessous, à l'exception des établissements compris dans la 5e catégorie" = "4: -300 personnes (hors 5)",
+                           "5e : établissements accueillant un nombre de personnes inférieur au seuil dépendant du type d'établissement" = "5 : inférieur au seuil"),
+    Type.bât. = fct_lump(Type.bât., n=4),
+    Type.ERP = fct_lump(Type.ERP, n=4),
+  ) %>% 
+  rename(pid = Paysage_id) %>%
+  select(-Etablissement) %>%
+  left_join(kpiESR::esr.etab %>% select(pid, Etablissement, Sigle, Groupe)) %>%
+  left_join(kpiESR::esr %>% transmute(pid, Année = Rentrée+1, étudiants = kpi.ETU.P.effectif)) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  mutate(Dévolution = case_when(
+    pid %in% c("hlX1r","K4lR3","gap5Q","cqkij") ~ "Vague 1",
+    pid %in% c("xJdyB", "p25Q3", "90I54") ~ "Vague 2",
+    TRUE ~ "Non"
+  ))
+
+summarise_imo <- function(var) {
+  imo %>%
+    mutate(var = as.factor(!!sym(var))) %>%
+    summarise(
+      `Batiments (nb)`= n(),
+      `SUB (hm2)` = sum(SUB,na.rm = TRUE) / 1e4,
+      .by = c(Etablissement,pid,Dévolution,Année,étudiants,var)
+    ) %>%
+    mutate(
+      `BatimentsParEtu (nb/kEtu)`= `Batiments (nb)` / étudiants * 1000,
+      `SUBParEtu (m2/étu)`= `SUB (hm2)` / étudiants * 1e4) %>%
+    pivot_longer(c(`Batiments (nb)`, `SUB (hm2)`, `BatimentsParEtu (nb/kEtu)`, `SUBParEtu (m2/étu)`), 
+                 names_to = "indicateur", values_to = "valeur") %>%
+    arrange(Dévolution,Etablissement,Année) %>%
+    mutate(val100 = valeur / first(valeur) * 100,
+           diff = valeur - first(valeur),
+           .by = c(pid,indicateur))
+}
+
+# devo <- summarise_imo("Etat.santé")
+# devo.non <- devo %>% filter(Dévolution == "Non")
+# devo.oui <- devo %>% filter(Dévolution != "Non")
+# devo.non.max <- devo.non %>% filter(Année == max(Année))
+# devo.oui.max <- devo.oui %>% filter(Année == max(Année))
+# 
+# ggplot(devo.non.max, aes(x=diff,y=var)) +
+#   geom_violin() + 
+#   geom_point(data = devo.oui.max, aes(color = Dévolution)) +
+#   facet_wrap(.~indicateur, scales = "free_x", nrow=2) 
+
+devo_explore <- function(var) {
+  devo <- summarise_imo(var)
+  devo.non <- devo %>% filter(Dévolution == "Non")
+  devo.oui <- devo %>% filter(Dévolution != "Non")
+  devo.non.max <- devo.non %>% filter(Année == max(Année))
+  devo.oui.max <- devo.oui %>% filter(Année == max(Année))
+  
+  p1 <- ggplot(devo.non.max, aes(x=valeur,y=var)) +
+    #geom_violin(alpha=0.2, color="black", fill="white", size=0.3) + 
+    geom_boxplot(coef=Inf, alpha=0.2, linewidth=0.3) +
+    geom_point(data = devo.oui.max, aes(color = Dévolution)) +
+    facet_wrap(.~indicateur, scales = "free_x", nrow=2) +
+    ylab(var) +
+    scale_x_continuous(breaks = scales::pretty_breaks()) +
+    ggtitle(paste(var, "en 2023"))
+
+  p2 <- ggplot(devo.non.max, aes(x=diff,y=var)) +
+    #geom_violin(alpha=0.2, color="black", fill="white", size=0.3) + 
+    geom_boxplot(coef=Inf, alpha=0.2, linewidth=0.3) +
+    geom_point(data = devo.oui.max, aes(color = Dévolution)) +
+    facet_wrap(.~indicateur, scales = "free_x", nrow=2) +
+    ylab(var) +
+    scale_x_continuous(breaks = scales::pretty_breaks()) +
+    ggtitle(paste(var, "différence entre 2017 et 2023")) 
+
+  cat("\n\n## ",var,"\n\n")
+  print(p1)
+  print(p2)
+  cat("\n\n")
+
+}
+
+# devo_explore("Etat.santé")
+
+```
+
+# Visualisations
+
+- les données sont réduites aux universités, avec de possibles problèmes de périmètre avec les composantes
+- les violons montrent la distribution des universités sans dévolution
+- les points montrent les établissements avec dévolution, par vague
+- pour chaque indicateur, les critères sont montrés en :
+  - nombre de bâtiments
+  - nombre de bâtiments pour 1000 étudiants
+  - surface utile brute (SUB) en hectomètres carré (hectare, 10 000 m2)
+  - SUB par étudiant en m2 par étudiant
+- les indicateurs sont également présentés en :
+  - valeur pour la dernière année (2023)
+  - différence absolue de valeur entre la première et la dernière année (2023 - 2017)
+
+La première représentation ("Année") montre l'état immobilier global.
+
+```{r explo.loop, results='asis'}
+vars = c("Année","Etat.santé","Type.bât.","Domaine.bat.","Propriétaire.bat.","Réglementation.générale","Catégorie.ERP","Type.ERP","Class..Monument.histo.","Etat.access.","Access..AdAP","Access..dérog.","Energie.class.","GES","Audit.energie","Bilan.carbone")
+for(var in vars)
+  devo_explore(var)
+```
