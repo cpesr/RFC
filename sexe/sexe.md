@@ -932,14 +932,14 @@ Personnel de soutien
     ## `summarise()` has grouped output by 'Etablissement'. You can override using the
     ## `.groups` argument.
 
-    ## Warning: ggrepel: 49 unlabeled data points (too many overlaps). Consider
+    ## Warning: ggrepel: 48 unlabeled data points (too many overlaps). Consider
     ## increasing max.overlaps
 
 ![](sexe_files/figure-gfm/pvsnp-1.png)<!-- -->
 
 ## IDEX, ISITE
 
-    ## Warning: Removed 235 rows containing non-finite values (`stat_boxplot()`).
+    ## Warning: Removed 221 rows containing non-finite values (`stat_boxplot()`).
 
 ![](sexe_files/figure-gfm/map-1.png)<!-- -->
 

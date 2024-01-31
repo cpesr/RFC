@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2023-11-27
+2024-01-22
 
 ## Données
 
@@ -110,3 +110,5 @@ sur le taux d’emploi salarié en France
 <img src="insertion-pro-tes_files/figure-gfm/lorraine2-1.png" width="672" />
 
 ## Dispersion
+
+<img src="insertion-pro-tes_files/figure-gfm/disp-1.png" width="672" />
