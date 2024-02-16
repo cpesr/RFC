@@ -13,6 +13,7 @@ theme_cpesr_setup(authors = "Julien Gossa", source="fr-esr-sise-effectifs-d-etud
 ```
 
 ```{r etl, eval=FALSE}
+
 read.sise.2019 <- function(file, rentrée.max = Inf) {
   df <- read.csv2(file, dec=".", stringsAsFactors=TRUE) %>%
     filter(RENTREE < rentrée.max) %>%
@@ -31,7 +32,9 @@ read.sise.2019 <- function(file, rentrée.max = Inf) {
       LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
       NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
     ) %>%
-    summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE)) %>%
+    summarise(
+      Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE),
+      Inscriptions = sum(Nombre.total.d.étudiants.inscrits..inscriptions.principales.et.secondes..hors.étudiants.inscrits.en.parallèle.en.CPGE, na.rm = TRUE)) %>%
     ungroup()
   return(df)
 }
@@ -57,7 +60,9 @@ read.sise <- function(file, rentrée.max = Inf) {
       LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
       NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
     ) %>%
-    summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE)) %>%
+    summarise(
+      Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE),
+      Inscriptions = sum(Nombre.total.d.étudiants.inscrits..inscriptions.principales.et.secondes..hors.étudiants.inscrits.en.parallèle.en.CPGE, na.rm = TRUE)) %>%
     ungroup()
 }
 
