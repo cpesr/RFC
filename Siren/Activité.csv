@@ -1,0 +1,42 @@
+nomenclatureActivitePrincipale;activitePrincipale;ActivitéSource;Activité
+NAP;92.11;Enseignement préscolaire (services non marchands à caractère public);Enseignement pré-primaire
+NAP;92.12;Enseignement élémentaire (services non marchands à caractère public);Enseignement primaire
+NAP;92.13;Enseignement du second degré premier cycle (services non marchands à caractère public);Enseignement secondaire général
+NAP;92.14;Enseignement du second degré second cycle (services non marchands à caractère public);Enseignement secondaire général
+NAP;92.15;Enseignement supérieur (services non marchands à caractère public);Enseignement supérieur
+NAP;92.16;Enseignement artistique (services non marchands à caractère public);Enseignement culturel
+NAP;92.17;Formation de fonctionnaires (services non marchands à caractère public);Autres enseignements
+NAP;92.18;Formation des adultes et formation continue (services non marchands à caractère public);Formation continue d'adultes
+NAP;92.21;Enseignement.(services non marchands à caractère privé);Autres enseignements
+NAP;82.01;Enseignement général primaire et secondaire (services marchands);Enseignement primaire
+NAP;82.02;Formation des adultes et formation continue (services marchands);Formation continue d'adultes
+NAP;82.03;Autres enseignements spécialisés et professionnels et enseignement supérieur (services marchands);Enseignement supérieur
+NAP;82.04;Enseignement par correspondance (services marchands);Autres enseignements
+NAP;82.05;Professeurs indépendants;Activités de soutien à l'enseignement
+NAP;82.06;Auto-écoles, écoles de pilotage;Enseignement de la conduite
+NAF1993;80.1Z;Enseignement primaire;Enseignement primaire
+NAF1993;80.2A;Enseignement secondaire général;Enseignement secondaire général
+NAF1993;80.2C;Enseignement secondaire technique ou professionnel;Enseignement secondaire technique ou professionnel
+NAF1993;80.3Z;Enseignement supérieur;Enseignement supérieur
+NAF1993;80.4A;Ecoles de conduite;Enseignement de la conduite
+NAF1993;80.4C;Formation des adultes et formation continue;Formation continue d'adultes
+NAF1993;80.4D;Autres enseignements;Autres enseignements
+NAFRev1;80.1Z;Enseignement primaire;Enseignement primaire
+NAFRev1;80.2A;Enseignement secondaire général;Enseignement secondaire général
+NAFRev1;80.2C;Enseignement secondaire technique ou professionnel;Enseignement secondaire technique ou professionnel
+NAFRev1;80.3Z;Enseignement supérieur;Enseignement supérieur
+NAFRev1;80.4A;Ecoles de conduite;Enseignement de la conduite
+NAFRev1;80.4C;Formation des adultes et formation continue;Formation continue d'adultes
+NAFRev1;80.4D;Autres enseignements;Autres enseignements
+NAFRev2;85.10Z;Enseignement pré-primaire;Enseignement pré-primaire
+NAFRev2;85.20Z;Enseignement primaire;Enseignement primaire
+NAFRev2;85.31Z;Enseignement secondaire général;Enseignement secondaire général
+NAFRev2;85.32Z;Enseignement secondaire technique ou professionnel;Enseignement secondaire technique ou professionnel
+NAFRev2;85.41Z;Enseignement post-secondaire non supérieur;Enseignement post-secondaire non supérieur
+NAFRev2;85.42Z;Enseignement supérieur;Enseignement supérieur
+NAFRev2;85.51Z;Enseignement de disciplines sportives et d'activités de loisirs;Enseignement de disciplines sportives et d'activités de loisirs
+NAFRev2;85.52Z;Enseignement culturel;Enseignement culturel
+NAFRev2;85.53Z;Enseignement de la conduite;Enseignement de la conduite
+NAFRev2;85.59A;Formation continue d'adultes;Formation continue d'adultes
+NAFRev2;85.59B;Autres enseignements;Autres enseignements
+NAFRev2;85.60Z;Activités de soutien à l'enseignement;Activités de soutien à l'enseignement
