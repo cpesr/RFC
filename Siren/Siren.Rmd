@@ -84,7 +84,10 @@ sirene <- read.csv("StockUniteLegale_utf8_ens.csv", colClasses = "character", na
         trancheEffectifsUniteLegale, categorieEntreprise, categorieJuridiqueUniteLegale,
         etatAdministratifUniteLegale, dateDebut,
         activitePrincipaleUniteLegale, nomenclatureActivitePrincipaleUniteLegale,
-        caractereEmployeurUniteLegale) %>%
+        caractereEmployeurUniteLegale) 
+  
+sirene_formateur <- function(.x) {
+  .x %>%
   # Fixes
   mutate(caractereEmployeurUniteLegale = (caractereEmployeurUniteLegale == "O")) %>%
   mutate(trancheEffectifsUniteLegale = ifelse(
@@ -98,15 +101,9 @@ sirene <- read.csv("StockUniteLegale_utf8_ens.csv", colClasses = "character", na
   mutate(categorieEntreprise = factor(categorieEntreprise, 
                                       levels = c("PME","ETI","GE")) ) %>%
   left_join(tranches, by = join_by(trancheEffectifsUniteLegale == Code)) %>%
-  left_join(naf, by = join_by(
-    nomenclatureActivitePrincipaleUniteLegale == nomenclatureActivitePrincipale,
-    activitePrincipaleUniteLegale == activitePrincipale)) %>%
-  filter(!is.na(Activité)) %>%
   left_join(cj, by = join_by(categorieJuridiqueUniteLegale == Code)) %>%
   left_join(rncp.siren) %>%
-  left_join(cpesr.siren %>% select(siren,NomMESR=Etablissement))
-
-sirene <- sirene %>%
+  left_join(cpesr.siren %>% select(siren,NomMESR=Etablissement)) %>%
   mutate(Categorie = case_when(
     !is.na(NomMESR) ~ "MESR",
     categorieJuridiqueSecteur == "Public" ~ "Public hors MESR",
@@ -115,10 +112,30 @@ sirene <- sirene %>%
     categorieJuridiqueGroupee == "Personne morale de droit étranger" ~ "Entreprise de droit étranger",
     TRUE ~ "Autre entreprise"
   )) %>%
-  mutate(Categorie = factor(Categorie, levels=c("MESR","Public hors MESR", "Privé avec RNCP", "Entreprise individuelle", "Entreprise de droit étranger", "Autre entreprise")))
+  mutate(Categorie = factor(Categorie, levels=c("MESR","Public hors MESR", "Privé avec RNCP", "Entreprise individuelle", "Entreprise de droit étranger", "Autre entreprise"))) %>%
+  left_join(naf, by = join_by(
+    nomenclatureActivitePrincipaleUniteLegale == nomenclatureActivitePrincipale,
+    activitePrincipaleUniteLegale == activitePrincipale))
+}
+
+sirene <- sirene_formateur(sirene) %>%
+  filter(!is.na(Activité)) 
 
 save(sirene, file="sirene.Rdata")
 ```
+
+```{r load.full, eval=FALSE}
+sirene.full <- read.csv("StockUniteLegale_utf8_shrink.csv", colClasses = "character", na.strings = c("","[ND]")) %>%
+  filter(etatAdministratifUniteLegale == "A") %>%
+  summarise(Nombre = n(),
+            .by = c(trancheEffectifsUniteLegale,etatAdministratifUniteLegale,categorieEntreprise,categorieJuridiqueUniteLegale,activitePrincipaleUniteLegale,nomenclatureActivitePrincipaleUniteLegale,caractereEmployeurUniteLegale)) %>%
+  mutate(siren = as.character(row_number())) %>%
+sirene_formateur()
+  
+save(sirene.full,file="sirene_full.Rdata")
+```
+
+
 
 ```{bakup}
 # sirene_hist <- read.csv("StockEtablissementHistorique_utf8_ens.csv", colClasses = "character", na.strings = c("","[ND]")) %>%
@@ -170,8 +187,11 @@ save(sirene, file="sirene.Rdata")
 ```
 
 
+
+
 ```{r load.save}
 load("sirene.Rdata")
+load("sirene_full.Rdata")
 activité.sup = c("Formation continue d'adultes","Enseignement supérieur","Enseignement de disciplines sportives et d'activités de loisirs","Autres enseignements")
 ```
 
@@ -290,7 +310,7 @@ sirene %>%
 ```
 
 
-```{r cat.all.txt}
+```{r cat.all.txt, results='asis'}
 sirene %>%
   filter(etatAdministratifUniteLegale == "A") %>%
   group_by(
@@ -302,7 +322,8 @@ sirene %>%
     MESR = !is.na(NomMESR),
     RNCP = !is.na(NomRNCP)
   ) %>%
-  summarise(Nombre = n()) %>% View()
+  summarise(Nombre = n()) %>%
+  spoiler_table("Toutes catégories")
 ```
 
 ## Evolutions
@@ -398,3 +419,66 @@ sirene %>%
   nombre_ouverts_zooms()
 ```
 
+
+## Listes
+
+```{r etr, results='asis'}
+sirene %>%
+  filter(Categorie == "Entreprise de droit étranger") %>%
+  spoiler_table("Entreprises de droit étranger", trim = Inf)
+```
+
+
+## Comparaisons
+
+```{r cmp.categorie}
+bind_rows(sirene %>% mutate(Groupe="Enseignement",Nombre=1), 
+          sirene.full %>% mutate(Groupe="Tout")) %>%
+  summarise(Nombre = sum(Nombre), .by=c(Groupe,categorieJuridique)) %>%
+  mutate(Part = Nombre/sum(Nombre), .by=Groupe) %>%
+  filter(!is.na(categorieJuridique)) %>%
+  ggplot(aes(y=reorder(categorieJuridique,Part),x=Part,fill=Groupe)) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels=scales::percent) +
+  theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
+  ggtitle("Comparaison des proportions d'entreprises par statut")
+```
+
+```{r cmp.categorie.2}
+sirene.full %>%
+  mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
+  summarise(Nombre = sum(Nombre), .by=c(Activité,categorieJuridique)) %>%
+  mutate(Part = Nombre/sum(Nombre), .by=Activité) %>%
+  filter(!is.na(categorieJuridique)) %>%
+  ggplot(aes(y=reorder(categorieJuridique,Part),x=Part,fill=Activité)) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels=scales::percent) +
+  theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
+  ggtitle("Comparaison des proportions d'entreprises par statut")
+```
+
+```{r cmp.categorie.3, results='asis'}
+df <- bind_rows(
+  sirene.full %>%
+    mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
+    summarise(Nombre = sum(Nombre), .by=c(Activité,categorieJuridique)) %>%
+    mutate(Part = Nombre/sum(Nombre), .by=categorieJuridique) %>%
+    filter(!is.na(categorieJuridique)),
+  sirene.full %>%
+    mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
+    summarise(Nombre = sum(Nombre), .by=c(Activité)) %>%
+    mutate(Part = Nombre/sum(Nombre)) %>%
+    mutate(categorieJuridique = "Tout")
+  ) %>%
+  filter(Activité == "Enseignement") 
+
+spoiler_table(df, trim = Inf)
+
+print(df %>%
+  ggplot(aes(y=reorder(categorieJuridique,Part),x=Part,fill=Activité)) +
+  geom_col() +
+  scale_x_continuous(labels=scales::percent) +
+  theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
+  ggtitle("Part des entreprises dans le secteur Enseignement par statut") 
+)
+```
