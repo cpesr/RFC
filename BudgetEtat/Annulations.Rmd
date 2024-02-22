@@ -1,0 +1,181 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049180270")
+```
+
+## Données 
+
+- https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049180270
+- https://data.economie.gouv.fr/explore/dataset/plf-2024-depenses-2024-selon-nomenclatures-destination-et-nature/export/
+
+```{r load}
+plf <- read.csv2("plf-2024-depenses-2024-selon-nomenclatures-destination-et-nature.csv", dec='.')
+
+annulations <- read.csv2("Décret n° 2024-124 du 21 février 2024 portant annulation de crédits.csv") %>%
+  head(-2) %>%
+  rename(
+     "Intitulé" = INTITULÉS.DE.LA.MISSION.ET.DU.PROGRAMME...OU.DE.LA.DOTATION,
+    "Programme" = NUMÉRO..du.programme..ou.de.la.dotation,
+    "AE.annulé" = AUTORISATIONS..d.engagement.annulées, 
+    "CP.annulé" = CRÉDITS..de.paiement.annulés
+  ) %>%
+  mutate(Mission = ifelse(is.na(Programme) & Intitulé != "Dont titre 2", Intitulé, NA)) %>%
+  fill(Mission) %>%
+  filter(Intitulé == "Dont titre 2" | !is.na(Programme)) %>%
+  fill(Programme) %>%
+  mutate(Libellé.Programme = ifelse(Intitulé != "Dont titre 2", Intitulé, NA)) %>%
+  fill(Libellé.Programme) %>%
+  mutate(across(c(AE.annulé, CP.annulé), ~ ifelse(!is.na(lead(Intitulé)) & lead(Intitulé) == "Dont titre 2", .x - lead(.x), .x)))%>%
+  mutate(Titre = ifelse(Intitulé == "Dont titre 2","Dépenses de personnel","Autres")) %>%
+  mutate(Annulations = ifelse(is.na(AE.annulé),CP.annulé,AE.annulé)) %>%
+  left_join(
+    plf %>% 
+      mutate(Titre = ifelse(Code.Titre==2,"Dépenses de personnel","Autres")) %>%
+      summarise(
+        AE.PLF = sum(AE..PLF),
+        CP.PLF = sum(CP.PLF),
+        .by = c(Programme,Titre)
+      ) %>%
+      mutate(Crédits = pmax(AE.PLF,CP.PLF))
+  )
+
+```
+
+## Explorations
+
+```{r top, fig.asp=3/4}
+annulations %>%
+  summarise(Annulations = sum(Annulations), .by=c(Mission,Titre)) %>%
+  ggplot(aes(x=Annulations,y=reorder(Mission,Annulations),fill=Titre)) +
+  geom_col() +
+  scale_x_continuous(labels = ~ paste(.x/1e6,"M€")) +
+  scale_y_discrete(name = "Mission") +
+  scale_fill_brewer(palette = "Set2") +
+  ggtitle("Annulations de crédits par mission") +
+  cpesr_cap()
+```
+
+```{r top.part, fig.asp=3/4}
+annulations %>%
+  summarise(Annulations = sum(Annulations), Crédits = sum(Crédits), .by=c(Mission)) %>%
+  mutate(Part.annulée = Annulations/Crédits) %>% 
+  ggplot(aes(x=Part.annulée,y=reorder(Mission,Part.annulée, FUN=sum),fill=Part.annulée)) +
+  geom_col() +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_discrete(name = "Mission") +
+  scale_fill_distiller(palette="Reds", direction=0) +
+  ggtitle("Part des crédits annulés par mission") +
+  cpesr_cap()
+```
+
+
+```{r top2, fig.asp=3/4}
+annulations %>%
+  summarise(Annulations = sum(Annulations), .by=c(Mission,Libellé.Programme)) %>%
+  arrange(desc(Annulations)) %>%
+  head(15) %>%
+  ggplot(aes(x=Annulations,y=reorder(Libellé.Programme,Annulations),fill=Mission)) +
+  geom_col() +
+  scale_x_continuous(labels = ~ paste(.x/1e6,"M€")) +
+  scale_y_discrete(name = "Programme") +
+  scale_fill_brewer(palette = "Set1",guide = guide_legend(ncol=2,)) +
+  ggtitle("Annulations de crédits par programme") +
+  cpesr_cap() +
+  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+```
+
+
+
+
+```{r top2.part, fig.asp=3/4}
+annulations %>%
+  summarise(Annulations = sum(Annulations), Crédits = sum(Crédits), .by=c(Mission,Libellé.Programme)) %>%
+  mutate(Part.annulée = Annulations/Crédits) %>% 
+  arrange(desc(Part.annulée)) %>%
+  head(15) %>%
+  ggplot(aes(x=Part.annulée,y=reorder(Libellé.Programme,Part.annulée),fill=Mission)) +
+  geom_col(color="black",size=0.1) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_discrete(name = "Programme") +
+  scale_fill_brewer(palette = "Set3",guide = guide_legend(ncol=2,)) +
+  ggtitle("Annulations de crédits par programme (TOP 15)") +
+  cpesr_cap() +
+  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+```
+
+
+```{r mires.part, fig.asp=9/16}
+annulations %>%
+  filter(Mission == "Recherche et enseignement supérieur") %>%
+  summarise(Annulations = sum(Annulations), Crédits = sum(Crédits), .by=c(Mission,Libellé.Programme)) %>%
+  mutate(Part.annulée = Annulations/Crédits) %>% 
+  arrange(desc(Part.annulée)) %>%
+  ggplot(aes(x=Part.annulée,y=reorder(Libellé.Programme,Part.annulée),fill=Mission)) +
+  geom_col(color="black",size=0.1) +
+  scale_x_continuous(labels = scales::percent, "Part de crédits annulée") +
+  scale_y_discrete(name = "Programme") +
+  scale_fill_brewer(palette = "Set3",guide = guide_legend(ncol=2,)) +
+  ggtitle("Annulations de crédits par programme (MIRES)") +
+  cpesr_cap() +
+  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+```
+
+
+```{r mires, fig.asp=9/16}
+annulations %>%
+  filter(Mission == "Recherche et enseignement supérieur") %>%
+  summarise(Annulations = sum(Annulations), .by=c(Libellé.Programme,Titre)) %>%
+  ggplot(aes(x=Annulations,y=reorder(Libellé.Programme,Annulations),fill=Titre)) +
+  geom_col() +
+  scale_x_continuous(labels = ~ paste(.x/1e6), name="Annulation (M€)") +
+  scale_y_discrete(name = "Programme") +
+  scale_fill_brewer(palette = "Set2") +
+  ggtitle("Annulations de crédits par programme (MIRES)") +
+  cpesr_cap()+
+  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+```
+
+
+```{r scol.part, fig.asp=9/16}
+annulations %>%
+  filter(Mission == "Enseignement scolaire") %>%
+  summarise(Annulations = sum(Annulations), Crédits = sum(Crédits), .by=c(Mission,Libellé.Programme)) %>%
+  mutate(Part.annulée = Annulations/Crédits) %>% 
+  arrange(desc(Part.annulée)) %>%
+  ggplot(aes(x=Part.annulée,y=reorder(Libellé.Programme,Part.annulée),fill=Mission)) +
+  geom_col(color="black",size=0.1) +
+  scale_x_continuous(labels = scales::percent, "Part de crédits annulée") +
+  scale_y_discrete(name = "Programme") +
+  scale_fill_brewer(palette = "Set3",guide = guide_legend(ncol=2,)) +
+  ggtitle("Annulations de crédits par programme (Scolaire)") +
+  cpesr_cap() +
+  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+```
+
+
+```{r scol, fig.asp=9/16}
+annulations %>%
+  filter(Mission == "Enseignement scolaire") %>%
+  summarise(Annulations = sum(Annulations), .by=c(Libellé.Programme,Titre)) %>%
+  ggplot(aes(x=Annulations,y=reorder(Libellé.Programme,Annulations),fill=Titre)) +
+  geom_col() +
+  scale_x_continuous(labels = ~ paste(.x/1e6), name="Annulation (M€)") +
+  scale_y_discrete(name = "Programme") +
+  scale_fill_brewer(palette = "Set2") +
+  ggtitle("Annulations de crédits par programme (Scolaire)") +
+  cpesr_cap()+
+  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+```

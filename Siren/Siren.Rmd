@@ -482,3 +482,57 @@ print(df %>%
   ggtitle("Part des entreprises dans le secteur Enseignement par statut") 
 )
 ```
+
+
+```{r cmp.categorie.3, results='asis'}
+df <- bind_rows(
+  sirene.full %>%
+    mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
+    summarise(Nombre = sum(Nombre), .by=c(Activité,categorieJuridique)) %>%
+    mutate(Part = Nombre/sum(Nombre), .by=categorieJuridique) %>%
+    filter(!is.na(categorieJuridique)),
+  sirene.full %>%
+    mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
+    summarise(Nombre = sum(Nombre), .by=c(Activité)) %>%
+    mutate(Part = Nombre/sum(Nombre)) %>%
+    mutate(categorieJuridique = "Tout")
+  ) %>%
+  filter(Activité == "Enseignement") 
+
+spoiler_table(df, trim = Inf)
+
+print(df %>%
+  ggplot(aes(y=reorder(categorieJuridique,Part),x=Part,fill=Activité)) +
+  geom_col() +
+  scale_x_continuous(labels=scales::percent) +
+  theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
+  ggtitle("Part des entreprises dans le secteur Enseignement par statut") 
+)
+```
+
+
+```{r categorie.part, fig.asp=3/4}
+sirene %>%
+  filter(etatAdministratifUniteLegale == "A") %>%
+  summarise(Nombre = n(), .by=c(Activité,Categorie)) %>% 
+  mutate(Part = Nombre/sum(Nombre),.by=Activité) %>%
+  ggplot(aes(x=Categorie, y=Part,fill=Categorie)) + 
+    geom_col() +
+    #scale_x_discrete(limits=rev) +
+    facet_wrap(Activité~., labeller = labeller(Activité = label_wrap_gen(25))) +
+  theme(axis.text.x=element_blank())
+```
+
+```{r categorie.part2, fig.asp=3/4}
+sirene %>%
+  filter(etatAdministratifUniteLegale == "A") %>%
+  filter(Categorie != "Entreprise individuelle") %>%
+  summarise(Nombre = n(), .by=c(Activité,Categorie)) %>% 
+  mutate(Part = Nombre/sum(Nombre),.by=Activité) %>%
+  ggplot(aes(x=Categorie, y=Part,fill=Categorie)) + 
+    geom_col() +
+    #scale_x_discrete(limits=rev) +
+    #coord_cartesian(ylim=c(0,0.1)) +
+    facet_wrap(Activité~., labeller = labeller(Activité = label_wrap_gen(25))) +
+  theme(axis.text.x=element_blank())
+```
