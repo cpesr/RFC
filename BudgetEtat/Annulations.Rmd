@@ -24,7 +24,7 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://www.legifrance.gou
 ```{r load}
 plf <- read.csv2("plf-2024-depenses-2024-selon-nomenclatures-destination-et-nature.csv", dec='.')
 
-annulations <- read.csv2("Décret n° 2024-124 du 21 février 2024 portant annulation de crédits.csv") %>%
+annulations.raw <- read.csv2("Décret n° 2024-124 du 21 février 2024 portant annulation de crédits.csv") %>%
   head(-2) %>%
   rename(
      "Intitulé" = INTITULÉS.DE.LA.MISSION.ET.DU.PROGRAMME...OU.DE.LA.DOTATION,
@@ -40,17 +40,23 @@ annulations <- read.csv2("Décret n° 2024-124 du 21 février 2024 portant annul
   fill(Libellé.Programme) %>%
   mutate(across(c(AE.annulé, CP.annulé), ~ ifelse(!is.na(lead(Intitulé)) & lead(Intitulé) == "Dont titre 2", .x - lead(.x), .x)))%>%
   mutate(Titre = ifelse(Intitulé == "Dont titre 2","Dépenses de personnel","Autres")) %>%
-  mutate(Annulations = ifelse(is.na(AE.annulé),CP.annulé,AE.annulé)) %>%
-  left_join(
-    plf %>% 
+  mutate(Annulations = ifelse(is.na(AE.annulé),CP.annulé,AE.annulé)) 
+
+plf.sum <- plf %>% 
       mutate(Titre = ifelse(Code.Titre==2,"Dépenses de personnel","Autres")) %>%
       summarise(
         AE.PLF = sum(AE..PLF),
         CP.PLF = sum(CP.PLF),
-        .by = c(Programme,Titre)
+        .by = c(Mission,Programme,Libellé.Programme,Titre)
       ) %>%
       mutate(Crédits = pmax(AE.PLF,CP.PLF))
-  )
+   
+annulations.full <- left_join(
+  plf.sum,
+  annulations.raw %>% select(Programme,Titre,AE.annulé,CP.annulé,Annulations) ) %>%
+  mutate(across(c(AE.annulé,CP.annulé,Annulations), ~ replace_na(.x,0)))
+
+annulations <- annulations.full %>% filter(Annulations > 0)
 
 ```
 
@@ -117,65 +123,47 @@ annulations %>%
 ```
 
 
-```{r mires.part, fig.asp=9/16}
-annulations %>%
-  filter(Mission == "Recherche et enseignement supérieur") %>%
-  summarise(Annulations = sum(Annulations), Crédits = sum(Crédits), .by=c(Mission,Libellé.Programme)) %>%
-  mutate(Part.annulée = Annulations/Crédits) %>% 
-  arrange(desc(Part.annulée)) %>%
-  ggplot(aes(x=Part.annulée,y=reorder(Libellé.Programme,Part.annulée),fill=Mission)) +
-  geom_col(color="black",size=0.1) +
-  scale_x_continuous(labels = scales::percent, "Part de crédits annulée") +
-  scale_y_discrete(name = "Programme") +
-  scale_fill_brewer(palette = "Set3",guide = guide_legend(ncol=2,)) +
-  ggtitle("Annulations de crédits par programme (MIRES)") +
-  cpesr_cap() +
-  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+## Auto
+
+```{r fun.part, fig.asp=9/16}
+annulations_part <- function(mission) {
+  annulations.full %>%
+    filter(Mission == mission) %>%
+    summarise(Annulations = sum(Annulations), Crédits = sum(Crédits), .by=c(Mission,Libellé.Programme)) %>%
+    mutate(Part.annulée = Annulations/Crédits) %>% 
+    arrange(desc(Part.annulée)) %>%
+    ggplot(aes(x=Part.annulée,y=reorder(Libellé.Programme,Part.annulée),fill=Mission)) +
+    geom_col(color="black",size=0.1) +
+    scale_x_continuous(labels = scales::percent, "Part de crédits annulée") +
+    scale_y_discrete(name = "Programme", labels= ~ str_wrap(.x,40)) +
+    scale_fill_brewer(palette = "Set3",guide = guide_legend(ncol=2,)) +
+    ggtitle(paste("Mission",mission), subtitle = "Part des crédits annulés par programme") +
+    #cpesr_cap() +
+    theme(plot.title = element_text(hjust=1), plot.subtitle = element_text(hjust=1), 
+          legend.justification = c(1,0), legend.position = "None")
+}
+
+annulations_prog <- function(mission) {
+  annulations.full %>%
+    filter(Mission == mission) %>%
+    summarise(Annulations = sum(Annulations), .by=c(Libellé.Programme,Titre)) %>%
+    ggplot(aes(x=Annulations,y=reorder(Libellé.Programme,Annulations),fill=Titre)) +
+    geom_col() +
+    scale_x_continuous(labels = ~ paste(.x/1e6), name="Annulation (M€)") +
+    scale_y_discrete(name = "Programme", labels= ~ str_wrap(.x,40)) +
+    scale_fill_brewer(palette = "Set2") +
+    ggtitle(paste("Mission",mission), subtitle = "Annulations de crédits par programme") +
+    #cpesr_cap()+
+    theme(plot.title = element_text(hjust=1), 
+          plot.subtitle = element_text(hjust=1), 
+          legend.justification = c(1,0))
+}
 ```
 
 
-```{r mires, fig.asp=9/16}
-annulations %>%
-  filter(Mission == "Recherche et enseignement supérieur") %>%
-  summarise(Annulations = sum(Annulations), .by=c(Libellé.Programme,Titre)) %>%
-  ggplot(aes(x=Annulations,y=reorder(Libellé.Programme,Annulations),fill=Titre)) +
-  geom_col() +
-  scale_x_continuous(labels = ~ paste(.x/1e6), name="Annulation (M€)") +
-  scale_y_discrete(name = "Programme") +
-  scale_fill_brewer(palette = "Set2") +
-  ggtitle("Annulations de crédits par programme (MIRES)") +
-  cpesr_cap()+
-  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
-```
-
-
-```{r scol.part, fig.asp=9/16}
-annulations %>%
-  filter(Mission == "Enseignement scolaire") %>%
-  summarise(Annulations = sum(Annulations), Crédits = sum(Crédits), .by=c(Mission,Libellé.Programme)) %>%
-  mutate(Part.annulée = Annulations/Crédits) %>% 
-  arrange(desc(Part.annulée)) %>%
-  ggplot(aes(x=Part.annulée,y=reorder(Libellé.Programme,Part.annulée),fill=Mission)) +
-  geom_col(color="black",size=0.1) +
-  scale_x_continuous(labels = scales::percent, "Part de crédits annulée") +
-  scale_y_discrete(name = "Programme") +
-  scale_fill_brewer(palette = "Set3",guide = guide_legend(ncol=2,)) +
-  ggtitle("Annulations de crédits par programme (Scolaire)") +
-  cpesr_cap() +
-  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
-```
-
-
-```{r scol, fig.asp=9/16}
-annulations %>%
-  filter(Mission == "Enseignement scolaire") %>%
-  summarise(Annulations = sum(Annulations), .by=c(Libellé.Programme,Titre)) %>%
-  ggplot(aes(x=Annulations,y=reorder(Libellé.Programme,Annulations),fill=Titre)) +
-  geom_col() +
-  scale_x_continuous(labels = ~ paste(.x/1e6), name="Annulation (M€)") +
-  scale_y_discrete(name = "Programme") +
-  scale_fill_brewer(palette = "Set2") +
-  ggtitle("Annulations de crédits par programme (Scolaire)") +
-  cpesr_cap()+
-  theme(plot.title = element_text(hjust=1),legend.justification = c(1,0))
+```{r loop, fig.asp=9/16}
+for(mission in unique(annulations$Mission)) {
+  print(annulations_prog(mission))
+  print(annulations_part(mission))
+}
 ```
