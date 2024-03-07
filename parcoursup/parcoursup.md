@@ -325,3 +325,9 @@ Voir les données
     ## Warning: Removed 1 rows containing missing values (`geom_point()`).
 
 ![](parcoursup_files/figure-gfm/deg.tda.taille-1.png)<!-- -->
+
+![](parcoursup_files/figure-gfm/staps.tda-1.png)<!-- -->
+
+    ## Warning: Removed 12 rows containing non-finite values (`stat_boxplot()`).
+
+![](parcoursup_files/figure-gfm/staps.tda.bac-1.png)<!-- -->

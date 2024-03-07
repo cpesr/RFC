@@ -105,14 +105,14 @@ sirene_formateur <- function(.x) {
   left_join(rncp.siren) %>%
   left_join(cpesr.siren %>% select(siren,NomMESR=Etablissement)) %>%
   mutate(Categorie = case_when(
-    !is.na(NomMESR) ~ "MESR",
+    !is.na(NomMESR) ~ "Privé dans MESR",
     categorieJuridiqueSecteur == "Public" ~ "Public hors MESR",
     !is.na(NomRNCP) ~ "Privé avec RNCP",
-    trancheEffectifsUniteLegale %in% c("NN","00","01") ~ "Entreprise individuelle",
-    categorieJuridiqueGroupee == "Personne morale de droit étranger" ~ "Entreprise de droit étranger",
-    TRUE ~ "Autre entreprise"
+    trancheEffectifsUniteLegale %in% c("NN","00","01") ~ "Privé individuel",
+    categorieJuridiqueGroupee == "Personne morale de droit étranger" ~ "Privé droit étranger",
+    TRUE ~ "Privé autre"
   )) %>%
-  mutate(Categorie = factor(Categorie, levels=c("MESR","Public hors MESR", "Privé avec RNCP", "Entreprise individuelle", "Entreprise de droit étranger", "Autre entreprise"))) %>%
+  mutate(Categorie = factor(Categorie, levels=c("Privé dans MESR","Public hors MESR", "Privé avec RNCP", "Privé individuel", "Privé droit étranger", "Privé autre"))) %>%
   left_join(naf, by = join_by(
     nomenclatureActivitePrincipaleUniteLegale == nomenclatureActivitePrincipale,
     activitePrincipaleUniteLegale == activitePrincipale))
@@ -384,6 +384,7 @@ nombre_ouverts_plot <- function(.x) {
     scale_y_continuous(labels=~ paste(.x/1e3,"k")) +
     facet_wrap(Activité~., labeller = labeller(Activité = label_wrap_gen(25))) +
     ggtitle("Nombre d'établissements dans l'activité Enseignement") +
+    theme(legend.title = element_blank()) +
     cpesr_cap()
 }
 
@@ -414,7 +415,7 @@ sirene %>%
 
 ```{r nombre.horsindiv, fig.asp=3/4}
 sirene %>% 
-  filter(Categorie != "Entreprise individuelle") %>%
+  filter(Categorie != "Privé individuel") %>%
   mutate(Indicateur = Categorie) %>%
   nombre_ouverts_zooms()
 ```
@@ -424,29 +425,16 @@ sirene %>%
 
 ```{r etr, results='asis'}
 sirene %>%
-  filter(Categorie == "Entreprise de droit étranger") %>%
-  spoiler_table("Entreprises de droit étranger", trim = Inf)
+  filter(Categorie == "Privé droit étranger") %>%
+  spoiler_table("Privé droit étranger", trim = Inf)
 ```
 
 
 ## Comparaisons
 
 ```{r cmp.categorie}
-bind_rows(sirene %>% mutate(Groupe="Enseignement",Nombre=1), 
-          sirene.full %>% mutate(Groupe="Tout")) %>%
-  summarise(Nombre = sum(Nombre), .by=c(Groupe,categorieJuridique)) %>%
-  mutate(Part = Nombre/sum(Nombre), .by=Groupe) %>%
-  filter(!is.na(categorieJuridique)) %>%
-  ggplot(aes(y=reorder(categorieJuridique,Part),x=Part,fill=Groupe)) +
-  geom_col(position = "dodge") +
-  scale_x_continuous(labels=scales::percent) +
-  theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
-  ggtitle("Comparaison des proportions d'entreprises par statut")
-```
-
-```{r cmp.categorie.2}
-sirene.full %>%
-  mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
+bind_rows(sirene %>% mutate(Activité="Enseignement",Nombre=1), 
+          sirene.full %>% mutate(Activité="Toutes")) %>%
   summarise(Nombre = sum(Nombre), .by=c(Activité,categorieJuridique)) %>%
   mutate(Part = Nombre/sum(Nombre), .by=Activité) %>%
   filter(!is.na(categorieJuridique)) %>%
@@ -454,7 +442,22 @@ sirene.full %>%
   geom_col(position = "dodge") +
   scale_x_continuous(labels=scales::percent) +
   theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
-  ggtitle("Comparaison des proportions d'entreprises par statut")
+  ggtitle("Part des statuts d'entreprise dans chaque groupe d'activité") +
+  cpesr_cap()
+```
+
+```{r cmp.categorie.2}
+sirene.full %>%
+  mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
+  summarise(Nombre = sum(Nombre), .by=c(Activité,categorieJuridique)) %>%
+  mutate(Part = Nombre/sum(Nombre), .by=c(categorieJuridique)) %>%
+  filter(!is.na(categorieJuridique)) %>%
+  ggplot(aes(y=reorder(categorieJuridique,Part),x=Part,fill=Activité)) +
+  geom_col(position = "dodge") +
+  scale_x_continuous(labels=scales::percent) +
+  theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
+  ggtitle("Par ") +
+  cpesr_cap()
 ```
 
 ```{r cmp.categorie.3, results='asis'}
@@ -483,32 +486,6 @@ print(df %>%
 )
 ```
 
-
-```{r cmp.categorie.3, results='asis'}
-df <- bind_rows(
-  sirene.full %>%
-    mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
-    summarise(Nombre = sum(Nombre), .by=c(Activité,categorieJuridique)) %>%
-    mutate(Part = Nombre/sum(Nombre), .by=categorieJuridique) %>%
-    filter(!is.na(categorieJuridique)),
-  sirene.full %>%
-    mutate(Activité = ifelse(is.na(Activité),"Autre","Enseignement")) %>%
-    summarise(Nombre = sum(Nombre), .by=c(Activité)) %>%
-    mutate(Part = Nombre/sum(Nombre)) %>%
-    mutate(categorieJuridique = "Tout")
-  ) %>%
-  filter(Activité == "Enseignement") 
-
-spoiler_table(df, trim = Inf)
-
-print(df %>%
-  ggplot(aes(y=reorder(categorieJuridique,Part),x=Part,fill=Activité)) +
-  geom_col() +
-  scale_x_continuous(labels=scales::percent) +
-  theme(axis.title.y = element_blank(), plot.title = element_text(hjust=1)) +
-  ggtitle("Part des entreprises dans le secteur Enseignement par statut") 
-)
-```
 
 
 ```{r categorie.part, fig.asp=3/4}
@@ -526,7 +503,7 @@ sirene %>%
 ```{r categorie.part2, fig.asp=3/4}
 sirene %>%
   filter(etatAdministratifUniteLegale == "A") %>%
-  filter(Categorie != "Entreprise individuelle") %>%
+  filter(Categorie != "Privé individuel") %>%
   summarise(Nombre = n(), .by=c(Activité,Categorie)) %>% 
   mutate(Part = Nombre/sum(Nombre),.by=Activité) %>%
   ggplot(aes(x=Categorie, y=Part,fill=Categorie)) + 
