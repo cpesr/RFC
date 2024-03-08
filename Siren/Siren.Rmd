@@ -45,7 +45,8 @@ cj <- left_join(
 
 cpesr.siren <- read.csv2("fr-cpesr-siren.csv") %>%
   slice_head(n=1,by=siren) %>%
-  select(siren,Etablissement)
+  select(siren,Etablissement,Secteur) %>%
+  filter(Secteur != "privé")
 
 tranches <- read.csv("TranchesEffectif.csv", colClasses = "character", stringsAsFactors = TRUE) %>%
   mutate(TrancheEffectif = factor(TrancheEffectif,levels=TrancheEffectif))
@@ -105,14 +106,14 @@ sirene_formateur <- function(.x) {
   left_join(rncp.siren) %>%
   left_join(cpesr.siren %>% select(siren,NomMESR=Etablissement)) %>%
   mutate(Categorie = case_when(
-    !is.na(NomMESR) ~ "Privé dans MESR",
+    !is.na(NomMESR) ~ "Public MESR",
     categorieJuridiqueSecteur == "Public" ~ "Public hors MESR",
     !is.na(NomRNCP) ~ "Privé avec RNCP",
     trancheEffectifsUniteLegale %in% c("NN","00","01") ~ "Privé individuel",
     categorieJuridiqueGroupee == "Personne morale de droit étranger" ~ "Privé droit étranger",
     TRUE ~ "Privé autre"
   )) %>%
-  mutate(Categorie = factor(Categorie, levels=c("Privé dans MESR","Public hors MESR", "Privé avec RNCP", "Privé individuel", "Privé droit étranger", "Privé autre"))) %>%
+  mutate(Categorie = factor(Categorie, levels=c("Public MESR","Public hors MESR", "Privé avec RNCP", "Privé individuel", "Privé droit étranger", "Privé autre"))) %>%
   left_join(naf, by = join_by(
     nomenclatureActivitePrincipaleUniteLegale == nomenclatureActivitePrincipale,
     activitePrincipaleUniteLegale == activitePrincipale))
@@ -381,8 +382,10 @@ nombre_ouverts_plot <- function(.x) {
   .x %>%
     ggplot(aes(x=Année,y=Nombre,fill=Indicateur,color=Indicateur)) + 
     geom_area() + # geom_point(shape=21,stroke=2,size=2,fill="white") +
-    scale_y_continuous(labels=~ paste(.x/1e3,"k")) +
+    scale_y_continuous(labels=~ paste(.x/1e3,"k"), name = "Nombre de SIREN (milliers)") +
     facet_wrap(Activité~., labeller = labeller(Activité = label_wrap_gen(25))) +
+    scale_color_brewer(palette = "Paired", limits=levels(.x$Indicateur)) +
+    scale_fill_brewer(palette = "Paired", limits=levels(.x$Indicateur)) +
     ggtitle("Nombre d'établissements dans l'activité Enseignement") +
     theme(legend.title = element_blank()) +
     cpesr_cap()
