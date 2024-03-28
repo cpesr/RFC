@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-03-08
+2024-03-10
 
 ## Données
 
@@ -109,7 +109,52 @@ Toutes catégories
 
 <img src="Siren_files/figure-gfm/nombre-1.png" width="672" /><img src="Siren_files/figure-gfm/nombre-2.png" width="672" /><img src="Siren_files/figure-gfm/nombre-3.png" width="672" />
 
+<img src="Siren_files/figure-gfm/nombre.fill-1.png" width="672" /><img src="Siren_files/figure-gfm/nombre.fill-2.png" width="672" /><img src="Siren_files/figure-gfm/nombre.fill-3.png" width="672" />
+
 <img src="Siren_files/figure-gfm/nombre.horsindiv-1.png" width="672" /><img src="Siren_files/figure-gfm/nombre.horsindiv-2.png" width="672" /><img src="Siren_files/figure-gfm/nombre.horsindiv-3.png" width="672" />
+
+<img src="Siren_files/figure-gfm/nombre.horsindiv.fill-1.png" width="672" /><img src="Siren_files/figure-gfm/nombre.horsindiv.fill-2.png" width="672" /><img src="Siren_files/figure-gfm/nombre.horsindiv.fill-3.png" width="672" />
+
+<details>
+<summary>
+Enseignement supérieur
+</summary>
+
+| Activité               | Indicateur           | Nombre_1986 | Nombre_2008 | Nombre_2023 | Part_1986 | Part_2008 | Part_2023 |  Evolution |
+|:-----------------------|:---------------------|------------:|------------:|------------:|:----------|:----------|:----------|-----------:|
+| Enseignement supérieur | Public hors MESR     |         324 |         243 |         177 | 42%       | 10%       | 1%        |  0.5462963 |
+| Enseignement supérieur | Privé individuel     |         202 |        1675 |       12960 | 26%       | 66%       | 91%       | 64.1584158 |
+| Enseignement supérieur | Privé avec RNCP      |         134 |         384 |         584 | 17%       | 15%       | 4%        |  4.3582090 |
+| Enseignement supérieur | Privé droit étranger |           2 |          NA |          54 | 0%        | NA        | 0%        | 27.0000000 |
+| Enseignement supérieur | Public MESR          |          89 |         129 |         169 | 11%       | 5%        | 1%        |  1.8988764 |
+| Enseignement supérieur | Privé autre          |          26 |         111 |         230 | 3%        | 4%        | 2%        |  8.8461538 |
+
+</details>
+<details>
+<summary>
+Enseignement supérieur hors indiv
+</summary>
+
+| Activité               | Indicateur           | Nombre_1986 | Nombre_2023 | Part_1986 | Part_2023 |  Evolution |
+|:-----------------------|:---------------------|------------:|------------:|:----------|:----------|-----------:|
+| Enseignement supérieur | Public hors MESR     |         324 |         177 | 56%       | 15%       |  0.5462963 |
+| Enseignement supérieur | Privé avec RNCP      |         134 |         584 | 23%       | 48%       |  4.3582090 |
+| Enseignement supérieur | Privé droit étranger |           2 |          54 | 0%        | 4%        | 27.0000000 |
+| Enseignement supérieur | Public MESR          |          89 |         169 | 15%       | 14%       |  1.8988764 |
+| Enseignement supérieur | Privé autre          |          26 |         230 | 5%        | 19%       |  8.8461538 |
+
+</details>
+<details>
+<summary>
+Enseignement supérieur total
+</summary>
+
+| Année | Nombre |
+|------:|-------:|
+|  1986 |    777 |
+|  2023 |  14174 |
+
+</details>
 
 ## Listes
 
@@ -295,6 +340,8 @@ Privé droit étranger
 ## Comparaisons
 
 <img src="Siren_files/figure-gfm/cmp.categorie-1.png" width="672" />
+
+<img src="Siren_files/figure-gfm/cmp.categorie.1-1.png" width="672" />
 
 <img src="Siren_files/figure-gfm/cmp.categorie.2-1.png" width="672" />
 

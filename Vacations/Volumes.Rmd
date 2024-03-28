@@ -1,0 +1,93 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://www.aefinfo.fr/depeche/705453-vacataires-dans-l-esr-une-population-toujours-difficile-a-cerner-dont-la-croissance-se-poursuit-24-sur-2013-2022
+
+
+
+```{r load}
+vacations <- read.csv2("vacations.csv", dec='.') %>%
+  left_join(kpiESR::esr %>%
+            filter(pid == "Ensemble") %>%
+            transmute(
+              Rentrée,
+              Titulaires = kpi.ENS.S.titulaires,
+              Contractuels = kpi.ENS.P.effectif - kpi.ENS.S.titulaires,
+              Etudiants = kpi.ETU.S.cycle1_L + kpi.ETU.S.cycle2_M)
+            )
+
+colnames(vacations)
+
+vac <- vacations %>% pivot_longer(-Rentrée, names_to = "Corps", values_to = "Effectifs") %>%
+  mutate(Corps = factor(Corps, 
+        levels = c("Vacataires", "Contractuels", "Titulaires", "Etudiants"))) %>%
+  mutate(val100 = Effectifs / first(Effectifs) * 100, .by = Corps) 
+```
+
+## Explorations
+
+```{r }
+vac %>%
+  ggplot(aes(x=Rentrée,y=val100,color=Corps)) + 
+  geom_point() + geom_line()
+```
+
+
+```{r }
+vac %>%
+  ggplot(aes(x=Rentrée,y=val100,color=Corps)) + 
+  geom_point() + geom_smooth(se=FALSE)
+```
+
+
+```{r }
+vac %>%
+  filter(Corps != "Etudiants", Rentrée < 2022) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + 
+  geom_area(color="white")
+```
+
+```{r }
+vac %>%
+  filter(Corps != "Etudiants", Rentrée < 2022) %>%
+  ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + 
+  geom_area(color="white", position = "fill")
+```
+
+
+
+
+```{r, fig.asp=4/16 }
+jdd <- tibble(
+  date = as.Date(c("2023-09-01","2024-02-01","2024-04-16","2024-05-16","2024-07-01")),
+  type = c("Titulaires","Complèmentaires","Contractuelles","Vacataires",NA)
+) %>%
+  mutate(type = factor(type, levels=type))
+
+jddpal = RColorBrewer::brewer.pal(5, "RdYlBu")[c(5,3,2,1)]
+
+jdd %>%
+  ggplot(aes(xmin=date,xmax=lead(date),fill=type)) + 
+  geom_rect(ymin=0,ymax=1) +
+  scale_fill_manual(values = jddpal) +
+  scale_x_date(breaks = jdd$date,
+               date_labels = "%e %B")
+```
+
