@@ -138,13 +138,13 @@ p1 <- vac2 %>%
     filter(Corps != "Vacataires") %>%
     ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="black") +
     coord_polar(theta = "y", direction=-1) +
-    scale_fill_manual(values = jddpal) +
+    scale_fill_manual(values = jddpal, name="Enseignants") +
     theme_void()
 
 p2 <- vac2 %>%
     ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="black") +
     coord_polar(theta = "y", direction=-1) +
-    scale_fill_manual(values = jddpal) +
+    scale_fill_manual(values = jddpal, name="Enseignants") +
     theme_void()
 l <- cowplot::get_legend(p2)
 
@@ -158,9 +158,19 @@ cowplot::plot_grid(nrow = 1, rel_widths = c(2,2,1),
 ```{r}
 jddpalw <- c(jddpal[1:3],"white")
 vac2 %>%
-    ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="white") +
+    ggplot(aes(x=1,y=Effectifs,fill=Corps)) + geom_col(color="white") +
     coord_polar(theta = "y", direction=-1) +
-    scale_fill_manual(values = jddpalw) +
+    scale_fill_manual(values = jddpalw, name="Enseignants") +
+    theme_void()
+```
+
+```{r}
+jddpalw <- c(jddpal[1:3],"white")
+vac2 %>%
+    ggplot(aes(x=1,y=Effectifs,fill=Corps)) + geom_col(color="white") +
+    coord_polar(theta = "y", direction=-1) +
+    scale_fill_manual(values = jddpalw, name="Enseignants") +
+    xlim(0,2)+
     theme_void()
 ```
 
@@ -169,6 +179,6 @@ jddpalw <- c(jddpal[1:3],"white")
 vac2 %>%
     ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="black") +
     coord_polar(theta = "y", direction=-1) +
-    scale_fill_manual(values = jddpalw) +
+    scale_fill_manual(values = jddpalw, name="Enseignants") +
     theme_void()
 ```
