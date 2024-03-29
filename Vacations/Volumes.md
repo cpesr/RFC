@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-03-28
+2024-03-29
 
 ## Données
 
@@ -39,3 +39,19 @@ CPESR
     ## Warning: Removed 1 rows containing missing values (`geom_rect()`).
 
 <img src="Volumes_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
+
+    ## Warning: Removed 1 rows containing missing values (`geom_rect()`).
+
+    ## Warning: Removed 1 rows containing missing values (`geom_text()`).
+
+<img src="Volumes_files/figure-gfm/unnamed-chunk-6-1.png" width="576" />
+
+    ## Joining with `by = join_by(Rentrée)`
+
+    ## [1] "Rentrée"      "Vacataires"   "Titulaires"   "Contractuels" "Etudiants"
+
+<img src="Volumes_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
+
+<img src="Volumes_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
+
+<img src="Volumes_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />

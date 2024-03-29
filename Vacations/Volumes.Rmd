@@ -77,7 +77,7 @@ vac %>%
 ```{r, fig.asp=4/16 }
 jdd <- tibble(
   date = as.Date(c("2023-09-01","2024-02-01","2024-04-16","2024-05-16","2024-07-01")),
-  type = c("Titulaires","Complèmentaires","Contractuelles","Vacataires",NA)
+  type = c("Titulaires","Complémentaires","Contractuelles","Vacataires",NA)
 ) %>%
   mutate(type = factor(type, levels=type))
 
@@ -91,3 +91,84 @@ jdd %>%
                date_labels = "%e %B")
 ```
 
+```{r, fig.asp=1/6, fig.width=6, fig.height=1 }
+jdd2 <- tibble(
+  date = as.Date(c("2023-09-01","2024-02-01","2024-04-16","2024-06-30")),
+  type = c("Heures\nTitulaires","Heures\nComplémentaires","Heures\nVacataires",NA)
+) %>%
+  mutate(type = factor(type, levels=type))
+
+jdd2pal = RColorBrewer::brewer.pal(5, "RdYlBu")[c(5,2,1)]
+
+jdd2 %>%
+  mutate(date2 = lead(date)) %>% rowwise() %>% 
+  mutate(xlab = mean.Date(c(date,date2))) %>%
+  ggplot(aes(xmin=date,xmax=lead(date),fill=type)) + 
+  geom_rect(ymin=0,ymax=1) +
+  geom_text(aes(label=type,x=xlab), y=0.5, color="white", fontface="bold") +
+  scale_fill_manual(values = jdd2pal) +
+  scale_x_date(breaks = jdd2$date,
+               date_labels = "%e %B") +
+  theme(legend.position = "None", axis.title.x = element_blank())
+```
+
+
+
+```{r}
+vacations2 <- read.csv2("vacations.csv", dec='.') %>%
+  left_join(kpiESR::esr %>%
+            filter(pid == "Ensemble", Rentrée == 2021) %>%
+            transmute(
+              Rentrée,
+              Titulaires = kpi.ENS.S.titulaires,
+              `Doctorants et ATER` = kpi.ENS.S.DocATER,
+              `Autres contractuels` = kpi.ENS.S.contractuels)
+            )
+
+colnames(vacations)
+
+vac2 <- vacations2 %>% pivot_longer(-Rentrée, names_to = "Corps", values_to = "Effectifs") %>%
+  mutate(Corps = factor(Corps, 
+        levels = c("Titulaires", "Doctorants et ATER", "Autres contractuels", "Vacataires"))) %>%
+  filter(Rentrée==2021)
+```
+
+```{r}
+p1 <- vac2 %>%
+    filter(Corps != "Vacataires") %>%
+    ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="black") +
+    coord_polar(theta = "y", direction=-1) +
+    scale_fill_manual(values = jddpal) +
+    theme_void()
+
+p2 <- vac2 %>%
+    ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="black") +
+    coord_polar(theta = "y", direction=-1) +
+    scale_fill_manual(values = jddpal) +
+    theme_void()
+l <- cowplot::get_legend(p2)
+
+cowplot::plot_grid(nrow = 1, rel_widths = c(2,2,1), 
+                   p1 + theme(legend.position = "None"), 
+                   p2 + theme(legend.position = "None"), 
+                   l)
+```
+
+
+```{r}
+jddpalw <- c(jddpal[1:3],"white")
+vac2 %>%
+    ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="white") +
+    coord_polar(theta = "y", direction=-1) +
+    scale_fill_manual(values = jddpalw) +
+    theme_void()
+```
+
+```{r}
+jddpalw <- c(jddpal[1:3],"white")
+vac2 %>%
+    ggplot(aes(x=Rentrée,y=Effectifs,fill=Corps)) + geom_col(color="black") +
+    coord_polar(theta = "y", direction=-1) +
+    scale_fill_manual(values = jddpalw) +
+    theme_void()
+```
