@@ -46,7 +46,19 @@ vac <- vacations %>% pivot_longer(-Rentrée, names_to = "Corps", values_to = "Ef
 ```{r }
 vac %>%
   ggplot(aes(x=Rentrée,y=val100,color=Corps)) + 
-  geom_point() + geom_line()
+  geom_line(size=1) + geom_point(shape = 21, stroke = 1.5, size=2, fill="white") +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  scale_y_continuous(name="Effectifs (valeur 100 en 2014)") +
+  scale_color_brewer(name="Effectifs", palette="Set1")
+```
+
+```{r }
+vac %>%
+  ggplot(aes(x=Rentrée,y=val100,color=Corps)) + 
+  geom_smooth(method = "lm", se=FALSE) + geom_point(shape = 21, stroke = 1.5, size=1, fill="white") +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  scale_y_continuous(name="Effectifs (valeur 100 en 2014)") +
+  scale_color_brewer(name="Effectifs", palette="Set1")
 ```
 
 
@@ -182,3 +194,34 @@ vac2 %>%
     scale_fill_manual(values = jddpalw, name="Enseignants") +
     theme_void()
 ```
+
+
+
+### Rémunération
+
+```{r}
+rem <- read.csv("Vrai_Smic vs vacataires - Feuil1.csv", dec=',')
+
+rem.vac <- rem %>%
+  transmute(
+    Date = as.Date(Date,tryFormats = c("%d/%m/%Y")),
+    Vacations = Rémunération.des.enseignants.vacataires.pour.une.heure.de.travaux.dirigés...4.2..euros.constants..base.2023.
+  ) %>%
+  filter(!is.na(Date))
+
+rem.smic <- rem %>%
+  transmute(
+    Date = as.Date(Date.1,tryFormats = c("%d/%m/%Y")),
+    SMIC = Smic.horaire.brut..euros.constants..base.2023.
+  ) %>%
+  filter(!is.na(Date))
+
+rémunérations <- full_join(rem.vac,rem.smic) %>%
+  arrange(Date) %>%
+  fill(Vacations) %>%
+  fill(SMIC) 
+
+write.csv(rémunérations, "remunerations.csv", row.names = FALSE)
+
+```
+
