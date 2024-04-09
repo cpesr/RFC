@@ -52,7 +52,7 @@ hetd <- hetd %>%
     Heures.complémentaires.des.permanents = ifelse(!is.na(Heures.complémentaires.des.permanents), Heures.complémentaires.des.permanents,
                             Heures.complémentaires - Heures.des.vacataires)
   ) %>%
-  left_join(kpiESR::esr.etab %>% select(Code.UAI = UAI, pid)) %>%
+  left_join(kpiESR::esr.etab %>% select(Code.UAI = UAI, pid, PerimEx)) %>%
   left_join(kpiESR::esr %>% transmute(
     pid, Rentrée,
     Etudiants = kpi.ETU.S.cycle1_L + kpi.ETU.S.cycle2_M,
@@ -104,3 +104,58 @@ hetd %>%
 ```
 
 
+```{r}
+df <- hetd %>%
+  arrange(Rentrée) %>%
+  summarize(Heures.complémentaires.par.permanent = mean(Heures.complémentaires.des.permanents, na.rm = TRUE) / mean(Enseignants,na.rm = TRUE), .by = Etablissement) %>%
+  filter(!is.na(Heures.complémentaires.par.permanent)) %>%
+  arrange(Heures.complémentaires.par.permanent) 
+
+bind_rows(
+  df %>% slice_head(n=5),
+  df %>% slice_tail(n=5)
+) %>%
+  ggplot(aes(y=reorder(Etablissement,Heures.complémentaires.par.permanent),x=Heures.complémentaires.par.permanent)) +
+  geom_col()
+```
+
+
+```{r}
+df <- hetd %>%
+  arrange(Rentrée) %>%
+  summarize(Heures.complémentaires.par.permanent = mean(Heures.complémentaires.des.permanents, na.rm = TRUE) / mean(Enseignants,na.rm = TRUE), .by = Etablissement) %>%
+  filter(!is.na(Heures.complémentaires.par.permanent)) %>%
+  arrange(Heures.complémentaires.par.permanent) %>%
+  filter(Etablissement != "Université de Versailles Saint-Quentin-en-Yvelines") %>%
+  filter(Etablissement != "Université de la Polynésie Française")
+
+bind_rows(
+  df %>% slice_head(n=5),
+  df %>% slice_tail(n=5)
+) %>%
+  ggplot(aes(y=reorder(Etablissement,Heures.complémentaires.par.permanent),x=Heures.complémentaires.par.permanent, fill=Heures.complémentaires.par.permanent)) +
+  geom_col() +
+  scale_x_continuous(name="Heures complémentaires par titulaire") +
+  scale_y_discrete(name="Etablissement") +
+  scale_fill_distiller(palette = "RdBu") +
+  theme(legend.position = "None") +
+  ggtitle("Heures complémentaires par titulaire")
+```
+
+
+```{r}
+hetd %>%
+  summarize(
+    Heures.complémentaires.par.étudiant = mean(Heures.complémentaires.des.permanents, na.rm = TRUE) / mean(Etudiants,na.rm = TRUE), 
+    Heures.des.vacataires.par.étudiant = mean(Heures.des.vacataires, na.rm = TRUE) / mean(Etudiants,na.rm = TRUE),
+    Etudiants = mean(Etudiants,na.rm = TRUE),
+    .by = c(Etablissement,PerimEx)) %>% 
+  filter(is.finite(Heures.complémentaires.par.étudiant),is.finite(Heures.des.vacataires.par.étudiant)) %>% 
+  filter(Heures.complémentaires.par.étudiant < 10) %>%
+  ggplot(aes(x=Heures.complémentaires.par.étudiant,y=Heures.des.vacataires.par.étudiant,size=Etudiants,color=PerimEx)) +
+  geom_point() + 
+  ggrepel::geom_text_repel(aes(label=Etablissement), color="grey") + 
+  scale_x_continuous(name="Heures complémentaires par étudiant") +
+  scale_y_continuous(name="Heures vacations par étudiant") +
+  ggtitle("Heures hors service par étudiant")
+```

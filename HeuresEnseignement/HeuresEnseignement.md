@@ -149,3 +149,12 @@ Données
 </details>
 
 <img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
+
+<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />
+
+<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
+
+    ## Warning: ggrepel: 18 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
