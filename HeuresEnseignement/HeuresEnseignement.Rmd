@@ -1,0 +1,106 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- url source
+
+```{r load}
+hetd <- read.csv("data.csv", dec='.')
+
+colnames(hetd)
+```
+
+## Explorations
+
+```{r, results='asis'}
+hetd %>%
+  summarize(
+    nb_rentrée = n(), 
+    nb_doublons = n() - n_distinct(Rentrée),
+    .by=c(Etablissement,Code.UAI)) %>%
+  arrange(desc(nb_rentrée)) %>%
+  spoiler_table("Nombre de rentrées par établissement", trim = Inf)
+```
+
+En cas de doublons, on ne garde que la première ligne.
+Ajout des effectifs étudiants et enseignants.
+
+```{r, results='asis'}
+hetd <- hetd %>%
+  slice_head(n = 1, by=c(Etablissement,Code.UAI,Rentrée)) %>%
+  mutate(
+    Heures.complémentaires = ifelse(!is.na(Heures.complémentaires), Heures.complémentaires,
+                            Heures.des.vacataires + Heures.complémentaires.des.permanents),
+    Heures.des.vacataires = ifelse(!is.na(Heures.des.vacataires), Heures.des.vacataires,
+                            Heures.complémentaires - Heures.complémentaires.des.permanents),
+    Heures.complémentaires.des.permanents = ifelse(!is.na(Heures.complémentaires.des.permanents), Heures.complémentaires.des.permanents,
+                            Heures.complémentaires - Heures.des.vacataires)
+  ) %>%
+  left_join(kpiESR::esr.etab %>% select(Code.UAI = UAI, pid)) %>%
+  left_join(kpiESR::esr %>% transmute(
+    pid, Rentrée,
+    Etudiants = kpi.ETU.S.cycle1_L + kpi.ETU.S.cycle2_M,
+    Enseignants = kpi.ENS.S.titulaires
+  ))
+
+write.csv(hetd, "fr-cpesr-hetd.csv")
+```
+
+
+```{r, results='asis'}
+hetd %>%
+  summarise(nb_etab = n(), .by=Rentrée) %>%
+  arrange(Rentrée) %>%
+  spoiler_table("Nb Etab par rentrée", trim = Inf)
+```
+
+```{r}
+hetd %>%
+  summarise(Heures.des.vacataires = mean(Heures.des.vacataires, na.rm = TRUE), 
+            Heures.complémentaires.des.permanents = mean(Heures.complémentaires.des.permanents, na.rm = TRUE), 
+            .by=Rentrée) %>%
+  pivot_longer(c(Heures.des.vacataires,Heures.complémentaires.des.permanents)) %>%
+  ggplot(aes(x=Rentrée,y=value,color=name)) + geom_line() + geom_point()
+```
+
+```{r, results='asis'}
+hetd %>%
+  summarise(Heures.des.vacataires = mean(Heures.des.vacataires, na.rm = TRUE), 
+            Heures.complémentaires.des.permanents = mean(Heures.complémentaires.des.permanents, na.rm = TRUE), 
+            .by=Rentrée) %>%
+  spoiler_table("Données",trim = Inf)
+```
+
+
+```{r}
+hetd %>%
+  filter(Rentrée > 2010) %>%
+  summarise(Heures.des.vacataires = mean(Heures.des.vacataires, na.rm = TRUE), 
+            Heures.complémentaires.des.permanents = mean(Heures.complémentaires.des.permanents, na.rm = TRUE), 
+            .by=Rentrée) %>%
+  pivot_longer(c(Heures.des.vacataires,Heures.complémentaires.des.permanents),
+               names_to = "Type", values_to = "Heures") %>%
+  mutate(Type = str_replace_all(Type,"\\."," ")) %>%
+  ggplot(aes(x=Rentrée,y=Heures,color=Type)) + 
+  geom_line() + geom_point() +
+  scale_y_continuous(labels = ~ paste(.x/1e3,"k")) +
+  ggtitle("Heures complémentaires moyennes par établissement")
+```
+
+
