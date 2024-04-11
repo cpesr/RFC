@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-04-09
+2024-04-11
 
 ## Données
 
@@ -86,6 +86,12 @@ effectifs étudiants et enseignants.
     ## Joining with `by = join_by(Code.UAI)`
     ## Joining with `by = join_by(Rentrée, pid)`
 
+    ## Joining with `by = join_by(pid)`
+
+    ## Warning: Removed 26 rows containing missing values (`geom_point()`).
+
+<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-3-1.png" width="672" />
+
 <details>
 <summary>
 Nb Etab par rentrée
@@ -117,7 +123,7 @@ Nb Etab par rentrée
 
     ## Warning: Removed 2 rows containing missing values (`geom_point()`).
 
-<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-4-1.png" width="672" />
+<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
 
 <details>
 <summary>
@@ -148,13 +154,13 @@ Données
 
 </details>
 
-<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
-
 <img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />
 
 <img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
 
+<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
+
     ## Warning: ggrepel: 18 unlabeled data points (too many overlaps). Consider
     ## increasing max.overlaps
 
-<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
+<img src="HeuresEnseignement_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />

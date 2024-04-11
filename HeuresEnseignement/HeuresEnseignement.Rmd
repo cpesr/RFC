@@ -63,6 +63,22 @@ write.csv(hetd, "fr-cpesr-hetd.csv")
 ```
 
 
+```{r, fig.asp=4/3}
+kpiESR::esr.etab %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  select(pid, Etablissement) %>%
+  left_join(
+    hetd %>%
+      transmute(Rentrée,pid,
+                Disponibilité = case_when(
+                  !is.na(Charge.totale.d.enseignement) ~ "Complet",
+                  TRUE ~ "Partiel"
+                ))) %>%
+  ggplot(aes(y=Etablissement,x=Rentrée,color=Disponibilité)) +
+  geom_point(size=2)
+```
+
+
 ```{r, results='asis'}
 hetd %>%
   summarise(nb_etab = n(), .by=Rentrée) %>%
