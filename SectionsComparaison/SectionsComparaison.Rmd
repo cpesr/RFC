@@ -16,8 +16,8 @@ theme_set(theme_cpesr())
 theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
 emploisEC <- read.csv2("../data/cpesr-emplois-ec.csv", stringsAsFactors = TRUE) 
 
-sections <- c(4,19,2,1,22)
-thesection <- 4
+sections <- c(4,21, 22)
+thesection <- 22
 
 emplois.sections <- emploisEC %>%
   filter(Périmètre == "Section", Périmètre.ID %in% sections) %>%
@@ -29,8 +29,7 @@ emplois.sections <- emploisEC %>%
 
 ```{r postes.mcf}
 emplois.sections %>%
-  ggplot(aes(x=Année,y=Concours.Postes.MCF, color = Section, size=highlight)) +
-  geom_point() + geom_smooth(se=FALSE) +
+  ggplot(aes(x=Année,y=Concours.Postes.MCF, color = Section, size=highlight)) +  geom_point() + geom_smooth(se=FALSE) +
   scale_color_discrete(name="Section") +
   scale_y_continuous(name = "Postes MCF") +
   scale_size_manual(name="Section", values=c(1,2), guide = FALSE) +
