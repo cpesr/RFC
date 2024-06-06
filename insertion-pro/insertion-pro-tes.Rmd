@@ -522,3 +522,20 @@ ipm %>%
   ggplot(aes(y=Valeur,x=Taux.Chômage.Département)) +
   geom_point() + geom_smooth(method = "lm") + facet_wrap(Indicateur~.)
 ```
+
+
+```{r}
+ipm %>%
+  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  group_by(Établissement, pid=Id_Paysage) %>%
+  summarise_taux() %>%
+  left_join(kpiESR::esr %>% filter(Rentrée == 2021)) %>%
+  ggplot(aes(y=Valeur,x=kpi.K.resPetu,color=Indicateur)) +
+  geom_point(aes(shape=Indicateur),size=4) + geom_smooth(method = "lm") +
+  facet_wrap(Indicateur~.) +
+  scale_x_continuous(name="Taux",label=~scales::percent(.x/100)) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Taux des diplômés de Master des établissements Paris-Créteil-Versailles","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") 
+```
