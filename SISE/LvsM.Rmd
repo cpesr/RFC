@@ -322,3 +322,20 @@ write.csv(export, "export.csv", row.names = FALSE)
 export %>% spoiler_table(trim = Inf)
 ```
 
+
+## L3 vs. M1 vs. M2
+
+```{r l3m1m2.decal}
+sise %>%
+  group_by(Rentrée,Niveau = paste(LMD, substr(NIVEAU,2,2), sep="")) %>%
+  summarise(Etudiants = sum(Etudiants)) %>%
+  filter(Niveau %in% c("L3","M1","M2")) %>%
+  mutate(Rentrée = ifelse(Niveau == "L3", Rentrée+2,Rentrée)) %>%
+  mutate(Rentrée = ifelse(Niveau == "M1", Rentrée+1,Rentrée)) %>%
+  #filter(Rentrée != 2012, Rentrée != 2023) %>%
+  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  geom_line(linewidth = 1.5) + geom_point(shape = 21, stroke = 2, size = 2, fill="white") + 
+  scale_x_continuous(labels = ~ paste0("L3 ", .x-2,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
+  scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +
+  ggtitle("Etudiant⋅e⋅s  inscrit⋅e⋅s en L3 à l'année N et M1 à l'année N+1" )
+```

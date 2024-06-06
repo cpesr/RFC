@@ -1,7 +1,7 @@
 LvsM
 ================
 CPESR
-2023-10-13
+2024-06-06
 
 <img src="LvsM_files/figure-gfm/l3m1.niveaux-1.png" width="672" />
 
@@ -138,6 +138,7 @@ Voir les données
 |    2022 | 8j5s2 | Université de Picardie Jules-Verne                 | 3229 |      1427 |             600 | 2027 |         | Amiens              |
 |    2022 | 8k883 | Université Sorbonne Nouvelle - Paris 3             | 2414 |      1812 |               0 | 1812 |         | Paris               |
 |    2022 | 90I54 | Université de Bordeaux                             | 4187 |      3308 |             979 | 4287 | IDEx    | Bordeaux            |
+|    2022 | 91D9w | Université de Rennes 1                             | 2581 |      2517 |               0 | 2517 |         | Rennes              |
 |    2022 | 9xlel | Le Mans Université                                 | 1216 |       955 |               0 |  955 |         | Nantes              |
 |    2022 | atbEK | La Rochelle Université                             | 1130 |       638 |               0 |  638 |         | Poitiers            |
 |    2022 | BWbvP | Université d’Artois                                | 1776 |      1114 |               0 | 1114 |         | Lille               |
@@ -151,8 +152,9 @@ Voir les données
 |    2022 | evv7S | Université de Montpellier                          | 4347 |      3565 |            1112 | 4677 | ISITE   | Montpellier         |
 |    2022 | EW53M | Université Polytechnique Hauts-de-France           | 1367 |      1131 |               0 | 1131 |         | Lille               |
 |    2022 | G2qA7 | Université Paris-Saclay                            | 2927 |      5266 |               0 | 5266 | IDEx    | Versailles          |
-|    2022 | G4572 | Université de Rouen Normandie                      | 4302 |      1913 |             616 | 2529 |         | Rouen               |
+|    2022 | G4572 | Université de Rouen Normandie                      | 4302 |      1913 |             616 | 2529 |         | Normandie           |
 |    2022 | g6rwB | Université Paris Nanterre                          | 5436 |      3208 |               0 | 3208 |         | Versailles          |
+|    2022 | gap5Q | Université Toulouse Capitole                       | 2485 |      2694 |               0 | 2694 |         | Toulouse            |
 |    2022 | HAU8L | Université de Nîmes                                |  792 |       208 |               0 |  208 |         | Montpellier         |
 |    2022 | HCBvW | Université d’Orléans                               | 2212 |      1086 |             808 | 1894 |         | Orléans-Tours       |
 |    2022 | hlX1r | Université de Poitiers                             | 3662 |      2348 |             566 | 2914 |         | Poitiers            |
@@ -161,7 +163,7 @@ Voir les données
 |    2022 | IXHyv | Université d’Angers                                | 3321 |      1626 |               0 | 1626 |         | Nantes              |
 |    2022 | K4lR3 | Université Clermont Auvergne                       | 3574 |      2165 |             415 | 2580 | ISITE   | Clermont-Ferrand    |
 |    2022 | Lr94O | Université de Bourgogne                            | 3105 |      1572 |             470 | 2042 | ISITE   | Dijon               |
-|    2022 | LsQ24 | Université Le Havre Normandie                      |  876 |       523 |               0 |  523 |         | Rouen               |
+|    2022 | LsQ24 | Université Le Havre Normandie                      |  876 |       523 |               0 |  523 |         | Normandie           |
 |    2022 | m7K6T | Université Toulouse III - Paul Sabatier            | 2601 |      1842 |               0 | 1842 |         | Toulouse            |
 |    2022 | Mz286 | Université de Pau et des Pays de l’Adour           | 1921 |       916 |               0 |  916 | ISITE   | Bordeaux            |
 |    2022 | Mz90U | Université Bordeaux Montaigne                      | 2238 |      1193 |               0 | 1193 |         | Bordeaux            |
@@ -169,7 +171,7 @@ Voir les données
 |    2022 | nkbwh | Université de Limoges                              | 1777 |       905 |             208 | 1113 |         | Limoges             |
 |    2022 | NLCOF | Université de Corse Pasquale Paoli                 |  429 |       313 |             127 |  440 |         | Corse               |
 |    2022 | OJZ4a | Université de Haute-Alsace                         | 1384 |       712 |               0 |  712 |         | Strasbourg          |
-|    2022 | p25Q3 | Université de Caen Normandie                       | 3366 |      1742 |             459 | 2201 |         | Caen                |
+|    2022 | p25Q3 | Université de Caen Normandie                       | 3366 |      1742 |             459 | 2201 |         | Normandie           |
 |    2022 | PpsCQ | Université Paris sciences et lettres               |    0 |      1099 |               0 | 1099 |         | Paris               |
 |    2022 | pVJpw | Centre universitaire de Mayotte                    |  259 |         0 |               0 |    0 |         | Mayotte             |
 |    2022 | qUCQp | Nantes Université                                  | 3963 |      2568 |             923 | 3491 | ISITE   | Nantes              |
@@ -194,3 +196,7 @@ Voir les données
 |    2022 | zepT6 | Université de la Polynésie Française               |  321 |        62 |             114 |  176 |         | Polynésie Française |
 
 </details>
+
+## L3 vs. M1 vs. M2
+
+<img src="LvsM_files/figure-gfm/l3m1m2.decal-1.png" width="672" />

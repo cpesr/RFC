@@ -16,10 +16,10 @@ theme_set(theme_cpesr() + theme(plot.title = element_text(hjust=1), plot.subtitl
 theme_cpesr_setup(authors = "Julien Gossa", source = "Insertion professionnelle des diplômés de Master en universités et établissements assimilés - SIES")
 ```
 
-## Données 
+## Données
 
-- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-master
-- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-master_donnees_nationales
+-   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-master>
+-   <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-insertion_professionnelle-master_donnees_nationales>
 
 ```{r load}
 ipm <- read.csv2("../data/fr-esr-insertion_professionnelle-master.csv", dec='.', na.strings = c("","nd","ns","fe",".")) %>%
@@ -91,14 +91,16 @@ pivot_taux <- function(x) {
                                levels=c("Taux.d.insertion","Taux.d.emploi","Taux.d.emploi.salarié.en.France"),
                                labels = c("Taux d'insertion","Taux d'emploi","Taux d'emploi salarié en France")))
 }
+
+save(ipm,ipmn,levels.domaine,levels.discipline,levels.secteur,summarise_taux,pivot_taux, file="insertion-pro.RData")
+
 ```
 
 Note : l'absence de Discipline "Ensemble Lettres, langues, arts" est pénible à gérer
 
-
-- Taux d'insertion = diplômé en emploi / diplômés sur le marché du travail (emploi + chômage, ou taux d'emploi *net*)
-- Taux d'emploi = diplômés en emploi / diplômés 
-- Taux d'emploi salarié en France = diplômés en emploi seulement salarié en France / diplômés 
+-   Taux d'insertion = diplômé en emploi / diplômés sur le marché du travail (emploi + chômage, ou taux d'emploi *net*)
+-   Taux d'emploi = diplômés en emploi / diplômés
+-   Taux d'emploi salarié en France = diplômés en emploi seulement salarié en France / diplômés
 
 Les données sont : diplômés de Masters hors MEEF de la session 2020, à 30 mois.
 
@@ -137,6 +139,7 @@ ipmn %>%
   cpesr_cap()
 
 ```
+
 Attention : les valeurs sont une moyenne imparfaite.
 
 ## Taux d'insertion par secteur disciplinaire
@@ -175,7 +178,6 @@ ipmn %>%
   cpesr_cap()
 ```
 
-
 ```{r tdx.dom2}
 ipmn %>%
   filter(str_detect(Secteur.disciplinaire,"Ensemble")) %>% 
@@ -193,7 +195,6 @@ ipmn %>%
   ggtitle("Comparaison des trois taux des diplômés de Master","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
 ```
-
 
 ## Comparaison des différents taux par secteur disciplinaire
 
@@ -229,7 +230,6 @@ ipmn %>%
   cpesr_cap()
 ```
 
-
 ```{r tdx.disc3, fig.asp=4/3}
 ipmn %>%
   mutate(Ensemble=str_detect(Secteur.disciplinaire,"Ensemble")) %>%
@@ -245,7 +245,6 @@ ipmn %>%
   ggtitle("Comparaison des trois taux des diplômés de Master pas discipline","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
 ```
-
 
 ## Comparaison des différents taux par établissement (tri par différence)
 
@@ -267,7 +266,6 @@ ipm %>%
 
 ## Comparaison des différents taux par établissement (tri par taux d'insertion)
 
-
 ```{r tds.vs.tip2, fig.asp=4/3}
 ipm %>%
   filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
@@ -285,7 +283,6 @@ ipm %>%
 ```
 
 ## Comparaison des différents taux par établissement (tri par taux d'emploi salarié en France)
-
 
 ```{r tds.vs.tip3, fig.asp=4/3}
 ipm %>%
@@ -322,7 +319,6 @@ ipm %>%
   scale_y_continuous(name="Taux d'emplois extérieurs à la région de l'université", label=~scales::percent(.x/100))
 ```
 
-
 ```{r tds.vs.tip.vs.tee.dom, fig.asp=3/4, fig.width=10}
 ipm %>%
   filter(Établissement != "La Réunion") %>%
@@ -338,7 +334,6 @@ ipm %>%
   scale_y_continuous(name="Taux d'emplois extérieurs à la région de l'université", label=~scales::percent(.x/100)) +
   facet_wrap(.~Domaine, scales = "free")
 ```
-
 
 ## Comparaison des taux par établissement et domaine
 
@@ -396,7 +391,7 @@ ipm %>%
   
 ```
 
-## Dispersion 
+## Dispersion
 
 ```{r disp, fig.asp=4/3}
 ipm %>%
@@ -412,4 +407,118 @@ ipm %>%
   scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
   ggtitle("Comparaison des trois taux des diplômés de Master pas discipline","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
+```
+
+## IP vs socio
+
+```{r}
+load("../SISE/sise_socio.RData")
+
+sise.socio <- sise.socio %>%
+  filter(
+    Attractivité.internationale =="Autres cas",
+    LMD == "M",
+    #Bac != "Dispensés"
+    #Diplôme == "Autres masters"
+  )
+
+sise2taux <- function(variable, filtre, nomtaux) {
+  sise.socio %>%
+    rename("var" = variable) %>% 
+    summarise(Etudiants = sum(Etudiants),
+              .by = c(Secteur.disciplinaire, var)) %>%
+    mutate(Taux = Etudiants / sum(Etudiants),
+           .by = Secteur.disciplinaire) %>%
+    filter(var == filtre) %>% 
+    select(Secteur.disciplinaire,Taux) %>%
+    setNames(c("Secteur.disciplinaire",paste0("Taux.",nomtaux)))
+}
+
+sise.taux <- full_join(
+  sise2taux("SEXE","F","Féminité"),
+  sise2taux("Bac","Baccalauréat général","BacGénéral") ) 
+
+ipmn.taux <- ipmn %>%
+  left_join(sise.taux) 
+
+ipmn.taux %>%
+  filter(is.na(Taux.Féminité)) %>%
+  select(Secteur.disciplinaire) %>%
+  unique() %>%
+  spoiler_table("ipmn miss")
+
+save(ipmn.taux,file="ipmn_taux.RData")
+```
+
+```{r}
+ipmn.taux %>%
+  ggplot(aes(x=Taux.Féminité,y=Taux.d.emploi.salarié.en.France)) + 
+  geom_smooth(method = "lm") + geom_point() +
+  ggrepel::geom_text_repel(aes(label=Secteur.disciplinaire))
+```
+
+```{r}
+ipmn.taux %>%
+  pivot_longer(c(Taux.d.insertion,Taux.d.emploi,Taux.d.emploi.salarié.en.France)) %>%
+  ggplot(aes(x=Taux.Féminité,y=value)) + 
+  geom_smooth(method = "lm") + geom_point() +
+  facet_wrap(name~.)
+```
+
+
+```{r}
+ipmn.taux %>%
+  ggplot(aes(x=Taux.BacGénéral,y=Taux.d.emploi.salarié.en.France)) + 
+  geom_smooth(method = "lm") + geom_point() +
+  ggrepel::geom_text_repel(aes(label=Secteur.disciplinaire))
+```
+
+
+```{r}
+ipmn.taux %>%
+  pivot_longer(c(Taux.d.insertion,Taux.d.emploi,Taux.d.emploi.salarié.en.France)) %>%
+  ggplot(aes(x=Taux.BacGénéral,y=value)) + 
+  geom_smooth(method = "lm") + geom_point() +
+  facet_wrap(name~.)
+```
+
+## Taux chômage
+
+```{r}
+ipm %>%
+  filter(Taux.de.chômage.régional<10) %>%
+  filter(Taux.d.emploi.salarié.en.France>50) %>%
+  ggplot(aes(y=Taux.d.emploi.salarié.en.France,x=Taux.de.chômage.régional)) +
+  geom_point() + geom_smooth(method = "lm")
+```
+
+```{r}
+chômage = readxl::read_xls("sl_etc_2023T4.xls", sheet = 2, skip = 3) %>%
+  select(Code,Libellé,Taux.Chômage.Département = T4_2023) %>%
+  mutate(Code = as.numeric(Code))
+
+etab <- read.csv2("../data/fr-esr-principaux-etablissements-enseignement-superieur.csv") %>%
+  select(pid=identifiant.interne,Code.département) %>%
+  mutate(Code = as.numeric(str_sub(Code.département,2))) %>%
+  left_join(chômage)
+
+ipm %>%
+  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  group_by(Établissement,pid=Id_Paysage) %>%
+  summarise_taux() %>%  
+  left_join(etab) %>%
+  ggplot(aes(y=Valeur,x=Taux.Chômage.Département)) +
+  geom_point() + geom_smooth(method = "lm") + facet_wrap(Indicateur~.)
+```
+```{r}
+ipm %>%
+  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  group_by(Établissement,pid=Id_Paysage) %>%
+  summarise_taux() %>%  
+  left_join(etab) %>%
+  filter(Taux.Chômage.Département < 10) %>%
+  ggplot(aes(y=Valeur,x=Taux.Chômage.Département)) +
+  geom_point() + geom_smooth(method = "lm") + facet_wrap(Indicateur~.)
 ```
