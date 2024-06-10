@@ -6,7 +6,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 options(dplyr.summarise.inform = FALSE)
 knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
 
@@ -538,4 +538,138 @@ ipm %>%
   scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
   scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
   ggtitle("Taux des diplômés de Master des établissements Paris-Créteil-Versailles","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") 
+```
+
+
+```{r, fig.asp=4/3}
+ipm %>%
+  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  group_by(Établissement, Discipline, pid=Id_Paysage) %>%
+  summarise_taux() %>%
+  left_join(kpiESR::esr %>% filter(Rentrée == 2021)) %>%
+  left_join(kpiESR::esr.etab) %>% mutate(PerimEx = ifelse(PerimEx %in% c("ISITE","IDEx"), PerimEx, "NINI")) %>%
+  #filter(Indicateur == "Taux d'emploi salarié en France") %>%
+  ggplot(aes(y=Valeur,x=kpi.K.resPetu)) +
+  geom_smooth(method = "lm", size=0.1) + 
+  ggrepel::geom_text_repel(aes(label=Établissement), size=2, segment.size=0.1) +
+  geom_point(aes(color=PerimEx),size=2) +
+  scale_x_continuous(name="Budget par étudiant", labels = ~ paste(.x/1e3,"k€")) +
+  scale_y_continuous(name="Taux d'emploi salarié en France", labels= ~ scales::percent(.x, scale = 1)) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  facet_grid(Discipline~Indicateur, scales = "free_y", labeller = labeller(Discipline = label_wrap_gen(30))) +
+  ggtitle("Mesures de l'insertion professionnelle des Masters dans les universités", subtitle="en fonction du budget par étudiant et du secteur disciplinaire")
+```
+
+
+## Apprentissage
+
+```{r}
+mm <- read.csv2("../data/fr-esr-mon_master.csv") %>%
+  rename(pid = Identifiant.interne.actuel) 
+
+mmalt <- mm %>%
+  mutate(Discipline = recode(Discipline.de.la.formation,
+    "Sc. fondamentales et appliquées (dont S.T.A.P.S.)" = "Ensemble sciences, technologies et santé",
+    "Droit et sc. politiques" = "Ensemble formations juridiques, économiques et de gestion",
+    "Lettres, langues, art" = "Ensemble Lettres, langues, arts", 
+    "S.H.S." = "Ensemble sciences humaines et sociales", 
+    "M.E.E.F." = "M.E.E.F.", 
+    "Economie, gestion et A.E.S." = "Ensemble formations juridiques, économiques et de gestion")) %>%
+  summarise(
+    Capacité = sum(Capacité.offerte.limitée.par.la.formation),
+    .by = c(Alternance, Discipline, pid, Libellé.de.l.établissement.aujourd.hui)) %>%
+  mutate(Taux.Alternance = Capacité / sum(Capacité), .by=c(pid,Discipline)) %>%
+  filter(Alternance == 1)
+```
+
+
+```{r, fig.asp=4/3}
+ipmk <- ipm %>%
+  filter(!is.na(Taux.de.chômage.régional), !is.na(Taux.d.insertion)) %>%
+  filter(str_detect(Discipline,"Ensemble")) %>%
+  group_by(Établissement, Discipline, pid=Id_Paysage) %>%
+  summarise_taux() %>%
+  left_join(kpiESR::esr %>% filter(Rentrée == 2021)) %>%
+  left_join(kpiESR::esr.etab) %>% mutate(PerimEx = ifelse(PerimEx %in% c("ISITE","IDEx"), PerimEx, "NINI")) %>%
+  left_join(mmalt)
+  
+ipmk %>%
+  #filter(Indicateur == "Taux d'emploi salarié en France") %>%
+  ggplot(aes(y=Valeur,x=Taux.Alternance)) +
+  geom_smooth(method = "lm", size=0.1) + 
+  ggrepel::geom_text_repel(aes(label=Établissement), size=2, segment.size=0.1) +
+  geom_point(aes(color=PerimEx),size=2) +
+  scale_x_continuous(name="Taux d'alternance", labels = scales::percent) +
+  scale_y_continuous(name="Taux", labels= ~ scales::percent(.x, scale = 1)) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  facet_grid(Discipline~Indicateur, scales = "free_y", labeller = labeller(Discipline = label_wrap_gen(30))) +
+  ggtitle("Mesures de l'insertion professionnelle des Masters dans les universités", subtitle="en fonction du taux d'alternance et du secteur disciplinaire")
+```
+
+
+
+```{r, fig.asp=5/3}
+ipmk %>%
+  filter(Taux.Alternance < 0.4) %>%
+  #filter(Indicateur == "Taux d'emploi salarié en France") %>%
+  ggplot(aes(y=Valeur,x=Taux.Alternance)) +
+  geom_smooth(method = "lm", size=0.1) + 
+  ggrepel::geom_text_repel(aes(label=Établissement), size=2, segment.size=0.1) +
+  geom_point(aes(color=PerimEx),size=2) +
+  scale_x_continuous(name="Taux d'alternance", labels = scales::percent) +
+  scale_y_continuous(name="Taux d'emploi salarié en France", labels= ~ scales::percent(.x, scale = 1)) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  facet_wrap(Discipline~Indicateur, scales = "free", labeller = labeller(Discipline = label_wrap_gen(30)), ncol=3) +
+  ggtitle("Mesures de l'insertion professionnelle des Masters dans les universités", subtitle="en fonction du taux d'alternance et du secteur disciplinaire")
+```
+
+### Alternance vs SCSP
+
+```{r}
+ mm %>%
+  summarise(
+    Capacité = sum(Capacité.offerte.limitée.par.la.formation),
+    .by = c(Alternance, pid)) %>%
+  mutate(Taux.Alternance = Capacité / sum(Capacité), .by=c(pid)) %>%
+  filter(Alternance == 1) %>% 
+  left_join(kpiESR::esr %>% filter(Rentrée == 2021)) %>%
+  left_join(kpiESR::esr.etab) %>% mutate(PerimEx = ifelse(PerimEx %in% c("ISITE","IDEx"), PerimEx, "NINI")) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  ggplot(aes(x=kpi.K.resPetu,y=Taux.Alternance)) +
+  geom_smooth(method = "lm", size=0.1) + 
+  ggrepel::geom_text_repel(aes(label=Etablissement), size=2, segment.size=0.1) +
+  geom_point(aes(color=PerimEx),size=2) +
+  scale_x_continuous(name="Budget par étudiant", labels = ~ paste(.x/1e3,"k€")) +
+  scale_y_continuous(name="Taux d'apprentissage dans MonMaster", labels= ~ scales::percent(.x)) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Taux d'alternance et budget par étudiant des université")
+```
+
+
+```{r}
+ mm %>%
+  summarise(
+    Capacité = sum(Capacité.offerte.limitée.par.la.formation),
+    .by = c(Alternance, pid)) %>%
+  mutate(Taux.Alternance = Capacité / sum(Capacité), .by=c(pid)) %>%
+  filter(Alternance == 1) %>% 
+  left_join(kpiESR::esr %>% filter(Rentrée == 2021)) %>%
+  left_join(kpiESR::esr.etab) %>% mutate(PerimEx = ifelse(PerimEx %in% c("ISITE","IDEx"), PerimEx, "NINI")) %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  filter(Taux.Alternance < 0.4) %>%
+  ggplot(aes(x=kpi.K.resPetu,y=Taux.Alternance)) +
+  geom_smooth(method = "lm", size=0.1) + 
+  ggrepel::geom_text_repel(aes(label=Etablissement), size=2, segment.size=0.1) +
+  geom_point(aes(color=PerimEx),size=2) +
+  scale_x_continuous(name="Budget par étudiant", labels = ~ paste(.x/1e3,"k€")) +
+  scale_y_continuous(name="Taux d'apprentissage dans MonMaster", labels= ~ scales::percent(.x)) +
+  scale_color_discrete(guide = guide_legend(reverse = TRUE)) +
+  scale_shape_discrete(guide = guide_legend(reverse = TRUE)) +
+  ggtitle("Taux d'alternance et budget par étudiant des université")
+  
 ```
