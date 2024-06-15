@@ -230,3 +230,39 @@ biatss %>%
 
   kableExtra::kable()
 ```
+
+## Statuts
+
+```{r, results='asis'}
+biatsscat <- function(var) {
+  biatss %>%
+    filter(Année == max(Année)) %>%
+    summarise(
+      Effectif = sum(Effectif),
+      Femmes = sum(effectif_femmes),
+      .by = !!sym(var)) %>%
+    arrange(!!sym(var)) %>%
+    spoiler_table(var, trim = Inf)
+}
+
+biatsscat("Type.de.personnel")
+biatsscat("Catégorie")
+biatsscat("Corps")
+biatsscat("Filière")
+biatsscat("BAP")
+```
+
+### Statuts Université de Strasbourg
+
+```{r, results='asis'}
+biatss %>%
+  filter(Etablissement == "Université de Strasbourg", Année == max(Année)) %>%
+  summarise(
+    Effectif = sum(Effectif),
+    Femmes = sum(effectif_femmes),
+    .by = c(Type.de.personnel,Catégorie,Corps,code_corps,Filière,code_filiere,BAP,code_bap)
+  ) %>%
+  pivot_wider(names_from = Type.de.personnel, values_from = c(Effectif,Femmes)) %>%
+  arrange(Catégorie,Corps,Filière,BAP) %>%
+  spoiler_table("Unistra", trim = Inf)
+```
