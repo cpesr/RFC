@@ -1,0 +1,71 @@
+---
+title: "prepas"
+date: "`r Sys.Date()`"
+format: gfm
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-effectifs-d-etudiants-inscrits-en-classes-preparatoires-aux-grandes-ecole")
+```
+
+
+```{r load}
+prepas <- read.csv2("../data/fr-esr-effectifs-d-etudiants-inscrits-en-classes-preparatoires-aux-grandes-ecole.csv", dec='.') %>%
+  mutate(
+    Degré.d.études = as.character(Degré.d.études),
+    Rentrée = as.numeric(str_sub(Année.scolaire,1,4))) 
+
+colnames(prepas)
+```
+
+```{r}
+prepas %>%
+  summarise(Effectif = sum(Nombre.d.élèves),
+    .by = c(Rentrée, Degré.d.études)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,color=Degré.d.études, group=Degré.d.études)) +
+  geom_line() + 
+  ggtitle("Effectif des CPGE") +
+  cpesr_cap()
+```
+
+
+```{r}
+prepas %>%
+  summarise(Effectif = sum(Nombre.d.élèves),
+    .by = c(Rentrée, Sexe)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,color=Sexe, group=Sexe)) +
+  geom_line(size=1.5) + geom_point(shape=21,fill="white", stroke=2,size=2) + 
+  ggtitle("Effectif des CPGE") +
+  cpesr_cap()
+```
+
+
+```{r}
+prepas %>%
+  summarise(Effectif = sum(Nombre.d.élèves),
+    .by = c(Rentrée, Filière)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,color=Filière, group=Filière)) +
+  geom_line(size=1.5) + geom_point(shape=21,fill="white", stroke=2,size=2) + 
+  ggtitle("Effectif des CPGE") +
+  cpesr_cap()
+```
+
+
+
+```{r}
+prepas %>%
+  summarise(Effectif = sum(Nombre.d.élèves),
+    .by = c(Rentrée, Secteur.d.établissement)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,color=Secteur.d.établissement, group=Secteur.d.établissement)) +
+  geom_line(size=1.5) + geom_point(shape=21,fill="white", stroke=2,size=2) + 
+  ggtitle("Effectif des CPGE") +
+  cpesr_cap()
+```
