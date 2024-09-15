@@ -1,351 +1,351 @@
 Etablissement,Typologie,PerimEx,Indicateur,Valeur100,Valeur,Rang,Rang_Valeur100,Rang_Typologie
-Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP,110.97964718380165,543899679,1,172,1
-Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,109.7877492915315,134279.58864716179,103,184,49
-Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,105.8324128828297,8505.0770758405,220,240,108
-Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),104.82153112930285,8845.335485444788,211,249,102
-Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),118.52152644944897,12327.165262644332,151,76,72
-Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP,118.47002663560038,55288028,63,78,15
-Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,109.35106662427796,139432.6726342711,97,193,29
-Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,121.69966965607924,8712.264103372203,214,58,64
-Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),121.52496245056315,8966.595523840415,206,59,61
-Avignon Université,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),129.16758349848206,10823.10866039572,172,31,50
-CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP,116.21380864573665,137012888,34,102,2
-CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP/E-EC,91.85255697889086,122501.85688729875,129,326,33
-CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant,83.128202297869,5813.266918409776,321,345,86
-CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant(hors doc.),83.3311173008739,5957.85919902596,319,344,85
-CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,Ressources/Etudiant(hors doc.),108.05468944024337,9095.176370830977,198,212,59
-La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP,117.12929928341012,66842121,59,90,12
-La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,113.68785767825736,136012.98778004074,99,132,30
-La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,112.26285215660003,8678.540768631525,217,154,66
-La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),111.90727170023973,8895.677535267501,209,157,63
-La Rochelle Université,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),140.6178855427462,13280.339765770561,145,17,40
-Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP,115.59446356702139,80346401,52,106,6
-Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,105.38928995787802,121885.31963470319,130,246,34
-Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,107.99250658195614,8179.415758933116,237,213,74
-Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),107.23722314477236,8358.098512431083,231,225,70
-Le Mans Université,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),115.40381468741849,10521.715697492979,178,109,51
-Nantes Université,Université pluridisciplinaire avec santé,ISITE,SCSP,111.60974723601504,270119369,13,160,9
+Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP,114.10497892800507,559216604,1,163,1
+Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,109.7877492915315,134279.58864716179,103,210,50
+Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,109.69144845252264,8815.203189992182,216,212,105
+Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),108.6437062652463,9167.868661570987,208,223,101
+Aix-Marseille Université,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),116.45412880532757,12112.139746300212,156,133,73
+Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP,121.25906352671257,56589626,63,77,15
+Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,109.35106662427796,139432.6726342711,96,218,29
+Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,126.57576757767926,9061.335329341317,211,44,63
+Avignon Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),126.39406043991922,9325.85695750892,204,47,61
+Avignon Université,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),132.81505437516506,11128.734674018813,170,28,48
+CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP,120.41289460747657,141963495,34,88,2
+CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP/E-EC,91.85255697889086,122501.85688729875,129,327,33
+CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant,87.53865839616866,6121.696041410327,320,344,86
+CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant(hors doc.),87.75233927270027,6273.9598208461975,312,343,85
+CY Cergy Paris Université,Université pluridisciplinaire hors santé,ISITE,Ressources/Etudiant(hors doc.),104.47163175297207,8793.583336956994,217,267,66
+La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP,120.77226412933355,68921050,60,83,13
+La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,113.68785767825736,136012.98778004074,98,172,30
+La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,115.23483959837715,8908.291872240976,215,150,65
+La Rochelle Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),114.8698456928612,9131.177002927869,210,157,62
+La Rochelle Université,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),123.8058871056308,11692.5684056428,161,58,47
+Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP,118.24127093943275,82186121,51,106,6
+Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,105.38928995787802,121885.31963470319,130,258,34
+Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,110.82726011325266,8394.121653262751,238,198,73
+Le Mans Université,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),110.05215083390209,8577.49474669718,232,206,71
+Le Mans Université,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),117.1546166472179,10681.34162072194,179,124,51
+Nantes Université,Université pluridisciplinaire avec santé,ISITE,SCSP,115.23394880269777,278890709,13,151,9
 Nantes Université,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,92.22909381847793,115654.9524838013,133,325,65
-Nantes Université,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,102.88701788880876,6558.205521025541,303,270,158
-Nantes Université,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),102.61710912067232,6754.841806496786,297,272,156
-Nantes Université,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),113.18581032266162,8975.072970066769,204,141,98
-Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP,107.53417892174481,517735673,5,221,4
-Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,107.76554814872834,118947.64483159117,132,217,64
-Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,108.95348968801102,10561.723235414116,177,200,84
-Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),105.65333879972552,11221.215739396172,165,242,77
-Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),123.58198240246021,16839.516352760136,141,44,67
-Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,114.93108681069823,85845179,49,117,8
-Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,100.51187144636006,123478.7365356623,126,288,16
-Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,118.3776375432632,6071.517009689512,314,79,30
-Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),118.18265516959518,6324.701908200103,306,82,25
-Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),122.88187663660652,7453.885213291092,264,51,19
-Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP,117.13724993658575,69245984,58,89,11
-Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,102.10741715484437,121450.825,131,274,35
-Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,99.69362553509607,7251.647711802283,276,299,84
-Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),98.9616404416331,7374.439190628328,270,303,82
-Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),111.43608121305977,10315.66922257721,182,164,53
-Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP,110.48666697994445,321244038,10,177,2
-Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP/E-EC,99.96574537191118,130631.0437806874,109,296,7
-Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant,106.66146220791613,8124.122148601487,239,229,21
-Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant(hors doc.),106.42344249325973,8426.515174566535,226,232,20
-Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,Ressources/Etudiant(hors doc.),113.41531876553705,11062.76106287543,168,139,16
-Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP,111.79472152507427,256246537,14,158,10
-Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,93.8133710320454,126340.29673590504,117,321,59
-Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,100.58144564808991,7826.472526801258,249,286,125
-Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),99.98517317263553,8032.303209830105,243,295,119
-Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),103.89883067408586,9862.978966835935,186,260,88
-Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP,114.39564201899289,213489763,18,122,13
-Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,101.26823962417022,126162.13281715306,118,279,60
-Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,105.95514121603537,7160.0014421303285,282,237,144
-Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),105.29057657473551,7469.116712731344,262,247,132
-Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),123.56711153850542,10484.998810481755,180,45,86
-Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP,116.30433172734851,392082794,6,101,5
-Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,88.26876191908492,97118.09795918368,138,334,66
-Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,96.20997068419227,7486.925356604098,261,309,131
-Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),93.55383593406847,7921.504646840149,246,322,122
-Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),104.70940053717341,11486.495737029254,162,251,75
-Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP,241.9450240567393,175079902,29,2,1
-Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP/E-EC,219.32364588890815,261466.6880597015,72,5,21
-Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant,165.28169737979812,11627.807797037922,159,10,47
-Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant(hors doc.),169.21510283862247,11904.528591827022,156,9,46
-Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,Ressources/Etudiant(hors doc.),221.43879163562664,19121.36968790372,140,4,38
-Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP,116.61690953996624,116215836,39,96,27
-Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,108.288978438227,132738.67976878613,106,207,52
-Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,119.08967282312763,6941.574244415243,293,70,153
-Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),119.55031003636198,7095.417058428476,285,69,147
-Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),131.34298111991015,9478.274986262897,192,24,91
-Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP,120.79228183329607,98521804,45,64,2
-Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP/E-EC,120.98472087279555,136485.1494413408,98,63,6
-Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,122.23493780566099,3935.3626522867985,343,53,18
-Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),121.79166368902476,4015.3979458754484,342,56,17
-Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),131.6301893521108,5366.793527877405,326,23,11
-Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP,113.08451717110144,66740710,60,144,13
-Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,128.181425583183,150698.54337899544,80,33,23
-Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,121.28832468820652,9942.009533740504,185,61,55
-Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),120.71207044282839,10184.75660003052,183,66,54
-Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),124.53542094258236,12072.458721196399,155,38,45
-Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,107.53695118021685,128491566,37,220,4
-Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,99.91271156388083,125532.77557100297,122,297,14
-Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,116.38487430447167,5085.149833781858,329,99,36
-Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),115.56144052494004,5253.774624851781,327,108,35
-Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),131.214740560449,6587.388068855543,301,27,24
-Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP,124.14269724339077,75646000,57,41,4
-Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP/E-EC,107.76671329664853,102765.79137691238,135,216,8
-Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,94.81652423705856,3486.794192210187,345,318,20
-Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),93.01772020577104,3627.7575292537886,344,323,19
-Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),96.05613153677423,4749.808171877998,336,311,14
-Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP,112.32902436379952,195137324,22,151,1
-Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP/E-EC,110.35995564982485,124329.87636130686,124,181,7
-Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,103.3078185125131,4967.222196767214,332,266,13
-Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),101.15175130913603,5252.121548150939,328,281,12
-Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),104.61394308058472,6559.684583086612,302,252,9
-Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,112.64966326758,131142428,36,148,3
-Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,122.93948892275193,140452.8452787258,94,50,11
-Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,112.2891349012335,5995.904718361376,317,153,32
-Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),111.56076347356327,6306.743676060402,307,161,26
-Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),116.76685762712815,7502.530922381457,258,93,18
-Université Paris Dauphine - PSL,NA,NINI,SCSP,106.84843007551275,62108365,62,226,1
-Université Paris Dauphine - PSL,NA,NINI,SCSP/E-EC,100.71185017098865,100933.31379310344,136,285,2
-Université Paris Dauphine - PSL,NA,NINI,SCSP/Etudiant,90.79543009154584,5553.151394422311,325,327,5
-Université Paris Dauphine - PSL,NA,NINI,SCSP/Etudiant(hors doc.),89.55444121300691,5719.160023446659,323,329,4
-Université Paris Dauphine - PSL,NA,NINI,Ressources/Etudiant(hors doc.),104.11211950765676,10907.669597499023,170,258,3
-Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,113.95398875086687,183787810,23,127,1
-Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,110.43379818260908,124032.2838665759,125,178,15
-Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,112.31985289153812,6003.5870381863915,316,152,31
-Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),111.14615129874737,6254.902834972603,308,168,27
-Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),115.12850559688582,7269.657420957697,273,111,20
-Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP,118.01411289427517,221965028,16,85,11
-Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,115.01428598310798,143736.11277173914,86,114,40
-Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,92.477438899754,6006.034797196742,315,324,163
-Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),93.92867337487519,6100.286593744847,313,320,162
-Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),107.60589970415187,8224.267080745341,236,219,116
-Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP,114.35939928245172,317667919,11,124,3
-Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP/E-EC,95.04005098224748,100841.31747572815,137,316,10
-Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant,66.54388653063043,6788.066135304927,295,346,25
-Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant(hors doc.),66.01659879047568,7430.654698135716,268,347,22
-Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,Ressources/Etudiant(hors doc.),88.25984292127322,11571.251970714135,161,335,14
-Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,110.63622896219792,97606639,46,176,7
-Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,89.33400568482827,125698.8374836173,121,330,13
-Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,95.66151275489335,4666.601596863645,337,314,40
-Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),95.13863213631659,4821.033241134051,335,315,39
-Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),103.70292472443477,5950.828114195397,320,263,34
-Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP,102.895704745791,84571766,51,269,30
-Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,107.35588589801415,129002.43613707165,112,222,55
-Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,86.87867836261115,7032.410277731582,288,338,149
-Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),86.7644146562682,7151.341620158972,283,339,145
-Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),88.93824348954999,9228.717148655505,196,333,93
-Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,118.6125222995847,103581112,41,74,5
-Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,111.3864408680441,129006.32660781841,111,165,12
-Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,120.24984647538619,4947.512036683225,333,67,38
-Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),120.17694909949128,5059.8950710761565,330,68,37
-Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),127.401943909496,6236.889160275512,310,34,28
-Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP,118.02921020075874,99958538,44,84,4
-Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,101.32153730729854,127312.85825747724,115,278,32
-Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,109.08853030180457,7401.594816734543,269,197,81
-Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),111.06013761293023,7537.7828218083105,257,170,80
-Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),117.2756541064996,9616.000904909131,189,88,56
-Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,111.0507269852628,100693049,43,171,6
-Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,114.98491133068617,144205.10760401722,85,115,10
-Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,123.11485731263814,6715.1083027675895,299,48,23
-Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),118.94008713927578,7061.718844238726,287,72,21
-Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),121.83281344230123,8036.496037590294,242,55,17
-Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP,115.04700932669097,163446918,30,113,21
-Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,107.25445475488749,133663.21110176618,104,224,50
-Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,106.34848647221187,7449.043751709051,265,234,134
-Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),105.607529446196,7611.03227008149,255,244,128
-Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),102.97869585915006,8940.262724097789,207,268,100
-Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,118.59522071711348,177580558,27,75,2
-Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,120.76034662180209,144426.9535655058,84,65,9
-Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,105.61337665910646,5984.785589107576,318,243,33
-Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),105.47989712277104,6181.445210247842,312,245,29
-Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),103.78568072872439,6743.666875522139,298,261,22
-Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP,106.10238269396002,85148725,50,236,3
-Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP/E-EC,108.35571321598529,143730.67096774193,87,206,5
-Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,109.81182583496907,4490.019246994305,339,183,16
-Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),108.92872818065813,4591.465354543004,338,201,15
-Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),117.6564386757247,6251.3329738473985,309,86,10
-Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP,112.61493691364615,315572913,12,149,4
-Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP/E-EC,106.4871293884579,125960.90721231766,119,230,8
-Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP/Etudiant,116.88056412240044,11108.98415883409,167,92,15
-Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP/Etudiant(hors doc.),116.57601439190886,11708.701135351737,157,97,13
-Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,Ressources/Etudiant(hors doc.),118.05057593988757,14688.775230038587,144,83,11
-Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP,117.35300465086391,138797770,33,87,24
-Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,104.46378012867552,131299.89801699718,108,254,53
-Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,102.01076285141673,5686.568747951491,324,275,165
-Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),101.11787802417432,5776.741582386482,322,282,164
-Université d'Angers,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),107.89337734889169,7242.841719731969,277,214,139
-Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP,113.1227159432574,90380774,48,143,5
-Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,134.75144300498278,145882.53300330034,83,20,25
-Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,96.43216717437502,7602.689602960969,256,307,79
-Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),95.79266304044124,7705.095822676897,253,313,77
-Université d'Artois,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),101.25592028044427,9272.516965046889,194,280,58
-Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP,113.76998534353235,150747407,32,129,23
-Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,111.1845458880488,128665.19673539519,113,167,56
-Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,100.51344135313806,8416.47071631958,227,287,112
-Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),100.01163347486195,8623.500200217379,218,293,106
-Université d'Orléans,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),103.65375226979052,10738.047194096447,175,264,82
-Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP,115.26264252708435,76502868,55,110,9
-Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,110.74064795525227,141621.38817005546,90,175,26
-Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,164.73377670906302,12089.580910240202,154,13,44
-Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),160.55155185572855,12091.491702228544,153,14,43
-Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),164.86840245439433,15425.324008218746,143,12,39
-Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP,110.84086176217698,359850709,8,174,7
-Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,105.09628223658105,135236.07939508508,101,248,47
-Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,114.50071313912404,7985.148319094641,244,119,120
-Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),115.84230913082688,8391.453699601241,230,104,114
-Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),127.33620218846112,13242.80665998181,146,35,69
-Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP,111.55800497667865,209711209,19,162,14
-Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,110.4208221182317,140537.2288993923,93,179,44
-Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,106.84361744067381,7441.053436468793,266.5,227,135.5
-Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),102.65173129404985,7441.053436468793,266.5,271,135.5
-Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),114.39912806571846,9825.5219103715,187,121,89
-Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP,115.62936119051818,162600000,31,105,22
-Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,101.55217828352899,123001.2255351682,128,277,63
-Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,87.84177137975391,6944.266495836003,292,336,152
-Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),86.69302909823267,7090.219334583351,286,340,148
-Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),86.04550881769319,8786.464919548249,213,341,104
-Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP,114.42896458711304,206332306,20,120,15
-Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,118.50477654726011,141043.95796002756,92,77,43
-Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,99.1841949997838,7001.673148053887,290,302,150
-Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),99.23189775951472,7196.048756670038,280,301,142
-Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),103.0989597065292,8788.666445785233,212,267,103
-Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP,128.69962035988488,43341018,64,32,31
-Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,123.78820696653108,128663.72011661807,114,43,57
-Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,124.4304077716756,10494.193220338982,179,40,85
-Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),123.36243719621444,10762.606903402037,174,46,81
-Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),129.62418712090493,16409.5540104296,142,30,68
-Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP,110.39144748093355,178640005,25,180,18
-Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,118.21186847662102,134620.22071050643,102,81,48
-Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,107.8334501432007,8465.147372411506,222.5,215,109.5
-Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),104.12984663580833,8465.147372411506,222.5,257,109.5
-Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),108.39687775394896,10705.626877695115,176,204,83
-Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP,150.78861882626828,24450940,67,15,33
-Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,111.97130741909417,7193.568696675493,281,156,143
-Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),113.81294076480297,7311.883971291866,271,128,137
-Université de Guyane,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),107.28697379162524,8112.18062200957,240,223,117
-Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP,113.6244358230585,80334118,53,134,7
-Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,105.7670815933583,140035.30902777778,95,241,28
-Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,89.64029375142881,8243.62421754746,235,328,73
-Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),89.32610245413173,8491.978646934462,221,331,67
-Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),102.4119838796899,12811.061945031712,148,273,41
-Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP,125.87156165074904,114807649,40,37,28
-Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,113.54561339233113,210498.23626373627,74,137,35
-Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,97.45158880697315,6780.513170328372,296,304,155
-Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),96.42457942813519,6858.6922157835,294,308,154
-Université de La Réunion,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),96.62221214046058,7858.916781169723,248,306,124
-Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP,124.44709586446443,518970500,4,39,3
-Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,108.55957861349492,132878.25644363448,105,202,51
-Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,109.42853873967906,6953.539941581585,291,192,151
-Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),109.30735472007143,7145.302969806281,284,195,146
-Université de Lille,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),111.68903510564701,8851.796450551417,210,159,101
-Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP,116.69059641151354,135443158,35,94,25
-Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,100.16714209697821,125419.98962264151,123,292,61
-Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,109.92665962896247,8414.70912027833,228,182,113
-Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),109.0689470372725,8690.052482997562,216,198,105
-Université de Limoges,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),113.44284278683683,11186.034004876172,166,138,78
-Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP,113.98223405230485,519268043,3,126,2
-Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,103.73054570649265,135911.56175298805,100,262,46
-Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,109.5014132185713,8972.854158386757,205,190,99
-Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),109.72182269104182,9242.440649306729,195,186,92
-Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),118.88326759630353,11651.808055817595,158,73,73
-Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP,114.38731823234956,326281976,9,123,8
-Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,100.9265816705291,126822.09190887667,116,283,58
-Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,105.89394919698792,7214.637390823659,278,238,140
-Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),105.8328120567741,7487.309559869659,260,239,130
-Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),123.11446454420437,10804.752742209372,173,49,80
-Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP,164.89636021724004,22241724,68,11,17
-Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,108.42597696747471,157256.198630137,78,203,22
-Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,115.57727454499673,4124.183942147228,341,107,90
-Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),116.34491136313483,4152.674383868559,340,100,89
-Université de Nîmes,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),122.36260480865417,5039.676624346527,331,52,87
-Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP,108.19087655978616,526982613,2,208,1
-Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP/E-EC,113.55806665179225,164816.87858508603,77,136,6
-Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant,104.4440787502829,9048.15447615123,199,255,19
-Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant(hors doc.),103.97552076120493,9514.554191416759,190,259,17
-Université de Paris,Université scientifique et/ou médicale,IDEx,Ressources/Etudiant(hors doc.),109.34244834594323,12112.285734919746,152,194,12
-Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP,116.03505456021755,100846204,42,103,3
-Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP/E-EC,94.092808090024,109326.43246187364,134,319,36
-Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant,109.76755161320877,8328.890320449289,232,185,71
-Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant(hors doc.),109.6836831572576,8692.888888888889,215,187,65
-Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,Ressources/Etudiant(hors doc.),131.33691669604707,12433.932505818464,150,25,42
-Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP,114.96189465256126,65588474,61,116,14
-Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,100.808875076581,131310.14228456913,107,284,31
-Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,124.0295534246095,8159.800199054491,238,42,75
-Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),123.20198927635182,8440.158795521811,225,47,68
-Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),130.54057827009072,10351.745592587826,181,29,52
-Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP,116.67545330302357,176923709,28,95,20
-Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,122.07737816569184,146800.19932998324,82,54,39
-Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,104.74132636342142,6488.565262038362,304,250,159
-Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),104.36887049871899,6596.4620633086015,300,256,157
-Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),107.64236303285881,7935.974087468774,245,218,121
-Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP,112.39016037682919,218702906,17,150,12
-Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,116.50848484525676,153187.06728971962,79,98,38
-Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,99.99099584439483,8042.617806053028,241,294,118
-Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),99.78935519410327,8281.064218099205,233,298,115
-Université de Poitiers,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),104.61346633971856,9942.01052631579,184,253,87
-Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP,113.71161553494322,183290326,24,131,17
-Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,112.75388485895913,140020.47145061727,96,147,45
-Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,113.1437312183221,7757.335618757406,252,142,127
-Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),112.8448215663952,7893.640223944875,247,146,123
-Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),121.1615820738131,9799.155297157622,188,62,90
-Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP,111.123125630896,222653872,15,169,5
-Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP/E-EC,100.42499755148033,125761.48317170565,120,290,9
-Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP/Etudiant,85.99717188060588,7010.733083535376,289,342,24
-Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP/Etudiant(hors doc.),85.41878489892395,7267.24564266597,274,343,23
-Université de Rennes 1,Université scientifique et/ou médicale,NINI,Ressources/Etudiant(hors doc.),87.68270667801666,9512.868333442131,191,337,18
-Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP,114.1997178817896,196532274,21,125,16
-Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,117.10973295059229,143139.3972303207,88,91,41
-Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,96.04874552714475,6189.213138502236,311,312,161
-Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),95.03333166386686,6333.417356836711,305,317,160
-Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),99.63925484176612,7766.246688795076,251,300,126
-Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP,112.0942428728192,365833959,7,155,6
-Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,100.47989327714133,123420.78936674568,127,289,62
-Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,101.83569672385092,7196.922391406988,279,276,141
-Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),100.34039100026692,7490.764548097793,259,291,129
-Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),113.31446982205055,11038.823723330193,169,140,79
-Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP,113.59940941870377,76334450,56,135,10
-Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,111.37129446245986,147317.40576923077,81,166,24
-Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,96.9737216266557,7625.8191808191805,254,305,78
-Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),96.16262901597545,7774.949073130984,250,310,76
-Université de Toulon,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),103.30970695812684,9374.638419229987,193,265,57
-Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP,113.73813289903288,177642558,26,130,19
-Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,106.83466678366102,130461.56347438753,110,228,54
-Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,109.48589147885095,7282.223415593999,272,191,138
-Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),109.11008843866661,7459.585034013606,263,196,133
-Université de Tours,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),109.52837303118042,9129.893759973125,197,189,94
-Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP,111.51970703356393,119131614,38,163,26
-Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,108.121892730099,141720.09563164107,89,211,42
-Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,131.83345576369615,8978.190820709926,203,22,97
-Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),126.5538046114884,8982.252431576566,202,36,96
-Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),142.44737335118828,12451.32111890221,149,16,71
-Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP,131.27344892065952,30625350,65,26,16
-Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,110.87482921554421,266664.61739130435,71,173,20
-Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,109.03795786366774,8913.08207217695,208,199,62
-Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),108.36251679771425,9028.699882075472,200,205,60
-Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),113.64919296774542,11226.924823113208,164,133,48
-Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP,135.64283632068694,29347132,66,18,32
-Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,134.90441161422032,260601.5128205128,73,19,34
-Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,183.20454374812653,11370.450213095699,163,8,76
-Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),185.20154757427122,11604.243574535389,160,7,74
-Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),185.44268856926217,13089.390272835113,147,6,70
-Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP,121.47718421780198,95463551,47,60,29
-Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,134.43885200082627,174339.19626168226,76,21,37
-Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,114.68238736987777,8462.330555801791,224,118,111
-Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),112.94900795706837,8614.289027251398,219,145,107
-Université des Antilles,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),106.48162323980435,8992.463815195813,201,231,95
-Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP,115.0852357062023,77795206,54,112,8
-Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,109.68333971973819,141225.97636363635,91,188,27
-Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,118.21514331703709,8264.65590141294,234,80,72
-Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),118.95626191262984,8413.930997187974,229,71,69
-Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),121.77863287757009,10855.894873458794,171,57,49
-Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP,279.20920010975055,6370264,69,1,18
-Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,3.0294527643133113,354.71150954952947,350,348,95
-Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),0,408.11480556089435,349,349.5,94
-Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),0,3385.1422897046577,346,349.5,91
-Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,106.18619547830494,184414.8951048951,75,235,36
-Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP,130.87952672770956,3723800,70,28,19
-Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,88.9928764534945,64924,139,332,37
-Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,108.1513675608667,2740.103016924209,347.5,209.5,92.5
-Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),108.1513675608667,2740.103016924209,347.5,209.5,92.5
-Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),240.9607506508114,7256.733627667402,275,3,83
-Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,106.39448899256789,4863.959526774595,334,233,88
+Nantes Université,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,97.4819867625908,6213.6790132052265,315,314,161
+Nantes Université,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),97.27895156361774,6403.45391275232,308,315,160
+Nantes Université,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),108.62766716546611,8613.634841672247,230,224,114
+Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP,111.70838078762941,537832848,2,187,2
+Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,107.76554814872834,118947.64483159117,132,237,64
+Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,113.6935719792024,11021.21689106487,171,171,81
+Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),110.24984618727119,11709.400983983182,160,205,75
+Sorbonne Université,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),115.18851534220016,15695.806541104055,143,152,68
+Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,117.36618154098804,87664018,49,120,8
+Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,100.51187144636006,123478.7365356623,126,295,16
+Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,121.31227573295389,6222.032817030908,314,76,31
+Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),121.11245965308967,6481.494290134827,305,78,26
+Université Bordeaux Montaigne,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),125.46521964437187,7610.588079275031,269,52,19
+Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP,120.12240495283324,71010666,58,90,11
+Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,102.10741715484437,121450.825,131,281,35
+Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,102.07719865508422,7425.027227981987,281,282,83
+Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),101.32771254303911,7550.754526091587,273,288,82
+Université Bretagne Sud,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),113.12696816790692,10472.19510117146,182,181,53
+Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP,113.87882262631052,331106855,10,166,2
+Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP/E-EC,99.96574537191118,130631.0437806874,109,301,7
+Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant,110.83199846394419,8441.78089120429,235,197,21
+Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant(hors doc.),110.58467201535522,8755.997691682187,221,201,20
+Université Claude Bernard - Lyon 1,Université scientifique et/ou médicale,IDEx,Ressources/Etudiant(hors doc.),117.35313638367828,11446.86380924901,166,122,15
+Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP,115.37382522337651,264450260,14,148,10
+Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,93.8133710320454,126340.29673590504,117,323,59
+Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,105.19820267507467,8185.712959286521,244,259,121
+Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),104.57456088589335,8400.99141119679,237,264,117
+Université Clermont Auvergne,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),107.87894926882988,10240.806375775814,185,234,87
+Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP,117.4806653387384,219247158,18,116,13
+Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,101.26823962417022,126162.13281715306,118,290,60
+Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,110.66759428524011,7478.44913975249,278,200,142
+Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),109.97347251582323,7801.312598397649,257,207,129
+Université Côte d'Azur,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),123.74098297464738,10499.75226533254,180,60,86
+Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP,113.21781746765005,381677600,6,179,5
+Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,88.26876191908492,97118.09795918368,138,342,66
+Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,99.61107344467095,7751.594416544139,261,304,131
+Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),96.86104211432158,8201.536447389688,243,316,120
+Université Grenoble Alpes,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),101.60677934035505,11146.14191045741,169,286,80
+Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP,244.77273254283728,177126131,29,2,1
+Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP/E-EC,219.32364588890815,261466.6880597015,72,4,21
+Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant,170.1395942700771,11969.567908613933,159,12,46
+Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant(hors doc.),174.18860888859396,12254.421975929828,153,9,45
+Université Gustave Eiffel,Université pluridisciplinaire hors santé,ISITE,Ressources/Etudiant(hors doc.),206.40377338586785,17823.087033385462,140,5,38
+Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP,119.79657416974756,119384565,39,93,27
+Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,108.288978438227,132738.67976878613,106,229,52
+Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,122.22643524782568,7124.411838490025,291,68,151
+Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),122.69920541488919,7282.306795286648,286,65,147
+Université Jean Monnet,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),130.0041622484709,9381.660052506259,200,38,97
+Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP,123.40579053765998,100653460,46,61,2
+Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP/E-EC,120.98472087279555,136485.1494413408,97,80,6
+Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,125.75801745731883,4048.788456161374,345,50,18
+Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),125.30196720606459,4131.130542875774,344,53,17
+Université Jean Moulin - Lyon 3,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),131.97721096769112,5380.942207368765,328,31,12
+Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP,117.11991743325343,69122340,59,125,12
+Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,128.181425583183,150698.54337899544,80,40,23
+Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,124.95237255900963,10242.351705645762,184,54,55
+Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),124.35871001694471,10492.432015870594,181,57,52
+Université Le Havre Normandie,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),131.1496455060918,12713.641385624906,148,33,41
+Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,109.4323344263515,130756283,37,217,4
+Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,99.91271156388083,125532.77557100297,122,302,14
+Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,118.31304989519987,5169.3967072977675,330,105,36
+Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),117.47597409453998,5340.815144948277,329,117,35
+Université Lumière - Lyon 2,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),127.82270866485617,6417.09751809298,307,41,27
+Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP,126.2055607184581,76903000,57,48,4
+Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP/E-EC,107.76671329664853,102765.79137691238,135,236,8
+Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,96.44419704011864,3546.650426365522,347,317,20
+Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),94.61451374571406,3690.033617878381,346,320,19
+Université Panthéon-Assas,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),102.63294239412471,5075.019998081719,333,276,14
+Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP,113.99511793198245,198031652,22,165,1
+Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP/E-EC,110.35995564982485,124329.87636130686,124,204,7
+Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,106.64647398343968,5127.750642738959,332,244,13
+Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),104.42072797290274,5421.857242827152,327,269,11
+Université Paris 1 - Panthéon Sorbonne,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),106.48267871171306,6676.861280077515,300,248,9
+Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,115.67477470956914,134664147,36,139,3
+Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,122.93948892275193,140452.8452787258,93,63,10
+Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,117.71098312646295,6285.415234089247,311,112,29
+Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),116.94744249621678,6611.262960469367,301,129,24
+Université Paris 8 - Vincennes - Saint-Denis,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),117.42550427084875,7544.850437626238,274,118,20
+Université Paris Dauphine - PSL,NA,NINI,SCSP,108.8482652311062,63270820,62,220,1
+Université Paris Dauphine - PSL,NA,NINI,SCSP/E-EC,100.71185017098865,100933.31379310344,136,294,2
+Université Paris Dauphine - PSL,NA,NINI,SCSP/Etudiant,90.79543009154584,5553.151394422311,325,332,5
+Université Paris Dauphine - PSL,NA,NINI,SCSP/Etudiant(hors doc.),89.55444121300691,5719.160023446659,324,338,4
+Université Paris Dauphine - PSL,NA,NINI,Ressources/Etudiant(hors doc.),104.11211950765676,10907.669597499023,175,271,3
+Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,116.30665420356405,187582247,24,134,1
+Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,110.43379818260908,124032.2838665759,125,202,15
+Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,117.08284892816026,6258.173031065234,313,127,30
+Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),115.85937575990243,6520.146036824014,304,136,25
+Université Paris Nanterre,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),121.02085995081444,7641.723377463159,267,79,18
+Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP,120.84900968512058,227297000,16,82,11
+Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,115.01428598310798,143736.11277173914,85,156,40
+Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,93.40388594424527,6066.203777362881,321,324,163
+Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),94.86965901284759,6161.399796625075,318,319,162
+Université Paris-Est Créteil,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),104.77221623445811,8007.690018138845,248,263,124
+Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP,115.58131696667422,321062166,11,143,3
+Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP/E-EC,95.04005098224748,100841.31747572815,137,318,10
+Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant,70.30219682925905,7171.447091756058,290,346,25
+Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant(hors doc.),69.74512857811396,7850.328202849056,253,347,22
+Université Paris-Saclay,Université scientifique et/ou médicale,IDEx,Ressources/Etudiant(hors doc.),85.92420761440727,11265.039952281819,168,345,16
+Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,117.86168884350896,103981159,42,111,6
+Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,89.33400568482827,125698.8374836173,121,339,13
+Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,99.55530952819811,4856.550487664946,337,305,40
+Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),99.01114562853152,5017.268102341203,334,308,38
+Université Paul-Valéry - Montpellier 3,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),107.77686648646707,6184.60481082683,317,235,33
+Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP,105.43667431479973,86660233,50,257,30
+Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,107.35588589801415,129002.43613707165,112,240,55
+Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,91.86712386612993,7436.200898054216,280,326,143
+Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),91.7462993063893,7561.9611026551665,271,328,137
+Université Polytechnique Hauts-de-France,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),91.70292881859464,9515.595974970403,194,329,92
+Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,120.38357558728572,105127725,41,89,5
+Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,111.3864408680441,129006.32660781841,111,190,12
+Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,121.8825834055641,5014.6887179977075,335,73,39
+Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),121.80869623848672,5128.597674759416,331,74,37
+Université Rennes 2,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),126.43301131124593,6189.455620145572,316,45,32
+Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP,119.48547650934628,101191845,45,95,4
+Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,101.32153730729854,127312.85825747724,115,289,32
+Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,112.25174888681542,7616.217400962606,268,183,81
+Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),114.2805265060536,7756.354422743383,260,162,80
+Université Savoie Mont Blanc,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),117.508408748484,9635.085589322072,191,115,57
+Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,114.02171986747855,103386938,43,164,7
+Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,106.31019746345196,133325.95805142084,104,251,11
+Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,130.34293069942865,7109.352317439147,293,36,22
+Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),125.92305976532366,7476.312364120906,279,49,21
+Université Sorbonne Nouvelle - Paris 3,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),122.3828017621384,8072.77508941721,247,67,17
+Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP,117.70526688030832,167223496,30,113,21
+Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,108.72961005332739,135501.58690176322,100,222,47
+Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,109.51295397722798,7670.694831829368,266,215,136
+Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),108.7499492991089,7837.5034225844,254,221,127
+Université Sorbonne Paris Nord,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),105.82124678634159,9187.043399301514,207,255,100
+Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP,120.77172001064001,180839576,28,84,2
+Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/E-EC,120.76034662180209,144426.9535655058,84,85,9
+Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant,108.04338960769189,6122.486957400916,319,231,34
+Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,SCSP/Etudiant(hors doc.),107.90683889787518,6323.671435533278,309,233,28
+Université Toulouse - Jean Jaurès,Université tertiaire - lettres et sciences Humaines,NINI,Ressources/Etudiant(hors doc.),106.32847516453904,6908.889654692286,296,250,23
+Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP,98.2635757975433,78857967,55,312,3
+Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP/E-EC,108.35571321598529,143730.67096774193,86,228,5
+Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP/Etudiant,112.10490261448929,4583.779265977641,339,184,16
+Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,SCSP/Etudiant(hors doc.),111.20336422567867,4687.343758425452,338,193,15
+Université Toulouse Capitole,Université tertiaire - droit et économie,NINI,Ressources/Etudiant(hors doc.),118.76768850393971,6310.376004313831,310,98,10
+Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP,113.867248274011,319082177,12,167,4
+Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP/E-EC,106.4871293884579,125960.90721231766,119,247,8
+Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP/Etudiant,122.2101782766393,11615.540570986024,164,69,14
+Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,SCSP/Etudiant(hors doc.),121.89174144210706,12242.60392549718,154,72,12
+Université Toulouse III - Paul Sabatier,Université scientifique et/ou médicale,NINI,Ressources/Etudiant(hors doc.),121.97183978160962,15176.689522113387,144,71,11
+Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP,120.42465052994653,142430720,33,87,24
+Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,104.46378012867552,131299.89801699718,108,268,53
+Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,105.85456148824608,5900.840503113734,323,254,165
+Université d'Angers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),104.92803247105871,5994.411079202564,322,262,164
+Université d'Angers,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),111.87577156339314,7510.1783410330045,276,185,140
+Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP,115.79702018443425,92517442,48,137,5
+Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,134.75144300498278,145882.53300330034,83,23,25
+Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,98.76374321217236,7786.510514804845,258,310,79
+Université d'Artois,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),98.10877688799187,7891.392753623189,251,313,77
+Université d'Artois,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),102.23272066944833,9361.967519181586,201,277,59
+Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP,117.15593268453415,155233852,32,123,23
+Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,111.1845458880488,128665.19673539519,113,194,56
+Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,102.18213053386194,8556.198034727262,233,279,115
+Université d'Orléans,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),101.67199181578958,8766.664550082947,219,285,107
+Université d'Orléans,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),103.9598037239605,10769.752702934615,177,274,84
+Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP,119.6441913843787,79411018,53,94,8
+Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,110.74064795525227,141621.38817005546,89,199,26
+Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,172.03577012867245,12625.46396965866,150,11,43
+Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),167.66816387409497,12627.45945945946,149,14,42
+Université d'Évry-Val-d'Essonne,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),173.10521870362334,16195.972340761815,142,10,39
+Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP,114.78692203862178,372661802,8,158,7
+Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,105.09628223658105,135236.07939508508,101,261,48
+Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,118.42168138941112,8258.592144679908,241,103,118
+Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),119.80921906255818,8678.811067322715,224,92,111
+Université de Bordeaux,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),123.3903272211725,12832.440570855584,147,62,70
+Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP,115.25972571028488,216669852,19,149,14
+Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,110.4208221182317,140537.2288993923,92,203,44
+Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,110.96660434508006,7728.196146613206,264.5,195,134.5
+Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),106.61295756079437,7728.196146613206,264.5,245,134.5
+Université de Bourgogne,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),109.64861677451987,9417.509597984601,197,214,94
+Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP,118.5449846891721,166700000,31,100,22
+Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,101.55217828352899,123001.2255351682,128,287,63
+Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,91.03383978802246,7196.61311125347,288,330,149
+Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),89.84335354017983,7347.869707408538,284,336,146
+Université de Bretagne Occidentale,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),90.52711889887367,9244.100771813544,205,335,99
+Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP,117.35375409158144,211606133,20,121,15
+Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,118.50477654726011,141043.95796002756,91,101,43
+Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,101.71016031255118,7179.987681970884,289,284,150
+Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),101.75907793838456,7379.313535381718,283,283,145
+Université de Caen Normandie,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),104.56805138619869,8913.899103686395,214,265,104
+Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP,133.65469176600712,45009693,64,26,31
+Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,123.78820696653108,128663.72011661807,114,59,57
+Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,130.62804778696488,11016.888861985472,172,35,82
+Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),129.50688364497796,11298.671715917557,167,39,79
+Université de Corse Pasquale Paoli,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),132.60192174215084,16786.515271914577,141,29,67
+Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP,115.05103178830525,186180337,25,155,18
+Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,118.21186847662102,134620.22071050643,102,107,49
+Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,111.3631544482462,8742.236411884565,222.5,192,109.5
+Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),107.53832116264618,8742.236411884565,222.5,238,109.5
+Université de Franche-Comté,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),109.30591066890554,10795.405913851111,176,219,83
+Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP,162.64971978754733,26374262,67,17,33
+Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,102.14618316144343,6562.3560411311055,303,280,158
+Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),103.96354068498562,6679.111721611722,299,273,156
+Université de Guyane,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),102.22585578618384,7729.499463631606,263,278,133
+Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP,115.60660181697841,81735538,52,142,7
+Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,105.7670815933583,140035.30902777778,94,256,28
+Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,90.94748418581574,8363.837865572088,240,331,75
+Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),90.62871115589367,8615.813953488372,229,334,69
+Université de Haute-Alsace,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),104.06748363592794,13018.154016913319,146,272,40
+Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP,130.17411207832916,118732012,40,37,28
+Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,113.54561339233113,210498.23626373627,74,176,35
+Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,100.3797918766977,6984.252480510277,295,298,153
+Université de La Réunion,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),99.3219231547483,7064.780632056873,294,307,152
+Université de La Réunion,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),101.03345305314737,8217.711870482108,242,291,119
+Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP,126.633124245612,528086697,5,43,4
+Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,108.55957861349492,132878.25644363448,105,225,51
+Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,113.42197503445266,7207.299327384302,287,177,148
+Université de Lille,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),113.29636857927366,7406.060470047225,282,178,144
+Université de Lille,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),118.0534600973456,9356.202227698917,203,108,98
+Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP,119.29912268361988,138470883,35,96,25
+Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,100.16714209697821,125419.98962264151,123,300,61
+Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,114.49239642423896,8764.20893389662,220,160,108
+Université de Limoges,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),113.59905926292353,9050.988515334275,212,173,103
+Université de Limoges,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),117.99121978754134,11634.526818940074,163,109,77
+Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP,116.01688441327738,528537285,4,135,3
+Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,103.73054570649265,135911.56175298805,99,275,46
+Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,111.5786487483309,9143.068687252682,209,188,102
+Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),111.80323937585554,9417.769218446861,196,186,93
+Université de Lorraine,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),119.02467695739975,11665.66765747646,162,97,76
+Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP,118.48530813736875,337971211,9,102,8
+Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP/E-EC,100.9265816705291,126822.09190887667,116,292,58
+Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant,109.79097708738179,7480.144941956883,277,209,141
+Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,SCSP/Etudiant(hors doc.),109.72759002503021,7762.851783009775,259,211,130
+Université de Montpellier,Université pluridisciplinaire avec santé,ISITE,Ressources/Etudiant(hors doc.),122.43966610850094,10745.531185460553,178,66,85
+Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP,168.2772001374524,22697742,68,13,17
+Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,108.42597696747471,157256.198630137,78,227,22
+Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,124.76688872794625,4452.100129797886,341,55,90
+Université de Nîmes,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),125.59556078176615,4482.855862584018,340,51,89
+Université de Nîmes,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),134.70038734916704,5547.825616131441,326,24,87
+Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP,109.851602797042,535071778,3,208,1
+Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP/E-EC,113.55806665179225,164816.87858508603,76,174,6
+Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant,106.67322497537413,9241.268912468666,206,243,19
+Université de Paris,Université scientifique et/ou médicale,IDEx,SCSP/Etudiant(hors doc.),106.1946665699481,9717.622980121689,189,252,18
+Université de Paris,Université scientifique et/ou médicale,IDEx,Ressources/Etudiant(hors doc.),108.53612127708452,12022.965768140539,158,226,13
+Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP,118.70017230099523,103162461,44,99,3
+Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP/E-EC,94.092808090024,109326.43246187364,134,322,36
+Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant,113.8531274083945,8638.893706640238,227,168,68
+Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,SCSP/Etudiant(hors doc.),113.76613734748288,9016.440393069563,213,169,64
+Université de Pau et des Pays de l'Adour,Université pluridisciplinaire hors santé,ISITE,Ressources/Etudiant(hors doc.),131.33124151120774,12433.395224549608,151,32,44
+Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP,117.64761001998865,67120738,61,114,14
+Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,100.808875076581,131310.14228456913,107,293,31
+Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,127.28098656799727,8373.709256033839,239,42,74
+Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),126.43172783626633,8661.4174494917,225,46,67
+Université de Perpignan Via Domitia,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),130.89179119179997,10379.596448333548,183,34,54
+Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP,120.54772701204273,182795527,26,86,19
+Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,122.07737816569184,146800.19932998324,82,70,39
+Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,107.91583845788453,6685.221439835699,298,232,155
+Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),107.53209415825195,6796.388389694643,297,239,154
+Université de Picardie Jules-Verne,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),109.50449137490314,8073.260206554565,246,216,123
+Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP,115.56105938554468,224873240,17,145,12
+Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,116.50848484525676,153187.06728971962,79,131,38
+Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,104.56310361668928,8410.36807266576,236,266,116
+Université de Poitiers,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),104.35224290836524,8659.717493373722,226,270,112
+Université de Poitiers,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),106.17041263994822,10089.975956077244,186,253,88
+Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP,116.47874546079504,187750628,23,132,17
+Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,112.75388485895913,140020.47145061727,95,182,45
+Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,115.76330116368834,7936.937997291349,250,138,125
+Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),115.45747098039713,8076.398406546081,245,147,122
+Université de Reims Champagne-Ardenne,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),118.40446904903467,9576.16894918174,193,104,91
+Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP,115.10390051159118,230630024,15,153,5
+Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP/E-EC,100.42499755148033,125761.48317170565,120,297,9
+Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP/Etudiant,89.7673957531314,7318.092414748575,285,337,24
+Université de Rennes 1,Université scientifique et/ou médicale,NINI,SCSP/Etudiant(hors doc.),89.16365156076209,7585.850806188393,270,340,23
+Université de Rennes 1,Université scientifique et/ou médicale,NINI,Ressources/Etudiant(hors doc.),90.67050604397899,9837.020530060709,187,333,17
+Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP,119.83050129290041,206222584,21,91,16
+Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,117.10973295059229,143139.3972303207,87,126,41
+Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,99.87011498858467,6435.455501669081,306,303,159
+Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),98.81430214345067,6585.3969901066675,302,309,157
+Université de Rouen Normandie,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),100.33550713233512,7820.515130031259,256,299,128
+Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP,115.6319678964435,377379779,7,140,6
+Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP/E-EC,100.47989327714133,123420.78936674568,127,296,62
+Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant,106.72969035881393,7542.790230563424,275,242,139
+Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,SCSP/Etudiant(hors doc.),105.1625236186221,7850.753777795979,252,260,126
+Université de Strasbourg,Université pluridisciplinaire avec santé,IDEx,Ressources/Etudiant(hors doc.),117.96828375217518,11492.187108399197,165,110,78
+Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP,115.60882311027021,77684699,56,141,10
+Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,111.37129446245986,147317.40576923077,81,191,24
+Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,99.53228248632608,7827.019280719281,255,306,78
+Université de Toulon,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),98.69978995644665,7980.0838256264005,249,311,76
+Université de Toulon,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),106.52133207610126,9666.071093909146,190,246,56
+Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP,117.02121904009881,182770265,27,128,20
+Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,106.83466678366102,130461.56347438753,110,241,54
+Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,113.55212438946292,7552.68033122899,272,175,138
+Université de Tours,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),113.16236427527329,7736.629041740153,262,180,132
+Université de Tours,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),115.5791931013989,9634.268497522466,192,144,90
+Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP,114.58735608882424,122408649,38,159,26
+Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,108.121892730099,141720.09563164107,88,230,42
+Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,137.81530034609474,9385.569522948224,199,21,96
+Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),132.29608896648622,9389.815426374123,198,30,95
+Université de Versailles Saint-Quentin-en-Yvelines,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),139.6964976756565,12210.867149212094,155,20,72
+Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP,140.06470881931457,32676301,65,19,16
+Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,110.87482921554421,266664.61739130435,71,196,20
+Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,114.47283178829156,9357.344586728754,202,161,60
+Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),113.76372412486235,9478.725235849057,195,170,58
+Université de la Nouvelle-Calédonie,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),111.41566692546492,11006.284198113208,173,189,49
+Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP,141.87993368150345,30696565,66,18,32
+Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,134.90441161422032,260601.5128205128,73,22,34
+Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,194.4015702987728,12065.385122045718,157,8,74
+Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),196.5206262553157,12313.46737841044,152,7,71
+Université de la Polynésie Française,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),200.57929158566634,14157.800711743772,145,6,69
+Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP,124.61750457758912,97931390,47,56,29
+Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,134.43885200082627,174339.19626168226,75,25,36
+Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant,116.84592479967222,8621.976420530094,228,130,113
+Université des Antilles,Université pluridisciplinaire avec santé,NINI,SCSP/Etudiant(hors doc.),115.07984436514835,8776.801660350116,218,154,106
+Université des Antilles,Université pluridisciplinaire avec santé,NINI,Ressources/Etudiant(hors doc.),115.48951087429428,9753.187601515972,188,146,89
+Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP,117.39999834018519,79359937,54,119,9
+Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,109.68333971973819,141225.97636363635,90,213,27
+Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,120.93209377889819,8454.603314564964,234,81,72
+Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),121.69024557729465,8607.309214795587,231,75,70
+Université du Littoral Côte d’Opale,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),122.70962542712394,10938.88773523686,174,64,50
+Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP,370.73259353997173,8458405,69,1,18
+Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,4.58549403363202,536.9047274347124,350,348,95
+Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),0,617.7379716830034,349,349.5,94
+Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),0,2917.792299314498,348,349.5,93
+Université de Guyane,Université pluridisciplinaire avec santé,NINI,SCSP/E-EC,94.22298470512767,163638.2371794872,77,321,37
+Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP,132.88616103123422,3780893,70,27,19
+Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,88.9928764534945,64924,139,341,37
+Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant,164.5921327942739,4170.075791022811,342.5,15.5,91.5
+Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,SCSP/Etudiant(hors doc.),164.5921327942739,4170.075791022811,342.5,15.5,91.5
+Centre universitaire de Mayotte,Université pluridisciplinaire hors santé,NINI,Ressources/Etudiant(hors doc.),236.32908766667992,7117.247240618101,292,3,84
+Université Paris sciences et lettres,Université pluridisciplinaire hors santé,NINI,SCSP/E-EC,106.39448899256789,4863.959526774595,336,249,88
