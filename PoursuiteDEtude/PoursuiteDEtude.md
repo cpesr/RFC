@@ -179,3 +179,19 @@ Voir les données
     ## 15 2023    Pro.    Autre           5331.  3590.
 
 <img src="PoursuiteDEtude_files/figure-gfm/diflux-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/diflux2plot-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/diflux4-1.png" width="672" />
+
+### IUT
+
+<img src="PoursuiteDEtude_files/figure-gfm/iuta-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/iutb-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/iut1-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/iut2-1.png" width="672" />
+
+<img src="PoursuiteDEtude_files/figure-gfm/iut3-1.png" width="672" />

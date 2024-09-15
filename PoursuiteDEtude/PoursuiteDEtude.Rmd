@@ -558,7 +558,7 @@ ggplot(aes(y = Diff, axis1 = Série, axis2=Filière)) +
 
 
 ```{r diflux2}
-knitr::knit_exit()
+#knitr::knit_exit()
 
 df <- pe.pivot %>%
   filter(Session %in% c("2017",last.session)) %>%
@@ -624,7 +624,7 @@ diflux %>%
   theme_cpesr()
 ```
 
-```{r diflux3, fig.retina=2}
+```{r diflux3, fig.retina=2, eval=FALSE}
 df.serie <- pe.pivot %>%
   filter(Session %in% c("2017","2020")) %>%
   group_by(Session, Série, Filière) %>%
