@@ -1,0 +1,41 @@
+---
+title: "Unistra"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggcpesrthemes)
+
+source("Finances.R")
+
+etiquettes <- read.csv("etiquettes.csv") %>%
+  mutate(étiquettes = factor(case_when(
+    IDEx ~ "IDEx",
+    ISITE ~ "ISITE",
+    TRUE ~ "NINI"),
+    levels=c("IDEx","ISITE","NINI"))
+    ) 
+
+theme_cpesr_setup(authors = "SNESUP-FSU Strasbourg", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-operateurs-indicateurs-financiers/information/")
+```
+
+```{r etab.focus.ms.vs.pfe, fig.width=8, fig.height=4.5}
+fin %>%
+  filter(as.character(exercice) >= "2015") %>%
+  filter(etablissement == "Université de Strasbourg") %>%
+  mutate(MS.sur.PFE = Dépenses.de.personnel...Produits.encaissables) %>%
+  ggplot(aes(x=exercice, y=MS.sur.PFE)) +
+    geom_line(aes(color=MS.sur.PFE,group="Indicateur"), size=1) +
+    geom_point(shape=21, color="white", size=4, stroke = 1, aes(fill=MS.sur.PFE)) + 
+  geom_vline(xintercept = "2017", color="grey") +
+    #expand_limits(y=0) +
+    ylab("") +
+    scale_y_continuous(labels = ~ scales::percent(.x, scale=1)) + #, limits = c(75,85)) +
+    scale_fill_distiller(palette="Greens", direction = 0, limits = c(0,100), guide = "none") +
+    scale_color_distiller(palette="Greens", direction = 0, limits = c(0,100), guide = "none") +
+    ggtitle(paste0("Part des dépenses de personnels dans les produits encaissables"), 
+      subtitle="Université de Strasbourg - 1% représente environ 5 M€") +
+    theme_cpesr_cap(author="SNESUP-FSU Strasbourg", url="")
+```

@@ -1,0 +1,431 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggcpesrthemes)
+
+fin <- read.csv("fr-esr-operateurs-indicateurs-financiers.csv",sep=";",quote='"') %>%
+  mutate(exercice = as.factor(exercice)) %>%
+  mutate(groupe = case_when(
+    startsWith(groupe,"université") ~ "université",
+    groupe == "école d'ingénieurs" ~ "écoles d'ingénieurs",
+    groupe == "communauté d'universités et établissements" ~ "COMUE",
+    groupe == "autres établissements d'enseignement et de recherche" ~ "autres",
+    str_length(groupe) == 0 ~ "autres",
+    TRUE ~ groupe
+  )) %>%
+  mutate(etablissement = case_when(
+    str_length(etablissement) == 0 ~ uai...identifiant,
+    TRUE ~ etablissement
+  )) %>%
+  mutate(
+    groupe = as.factor(groupe),
+    etablissement = as.factor(etablissement))
+
+etiquettes <- read.csv("etiquettes.csv") %>%
+  mutate(étiquettes = factor(case_when(
+    IDEx ~ "IDEx",
+    ISITE ~ "ISITE",
+    TRUE ~ "NINI"),
+    levels=c("IDEx","ISITE","NINI"))
+    ) 
+ 
+# df <- etiquettes %>% filter(str_length(ancien.UAI)==8) %>% select(UAI,ancien.UAI)
+# newuais <- df$ancien.UAI
+# names(newuais) <- df$UAI
+# newuais <- c('a'='b')
+
+# etab <- read.csv("fr-esr-principaux-etablissements-enseignement-superieur_2021-01-10 14 36.csv", sep=";", quote='"', stringsAsFactors = FALSE) %>% 
+#   transmute(
+#     UAI = uai,
+#     fusion = universites_fusionnees == "Oui",
+#     étudiants = as.numeric(str_replace(Effectifs.d.étudiants.inscrits.2017.18," ","")),
+#     sigle = case_when(
+#       sigle!="" ~ sigle,
+#       nom_court!="" ~ nom_court,
+#       TRUE ~ gsub("Université (de )?","",Libellé)),
+#     )
+# 
+# ens <- read.csv("fr-esr-enseignants-titulaires-esr-public.csv", sep=";", quote='"', stringsAsFactors = TRUE) %>%
+#   group_by(Rentrée,Identifiant.établissement) %>%
+#   summarise(titulaires = sum(effectif)) %>%
+#   ungroup() %>%
+#   transmute(
+#     UAI = Identifiant.établissement,
+#     exercice = as.factor(Rentrée+1), 
+#     titulaires
+#     ) %>%
+#   mutate(UAI = fct_recode(UAI, "0383493R" = "0383546Y"))
+
+anr <- fin %>% 
+  group_by(exercice) %>%
+  transmute(
+    UAI = as.character(uai...identifiant),
+    etablissement = etablissement,
+    groupe = groupe,
+    exercice = as.numeric(as.character(exercice)),
+    SCSP = Produits.de.fonctionnement.encaissables - Ressources.propres,
+    ANR.PIA = ANR.investissements.d.avenir,
+    ANR.hors.PIA = ANR.hors.investissements.d.avenir,
+    Autres.RP = Ressources.propres - ANR.PIA - ANR.hors.PIA,
+    PFE = Produits.de.fonctionnement.encaissables,
+    rang = rank(desc(ANR.PIA))
+  ) %>%
+  ungroup() %>%
+  #left_join(ens) %>%
+  #left_join(etab) %>%
+  left_join(kpiESR::esr %>% transmute(
+    UAI = as.character(UAI),
+    exercice=as.numeric(as.character(Rentrée))+1,
+    titulaires = kpi.ENS.S.titulaires,
+    étudiants = kpi.ETU.P.effectif,
+    sigle = case_when(
+      Sigle!="" ~ Sigle,
+      TRUE ~ gsub("Université (de )?","",Libellé))
+  ) ) %>%
+  left_join(etiquettes %>% select(UAI,étiquettes)) %>%
+  mutate(
+    exercice = factor(exercice),
+    UAI = factor(UAI)) %>%
+  mutate(
+    SCSP = ifelse(SCSP < 0, NA, SCSP)
+  ) %>%
+  group_by(UAI) %>%
+  fill(sigle) %>%
+  ungroup() %>%
+  mutate(groupe = as.factor(ifelse(etablissement == "Université Paris-Dauphine", "université", as.character(groupe)))) %>%
+  filter(!etablissement %in% c("Centre Universitaire de Mayotte",
+                               "Institut national universitaire Jean-François Champollion",
+                               "Université de la Nouvelle-Calédonie"))
+  
+
+anr.pivot <- anr %>%
+  filter(!is.na(ANR.PIA)) %>%
+  pivot_longer(c(SCSP,ANR.PIA,ANR.hors.PIA,Autres.RP,PFE), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = factor(Indicateur,
+                             levels=c("ANR.PIA","ANR.hors.PIA","Autres.RP","SCSP","PFE"),
+                             labels=c("ANR PIA","ANR hors PIA","Autres RP","SCSP","PFE")))
+
+anr.pivot.2 <- anr %>%
+  filter(!is.na(ANR.PIA)) %>%
+  mutate(Autres.RP = Autres.RP + ANR.hors.PIA) %>%
+  select(-ANR.hors.PIA) %>%
+  pivot_longer(c(SCSP,ANR.PIA,Autres.RP,PFE), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = factor(Indicateur,
+                             levels=c("ANR.PIA","Autres.RP","SCSP","PFE"),
+                             labels=c("ANR PIA","Autres RP","SCSP","PFE")))
+
+exercice.ref <- 2019
+```
+
+
+### check
+
+```{r check.idex, fig.width=10, fig.height=10}
+etiquettes %>%
+  filter(étiquettes == "IDEx") %>%
+  select(UAI,étiquettes,Libellé) %>%
+  left_join(anr) %>%
+  pivot_longer(c(SCSP:PFE,titulaires,étudiants), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = factor(Indicateur,levels=c("ANR.PIA","ANR.hors.PIA","Autres.RP","SCSP","PFE","titulaires","étudiants"))) %>%
+  mutate(Check = !is.na(Valeur)) %>% 
+  ggplot(aes(x=exercice,y=Indicateur,color=Check)) + 
+  geom_point(size=3) +
+  facet_wrap(paste0(UAI,' : ',Libellé,' (',sigle,')')~paste(étiquettes, groupe), ncol=2) +
+  theme_cpesr_cap() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+```{r check, fig.width=10, fig.height=10}
+etiquettes %>%
+  filter(étiquettes == "ISITE") %>%
+  select(UAI,étiquettes,Libellé) %>%
+  left_join(anr) %>%
+  pivot_longer(c(SCSP:PFE,titulaires,étudiants), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = factor(Indicateur,levels=c("ANR.PIA","ANR.hors.PIA","Autres.RP","SCSP","PFE","titulaires","étudiants"))) %>%
+  mutate(Check = !is.na(Valeur)) %>% 
+  ggplot(aes(x=exercice,y=Indicateur,color=Check)) + 
+  geom_point(size=3) +
+  facet_wrap(paste0(UAI,' : ',Libellé,' (',sigle,')')~paste(étiquettes, groupe), ncol=2) +
+  theme_cpesr_cap() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+```{r total.pia}
+anr %>%
+  group_by(exercice) %>%
+  summarise(ANR.PIA = sum(ANR.PIA, na.rm = TRUE) / 1e6) %>%
+  ggplot(aes(x=exercice,y=ANR.PIA)) +
+  geom_col() +
+  theme_cpesr_cap()
+```
+
+
+```{r pia, fig.width=8, fig.height=16}
+anr %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(ANR.PIA > 0) %>%
+  mutate(ANR.PIA = round(ANR.PIA/1e6,1)) %>%
+  ggplot(aes(x=reorder(etablissement,ANR.PIA),y=ANR.PIA,fill=groupe)) +
+  geom_col() +
+  geom_text(aes(label=ANR.PIA), hjust=-0.1) +
+  coord_flip(clip="off") +
+  ylim(0,65) +
+  xlab("ANR PIA (M€)") + ylab("") +
+  theme_cpesr_cap() +
+  theme(
+    panel.grid.major.x = element_line(color="grey",size=0.2),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+
+
+```{r tab.ind, fig.width=10, fig.height=16}
+anr.pivot %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = round(Valeur / 1e6,0)) %>%
+  
+  ggplot(aes(x=reorder(etablissement,-rang),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  geom_text(aes(y=max(Valeur)/1.3, label=paste(Valeur,"M€")), hjust=1 ) +
+  coord_flip() +
+  facet_grid(.~Indicateur) +
+  xlab("Montant (M€)") + ylab("") +
+  theme_cpesr_cap() +
+  theme(
+    panel.grid.major.x = element_line(color="grey",size=0.2),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+
+
+
+```{r pia.vs.scsp}
+anr %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  ggplot(aes(x=ANR.PIA,y=SCSP,color=étiquettes)) +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label=sigle)) +
+  theme_cpesr_cap() +
+  theme(
+    panel.grid.major.x = element_line(color="grey",size=0.2),
+    panel.grid.major.y = element_blank()
+  )
+
+```
+
+
+
+
+
+
+```{r tab.ind.norm, fig.width=10, fig.height=16}
+anr.pivot %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = Valeur/titulaires) %>%  
+  mutate(Valeur = round(Valeur / 1e3,0)) %>%
+  
+  ggplot(aes(x=reorder(etablissement,-rang),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  geom_text(aes(y=max(Valeur)/1.3, label=paste(Valeur,"k€")), hjust=1 ) +
+  coord_flip() +
+  facet_grid(.~Indicateur) +
+  xlab("Montant par E-EC titulaire (M€)") + ylab("") +
+  theme_cpesr_cap() +
+  theme(
+    panel.grid.major.x = element_line(color="grey",size=0.2),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+
+
+```{r pia.vs.scsp.norm}
+anr %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(
+    ANR.PIA = ANR.PIA/titulaires / 1e3,
+    SCSP = SCSP/titulaires  / 1e3) %>%  
+  mutate(etablissement = ifelse(étiquettes == "NINI", NA, as.character(etablissement))) %>%
+  ggplot(aes(x=ANR.PIA,y=SCSP,color=étiquettes)) +
+  geom_point() +
+  ggrepel::geom_text_repel(aes(label=sigle)) +
+  ylim(150,250) +
+  xlab("ANR PIA par E-EC titulaire (k€)") + ylab("SCSP par E-EC titulaire (k€)") +
+  theme_cpesr_cap() +
+  theme(
+    panel.grid.major.x = element_line(color="grey",size=0.2),
+    panel.grid.major.y = element_blank()
+  )
+
+```
+
+
+```{r pia.vs.scsp.norm.bp}
+df <- anr %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université", ! is.na(étiquettes) ) %>% 
+  mutate(
+    ANR.PIA = ANR.PIA/titulaires / 1e3,
+    SCSP = SCSP/titulaires  / 1e3) %>%  
+   mutate(sigle = ifelse(étiquettes == "NINI", NA, as.character(sigle))) %>%
+  filter(!is.na(ANR.PIA))
+  
+cowplot::plot_grid(ncol=2, rel_widths = c(3,1), align = "h", axis = "tb",
+  
+  ggplot(df, aes(x=ANR.PIA,y=SCSP,color=étiquettes)) +
+    geom_point() +
+    #geom_smooth(aes(color=NA), method="lm") +
+    ggrepel::geom_text_repel(aes(label=sigle)) +
+    ylim(150,250) +
+    xlab("ANR PIA par E-EC titulaire (k€)") + ylab("SCSP par E-EC titulaire (k€)") +
+    theme_cpesr() +
+    theme(
+      panel.grid.major.x = element_line(color="grey",size=0.2),
+      plot.caption = element_text(color="white")
+    ),
+  
+  ggplot(df, aes(x=étiquettes,y=SCSP,color=étiquettes)) +
+  geom_violin() +
+  ggbeeswarm::geom_beeswarm() +
+  ylim(150,250) +
+  xlab("Etablissements") + ylab("") +
+  theme_cpesr_cap() + guides(color=FALSE)
+)
+```
+
+## Vues rapides
+
+
+```{r vue.pia}
+anr.pivot %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = round(Valeur / 1e6,0)) %>%
+  filter(Indicateur == "ANR PIA") %>%
+  
+  ggplot(aes(x=reorder(etablissement,rang),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  facet_grid(Indicateur~.) +
+  ylab("Montant (M€)") + xlab("Universités") +
+  theme_cpesr_cap() + theme(axis.text.x = element_blank())
+```
+
+```{r vue.tout, fig.width=8, fig.height=6}
+anr.pivot.2 %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = round(Valeur / 1e6,0)) %>%
+  
+  ggplot(aes(x=reorder(etablissement,rang),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  facet_grid(Indicateur~.) +
+  ylab("Montant (M€)") + xlab("Universités") +
+  theme_cpesr_cap() + theme(axis.text.x = element_blank())
+
+```
+
+```{r vue.tout.norm, fig.width=8, fig.height=6}
+anr.pivot.2 %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = round(Valeur/titulaires / 1e3,0)) %>%
+  
+  ggplot(aes(x=reorder(etablissement,rang),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  facet_grid(Indicateur~.) +
+  ylab("Montant par E-EC titulaire (k€)") + xlab("Universités") +
+  theme_cpesr_cap() + theme(axis.text.x = element_blank())
+
+```
+
+
+```{r vue.pfe.norm}
+anr.pivot %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = round(Valeur/titulaires / 1e3,0)) %>%
+  filter(Indicateur == "PFE") %>%
+  
+  ggplot(aes(x=reorder(etablissement,-Valeur),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  facet_grid(Indicateur~.) +
+  ylab("Montant par E-EC titulaire (k€)") + xlab("Universités") +
+  theme_cpesr_cap() + theme(axis.text.x = element_blank())
+```
+
+
+
+```{r vue.pfe.norm}
+anr.pivot %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = Valeur/titulaires / 1e3) %>%
+  filter(Indicateur == "SCSP") %>%
+  
+  ggplot(aes(x=reorder(etablissement,-Valeur),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  facet_grid(Indicateur~.) +
+  ylab("Montant par E-EC titulaire (k€)") + xlab("Universités") +
+  theme_cpesr_cap() + theme(axis.text.x = element_blank())
+```
+
+```{r vue.pfe.norm}
+anr.pivot %>% 
+  filter(exercice == exercice.ref) %>%
+  filter(groupe == "université") %>% 
+  mutate(Valeur = Valeur/étudiants / 1e3) %>%
+  filter(Indicateur == "SCSP") %>%
+  
+  ggplot(aes(x=reorder(etablissement,-Valeur),y=Valeur,fill=étiquettes)) +
+  geom_col() +
+  facet_grid(Indicateur~.) +
+  ylab("Montant par étudiant (k€)") + xlab("Universités") +
+  theme_cpesr_cap() + theme(axis.text.x = element_blank())
+```
+
+
+```{r vue.pfe.norm}
+
+df <- anr %>% 
+  filter(exercice %in% c(2012,exercice.ref)) %>%
+  filter(groupe == "université") %>% 
+  mutate(ANR.PIA=ANR.PIA/titulaires, SCSP=SCSP/titulaires) %>%
+  select(etablissement,sigle,étiquettes,exercice,ANR.PIA,SCSP) %>% 
+  pivot_wider(names_from = exercice, values_from = c(ANR.PIA,SCSP)) %>% 
+  mutate(SCSP.diff = SCSP_2019 - SCSP_2012) %>% 
+  mutate(sigle = ifelse(étiquettes == "NINI", NA, as.character(sigle))) %>%
+  filter(!is.na(ANR.PIA_2019))
+  
+cowplot::plot_grid(ncol=2, rel_widths = c(3,1), align = "h", axis = "tb",
+  
+  ggplot(df, aes(x=ANR.PIA_2019,y=SCSP.diff,color=étiquettes)) +
+    geom_point() +
+    #geom_smooth(aes(color=NA), method="lm") +
+    ggrepel::geom_text_repel(aes(label=sigle)) +
+    ylim(-1e4,4e4) +
+    xlab("ANR PIA par E-EC titulaire (k€)") + ylab("SCSP par E-EC titulaire (k€)") +
+    theme_cpesr() +
+    theme(
+      panel.grid.major.x = element_line(color="grey",size=0.2),
+      plot.caption = element_text(color="white")
+    ),
+  
+  ggplot(df, aes(x=étiquettes,y=SCSP.diff,color=étiquettes)) +
+  geom_boxplot() +
+  ggbeeswarm::geom_beeswarm() +
+  ylim(-1e4,4e4) +
+  xlab("Etablissements") + ylab("") +
+  theme_cpesr_cap() + guides(color=FALSE)
+)
+```
+
