@@ -744,7 +744,7 @@ diflux %>%
 
 ### IUT 
 
-```{r iut}
+```{r iuta}
 pe.pivot %>%
   ungroup() %>%
   filter(Filière == "IUT") %>%
@@ -756,7 +756,7 @@ pe.pivot %>%
 ```
 
 
-```{r iut}
+```{r iutb}
 pe.pivot %>%
   ungroup() %>%
   filter(Filière == "IUT") %>%
@@ -767,18 +767,53 @@ pe.pivot %>%
 ```
 
 
-```{r iut}
-pe.pivot %>%
+```{r iut1}
+iut <- pe.pivot %>%
   ungroup() %>%
   filter(Filière == "IUT") %>%
   summarise(Poursuites = sum(Poursuites), .by=c(Session,Série)) %>%
   filter(Session > 2017) %>%
-  mutate(val100 = Poursuites / first(Poursuites) * 100, .by = Série) %>%
+  mutate(val100 = Poursuites / first(Poursuites) * 100, .by = Série) 
+
+iut %>%
   ggplot(aes(x=Session,y=val100,color=Série,group=Série)) +
   geom_vline(xintercept = "2020") +
   geom_line(size=1) + geom_point(shape=21, fill="white", size=2, stroke=1.5) +
   ylab("Admissions en IUT (valeur 100 en 2018)") +
-  ggtitle("Admissions post-bac en IUT en fonction des Série du Bac", subtitle = "2020 marque la transition du DUT au BUT")
+  ggtitle("Admissions post-bac en IUT en fonction des Série du Bac", subtitle = "2020 marque la transition du DUT au BUT") +
   cpesr_cap()
 ```
 
+
+```{r iut2}
+iut %>%
+  mutate(diff = Poursuites - first(Poursuites), .by = Série) %>%
+  filter(Session == last(Session)) %>%
+  ggplot(aes(x=Série,y=diff,fill=Série)) +
+  geom_col() + geom_hline(yintercept = 0) +
+  ylab("Différence des dmissions") +
+  ggtitle("Admissions post-bac en IUT en fonction des Série du Bac", subtitle = "Différence entre 2018 et 2023") +
+  cpesr_cap()
+```
+
+
+```{r iut3}
+cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
+  iut %>%
+    ggplot(aes(x=Session,y=val100,color=Série,group=Série)) +
+    geom_vline(xintercept = "2020") +
+    geom_line(size=1) + geom_point(shape=21, fill="white", size=2, stroke=1.5) +
+    ylab("Admissions en IUT (valeur 100 en 2018)") +
+    ggtitle("Admissions post-bac en IUT en fonction des Série du Bac", subtitle = "2020 marque la transition du DUT au BUT") +
+    cpesr_cap(),
+
+  iut %>%
+    mutate(diff = Poursuites - first(Poursuites), .by = Série) %>%
+    filter(Session == last(Session)) %>%
+    ggplot(aes(x=Série,y=diff,fill=Série)) +
+    geom_col() + geom_hline(yintercept = 0) +
+    ylab("Différence 2018-2023") +
+    ggtitle("Différence", subtitle = "2018-2013") +
+    theme(legend.position = "None")
+)
+```
