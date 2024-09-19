@@ -64,9 +64,6 @@ ps18 <- read.csv2("../data/fr-esr-parcoursup-2018.csv",dec='.')
 ps19 <- read.csv2("../data/fr-esr-parcoursup-2019.csv",dec='.')
 
 ps20 <- read.csv2("../data/fr-esr-parcoursup-2020-xls.csv",dec=',') %>%
-  rename(
-    Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP. = Indicateur.Parcoursup.du.taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.dernier.classé.
-  ) %>%
   select(-X..d.admis.néo.bacheliers.issus.du.même.établissement..BTS.CPGE.)
 
 ps21 <- read.csv2("../data/fr-esr-parcoursup_2021.csv",dec='.') 
@@ -91,7 +88,10 @@ ps <- bind_rows(apb,ps18,ps19,ps20,ps21,ps22,ps23) %>%
   mutate(rdda = ifelse(is.na(Rang.du.dernier.appelé),Rang.du.dernier.appelé.du.groupe.1,Rang.du.dernier.appelé)) %>%
   mutate(Taux.sélection = rdda / candidats) %>%
   mutate(
-    taux.accès = Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP. / 100,
+    taux.accès = coalesce(
+      Taux.d.accès,
+      Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP.,
+      Indicateur.Parcoursup.du.taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.dernier.classé.) / 100,
     Sélectivité = cut(Taux.sélection, 
                       breaks = c(0,0.05,0.10,0.20,0.50,0.80,0.90,0.95,1.00,1000)),
     Accessibilité = cut(taux.accès, 

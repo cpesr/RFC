@@ -1,0 +1,105 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/Atlas-etudiants")
+```
+
+## Données 
+
+- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-atlas_regional-effectifs-d-etudiants-inscrits-detail_etablissements/information/
+
+```{r load}
+etu <- read.csv2("../data/fr-esr-atlas_regional-effectifs-d-etudiants-inscrits-detail_etablissements.csv", dec='.')
+
+colnames(etu)
+```
+
+## Explorations
+
+```{r}
+etu %>%
+  summarise(etudiants = sum(nombre.total.d.étudiants.inscrits.hors.doubles.inscriptions.université.CPGE),
+            .by = c(Rentrée.universitaire,catégorie.d.établissement)) %>%
+  ggplot(aes(x=Rentrée.universitaire,y=etudiants,fill=catégorie.d.établissement,group=catégorie.d.établissement)) + geom_area(color="white") +
+  theme(legend.position = "right")
+```
+
+```{r}
+etu %>%
+  summarise(etudiants = sum(nombre.total.d.étudiants.inscrits.hors.doubles.inscriptions.université.CPGE),
+            .by = c(Rentrée.universitaire,catégorie.d.établissement)) %>%
+  mutate(Rentrée = as.character(Rentrée.universitaire)) %>%
+  filter(Rentrée %in% range(Rentrée)) %>%
+  ggplot(aes(x=etudiants,y=reorder(catégorie.d.établissement,etudiants),fill=Rentrée)) +
+  geom_col(position = "dodge") +
+  ylab("") +
+  scale_x_continuous(labels = ~ paste(.x / 1e3,"k"), name="Effectif étudiant (milliers)") +
+  scale_fill_brewer(palette = "Paired", name = "Rentrée") +
+  ggtitle("Effectif étudiant en 2015 et 2023") +
+  theme(plot.title = element_text(hjust = 1), legend.position = "right") +
+  cpesr_cap()
+```
+
+```{r}
+etu %>%
+  summarise(etudiants = sum(nombre.total.d.étudiants.inscrits.hors.doubles.inscriptions.université.CPGE),
+            .by = c(Rentrée.universitaire,catégorie.d.établissement,secteur.d.établissement)) %>%
+  arrange(Rentrée.universitaire) %>%
+  mutate(Rentrée = as.character(Rentrée.universitaire)) %>%
+  mutate(Différence = etudiants - first(etudiants), 
+         .by = c(catégorie.d.établissement,secteur.d.établissement)) %>%
+  filter(Rentrée == max(Rentrée)) %>%
+  ggplot(aes(x=Différence,y=reorder(catégorie.d.établissement,Différence,FUN=sum),fill=secteur.d.établissement)) +
+  geom_col() +
+  ylab("") +
+  scale_x_continuous(labels = ~ paste(.x / 1e3,"k"), name="Différence (milliers)") +
+  scale_fill_brewer(palette = "Set1", name = "Secteur") +
+  ggtitle("Différence d'effectif étudiant entre 2015 et 2023") +
+  theme(plot.title = element_text(hjust = 1), legend.position = "right") +
+  cpesr_cap()
+```
+
+
+
+```{r}
+etu %>%
+  summarise(etudiants = sum(nombre.total.d.étudiants.inscrits.hors.doubles.inscriptions.université.CPGE),
+            .by = c(Rentrée.universitaire,secteur.d.établissement)) %>%
+  mutate(Rentrée = as.character(Rentrée.universitaire)) %>%
+  ggplot(aes(x=Rentrée,y=etudiants,fill=secteur.d.établissement,group=secteur.d.établissement)) +
+  geom_area(color="white", alpha=0.7) +
+  scale_y_continuous(labels = ~ paste(.x / 1e3,"k"), name="Effectifs (milliers)") +
+  scale_fill_brewer(palette = "Set1", name = "Secteur") +
+  ggtitle("Effectif étudiant entre 2015 et 2023 par secteur") +
+  theme(plot.title = element_text(hjust = 1), legend.position = "right") +
+  cpesr_cap()
+```
+
+
+```{r}
+etu %>%
+  summarise(etudiants = sum(nombre.total.d.étudiants.inscrits.hors.doubles.inscriptions.université.CPGE),
+            .by = c(Rentrée.universitaire,secteur.d.établissement)) %>%
+  arrange(Rentrée.universitaire) %>%
+  mutate(Rentrée = as.character(Rentrée.universitaire)) %>%
+  mutate(val100 = etudiants / first(etudiants) * 100, .by = secteur.d.établissement) %>%
+  ggplot(aes(x=Rentrée,y=val100,color=secteur.d.établissement,group=secteur.d.établissement)) +
+  geom_line(linewidth=1) + geom_point(shape=21, stroke=1.5, size=2, fill="white") +
+  ylab("Effectifs (valeur 100 en 2015)") +
+  scale_color_brewer(palette = "Set1", name = "Secteur") +
+  ggtitle("Effectif étudiant entre 2015 et 2023 par secteur") +
+  theme(plot.title = element_text(hjust = 1), legend.position = "right") +
+  cpesr_cap()
+```
