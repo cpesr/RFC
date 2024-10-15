@@ -32,7 +32,9 @@ cy %>% spoiler_table("Données financières CY", trim=Inf)
 ```
 
 ```{r, results='asis'}
-cy.long <- cy %>%
+cy.long <- fin %>%
+  filter(exercice >= 2020) %>%
+  mutate(Etablissement = ifelse(Etablissement == "CY Cergy Paris Université", "CY", "Autres")) %>%
   pivot_longer(c("ANR.hors.investissements.d.avenir",
                  "ANR.investissements.d.avenir",
                  "Autres.ressources.propres",
@@ -44,37 +46,43 @@ cy.long <- cy %>%
                  "Subventions.Union.Européenne",
                  "Subventions.de.la.région"), 
                names_to="Indicateur", values_to="Montant") %>%
-  mutate(Indicateur = str_replace_all(Indicateur, "\\.", " ")) %>%
+  summarise(Montant = sum(Montant,na.rm=TRUE),
+            PFE = sum(Produits.de.fonctionnement.encaissables,na.rm=TRUE),
+            SCSP = sum(Produits.de.fonctionnement.encaissables-Ressources.propres.encaissables,na.rm=TRUE),
+            .by=c(exercice,Etablissement,Indicateur)) %>%
   mutate(
-    Part = Montant / Produits.de.fonctionnement.encaissables,
-    PartSCSP = Montant / (Produits.de.fonctionnement.encaissables-Ressources.propres.encaissables)
-    )
+    Part = Montant / PFE,
+    PartSCSP = Montant / SCSP
+    ) %>%
+  mutate(Indicateur = str_replace_all(Indicateur, "\\.", " ")) 
 
 cy.long %>% spoiler_table("Données financières CY - long", trim=Inf)
 ```
 
 ```{r}
 cy.long %>%
-  ggplot(aes(x=exercice, y=Montant, color=Indicateur)) + geom_line() + geom_point() +
+  filter(Etablissement == "CY") %>%
+  ggplot(aes(x=exercice, y=Montant, color=Etablissement)) + geom_line() + geom_point() +
   facet_wrap(~Indicateur, labeller = labeller(Indicateur = label_wrap_gen(25))) +
   scale_y_continuous(labels = ~ paste(.x/1e6,"M€")) +
-  theme(legend.position = "None", panel.grid.minor = element_blank())
+  theme(panel.grid.minor = element_blank())
 ```
 
 
 ```{r}
 cy.long %>%
-  ggplot(aes(x=exercice, y=Part, color=Indicateur)) + geom_line() + geom_point() +
+  ggplot(aes(x=exercice, y=Part, color=Etablissement)) + geom_line() + geom_point() +
   facet_wrap(~Indicateur, labeller = labeller(Indicateur = label_wrap_gen(25))) +
   scale_y_continuous(labels = scales::percent, name = "Part de toutes les ressources")  +
-  theme(legend.position = "None", panel.grid.minor = element_blank())
+  theme(panel.grid.minor = element_blank())
 ```
 
 
 ```{r}
 cy.long %>%
-  ggplot(aes(x=exercice, y=PartSCSP, color=Indicateur)) + geom_line() + geom_point() +
+  ggplot(aes(x=exercice, y=PartSCSP, color=Etablissement)) + geom_line() + geom_point() +
   facet_wrap(~Indicateur, labeller = labeller(Indicateur = label_wrap_gen(25))) +
   scale_y_continuous(labels = scales::percent, name = "Ratio avec SCSP")  +
-  theme(legend.position = "None", panel.grid.minor = element_blank())
+  theme(panel.grid.minor = element_blank())
 ```
+
