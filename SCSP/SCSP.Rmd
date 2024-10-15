@@ -419,3 +419,28 @@ fin %>%
   summarise(Valeur = sum(Valeur, na.rm = TRUE), .by = c(exercice,Budget)) %>%
   ggplot(aes(x=exercice,y=Valeur,fill=Budget)) + geom_area()
 ```
+
+
+```{r deficit, fig.asp=4/3}
+fin %>% 
+  filter(exercice == max(exercice)) %>%
+  left_join(kpiESR::esr.etab, by = join_by(id...paysage == pid)) %>% 
+  filter(Groupe == "Universités et assimilés") %>% 
+  mutate(Etablissement = coalesce(Etablissement.x, Etablissement.y)) %>%
+  ggplot(aes(x=Résultat.net.comptable,y=reorder(Etablissement,Résultat.net.comptable),fill=PerimEx)) + 
+  geom_col() +
+  ylab(NULL) +
+  scale_x_continuous(labels = ~ paste(.x/1e6,"M€"), name="Résultat net comptable") +
+  ggtitle("Résultat net comptable des universités", subtitle = "2024, en millions d'euros")
+```
+
+```{r deficit2, fig.asp=4/3}
+fin %>% 
+  filter(exercice == max(exercice)) %>%
+  left_join(kpiESR::esr.etab, by = join_by(id...paysage == pid)) %>% 
+  filter(Groupe == "Universités et assimilés") %>% 
+  mutate(Etablissement = coalesce(Etablissement.x, Etablissement.y)) %>%
+  mutate(PartDeficit = Résultat.net.comptable / Produits.de.fonctionnement.encaissables) %>%
+  filter(!str_detect(Etablissement,"Lumière")) %>%
+  ggplot(aes(x=PartDeficit,y=reorder(Etablissement,PartDeficit),fill=PerimEx)) + geom_col()
+```

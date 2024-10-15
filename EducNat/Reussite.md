@@ -1,7 +1,7 @@
 Réussite
 ================
 CPESR
-2023-04-19
+2024-09-26
 
 ## Données
 
@@ -323,9 +323,11 @@ CPESR
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
-    ## Warning: Removed 1182 rows containing non-finite values (`stat_smooth()`).
+    ## Warning: Removed 1182 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
 
-    ## Warning: Removed 1182 rows containing missing values (`geom_point()`).
+    ## Warning: Removed 1182 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
 
 <img src="Reussite_files/figure-gfm/college.btb.et-1.png" width="672" />
 
@@ -347,6 +349,21 @@ CPESR
 
 ### Strasbourg
 
-    ## Warning: Removed 178 rows containing missing values (`geom_text_repel()`).
+    ## Warning: Removed 178 rows containing missing values or values outside the scale range
+    ## (`geom_text_repel()`).
 
 <img src="Reussite_files/figure-gfm/college.btb.stras-1.png" width="672" />
+
+### Aix-Marseille
+
+    ## Warning: Removed 324 rows containing missing values or values outside the scale range
+    ## (`geom_text_repel()`).
+
+<img src="Reussite_files/figure-gfm/college.btb.aixmars-1.png" width="672" />
+
+### Aix-Marseille
+
+    ## Warning: Removed 384 rows containing missing values or values outside the scale range
+    ## (`geom_text_repel()`).
+
+<img src="Reussite_files/figure-gfm/college.btb.anse-1.png" width="672" />

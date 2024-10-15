@@ -1,7 +1,7 @@
 SCSP
 ================
 CPESR
-2024-09-07
+2024-09-26
 
 ## Données
 
@@ -17,14 +17,14 @@ CPESR
 Données
 </summary>
 
-| Etablissement            | Typologie                                | PerimEx | Indicateur                     | Valeur100 |       Valeur | Rang | Rang_Valeur100 | Rang_Typologie |
-|:-------------------------|:-----------------------------------------|:--------|:-------------------------------|----------:|-------------:|-----:|---------------:|---------------:|
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx    | SCSP                           |  114.1050 | 5.592166e+08 |    1 |            163 |              1 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx    | SCSP/E-EC                      |  109.7877 | 1.342796e+05 |  103 |            210 |             50 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx    | SCSP/Etudiant                  |  109.6914 | 8.815203e+03 |  216 |            212 |            105 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx    | SCSP/Etudiant(hors doc.)       |  108.6437 | 9.167869e+03 |  208 |            223 |            101 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx    | Ressources/Etudiant(hors doc.) |  116.4541 | 1.211214e+04 |  156 |            133 |             73 |
-| Avignon Université       | Université pluridisciplinaire hors santé | NINI    | SCSP                           |  121.2591 | 5.658963e+07 |   63 |             77 |             15 |
+| Etablissement | Typologie | PerimEx | Indicateur | Valeur100 | Valeur | Rang | Rang_Valeur100 | Rang_Typologie |
+|:---|:---|:---|:---|---:|---:|---:|---:|---:|
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP | 114.1050 | 5.592166e+08 | 1 | 163 | 1 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/E-EC | 109.7877 | 1.342796e+05 | 103 | 210 | 50 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant | 109.6914 | 8.815203e+03 | 216 | 212 | 105 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant(hors doc.) | 108.6437 | 9.167869e+03 | 208 | 223 | 101 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | Ressources/Etudiant(hors doc.) | 116.4541 | 1.211214e+04 | 156 | 133 | 73 |
+| Avignon Université | Université pluridisciplinaire hors santé | NINI | SCSP | 121.2591 | 5.658963e+07 | 63 | 77 | 15 |
 
 </details>
 
@@ -107,3 +107,9 @@ sont trop hors-norme.
 ### Autres indicateurs
 
 <img src="SCSP_files/figure-gfm/fdr-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/scsp.vs.anr-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/deficit-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/deficit2-1.png" width="672" />

@@ -1,0 +1,80 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+```{r load}
+fin <- read.csv2("../data/fr-esr-operateurs-indicateurs-financiers.csv", dec='.')
+cy <- fin %>% filter(Etablissement == "CY Cergy Paris Université")
+
+colnames(fin)
+```
+
+## Explorations
+
+```{r, results='asis'}
+cy %>% spoiler_table("Données financières CY", trim=Inf)
+```
+
+```{r, results='asis'}
+cy.long <- cy %>%
+  pivot_longer(c("ANR.hors.investissements.d.avenir",
+                 "ANR.investissements.d.avenir",
+                 "Autres.ressources.propres",
+                 "Autres.Subventions",
+                 "Contrats.et.prestations.de.recherche.hors.ANR",
+                 "Droits.d.inscription",
+                 "Taxe.d.apprentissage",
+                 "Valorisation",
+                 "Subventions.Union.Européenne",
+                 "Subventions.de.la.région"), 
+               names_to="Indicateur", values_to="Montant") %>%
+  mutate(Indicateur = str_replace_all(Indicateur, "\\.", " ")) %>%
+  mutate(
+    Part = Montant / Produits.de.fonctionnement.encaissables,
+    PartSCSP = Montant / (Produits.de.fonctionnement.encaissables-Ressources.propres.encaissables)
+    )
+
+cy.long %>% spoiler_table("Données financières CY - long", trim=Inf)
+```
+
+```{r}
+cy.long %>%
+  ggplot(aes(x=exercice, y=Montant, color=Indicateur)) + geom_line() + geom_point() +
+  facet_wrap(~Indicateur, labeller = labeller(Indicateur = label_wrap_gen(25))) +
+  scale_y_continuous(labels = ~ paste(.x/1e6,"M€")) +
+  theme(legend.position = "None", panel.grid.minor = element_blank())
+```
+
+
+```{r}
+cy.long %>%
+  ggplot(aes(x=exercice, y=Part, color=Indicateur)) + geom_line() + geom_point() +
+  facet_wrap(~Indicateur, labeller = labeller(Indicateur = label_wrap_gen(25))) +
+  scale_y_continuous(labels = scales::percent, name = "Part de toutes les ressources")  +
+  theme(legend.position = "None", panel.grid.minor = element_blank())
+```
+
+
+```{r}
+cy.long %>%
+  ggplot(aes(x=exercice, y=PartSCSP, color=Indicateur)) + geom_line() + geom_point() +
+  facet_wrap(~Indicateur, labeller = labeller(Indicateur = label_wrap_gen(25))) +
+  scale_y_continuous(labels = scales::percent, name = "Ratio avec SCSP")  +
+  theme(legend.position = "None", panel.grid.minor = element_blank())
+```
