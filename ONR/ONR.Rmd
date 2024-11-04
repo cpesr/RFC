@@ -1,0 +1,62 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi/")
+```
+
+## Données 
+
+- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi/
+
+```{r load}
+onr.raw <- read.csv2("../data/fr-esr-tbes-personnels-epst-epic-fondation-par-type-contrat-emploi.csv", dec='.') %>%
+  mutate(Statut = fct_recode(Statut.Nature.de.contrat, 
+                             "Titulaires, contrats PACTE" = "Titulaires de l'organisme, y compris ceux mis à disposition, yc fonctionnaires stagiaires (non encore titularisés), contrats PACTE",
+                             "Titulaires d'autres organismes" = "Fonctionnaires, titulaires d'autres organismes accueillis sur emploi",
+                             "Titulaires d'autres organismes" = "Fonctionnaires, titulaires d'autres organismes accueillis sur contrat",
+                             "CUI-CAE" = "Contrat unique d'insertion - contrat d'accompagnement dans l'emploi (CUI-CAE)",
+                             "Contrat Pro, DRI" = "Contrats de professionnalisation, diplômes de recherche et d’innovation"
+                             )) %>%
+  mutate(Année = as.character(Année))
+  
+```
+
+## Explorations
+
+```{r}
+onr.raw %>% 
+  filter(Année == max(Année)) %>%
+  mutate(Personnels = factor(case_when(
+    Statut.regroupé == "Non permanents" ~ "CDD et temporaires",
+    Statut.Nature.de.contrat == "Titulaires de l'organisme, y compris ceux mis à disposition, yc fonctionnaires stagiaires (non encore titularisés), contrats PACTE" ~ "Fonctionnaires",
+    Statut.Nature.de.contrat == "CDI" ~ "CDI",
+    TRUE ~ "Fonctionnaire accueilli"),
+    levels = c("Fonctionnaires", "Fonctionnaire accueilli","CDI","CDD et temporaires"))) %>%
+  summarise(ETPT = sum(Effectif.au.31.12..en.ETPT.),
+            .by = c(Organisme,Personnels)) %>%
+  mutate(PartETPT = ETPT / sum(ETPT), .by=Organisme) %>%
+  mutate(CDD = sum(ifelse(Personnels == "CDD et temporaires", PartETPT, 0)),
+         .by = Organisme) %>% 
+  mutate(rang = rank(CDD)) %>%
+  ggplot(aes(y = reorder(Organisme, rang), x = PartETPT, fill = Personnels)) +
+  geom_col() +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1), name = "Part des ETPT") +
+  scale_fill_brewer(palette = "Paired", direction = -1) +
+  ylab(NULL) +
+  ggtitle("Répartition des personnel des principaux ONR par statut",
+          subtitle = "En part des ETPT, pour l'année 2020") +
+  cpesr_cap()
+  
+```

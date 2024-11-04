@@ -24,13 +24,13 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "Base SIRENE https://github
 - https://www.data.gouv.fr/fr/datasets/repertoire-national-des-certifications-professionnelles-et-repertoire-specifique/
 
 ```{r load, eval=FALSE}
-naf <- read.csv2("Activité.csv", stringsAsFactors = TRUE)
+naf <- read.csv2("data/Activité.csv", stringsAsFactors = TRUE)
 
 cj <- left_join(
-  readxl::read_xls("cj_septembre_2022.xls", sheet = 3, skip = 3) %>%
+  readxl::read_xls("data/cj_septembre_2022.xls", sheet = 3, skip = 3) %>%
     mutate(subcode = str_sub(Code,1,1)) %>%
     rename(categorieJuridiqueDetaillee=Libellé),
-  readxl::read_xls("cj_septembre_2022.xls", sheet = 1, skip = 3) %>%
+  readxl::read_xls("data/cj_septembre_2022.xls", sheet = 1, skip = 3) %>%
     rename(subcode = Code,
            categorieJuridique=Libellé)) %>%
   mutate(categorieJuridiqueGroupee = fct_other(categorieJuridique,
@@ -43,12 +43,12 @@ cj <- left_join(
   )) %>%
   select(-subcode)
 
-cpesr.siren <- read.csv2("fr-cpesr-siren.csv") %>%
+cpesr.siren <- read.csv2("data/fr-cpesr-siren.csv") %>%
   slice_head(n=1,by=siren) %>%
   select(siren,Etablissement,Secteur) %>%
   filter(Secteur != "privé")
 
-tranches <- read.csv("TranchesEffectif.csv", colClasses = "character", stringsAsFactors = TRUE) %>%
+tranches <- read.csv("data/TranchesEffectif.csv", colClasses = "character", stringsAsFactors = TRUE) %>%
   mutate(TrancheEffectif = factor(TrancheEffectif,levels=TrancheEffectif))
 
 rncp <- full_join(
