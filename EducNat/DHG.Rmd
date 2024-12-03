@@ -1,0 +1,185 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- url source
+
+```{r load}
+dhg <- bind_rows(
+  read.csv2("../data/fr-en-moyens_enseignants_2d_public.csv", dec='.', na.strings = "ns") %>% mutate(Secteur = "Public"),
+  read.csv2("../data/fr-en-moyens_enseignants_2d_prive.csv", dec='.', na.strings = "ns") %>% mutate(Secteur = "Privé")
+) %>%
+  mutate(Elèves = coalesce(Dénominateur.H.E..somme.des.élèves.en.division.,Dénominateur.H.E...somme.des.élèves.en.division.))
+
+colnames(dhg)
+
+dhg.metro <- dhg %>% filter(startsWith(Code.département,"0")) %>%
+  mutate(Niv = factor(recode(Niveau,
+                          "Segpa" = "Segpa", 
+                          "Établissement régional d'enseignement adapté" = "EREA",
+                          "Collège" = "Collège",
+                          "Lycée général et technologique" = "LGT", 
+                          "Lycée professionnel" = "LPro", 
+                          "STS" = "STS", 
+                          "CPGE" = "CPGE"),
+                      levels = c("Segpa", "EREA", "Collège", "LPro", "STS", "LGT", "CPGE"))) %>%
+  filter(Niv != "EREA")
+
+
+college <- read.csv2("college_ips.csv") %>% rename(UAI = Numero.d.etablissement)
+```
+
+## Explorations
+
+```{r}
+dhg.metro %>% ggplot(aes(y=Niv,x=H.E,fill=Secteur)) + geom_boxplot()
+```
+
+```{r}
+dhg.metro %>% ggplot(aes(y=Niv,x=E.S,fill=Secteur)) + geom_boxplot()
+```
+
+
+```{r}
+dhg.metro %>% 
+  pivot_longer(cols = c(H.E,E.S), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = factor(Indicateur, levels = c("H.E", "E.S"), labels = c("Heures par élève", "Taille des groupes"))) %>%
+  ggplot(aes(y=Niv,x=Valeur,fill=Secteur)) + 
+  geom_boxplot() +
+  facet_grid(~Indicateur, scales = "free_x")
+```
+
+```{r}
+dhg.metro %>% 
+  ggplot(aes(x=H.E,y=E.S,color=Secteur)) + geom_point()
+```
+
+
+
+```{r}
+dhg.metro %>% 
+  mutate(E.S = -E.S) %>%
+  pivot_longer(cols = c(H.E,E.S), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = factor(Indicateur, levels = c("H.E", "E.S"), labels = c("Heures par élève", "Taille des groupes"))) %>%
+  mutate(quant = cut(Valeur,quantile(Valeur, na.rm=TRUE), labels = c("--","-","+","++")), .by=c(Indicateur,Niv)) %>% 
+  filter(!is.na(quant)) %>%
+  summarise(Elèves = sum(Elèves,na.rm=TRUE), .by = c(Indicateur,Niv,Secteur,quant)) %>%
+  mutate(PartElèves = Elèves/sum(Elèves), .by = c(Indicateur,Niv,Secteur)) %>%
+  ggplot(aes(x=quant,y=PartElèves,fill=Secteur)) + 
+  geom_col(position = "dodge") +
+  facet_grid(Indicateur~Niv, scales = "free_y")
+```
+
+```{r}
+dhg.quant <- dhg.metro %>% 
+  mutate(E.S = -E.S) %>%
+  pivot_longer(cols = c(H.E,E.S), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = factor(Indicateur, levels = c("H.E", "E.S"), labels = c("Heures par élève", "Taille des groupes"))) %>%
+  mutate(quant = cut(Valeur,quantile(Valeur, na.rm=TRUE), labels = c("--","-","+","++")), .by=c(Indicateur,Niv)) %>% 
+  filter(!is.na(quant)) 
+
+dhg.quant %>%
+  summarise(Elèves = sum(Elèves,na.rm=TRUE), .by = c(Indicateur,Niv,Secteur,quant)) %>%
+  mutate(PartElèves = Elèves/sum(Elèves), .by = c(Indicateur,Niv,quant)) %>% 
+  ggplot(aes(x=quant,y=Elèves,fill=Secteur)) + 
+  geom_col(position = "fill") +
+  scale_y_continuous(labels = scales::percent) +
+  xlab("Quartile des établissements") +
+  facet_grid(Indicateur~Niv, scales = "free_y")
+```
+
+
+
+```{r}
+dhg.metro %>% 
+  mutate(E.S = -E.S) %>%
+  pivot_longer(cols = c(H.E,E.S), names_to = "Indicateur", values_to = "Valeur") %>%
+  filter(Indicateur == "H.E") %>%
+  mutate(Indicateur = factor(Indicateur, levels = c("H.E", "E.S"), labels = c("Heures par élève", "Taille des groupes"))) %>%
+  mutate(quant = cut(Valeur,quantile(Valeur, na.rm=TRUE), labels = c("--","-","+","++")), .by=c(Indicateur,Niv)) %>% 
+  filter(!is.na(quant)) %>%
+  summarise(Elèves = sum(Elèves,na.rm=TRUE), .by = c(Indicateur,Niv,Secteur,quant)) %>%
+  mutate(PartElèves = Elèves/sum(Elèves), .by = c(Indicateur,Niv,Secteur)) %>%
+  ggplot(aes(x=quant,y=PartElèves,fill=Secteur)) + 
+  geom_col(position = "dodge") +
+  facet_grid(Secteur~Niv, scales = "free_y")
+```
+
+```{r}
+superquantor <- function(.x, n=4) {
+  cut(.x,quantile(.x, probs = seq(0, 1, 1/n), na.rm=TRUE)) %>%
+    as.numeric() - 1
+}
+  
+dhg.superquant <- dhg.metro %>% 
+  mutate(E.S = -E.S) %>%
+  mutate(
+    quantES = superquantor(E.S, 10), 
+    quantHE = superquantor(H.E, 10), 
+    .by=c(Niv)
+    ) %>% 
+  filter(!is.na(quantES) & !is.na(quantHE)) %>%
+  mutate(quant = quantES )
+  
+dhg.superquant %>%
+  summarise(
+    Etablissements = n(), 
+    Elèves = sum(Elèves,na.rm=TRUE), 
+    .by = c(Niv,Secteur,quant)
+  ) %>%
+  mutate(
+    PartEtablissements = Etablissements/sum(Etablissements),
+    PartElèves = Elèves/sum(Elèves), 
+    .by = c(Niv,Secteur)) %>%
+  ggplot(aes(x=quant,y=PartEtablissements,fill=Secteur)) +
+  geom_col(position = "dodge") +
+  facet_grid(Secteur~Niv)
+```
+
+```{r}
+dhg.superquant %>%
+  summarise(Elèves = sum(Elèves,na.rm=TRUE), .by = c(Niv,Secteur,quant)) %>%
+  
+  ggplot(aes(x=quant,y=Elèves,fill=Secteur)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~Niv, scales = "free_y")
+```
+
+```{r}
+dhg.metro %>%
+  ggplot(aes(x=E.S, color=Secteur, fill=Secteur)) + geom_density(alpha=0.5) + 
+  facet_wrap(~Niv)
+```
+
+```{r, fig.asp=4/3}
+dhg.metro %>%
+  mutate(H.E = ifelse(H.E > 3,3,H.E)) %>%
+  ggplot(aes(x=H.E, color=Secteur, fill=Secteur)) + geom_density(alpha=0.5) + 
+  facet_grid(Niv~.)
+``` 
+
+
+### IPS
+
+```{r}
+dhg.college <- left_join(dhg.quant, college, by="UAI")
+
+dhg.college %>%
+  ggplot(aes(x=quant,y=IPS,fill=Secteur.x)) + geom_boxplot() + facet_wrap(~Niv)
+```

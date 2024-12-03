@@ -1,0 +1,56 @@
+---
+title: "Nombre de postes depuis 2002 pour les sections CNU"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(ggcpesrthemes)
+
+theme_cpesr_setup(authors=c("Florent Figon, Julien Gossa"), licence="LO 2.0", source = "DGRH A1-1")
+
+cnu <- read.table("DB_CNU_QualificationRecrutements.csv", h=T, sep=";") %>%
+    mutate(SectionCNU.ID = as.factor(SectionCNU.ID),
+           candidatures.par.candidat.MCF = Candidatures.MCF / Candidats.MCF,
+           candidatures.par.poste.MCF = Candidatures.MCF / PostesPublies.MCF,
+           candidats.par.poste.MCF = Candidats.MCF / PostesPublies.MCF,
+           candidatures.par.candidat.par.poste.MCF = candidatures.par.candidat.MCF / PostesPublies.MCF,
+           GrandeDisciplineCNU = as.factor(GrandeDisciplineCNU),
+           Code.GrandeDisciplineCNU = recode(GrandeDisciplineCNU, 
+                                             "Droit éco ges" ="DEG",
+                                             "Lettres et sciences humaines" = "LSHS",
+                                             "Pharmacie" = "Pharma",
+                                             "Sciences et techniques" = "ST"),
+           SectionCNU = recode(SectionCNU, 
+                               "87/41 Sciences biologiques, fondamentales et cliniques"="87 Sciences biologiques, fondamentales et cliniques",
+                               "86/40 Sciences du médicament et des autres produits de santé"="86 Sciences du médicament et des autres produits de santé",
+                               "85/39 Sciences physico-chimiques et ingénierie appliquée à la santé"="85 Sciences physico-chimiques et ingénierie appliquée à la santé")
+    )
+```
+
+```
+- twtexte:[#DataESR] Evolution du nombre de postes de Maître de conférences
+- twalt:LO 2.0 @ffigon @juliengossa
+- twurl:https://twitter.com/CPESR_/status/1442047467042877442
+```
+
+```{r funs}
+plot_section <- function(section) {
+  cnu %>% 
+    drop_na(PostesPublies.MCF) %>% 
+    filter(SectionCNU==section) %>% 
+    ggplot(aes(x=Annee, y=PostesPublies.MCF)) + 
+      geom_point() + geom_smooth(se=F) + 
+      theme_cpesr_cap() + 
+      labs(title=paste0("Concours MCF section ", str_sub(section,1,2),", de 2002 à 2019"), subtitle=section, y ="Postes de MCF publiés", x = "Année")
+}
+```
+
+```{r evolution.postes.MCF, fig.width=8, fig.asp=9/16, results='asis'}
+for(sec in unique(cnu$SectionCNU)) {
+
+  cat(paste0("\n\n## Section ", sec," \n"))
+  print(plot_section(sec))
+}
+```

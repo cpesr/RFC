@@ -1,0 +1,56 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://www.data.gouv.fr/fr/datasets/le-baccalaureat-par-academie/")
+```
+
+## Données 
+
+- https://www.data.gouv.fr/fr/datasets/le-baccalaureat-par-academie/
+
+```{r load}
+bac <- read.csv2("../data/fr-en-baccalaureat-par-academie.csv", dec='.')
+
+colnames(bac)
+```
+
+## Explorations
+
+```{r}
+bac %>%
+  summarise(across(starts_with("nombre"), sum, na.rm = TRUE),
+            .by = c(session,voie)) %>%
+  filter(session == max(session)) %>%
+  pivot_longer(nombre_d_admis_au_1er_groupe:nombre_de_refuses_totaux, names_to = "type", values_to = "nombre") %>%
+  mutate(mention = factor(type, 
+                       levels = c(
+                         "nombre_d_admis_avec_mention_tb_avec_les_felicitations_du_jury",
+                         "nombre_d_admis_avec_mention_tb_sans_les_felicitations_du_jury",
+                         "nombre_d_admis_avec_mention_b", 
+                         "nombre_d_admis_avec_mention_ab",
+                         "nombre_d_admis_sans_mention", 
+                         "nombre_de_refuses_totaux"),
+                       labels = c("TBF","TB","B","AB","\nSans mention","Refusé"))) %>% 
+  mutate(mention=fct_rev(mention)) %>%
+  filter(!is.na(mention)) %>%
+  mutate(taux = nombre / nombre_de_presents) %>% View()
+  ggplot(aes(x=mention, y=taux, fill=mention)) + 
+  geom_col() +
+  facet_grid(~voie) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  ggtitle("Taux de mentions au baccalauréat 2023 par voie") +
+  theme(legend.position = "none") +
+  cpesr_cap() 
+```

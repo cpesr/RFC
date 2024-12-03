@@ -61,18 +61,20 @@ ips <- bind_rows(
   ips.ecole %>% mutate(Niveau = "Ecole"),
   ips.college %>% mutate(Niveau = "Collège"),
   ips.lycee %>% 
-    rename(
-      Rentrée.scolaire = rentree_scolaire,
-      Académie = academie,
-      Code.du.département = code_du_departement,
-      Département = departement,
-      UAI = uai,
-      Nom.de.l.établissment = nom_de_l_etablissment,
-      Code.INSEE.de.la.commune = code_insee_de_la_commune,
-      Nom.de.la.commune = nom_de_la_commune,
-      Secteur = secteur,
-      IPS = ips_ensemble_gt_pro
-    ) %>% mutate(Niveau = "Lycée")
+    mutate(
+      Code.du.département = as.character(Code.du.département),
+      Code.INSEE.de.la.commune = as.character(Code.INSEE.de.la.commune),
+      Niveau = "Lycée")
+    # rename(
+    #   Académie = academie,
+    #   Département = departement,
+    #   UAI = uai,
+    #   Nom.de.l.établissment = nom_de_l_etablissment,
+    #   Code.INSEE.de.la.commune = code_insee_de_la_commune,
+    #   Nom.de.la.commune = nom_de_la_commune,
+    #   Secteur = secteur,
+    #   IPS = ips_ensemble_gt_pro
+    # ) %>% 
   ) %>%
   mutate(
     Niveau = factor(Niveau, levels = c("Ecole","Collège","Lycée")),
@@ -89,8 +91,8 @@ colnames(ips)
 ```{r college.reussite}
 college.ips <- inner_join(
   brevet %>% filter(Session == 2021),
-  ips %>% filter(Rentrée == 2020),
-  by = c(Numero.d.etablissement = "UAI")
+  ips %>% filter(Rentrée == 2021),
+  by = join_by(Numero.d.etablissement == UAI)
 ) 
 
 write.csv2(college.ips, "college_ips.csv", row.names = FALSE)
@@ -99,6 +101,46 @@ college.ips %>%
   ggplot(aes(x=IPS,y=Taux.de.réussite)) + geom_point()
 ```
 
+```{r}
+college.ips %>%
+  filter(!is.na(IPS)) %>%
+  mutate(IPS.cut = cut(IPS, 
+                       breaks = c(-Inf,75,100,125,Inf), 
+                       labels = c("Très défavorisé\n(IPS<75)","Défavorisé\n(75<IPS<100)","Favorisé\n (100<IPS<125)","Très favorisé\n(IPS>125)"))) %>%
+  ggplot(aes(x=IPS.cut,y=Taux.de.réussite,fill=IPS.cut)) + 
+  geom_boxplot() +
+  scale_fill_brewer(palette = "RdBu") +
+  labs(title = "Taux de réussite au Brevet selon l'indice de position sociale (IPS)",
+       subtitle = "IPS moyen des collèges de France, session 2021",
+       x = "IPS moyen de l'établissement",
+       y = "Taux de réussite au Brevet") +
+  theme(legend.position = "none") +
+  cpesr_cap()
+
+```
+
+
+```{r}
+college.ips %>%
+  filter(!is.na(IPS)) %>%
+  mutate(IPS.cut = cut(IPS, 
+                       breaks = c(-Inf,75,100,125,Inf), 
+                       labels = c("Très défavorisé\n(IPS<75)","Défavorisé\n(75<IPS<100)","Favorisé\n (100<IPS<125)","Très favorisé\n(IPS>125)"))) %>%
+  summarize(
+    Absents = sum(Inscrits - Presents),
+    Refusés = sum(Presents - Admis),
+    .by = IPS.cut
+  ) %>% pivot_longer(cols = c(Absents,Refusés), names_to = "Type", values_to = "Nombre") %>%
+  ggplot(aes(x=IPS.cut,y=Nombre,fill=Type)) + 
+  geom_col() +
+  scale_fill_brewer(palette = "Dark2") +
+  labs(title = "Nombre d'élèves échouant au Brevet selon l'indice de position sociale",
+       subtitle = "IPS moyen des collèges de France, session 2021",
+       x = "IPS moyen de l'établissement",
+       y = "Taux de réussite au Brevet") +
+  cpesr_cap()
+
+```
 
 
 ```{r college.tb}
@@ -106,6 +148,9 @@ college.ips %>%
   mutate(taux.TB = Admis.Mention.très.bien / Inscrits) %>%
   ggplot(aes(x=IPS,y=taux.TB)) + geom_point()
 ```
+
+
+
 ```{r college.btb}
 college.ips %>%
   mutate(taux.BTB = (Admis.Mention.très.bien+Admis.Mention.bien) / Inscrits) %>%

@@ -1,0 +1,93 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://www.data.gouv.fr/fr/datasets/base-sirene-des-entreprises-et-de-leurs-etablissements-siren-siret/
+  - StockUniteLegale_utf8.csv
+  - python3 SireneFilter.py data/SIRENE/StockUniteLegale_utf8.csv sirene_enseignement.csv
+  - python3 SireneFilter.py data/SIRENE/StockUniteLegale_utf8.csv sirene_siren.csv --siren RNCP_SIREN.csv
+  - https://www.sirene.fr/static-resources/documentation/v_sommaire_311.htm#27
+- https://insee.fr/fr/information/2406147
+- https://www.insee.fr/fr/information/2028129
+
+```{r load}
+tranches_effectifs <- read.csv("data/TranchesEffectif.csv", colClasses = "character", stringsAsFactors = TRUE) %>%
+  mutate(TrancheEffectif = factor(TrancheEffectif,levels=TrancheEffectif))
+
+cj <- bind_rows(
+  readxl::read_xls("data/cj_septembre_2022.xls", sheet = 2, skip = 3) %>%
+    mutate(Code = paste0(Code,"00")),
+  readxl::read_xls("data/cj_septembre_2022.xls", sheet = 3, skip = 3) 
+  ) %>%
+  mutate(subcode = str_sub(Code,1,1)) %>%
+  rename(categorieJuridiqueDetaillee=Libellé) %>%
+  slice_head(n=1, by=Code) %>%
+left_join(
+  readxl::read_xls("data/cj_septembre_2022.xls", sheet = 1, skip = 3) %>%
+    rename(subcode = Code,
+           categorieJuridique=Libellé)) %>%
+  mutate(categorieJuridiqueGroupee = fct_other(categorieJuridique,
+    keep=c("Entrepreneur individuel","Personne morale de droit public soumise au droit commercial","Personne morale et organisme soumis au droit administratif","Personne morale de droit étranger"),
+    other_level = "Autres"
+  )) %>%
+  mutate(categorieJuridiqueSecteur = fct_collapse(categorieJuridiqueGroupee,
+    Public=c("Personne morale de droit public soumise au droit commercial","Personne morale et organisme soumis au droit administratif"),
+    other_level = "Privé"
+  )) %>%
+  select(-subcode) %>%
+  mutate(across(everything(), as.factor))
+
+
+sirene <- full_join(
+  read.csv("sirene_rncp.csv", colClasses = "character") %>% mutate(RNCP = TRUE),
+  read.csv("sirene_enseignement.csv", colClasses = "character") %>% mutate(Enseignement = TRUE)
+  ) %>%
+  mutate(across(c(RNCP,Enseignement), replace_na, FALSE)) %>%
+  left_join(cj, by = c("categorieJuridiqueUniteLegale"="Code")) %>%
+  mutate(
+    across(c(statutDiffusionUniteLegale, categorieEntreprise, etatAdministratifUniteLegale, categorieJuridiqueUniteLegale:caractereEmployeurUniteLegale), as.factor),
+    across(c(nombrePeriodesUniteLegale), as.numeric),
+    unitePurgeeUniteLegale = (unitePurgeeUniteLegale == "true"),
+    trancheEffectifsUniteLegale = factor(trancheEffectifsUniteLegale, levels = tranches_effectifs$Code, labels = tranches_effectifs$TrancheEffectif))
+
+save(sirene, file = "sirene.RData")
+```
+
+## Checks
+
+### Categorie juridique
+
+```{r, results='asis'}
+sirene %>%
+  filter(!is.na(categorieJuridiqueUniteLegale),is.na(categorieJuridiqueSecteur)) %>%
+  summarize(Nombre = n(), .by=categorieJuridiqueUniteLegale) %>%
+  arrange(categorieJuridiqueUniteLegale) %>%
+  spoiler_table("Catégories juridique non matchées", trim = Inf)
+```
+
+### RNCP
+
+```{r, results='asis'}
+read.csv("rncp_siren.csv", colClasses = "character") %>%
+  select(Siren) %>%
+  filter(!Siren %in% sirene$siren) %>%
+  spoiler_table("Siren dans RNCP mais pas dans Sirene", trim = Inf)
+```
+
+

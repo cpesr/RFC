@@ -1,0 +1,260 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://www.data.gouv.fr/fr/datasets/repertoire-national-des-certifications-professionnelles-et-repertoire-specifique/
+
+```{r load}
+load("./sirene.RData")
+
+rncp.standard <- read.csv2("data/RNCP/export_fiches_CSV_Standard_2024_05_01.csv", colClasses = "character") 
+
+rncp.certificateurs <- read.csv2("data/RNCP/export_fiches_CSV_Certificateurs_2024_05_01.csv") %>%
+  mutate(Siret_Certificateur = as.character(Siret_Certificateur))
+rncp.partenaires <- read.csv2("data/RNCP/export_fiches_CSV_Partenaires_2024_05_01.csv") %>%
+  mutate(Siret_Partenaire = as.character(Siret_Partenaire))
+
+rncp.rome <- read.csv2("data/RNCP/export_fiches_CSV_Rome_2024_05_01.csv", colClasses = "character")
+rncp.nsf <- read.csv2("data/RNCP/export_fiches_CSV_Nsf_2024_05_01.csv", colClasses = "character")
+rncp.formacode <- read.csv2("data/RNCP/export_fiches_CSV_Formacode_2024_05_01.csv", colClasses = "character")
+rncp.ccn <- read.csv2("data/RNCP/export_fiches_CSV_CCN_2024_05_01.csv", colClasses = "character")
+rncp.ancienne_nouvelle_certifications <- read.csv2("data/RNCP/export_fiches_CSV_Ancienne_Nouvelle_Certification_2024_05_01.csv", colClasses = "character") 
+rncp.voies <- read.csv2("data/RNCP/export_fiches_CSV_VoixdAcc├иs_2024_05_01.csv", colClasses = "character")
+rncp.blocs <- read.csv2("data/RNCP/export_fiches_CSV_Blocs_De_Comp├йtences_2024_05_01.csv", colClasses = "character")
+
+# Siret to Siren function
+siret2siren <- function(siret) {
+  str_sub(siret,1,9)
+}
+
+bind_rows(
+  rncp.certificateurs %>% select(Siret = Siret_Certificateur),
+  rncp.partenaires %>% select(Siret = Siret_Partenaire)
+) %>%
+  unique() %>%
+  mutate(Siren = siret2siren(Siret)) %>%
+  write.csv("RNCP_SIREN.csv", row.names = FALSE)
+```
+
+### Ressources :
+
+- https://services.dgesip.fr/fichiers/Fiche-EnregistrementRNCP.pdf
+- https://www.francecompetences.fr/espace-international/faq/quelles-sont-les-differences-entre-le-certificateur-et-ses-partenaires/
+
+## Explorations
+
+```{r}
+Numero_Fiches_Actives <- rncp.standard %>% filter(Actif == "ACTIVE") %>% pull(Numero_Fiche)
+
+explore <- function(df, var, actif=TRUE, lumpn=20) {
+  df %>% 
+    { if (actif) filter(., Numero_Fiche %in% Numero_Fiches_Actives) else . } %>%
+    mutate(Variable = fct_lump(!!sym(var),n=lumpn)) %>%
+    summarise(Nombre = n(), .by = Variable) %>%
+    ggplot(aes(x=Nombre,y=reorder(Variable,Nombre),fill=Variable)) + 
+    geom_col() +
+    ylab(var) +
+    theme(legend.position = "none")
+}
+```
+
+### Standard 
+
+```{r}
+colnames(rncp.standard)
+rncp.standard %>% explore("Actif", actif = FALSE)
+rncp.standard %>% explore("Abrege_Libelle", actif = FALSE)
+rncp.standard %>% explore("Nomenclature_Europe_Niveau")
+rncp.standard %>% explore("Nomenclature_Europe_Intitule")
+rncp.standard %>% explore("Type_Enregistrement")
+rncp.standard %>% explore("Validation_Partielle")
+```
+### Rome 
+
+```{r}
+colnames(rncp.rome)
+rncp.rome %>% explore("Codes_Rome_Libelle")
+```
+
+
+### NSF 
+
+```{r}
+colnames(rncp.nsf)
+rncp.nsf %>% explore("Nsf_Intitule")
+```
+
+### Formacode 
+
+```{r}
+colnames(rncp.formacode)
+rncp.formacode %>% explore("Formacode_Libelle")
+```
+
+### Certificateurs 
+
+```{r}
+colnames(rncp.certificateurs)
+rncp.certificateurs %>% explore("Nom_Certificateur")
+```
+
+### Partenaires 
+
+```{r}
+colnames(rncp.partenaires)
+rncp.partenaires %>% explore("Habilitation_Partenaire")
+```
+
+### CCN 
+
+```{r}
+colnames(rncp.ccn)
+rncp.ccn %>% explore("Ccn_1_Libelle")
+```
+
+### ancienne_nouvelle_certifications 
+
+```{r}
+colnames(rncp.ancienne_nouvelle_certifications)
+```
+
+### Voies 
+
+```{r}
+colnames(rncp.voies)
+rncp.voies %>% explore("Si_Jury")
+```
+
+### Blocs 
+
+```{r}
+colnames(rncp.blocs)
+rncp.blocs %>% explore("Bloc_Competences_Libelle")
+```
+
+
+```{r, eval=FALSE}
+rncp.siret <- rncp %>%
+  summarise(Nombre = n_distinct(Numero_Fiche), .by = c(siret,NomRNCP,Type)) %>%
+  pivot_wider(names_from = Type, values_from = Nombre, values_fill = 0)
+
+rncp.siren <- rncp %>%
+  mutate(siren = str_sub(siret,1,9)) %>%
+  mutate(NomRNCP = paste(unique(NomRNCP), collapse = ";"), .by = siren) %>%
+  summarise(Nombre = n_distinct(Numero_Fiche), .by = c(siren,NomRNCP,Type)) %>%
+  pivot_wider(names_from = Type, values_from = Nombre, values_fill = 0)
+```
+
+
+## Organismes
+
+```{r}
+rncp.organismes <- bind_rows(
+  rncp.certificateurs %>%
+    rename(Siret = Siret_Certificateur, Nom = Nom_Certificateur) %>%
+    mutate(Role = "Certificateur"),
+  rncp.partenaires %>%
+    rename(Siret = Siret_Partenaire, Nom = Nom_Partenaire) %>%
+    mutate(Role = "Partenaire")) %>%
+  right_join(rncp.standard %>% filter(Actif == "ACTIVE") %>% select(Numero_Fiche, Actif), by = "Numero_Fiche") %>%
+  arrange(Numero_Fiche) %>%
+  mutate(Siren = siret2siren(Siret)) %>%
+  left_join(sirene, by = c("Siren" = "siren")) %>%
+  left_join(read.csv2("data/fr-cpesr-siren.csv") %>%
+              select(Siren = siren, ESR.Etablissement = Etablissement, ESR.Secteur = Secteur) %>%
+              slice_head(n=1, by=Siren)) %>%
+  mutate(Perimetre = case_when(
+    Nom == "MINISTERE DE L'ENSEIGNEMENT SUPERIEUR ET DE LA RECHERCHE" ~ "MESR",
+    str_detect(Nom, "MINISTERE") ~ "Autre Ministère",
+    str_detect(Nom, "UNIVERSITE") ~ "Université",
+    !is.na(ESR.Etablissement) & categorieJuridiqueSecteur == "Public" ~ "MESR Public",
+    !is.na(ESR.Etablissement) ~ "MESR Privé",
+    categorieJuridiqueSecteur == "Public" ~ "Autre Public",
+    TRUE ~ "Autre Privé"
+  ))
+```
+
+
+
+```{r}
+rncp.organismes %>%
+  summarise(Nombre_Siren = n_distinct(Siren), .by=c(Role,categorieJuridiqueSecteur)) %>%
+  filter(!is.na(categorieJuridiqueSecteur)) %>%
+  ggplot(aes(x=Role, y=Nombre_Siren, fill=Role)) +
+  geom_col() +
+  facet_grid(~categorieJuridiqueSecteur) 
+```
+
+```{r}
+rncp.organismes %>%
+  summarise(Nombre_Fiches = n_distinct(Numero_Fiche), .by=c(Role,categorieJuridiqueSecteur)) %>%
+  filter(!is.na(categorieJuridiqueSecteur)) %>%
+  ggplot(aes(x=Role, y=Nombre_Fiches, fill=Role)) +
+  geom_col() +
+  facet_grid(~categorieJuridiqueSecteur) 
+```
+
+
+```{r}
+rncp.organismes %>%
+  select(Numero_Fiche,Role,categorieJuridiqueSecteur) %>%
+  filter(!is.na(categorieJuridiqueSecteur)) %>%
+  unique() %>% 
+  arrange(Numero_Fiche,categorieJuridiqueSecteur) %>%
+  summarise(categorie = paste(categorieJuridiqueSecteur, collapse = "+"), .by=c(Numero_Fiche,Role)) %>%
+  pivot_wider(names_from = Role, values_from = categorie, values_fill = "Aucun") %>% 
+  summarize(Nombre_Fiches = n(), .by=c(Certificateur,Partenaire)) %>%
+  ggplot(aes(y=Partenaire, x=Nombre_Fiches, fill=Certificateur)) +
+  geom_col() +
+  facet_grid(Certificateur~.)
+```
+
+
+```{r, results='asis'}
+rncp.standard %>%
+  filter(Actif == "ACTIVE") %>%
+  filter(!Numero_Fiche %in% rncp.certificateurs$Numero_Fiche) %>% 
+  select(Numero_Fiche, Intitule) %>%
+  mutate(lien = paste0("https://www.francecompetences.fr/recherche/rncp/",str_sub(Numero_Fiche,5))) %>%
+  spoiler_table("Fiches sans certificateur", trim = Inf)
+```
+
+Hypothèse : incohérences dans la base de données mise en ligne.
+
+### Ministères
+
+```{r, fig.asp=3/4}
+rncp.organismes %>%
+  filter(Actif == "ACTIVE") %>%
+  filter(str_detect(Nom, "MINISTERE")) %>%
+  summarise(Nombre_Fiches = n(), .by=c(Nom,Role)) %>%
+  ggplot(aes(y=reorder(Nom,Nombre_Fiches), x=Nombre_Fiches, fill=Role)) +
+  geom_col() +
+  scale_y_discrete(labels = ~ str_wrap(.x, width = 50)) 
+```
+
+
+```{r, fig.asp=3/4}
+rncp.organismes %>%
+  filter(Actif == "ACTIVE") %>%
+  summarise(Nombre_Fiches = n(), .by=c(Perimetre,Role)) %>%
+  ggplot(aes(y=reorder(Perimetre,Nombre_Fiches), x=Nombre_Fiches, fill=Role)) +
+  geom_col() +
+  scale_y_discrete(labels = ~ str_wrap(.x, width = 50)) 
+```

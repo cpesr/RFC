@@ -1,0 +1,193 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+```{r load}
+load("ps.RData")
+```
+
+## Explorations
+
+```{r vardispo}
+ps %>% 
+  summarise(
+    across(contains("ention"), ~ sum(!is.na(.x))/n()),
+    .by=Session
+  ) %>%
+  pivot_longer(-Session, names_to = "Variable", values_to = "Dispo") %>%
+  ggplot(aes(x=Session,y=Variable,color=Dispo)) + geom_point() +
+  scale_color_distiller(palette = "RdBu", direction = 1)
+```
+
+```{r X}
+mentions <- function(df) {
+  df %>%
+  filter(Session > 2017) %>%
+  mutate(across(matches("X..d.admis.néo.bacheliers.*mention"), ~ .x / 100 * admis)) %>%
+  mutate(X..d.admis.néo.bacheliers.sans.information.sur.la.mention.au.bac
+ = X..d.admis.néo.bacheliers.sans.information.sur.la.mention.au.bac + admis - rowSums(pick(matches("X..d.admis.néo.bacheliers.*mention")))) %>% 
+  summarize(across(matches("X..d.admis.néo.bacheliers.*mention"), ~ sum(.x,na.rm=TRUE)), .by = Session) %>%
+  pivot_longer(-Session, names_to = "Mention", values_to = "Admissions") %>%
+  mutate(Mention = factor(case_match(Mention,
+    "X..d.admis.néo.bacheliers.sans.information.sur.la.mention.au.bac" ~ "Inconnue",
+    "X..d.admis.néo.bacheliers.sans.mention.au.bac" ~ "Aucune",
+    "X..d.admis.néo.bacheliers.avec.mention.Assez.Bien.au.bac" ~ "AB",
+    "X..d.admis.néo.bacheliers.avec.mention.Bien.au.bac" ~ "B",
+    "X..d.admis.néo.bacheliers.avec.mention.Très.Bien.au.bac" ~ "TB",
+    "X..d.admis.néo.bacheliers.avec.mention.Très.Bien.avec.félicitations.au.bac" ~ "TBF"),
+    levels = c("Inconnue","Aucune","AB","B","TB","TBF"))) 
+}
+
+ps %>%
+  mentions() %>%
+  ggplot(aes(x=Session,y=Admissions/1e3,fill=Mention,group=Mention,color=Mention)) + 
+    geom_area(position = position_stack(reverse = TRUE))
+  
+```
+
+```{r iut}
+ps %>%
+  filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>%
+  mentions() %>%
+  ggplot(aes(x=Session,y=Admissions/1e3,fill=Mention,group=Mention,color=Mention)) + 
+    geom_area(position = position_stack(reverse = TRUE))
+```
+
+
+```{r iut.part}
+left_join(
+  ps %>% mentions(),
+  ps %>% filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>% mentions() %>% rename(AdmissionsIUT = Admissions)
+) %>%
+  mutate(Part = AdmissionsIUT / Admissions) %>%
+  mutate(Part100 = Part / first(Part) * 100, .by = Mention) %>%
+  #filter(Session != 2020) %>%
+  ggplot(aes(x=Session,y=Part,color=Mention)) + geom_line()
+  
+```
+
+
+```{r iut.diff}
+left_join(
+  ps %>% mentions(),
+  ps %>% filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>% mentions() %>% rename(AdmissionsIUT = Admissions)
+) %>%
+  mutate(Différence = AdmissionsIUT / sum(AdmissionsIUT) - Admissions / sum(Admissions),
+         .by = Session) %>%
+  ggplot(aes(x=Session,y=Différence,color=Mention)) + geom_line()
+```
+
+
+## Mention par série
+
+```{r}
+mentions.series <- function(df) {
+  df %>%
+    summarise(across(starts_with("Effectif.des.admis.néo.bacheliers."), sum),
+              .by = Session) %>%
+    pivot_longer(-Session, names_to = "Type", values_to = "Admissions") %>%
+    mutate(
+      Bacheliers = gsub("Effectif.des.admis.néo.bacheliers.([^\\.]*).*","\\1",Type),
+      Mention = ifelse(str_detect(Type,"ayant.eu"),"Avec","Total")) %>%
+    mutate(Part = Admissions / sum(Admissions), .by = c(Session,Bacheliers))
+}
+
+bind_rows(
+  ps %>% mentions.series() %>% mutate(Fillière = "Global"),
+  ps %>% filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>% mentions.series() %>% mutate(Fillière = "IUT")
+) %>%
+    filter(Mention == "Avec", Session > 2017) %>%
+  ggplot(aes(x=Session,y=Part,color=Bacheliers,linetype = Fillière)) + 
+  geom_line()
+```
+```{r}
+bind_rows(
+  ps %>% mentions.series() %>% mutate(Fillière = "Global"),
+  ps %>% filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>% mentions.series() %>% mutate(Fillière = "IUT")
+) %>%
+  filter(Mention == "Avec", Session > 2017) %>%
+  mutate(Différence = 2 * Part - sum(Part), .by = c(Session,Bacheliers)) %>%
+  filter(Fillière == "IUT") %>%
+  ggplot(aes(x=Session,y=Différence,color=Bacheliers,linetype = Fillière)) + 
+  geom_line()
+```
+
+
+## Principale/complémentaire
+
+```{r}
+ps %>%
+  summarise(across(starts_with("Effectif.des.admis.en.phase."), sum),
+            .by = Session) %>%
+  pivot_longer(-Session, names_to = "Phase", values_to = "Admissions") %>%
+  ggplot(aes(x=Session,y=Admissions/1e3,fill=Phase,group=Phase,color=Phase)) + 
+    geom_area(position = position_stack(reverse = TRUE))
+```
+
+
+```{r}
+ps %>%
+  filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>%
+  summarise(across(starts_with("Effectif.des.admis.en.phase."), sum),
+            .by = Session) %>%
+  pivot_longer(-Session, names_to = "Phase", values_to = "Admissions") %>%
+  ggplot(aes(x=Session,y=Admissions/1e3,fill=Phase,group=Phase,color=Phase)) + 
+    geom_area(position = position_stack(reverse = TRUE))
+```
+
+```{r}
+ps %>%
+  filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>%
+  summarise(across(starts_with("Effectif.des.admis.en.phase."), sum),
+            .by = Session) %>%
+  mutate (Part = Effectif.des.admis.en.phase.complémentaire / (Effectif.des.admis.en.phase.principale + Effectif.des.admis.en.phase.complémentaire ) ) %>%
+  ggplot(aes(x=Session,y=Part)) + geom_line()
+```
+
+## taux d'accès 
+
+```{r tda}
+bind_rows(
+  ps %>% 
+    summarise(Taux.d.accès.médian = median(taux.accès, na.rm=TRUE), .by = Session) %>%
+    mutate(Type = "Total"),
+  ps %>% 
+    filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>%
+    summarise(Taux.d.accès.médian = median(taux.accès, na.rm=TRUE), .by = Session) %>%
+    mutate(Type = "IUT")
+) %>%
+  ggplot(aes(x=Session,y=Taux.d.accès.médian,color=Type)) + geom_line()
+
+```
+
+
+```{r tda.diff}
+full_join(
+  ps %>% 
+    summarise(Taux.d.accès.médian = median(taux.accès, na.rm=TRUE), .by = Session),
+  ps %>% 
+    filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>%
+    summarise(Taux.d.accès.médian.IUT = median(taux.accès, na.rm=TRUE), .by = Session)
+) %>%
+  mutate(Différence = Taux.d.accès.médian - Taux.d.accès.médian.IUT) %>%
+  ggplot(aes(x=Session,y=Différence)) + geom_line()
+
+```
+
+

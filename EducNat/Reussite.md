@@ -1,7 +1,7 @@
 Réussite
 ================
 CPESR
-2024-09-26
+2024-11-12
 
 ## Données
 
@@ -136,7 +136,7 @@ CPESR
     ## [101] "Taux.d.acces.attendu.france.terminale.bac"                      
     ## [102] "Region"                                                         
     ## [103] "Code.region"                                                    
-    ## [104] "code_departement"                                               
+    ## [104] "Code.departement"                                               
     ## [105] "Libelle.departement"                                            
     ## [106] "Valeur.ajoutee.du.taux.de.reussite...Toutes.series"             
     ## [107] "Valeur.ajoutee.du.taux.d.acces.2nde.bac"                        
@@ -169,7 +169,15 @@ CPESR
     ## [134] "Taux.de.reussite...Gnle"                                        
     ## [135] "Valeur.ajoutee.du.taux.de.réussite...Gnle"                      
     ## [136] "Taux.de.mentions...Gnle"                                        
-    ## [137] "Valeur.ajoutée.du.taux.de.mentions...Gnle"
+    ## [137] "Valeur.ajoutée.du.taux.de.mentions...Gnle"                      
+    ## [138] "Nombre.de.mentions.TB.avec.félicitations...G"                   
+    ## [139] "Nombre.de.mentions.TB.sans.félicitations...G"                   
+    ## [140] "Nombre.de.mentions.B...G"                                       
+    ## [141] "Nombre.de.mentions.AB...G"                                      
+    ## [142] "Nombre.de.mentions.TB.avec.félicitations...T"                   
+    ## [143] "Nombre.de.mentions.TB.sans.félicitations...T"                   
+    ## [144] "Nombre.de.mentions.B...T"                                       
+    ## [145] "Nombre.de.mentions.AB...T"
 
     ##   [1] "Etablissement"                                                                         
     ##   [2] "UAI"                                                                                   
@@ -297,7 +305,10 @@ CPESR
     ## [124] "Valeur.ajoutee.du.taux.de.mentions...Services.aux.personnes"                           
     ## [125] "Valeur.ajoutee.du.taux.de.mentions...Services.a.la.collectivite"                       
     ## [126] "Valeur.ajoutee.du.taux.de.mentions...Services"                                         
-    ## [127] "Valeur.ajoutee.du.taux.de.mentions...Toutes.series"
+    ## [127] "Valeur.ajoutee.du.taux.de.mentions...Toutes.series"                                    
+    ## [128] "Nombre.de.mentions.TB.sans.félicitations...P"                                          
+    ## [129] "Nombre.de.mentions.B...P"                                                              
+    ## [130] "Nombre.de.mentions.AB...P"
 
     ##  [1] "Rentrée.scolaire"             "Académie"                    
     ##  [3] "Code.du.département"          "Département"                 
@@ -305,65 +316,112 @@ CPESR
     ##  [7] "Code.INSEE.de.la.commune"     "Nom.de.la.commune"           
     ##  [9] "Secteur"                      "IPS"                         
     ## [11] "Niveau"                       "Ecart.type.de.l.IPS"         
-    ## [13] "type_de_lycee"                "ips_voie_gt"                 
-    ## [15] "ips_voie_pro"                 "ecart_type_de_l_ips_voie_gt" 
-    ## [17] "ecart_type_de_l_ips_voie_pro" "Rentrée"
+    ## [13] "Type.de.lycée"                "IPS.voie.GT"                 
+    ## [15] "IPS.voie.PRO"                 "IPS.Ensemble.GT.PRO"         
+    ## [17] "Ecart.type.de.l.IPS.voie.GT"  "Ecart.type.de.l.IPS.voie.PRO"
+    ## [19] "Rentrée"
 
 ## Explorations
 
 ### Collèges
 
+    ## Warning: Removed 1035 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
 <img src="Reussite_files/figure-gfm/college.reussite-1.png" width="672" />
+
+<img src="Reussite_files/figure-gfm/unnamed-chunk-1-1.png" width="672" />
+
+<img src="Reussite_files/figure-gfm/unnamed-chunk-2-1.png" width="672" />
+
+    ## Warning: Removed 1035 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
 
 <img src="Reussite_files/figure-gfm/college.tb-1.png" width="672" />
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
+    ## Warning: Removed 1035 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 1035 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
 <img src="Reussite_files/figure-gfm/college.btb-1.png" width="672" />
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
-    ## Warning: Removed 1182 rows containing non-finite outside the scale range
+    ## Warning: Removed 1035 rows containing non-finite outside the scale range
     ## (`stat_smooth()`).
 
-    ## Warning: Removed 1182 rows containing missing values or values outside the scale range
+    ## Warning: Removed 1035 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
 
 <img src="Reussite_files/figure-gfm/college.btb.et-1.png" width="672" />
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
+    ## Warning: Removed 1035 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 1035 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
 <img src="Reussite_files/figure-gfm/college.inscrits-1.png" width="672" />
 
 ### Lycées
+
+    ## Warning: Removed 2311 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
 
 <img src="Reussite_files/figure-gfm/lycee.reussite-1.png" width="672" />
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
 
+    ## Warning: Removed 2311 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 2311 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
 <img src="Reussite_files/figure-gfm/lycee.mention-1.png" width="672" />
 
     ## `geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'
+
+    ## Warning: Removed 2311 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 2311 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
 
 <img src="Reussite_files/figure-gfm/lycee.taille-1.png" width="672" />
 
 ### Strasbourg
 
-    ## Warning: Removed 178 rows containing missing values or values outside the scale range
+    ## Warning: Removed 33 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+    ## Warning: Removed 155 rows containing missing values or values outside the scale range
     ## (`geom_text_repel()`).
 
 <img src="Reussite_files/figure-gfm/college.btb.stras-1.png" width="672" />
 
 ### Aix-Marseille
 
-    ## Warning: Removed 324 rows containing missing values or values outside the scale range
+    ## Warning: Removed 41 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+    ## Warning: Removed 284 rows containing missing values or values outside the scale range
     ## (`geom_text_repel()`).
 
 <img src="Reussite_files/figure-gfm/college.btb.aixmars-1.png" width="672" />
 
 ### Aix-Marseille
 
-    ## Warning: Removed 384 rows containing missing values or values outside the scale range
+    ## Warning: Removed 62 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+    ## Warning: Removed 323 rows containing missing values or values outside the scale range
     ## (`geom_text_repel()`).
 
 <img src="Reussite_files/figure-gfm/college.btb.anse-1.png" width="672" />
