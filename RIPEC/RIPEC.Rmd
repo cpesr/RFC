@@ -1,0 +1,319 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- url source
+
+```{r load}
+ripec.c2 <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab RIPEC C2 2023", skip = 3, .name_repair = "universal", na = "nd") %>%
+  transmute(
+    UAI = ...1,
+    Etablissement,
+    Prime = "C2",
+    EC = Effectif...3,
+    Bénéficiaires = as.integer(Effectif...6)
+  )
+
+ripec.c3 <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab Bénéf Prime indiv_2023", skip = 3, .name_repair = "universal", na = "nd") %>%
+  transmute(
+    UAI = ...1,
+    Etablissement,
+    Prime = "C3",
+    EC = Effectif...3,
+    Bénéficiaires = as.integer(Effectif...6)
+  )
+
+ripec.c2.montants <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab RIPEC C2 moy 2023", skip = 3, .name_repair = "universal", na = "nd") %>%
+  transmute(
+    UAI = ...1,
+    Etablissement,
+    Prime = "C2",
+    MontantMoyen = as.integer(Ensemble...10)
+  )
+
+ripec.c3.montants <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab Montant C3 2022_2023", skip = 4, .name_repair = "universal", na = "nd") %>%
+  transmute(
+    UAI = ...1,
+    Etablissement,
+    Prime = "C3",
+    MontantMoyen = as.integer(Total)
+  )
+
+ripec <- bind_rows(
+  left_join(ripec.c2, ripec.c2.montants),
+  left_join(ripec.c3, ripec.c3.montants)) %>%
+  filter(!is.na(Etablissement)) 
+
+esr <- left_join(kpiESR::esr.etab, 
+                 kpiESR::esr) %>% 
+                   filter(Rentrée == 2023) %>%
+                   mutate(UAI = recode(UAI,
+                          "0751718K" = "0756305W", # Assas
+                          "0311382J" = "0313124C", # Toulouse Capitole 
+                          "0632086A" = "0632033T"
+                          ))
+
+ripec.esr <- left_join(ripec, esr, by = "UAI") %>%
+  mutate(Etablissement.x = ifelse(UAI == "0353074B", "RENNES UNIVERSITE", Etablissement.x)) %>%
+  mutate(Groupe = if_else(UAI == "0353074B", "Universités et assimilés", Groupe)) %>% 
+  mutate(Groupe = replace_na(Groupe,"Ecoles d'ingénieurs")) %>% 
+  mutate(TypeEtablissement = factor(ifelse(Groupe == "Universités et assimilés", 
+                                      paste("Univ.",replace_na(na_if(PerimEx,""),"NINI")), 
+                                      "Autres"),
+                                    levels = rev(c("Univ. NINI", "Univ. ISITE", "Univ. IDEx", "Autres")))) 
+  
+
+colnames(ripec)
+```
+
+## Check
+
+```{r, results='asis'}
+ripec.esr %>% 
+  select(UAI,Etablissement.x,Groupe) %>% 
+  filter(is.na(Groupe)) %>%
+  unique() %>%
+  spoiler_table(trim = Inf, title = "Etablissements sans groupe")
+```
+
+```{r, results='asis'}
+ripec.esr %>% 
+  select(Groupe,PerimEx,TypeEtablissement) %>% 
+  unique() %>%
+  arrange(Groupe) %>%
+  spoiler_table(trim = Inf, title = "Groupes et périmètres")
+```
+
+
+## Explorations
+
+```{r, fig.asp=9/16}
+smart_label <- function(x) {
+  if(max(x, na.rm = TRUE) <=1) {
+    return(scales::percent(x))
+  } else {
+    return(scales::number(x))
+  }
+}
+
+ripec.esr %>%
+  #filter(TypeEtablissement != "Autres") %>%
+  mutate(TauxBénéficiaires = Bénéficiaires/EC) %>%
+  pivot_longer(cols = c(TauxBénéficiaires, MontantMoyen), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = recode(Indicateur, 
+                             "TauxBénéficiaires" = "Taux de bénéficiaires",
+                             "MontantMoyen" = "Montant moyen")) %>%
+  mutate(Label = paste(Indicateur, Prime)) %>%
+  ggplot(aes(x=Valeur, y=TypeEtablissement, fill=TypeEtablissement)) +
+  geom_boxplot(alpha=0.7) +
+  scale_x_continuous(labels = smart_label) +
+  #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
+  facet_grid(Prime~Indicateur, scales = "free_x") +
+  theme(legend.position = "none") +
+  labs(title = "Répartition des montants moyens et taux de bénéficiaires",
+       subtitle = "des primes RIPEC C2 et C3 par type d'établissement",
+       x = NULL, y = NULL) 
+```
+
+```{r}
+ripec.esr %>%
+  filter(Groupe == "Universités et assimilés", !is.na(Typologie)) %>%
+  mutate(TauxBénéficiaires = Bénéficiaires/EC) %>%
+  pivot_longer(cols = c(TauxBénéficiaires, MontantMoyen), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = recode(Indicateur, 
+                             "TauxBénéficiaires" = "Taux de bénéficiaires",
+                             "MontantMoyen" = "Montant moyen")) %>%
+  mutate(Label = paste(Indicateur, Prime)) %>%
+  ggplot(aes(x=Valeur, y=str_sub(Typologie,12), fill=Typologie)) +
+  geom_boxplot(alpha=0.7) +
+  scale_x_continuous(labels = smart_label) +
+  #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
+  facet_grid(Prime~Indicateur, scales = "free_x") +
+  theme(legend.position = "none") +
+  labs(title = "Répartition des montants moyens et taux de bénéficiaires",
+       subtitle = "des primes RIPEC C2 et C3 par typologie d'université",
+       x = NULL, y = NULL) 
+```
+
+```{r}
+ripec.esr %>%
+  #filter(TypeEtablissement != "Autres") %>%
+  mutate(
+    BudgetPrimeEC = Bénéficiaires*MontantMoyen/EC,
+    BudgetPrimeRessources = Bénéficiaires*MontantMoyen/kpi.FIN.P.ressources) %>%
+  pivot_longer(cols = c(BudgetPrimeEC, BudgetPrimeRessources), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = recode(Indicateur, 
+                             "BudgetPrimeEC" = "Budget prime par EC",
+                             "BudgetPrimeRessources" = "Part du budget global")) %>%
+  mutate(Label = paste(Indicateur, Prime)) %>%
+  ggplot(aes(x=Valeur, y=TypeEtablissement, fill=TypeEtablissement)) +
+  geom_boxplot(alpha=0.7) +
+  scale_x_continuous(labels = smart_label) +
+  #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
+  facet_grid(Prime~Indicateur, scales = "free_x") +
+  theme(legend.position = "none") +
+  labs(title = "Répartition des budgets prime, par EC et en part du budget global",
+       subtitle = "des primes RIPEC C2 et C3 par type d'établissement",
+       x = NULL, y = NULL) 
+```
+
+```{r}
+ripec.esr %>%
+  filter(TypeEtablissement != "Autres") %>%
+  mutate(
+    BudgetPrimeEC = Bénéficiaires*MontantMoyen/EC,
+    BudgetPrimeRessources = Bénéficiaires*MontantMoyen/kpi.FIN.P.ressources) %>%
+  pivot_longer(cols = c(BudgetPrimeEC, BudgetPrimeRessources), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = recode(Indicateur, 
+                             "BudgetPrimeEC" = "Budget prime par EC",
+                             "BudgetPrimeRessources" = "Part du budget global")) %>%
+  mutate(Label = paste(Indicateur, Prime)) %>%
+  ggplot(aes(x=Valeur, y=TypeEtablissement, fill=TypeEtablissement)) +
+  geom_boxplot(alpha=0.7) +
+  scale_x_continuous(labels = smart_label) +
+  #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
+  facet_grid(Prime~Indicateur, scales = "free_x") +
+  theme(legend.position = "none") +
+  labs(title = "Répartition des budgets prime, par EC et en part du budget global",
+       subtitle = "des primes RIPEC C2 et C3 par type d'établissement",
+       x = NULL, y = NULL) 
+```
+
+```{r}
+ripec.esr %>%
+  filter(Groupe == "Universités et assimilés", !is.na(Typologie)) %>%
+  mutate(
+    BudgetPrimeEC = Bénéficiaires*MontantMoyen/EC,
+    BudgetPrimeRessources = Bénéficiaires*MontantMoyen/kpi.FIN.P.ressources) %>%
+  pivot_longer(cols = c(BudgetPrimeEC, BudgetPrimeRessources), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = recode(Indicateur, 
+                             "BudgetPrimeEC" = "Budget prime par EC",
+                             "BudgetPrimeRessources" = "Part du budget prime")) %>%
+  mutate(Label = paste(Indicateur, Prime)) %>%
+  ggplot(aes(x=Valeur, y=str_sub(Typologie,12), fill=Typologie)) +
+  geom_boxplot(alpha=0.7) +
+  scale_x_continuous(labels = smart_label) +
+  #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
+  facet_grid(Prime~Indicateur, scales = "free_x") +
+  theme(legend.position = "none") +
+  labs(title = "Répartition des budgets prime par EC et en part de tout le budget",
+       subtitle = "des primes RIPEC C2 et C3 par typologie d'université",
+       x = NULL, y = NULL) 
+```
+
+
+```{r}
+ripec %>%
+  ggplot(aes(x=Bénéficiaires/EC, y=MontantMoyen, color=Prime)) +
+  geom_point() +
+  facet_wrap(~Prime) 
+```
+
+
+```{r}
+ripec %>%
+  ggplot(aes(x=Bénéficiaires/EC, y=MontantMoyen*Bénéficiaires/EC, color=Prime)) +
+  geom_point() +
+  facet_wrap(~Prime) 
+```
+
+
+```{r}
+ripec.esr %>%
+  filter(!is.na(kpi.FIN.P.ressources)) %>%
+  ggplot(aes(x=kpi.FIN.P.ressources, y=MontantMoyen*Bénéficiaires, color=Prime)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=2) +
+  facet_wrap(~Prime) 
+```
+
+```{r}
+ripec.esr %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  filter(kpi.FIN.P.ressources/EC < 6e5) %>%
+  filter(!is.na(kpi.FIN.P.ressources)) %>%
+  ggplot(aes(x=kpi.FIN.P.ressources/EC, y=MontantMoyen*Bénéficiaires/EC, color=TypeEtablissement)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=2) +
+  facet_wrap(~Prime, scales = "free_x") 
+```
+
+
+```{r, fig.asp=16/9}
+sumna <- function(x) sum(x, na.rm=TRUE)
+
+ripec.esr %>%
+  filter(!is.na(kpi.FIN.P.ressources)) %>%
+  filter(Groupe == "Universités et assimilés") %>% 
+  mutate(PartBudget = MontantMoyen*Bénéficiaires/kpi.FIN.P.ressources) %>%
+  ggplot(aes(x=PartBudget, 
+             y=reorder(Etablissement.x,PartBudget, FUN = sumna),  
+             fill=Prime)) +
+  geom_col() 
+```
+
+
+```{r, fig.asp=16/9}
+c2only <- function(x) sum(x, ifelse(Prime == "C2", sum(.x,na.rm=TRUE)))
+
+ripec.esr %>%
+  filter(!is.na(kpi.FIN.P.ressources)) %>%
+  filter(Groupe == "Universités et assimilés") %>% 
+  mutate(BudgetPrime = MontantMoyen*Bénéficiaires) %>%
+  mutate(PartBudget = MontantMoyen*Bénéficiaires/kpi.FIN.P.ressources) %>%
+  mutate(PartParPrime = BudgetPrime / sum(BudgetPrime), .by=UAI) %>%
+  filter(!is.na(PartParPrime)) %>%
+  ggplot(aes(x=PartBudget, 
+             y=reorder(Etablissement.x,PartBudget, FUN = sum),
+             alpha=TypeEtablissement,
+             fill=Prime)) +
+  geom_col(position=position_stack(reverse = TRUE)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_fill_brewer(palette="Set2", name="") +
+  scale_alpha_manual(values=c(0.9,0.7,0.5), name="") +
+  labs(
+    title="Part des primes RIPEC dans le budget",
+    subtitle = "C2 et C3 des universités, selon le périmètre d'excellence",
+    x="Part du budget prime RIPEC C2 et C3",
+    y=NULL
+  )
+```
+
+```{r, fig.asp=16/9}
+c2only <- function(x) sum(x, ifelse(Prime == "C2", sum(.x,na.rm=TRUE)))
+
+ripec.esr %>%
+  filter(!is.na(kpi.FIN.P.ressources)) %>%
+  filter(Groupe == "Universités et assimilés") %>% 
+  mutate(BudgetPrime = MontantMoyen*Bénéficiaires) %>%
+  mutate(PartParPrime = BudgetPrime / sum(BudgetPrime), .by=UAI) %>%
+  filter(!is.na(PartParPrime)) %>%
+  ggplot(aes(x=PartParPrime, 
+             y=reorder(Etablissement.x,PartParPrime, FUN = first),
+             alpha=TypeEtablissement,
+             fill=Prime)) +
+  geom_col(position=position_fill(reverse = TRUE)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_fill_brewer(palette="Set2", name="") +
+  scale_alpha_manual(values=c(0.9,0.7,0.5), name="") +
+  labs(
+    title="Equilibre entre les budgets prime RIPEC",
+    subtitle = "C2 et C3 des universités, selon le périmètre d'excellence",
+    x="Part du budget prime RIPEC C2 et C3",
+    y=NULL
+  )
+```
