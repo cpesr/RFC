@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-12-07
+2024-12-09
 
 ## Données
 
@@ -13,8 +13,10 @@ CPESR
     ## New names:
     ## New names:
     ## New names:
+    ## New names:
     ## Joining with `by = join_by(UAI, Etablissement, Prime)`
     ## Joining with `by = join_by(UAI, Etablissement, Prime)`
+    ## Joining with `by = join_by(UAI, Prime)`
     ## • `` -> `...1`
     ## • `Effectif` -> `Effectif...3`
     ## • `Part de femmes` -> `Part.de.femmes...4`
@@ -50,8 +52,9 @@ CPESR
     ## Joining with `by = join_by(pid, Etablissement, Groupe, Groupe.détaillé,
     ## Comparable)`
 
-    ## [1] "UAI"           "Etablissement" "Prime"         "EC"           
-    ## [5] "Bénéficiaires" "MontantMoyen"
+    ##  [1] "UAI"            "Etablissement"  "Prime"          "EC"            
+    ##  [5] "Bénéficiaires"  "MontantMoyen"   "Candidats.2022" "Lauréats.2022" 
+    ##  [9] "Candidats.2023" "Lauréats.2023"
 
 ## Check
 
@@ -155,3 +158,30 @@ Groupes et périmètres
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-13-1.png" width="672" />
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-14-1.png" width="672" />
+
+    ## Warning: Removed 283 rows containing non-finite outside the scale range
+    ## (`stat_boxplot()`).
+
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-15-1.png" width="672" />
+
+    ## Warning: Removed 69 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+    ## Warning: Removed 69 rows containing missing values or values outside the scale range
+    ## (`geom_text_repel()`).
+
+    ## Warning: ggrepel: 25 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />
+
+    ## Warning: Removed 67 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+    ## Warning: Removed 67 rows containing missing values or values outside the scale range
+    ## (`geom_text_repel()`).
+
+    ## Warning: ggrepel: 26 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-17-1.png" width="672" />

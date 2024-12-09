@@ -30,6 +30,14 @@ ripec.c2 <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab RIP
     Bénéficiaires = as.integer(Effectif...6)
   )
 
+ripec.c2.montants <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab RIPEC C2 moy 2023", skip = 3, .name_repair = "universal", na = "nd") %>%
+  transmute(
+    UAI = ...1,
+    Etablissement,
+    Prime = "C2",
+    MontantMoyen = as.integer(Ensemble...10)
+  )
+
 ripec.c3 <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab Bénéf Prime indiv_2023", skip = 3, .name_repair = "universal", na = "nd") %>%
   transmute(
     UAI = ...1,
@@ -39,12 +47,14 @@ ripec.c3 <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab Bé
     Bénéficiaires = as.integer(Effectif...6)
   )
 
-ripec.c2.montants <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab RIPEC C2 moy 2023", skip = 3, .name_repair = "universal", na = "nd") %>%
+ripec.c3.candidats <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab RIPEC C3_cand et lauréats", skip = 5, .name_repair = "universal", na = "nd") %>%
   transmute(
     UAI = ...1,
-    Etablissement,
-    Prime = "C2",
-    MontantMoyen = as.integer(Ensemble...10)
+    Prime = "C3",
+    Candidats.2022 = ...3,
+    Lauréats.2022 = ...6,
+    Candidats.2023 = ...9,
+    Lauréats.2023 = ...12
   )
 
 ripec.c3.montants <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = "Etab Montant C3 2022_2023", skip = 4, .name_repair = "universal", na = "nd") %>%
@@ -57,7 +67,7 @@ ripec.c3.montants <- readxl::read_excel("Bilan LDG RIPEC 2023_EC.xlsx", sheet = 
 
 ripec <- bind_rows(
   left_join(ripec.c2, ripec.c2.montants),
-  left_join(ripec.c3, ripec.c3.montants)) %>%
+  left_join(ripec.c3, ripec.c3.montants) %>% left_join(ripec.c3.candidats)) %>%
   filter(!is.na(Etablissement)) 
 
 esr <- left_join(kpiESR::esr.etab, 
@@ -316,4 +326,60 @@ ripec.esr %>%
     x="Part du budget prime RIPEC C2 et C3",
     y=NULL
   )
+```
+
+
+
+```{r, fig.asp=5/16}
+ripec.esr %>%
+  mutate(
+    Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
+    Taux.lauréats = (Lauréats.2022+Lauréats.2023)/(Candidats.2022+Candidats.2023)) %>%
+  pivot_longer(cols = c(Taux.candidatures, Taux.lauréats), names_to = "Indicateur", values_to = "Valeur") %>%
+  mutate(Indicateur = recode(Indicateur, 
+                             "Taux.candidatures" = "Taux de candidatures C3",
+                             "Taux.lauréats" = "Taux de lauréats C3")) %>%
+  mutate(Label = paste(Indicateur, Prime)) %>%
+  ggplot(aes(x=Valeur, y=TypeEtablissement, fill=TypeEtablissement)) +
+  geom_boxplot(alpha=0.7) +
+  scale_x_continuous(labels = smart_label) +
+  #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
+  facet_grid(.~Indicateur, scales = "free_x") +
+  theme(legend.position = "none") +
+  labs(title = "Répartition des budgets prime, par EC et en part du budget global",
+       subtitle = "des primes RIPEC C2 et C3 par type d'établissement",
+       x = NULL, y = NULL) 
+```
+
+
+```{r}
+ripec.esr %>%
+  filter(TypeEtablissement != "Autres") %>%
+  mutate(
+    Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
+    Taux.lauréats = (Lauréats.2022+Lauréats.2023)/(Candidats.2022+Candidats.2023)) %>%
+  ggplot(aes(x=Taux.candidatures, y=Taux.lauréats, color=TypeEtablissement)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=3) 
+
+```
+
+```{r}
+ripec.esr %>%
+  filter(TypeEtablissement != "Autres") %>%
+  filter(!Etablissement.x %in% c("MAYOTTE CUFR","CORTE")) %>%
+  mutate(
+    Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
+    Taux.lauréats = (Lauréats.2022+Lauréats.2023)/(Candidats.2022+Candidats.2023)) %>%
+  ggplot(aes(x=Taux.candidatures, y=Taux.lauréats, color=TypeEtablissement)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=3) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Taux de candidatures et taux de lauréats au RIPEC C3",
+    subtitle = "des universités, hors Corse et Mayotte, moyenne 2022 et 2023",
+    x = "Taux de candidatures",
+    y = "Taux de lauréats",
+    color = "Périmètre d'excellence"
+  )
+
 ```
