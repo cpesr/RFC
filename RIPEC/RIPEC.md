@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-12-09
+2024-12-10
 
 ## Données
 
@@ -136,33 +136,44 @@ Groupes et périmètres
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />
 
+    ## Warning: Removed 4 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+    ## Warning: Removed 4 rows containing missing values or values outside the scale range
+    ## (`geom_text_repel()`).
+
+    ## Warning: ggrepel: 55 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+    ## Warning: ggrepel: 57 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-11-1.png" width="672" />
+
     ## Warning: Removed 1 row containing missing values or values outside the scale range
     ## (`geom_point()`).
 
     ## Warning: Removed 1 row containing missing values or values outside the scale range
     ## (`geom_text_repel()`).
 
-    ## Warning: ggrepel: 48 unlabeled data points (too many overlaps). Consider
-    ## increasing max.overlaps
+    ## Warning: ggrepel: 51 unlabeled data points (too many overlaps). Consider increasing max.overlaps
+    ## ggrepel: 51 unlabeled data points (too many overlaps). Consider increasing max.overlaps
 
-    ## Warning: ggrepel: 45 unlabeled data points (too many overlaps). Consider
-    ## increasing max.overlaps
-
-<img src="RIPEC_files/figure-gfm/unnamed-chunk-11-1.png" width="672" />
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
 
     ## Warning: Removed 4 rows containing missing values or values outside the scale range
     ## (`geom_col()`).
-
-<img src="RIPEC_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-13-1.png" width="672" />
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-14-1.png" width="672" />
 
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-15-1.png" width="672" />
+
     ## Warning: Removed 283 rows containing non-finite outside the scale range
     ## (`stat_boxplot()`).
 
-<img src="RIPEC_files/figure-gfm/unnamed-chunk-15-1.png" width="672" />
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />
 
     ## Warning: Removed 69 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
@@ -173,7 +184,7 @@ Groupes et périmètres
     ## Warning: ggrepel: 25 unlabeled data points (too many overlaps). Consider
     ## increasing max.overlaps
 
-<img src="RIPEC_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-17-1.png" width="672" />
 
     ## Warning: Removed 67 rows containing missing values or values outside the scale range
     ## (`geom_point()`).
@@ -184,4 +195,4 @@ Groupes et périmètres
     ## Warning: ggrepel: 26 unlabeled data points (too many overlaps). Consider
     ## increasing max.overlaps
 
-<img src="RIPEC_files/figure-gfm/unnamed-chunk-17-1.png" width="672" />
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-18-1.png" width="672" />

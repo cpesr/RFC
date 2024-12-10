@@ -253,13 +253,50 @@ ripec.esr %>%
 ```
 
 ```{r}
+euros <- ~ paste(.x/1e3, "k€")
+  
+ripec.esr %>%
+  filter(Groupe == "Universités et assimilés") %>%
+  #filter(kpi.FIN.P.ressources/EC < 6e5) %>%
+  filter(!is.na(kpi.FIN.P.ressources)) %>%
+  ggplot(aes(x=kpi.FIN.P.ressources/EC, 
+             y=MontantMoyen*Bénéficiaires/EC, 
+             color=TypeEtablissement)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=2) +
+  facet_wrap(~Prime, scales = "free_x") +
+  scale_x_continuous(labels = euros) +
+  scale_y_continuous(labels = euros) +
+  labs(
+    title = "Budget prime RIPEC C2 et C3 par EC, et budget global par EC",
+    subtitle = "des universités, selon le périmètre d'excellence",
+    x = "Budget global de l'établissement par EC",
+    y = "Budget prime par EC",
+    color = "Périmètre d'excellence"
+  )
+```
+
+```{r}
+euros <- ~ paste(.x/1e3, "k€")
+  
 ripec.esr %>%
   filter(Groupe == "Universités et assimilés") %>%
   filter(kpi.FIN.P.ressources/EC < 6e5) %>%
   filter(!is.na(kpi.FIN.P.ressources)) %>%
-  ggplot(aes(x=kpi.FIN.P.ressources/EC, y=MontantMoyen*Bénéficiaires/EC, color=TypeEtablissement)) +
+  ggplot(aes(
+    x=1-kpi.K.dotPres, 
+    y=MontantMoyen*Bénéficiaires/kpi.FIN.P.ressources, 
+    color=TypeEtablissement)) +
   geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=2) +
-  facet_wrap(~Prime, scales = "free_x") 
+  facet_wrap(~Prime, scales = "free_x") +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Part des primes dans le budget global, et taux de ressources propres",
+    subtitle = "RIPEC C2 et C3, des universités, selon le périmètre d'excellence",
+    x = "Taux de ressources propres",
+    y = "Part du budget prime",
+    color = "Périmètre d'excellence"
+  )
 ```
 
 
