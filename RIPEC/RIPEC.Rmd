@@ -89,7 +89,13 @@ ripec.esr <- left_join(ripec, esr, by = "UAI") %>%
                                       paste("Univ.",replace_na(na_if(PerimEx,""),"NINI")), 
                                       "Autres"),
                                     levels = rev(c("Univ. NINI", "Univ. ISITE", "Univ. IDEx", "Autres")))) 
-  
+
+ripec.esr.ens <- bind_rows(
+  ripec.esr, 
+  ripec.esr %>% mutate(TypeEtablissement = "Ensemble") 
+  ) %>%
+  mutate(TypeEtablissement = factor(TypeEtablissement, 
+                                    levels = rev(c("Ensemble", "Univ. NINI", "Univ. ISITE", "Univ. IDEx", "Autres"))))
 
 colnames(ripec)
 ```
@@ -124,7 +130,7 @@ smart_label <- function(x) {
   }
 }
 
-ripec.esr %>%
+ripec.esr.ens %>%
   #filter(TypeEtablissement != "Autres") %>%
   mutate(TauxBénéficiaires = Bénéficiaires/EC) %>%
   pivot_longer(cols = c(TauxBénéficiaires, MontantMoyen), names_to = "Indicateur", values_to = "Valeur") %>%
@@ -142,6 +148,8 @@ ripec.esr %>%
        subtitle = "des primes RIPEC C2 et C3 par type d'établissement",
        x = NULL, y = NULL) 
 ```
+
+
 
 ```{r}
 ripec.esr %>%
@@ -164,7 +172,7 @@ ripec.esr %>%
 ```
 
 ```{r}
-ripec.esr %>%
+ripec.esr.ens %>%
   #filter(TypeEtablissement != "Autres") %>%
   mutate(
     BudgetPrimeEC = Bénéficiaires*MontantMoyen/EC,
@@ -186,7 +194,7 @@ ripec.esr %>%
 ```
 
 ```{r}
-ripec.esr %>%
+ripec.esr.ens %>%
   filter(TypeEtablissement != "Autres") %>%
   mutate(
     BudgetPrimeEC = Bénéficiaires*MontantMoyen/EC,
@@ -370,7 +378,7 @@ ripec.esr %>%
 
 
 ```{r, fig.asp=5/16}
-ripec.esr %>%
+ripec.esr.ens %>%
   mutate(
     Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
     Taux.lauréats = (Lauréats.2022+Lauréats.2023)/(Candidats.2022+Candidats.2023)) %>%
