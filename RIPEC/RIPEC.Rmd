@@ -12,7 +12,9 @@ knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
 
 library(tidyverse)
 library(ggcpesrthemes)
-theme_set(theme_cpesr() +   theme(plot.title = element_text(hjust = 1)))
+theme_set(theme_cpesr() + theme(
+  plot.title = element_text(hjust = 1), 
+  plot.subtitle = element_text(hjust = 1)))
 theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
 ```
 
