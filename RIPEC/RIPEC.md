@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-12-18
+2024-12-24
 
 ## Données
 
@@ -85,7 +85,44 @@ Groupes et périmètres
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-3-1.png" width="672" />
 
-<img src="RIPEC_files/figure-gfm/unnamed-chunk-4-1.png" width="672" />
+<details>
+<summary>
+MontantMoyen
+</summary>
+
+| Prime | TypeEtablissement |  min |   max | median |
+|:------|:------------------|-----:|------:|-------:|
+| C2    | Autres            | 1261 | 14305 | 3443.0 |
+| C2    | Univ. IDEx        | 2243 |  7582 | 4502.0 |
+| C2    | Univ. ISITE       | 2531 |  4959 | 3634.0 |
+| C2    | Univ. NINI        |  522 | 10263 | 3317.0 |
+| C2    | Ensemble          |  522 | 14305 | 3619.0 |
+| C3    | Autres            | 3500 |  7625 | 4942.5 |
+| C3    | Univ. IDEx        | 3982 |  6177 | 4200.0 |
+| C3    | Univ. ISITE       | 3505 |  5000 | 4504.5 |
+| C3    | Univ. NINI        | 3500 |  6055 | 4300.0 |
+| C3    | Ensemble          | 3500 |  7625 | 4500.0 |
+
+</details>
+<details>
+<summary>
+Taux de bénéficiaires
+</summary>
+
+| Prime | TypeEtablissement | min | max | median |
+|:------|:------------------|----:|----:|-------:|
+| C2    | Autres            |   0 |  86 |   16.0 |
+| C2    | Univ. IDEx        |   3 |  54 |    9.0 |
+| C2    | Univ. ISITE       |   0 |  20 |    9.5 |
+| C2    | Univ. NINI        |   0 |  86 |   16.0 |
+| C2    | Ensemble          |   0 |  86 |   16.0 |
+| C3    | Autres            |   0 |  88 |   51.0 |
+| C3    | Univ. IDEx        |  34 |  58 |   45.0 |
+| C3    | Univ. ISITE       |  35 |  52 |   45.0 |
+| C3    | Univ. NINI        |  17 |  53 |   35.0 |
+| C3    | Ensemble          |   0 |  88 |   40.5 |
+
+</details>
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
 
@@ -114,3 +151,5 @@ Groupes et périmètres
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-17-1.png" width="672" />
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-18-1.png" width="672" />
+
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-19-1.png" width="672" />

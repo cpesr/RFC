@@ -81,6 +81,21 @@ esr <- left_join(kpiESR::esr.etab,
                           "0632086A" = "0632033T"
                           ))
 
+typos = c(
+  "Université scientifique et/ou médicale", 
+  "Université pluridisciplinaire avec santé", 
+  "Université pluridisciplinaire hors santé", 
+  "Université tertiaire - lettres et sciences Humaines", 
+  "Université tertiaire - droit et économie")
+
+typoslab = c(
+  "Université scientifique\net/ou médicale", 
+  "Université pluridisciplinaire\navec santé", 
+  "Université pluridisciplinaire\nhors santé", 
+  "Université tertiaire\nlettres et sciences Humaines", 
+  "Université tertiaire\ndroit et économie")
+
+
 ripec.esr <- left_join(ripec, esr, by = "UAI") %>%
   mutate(Etablissement.x = ifelse(UAI == "0353074B", "RENNES UNIVERSITE", Etablissement.x)) %>%
   mutate(Groupe = if_else(UAI == "0353074B", "Universités et assimilés", Groupe)) %>% 
@@ -88,7 +103,9 @@ ripec.esr <- left_join(ripec, esr, by = "UAI") %>%
   mutate(TypeEtablissement = factor(ifelse(Groupe == "Universités et assimilés", 
                                       paste("Univ.",replace_na(na_if(PerimEx,""),"NINI")), 
                                       "Autres"),
-                                    levels = rev(c("Univ. NINI", "Univ. ISITE", "Univ. IDEx", "Autres")))) 
+                                    levels = rev(c("Univ. NINI", "Univ. ISITE", "Univ. IDEx", "Autres")))) %>%
+  mutate(Typologie= factor(Typologie, levels = typos, labels = typoslab)) %>%
+
 
 ripec.esr.ens <- bind_rows(
   ripec.esr, 
@@ -150,8 +167,25 @@ ripec.esr.ens %>%
 ```
 
 
+```{r, results='asis'}
+mmm <- function(df,title) {
+  df %>%
+    filter(is.finite(v)) %>%
+    summarize(min = min(v,na.rm = TRUE), 
+              max=max(v,na.rm=TRUE), 
+              median=median(v,na.rm=TRUE), 
+              .by = c(Prime,TypeEtablissement)) %>%
+    arrange(Prime,TypeEtablissement) %>%
+    spoiler_table(title, trim = Inf)
+}
 
-```{r}
+ripec.esr.ens %>% mutate(v = MontantMoyen) %>% mmm("MontantMoyen")
+
+ripec.esr.ens %>% mutate(v = round(Bénéficiaires/EC*100)) %>% mmm("Taux de bénéficiaires")
+```
+
+
+```{r, fig.asp=10/16}
 ripec.esr %>%
   filter(Groupe == "Universités et assimilés", !is.na(Typologie)) %>%
   mutate(TauxBénéficiaires = Bénéficiaires/EC) %>%
@@ -160,9 +194,10 @@ ripec.esr %>%
                              "TauxBénéficiaires" = "Taux de bénéficiaires",
                              "MontantMoyen" = "Montant moyen")) %>%
   mutate(Label = paste(Indicateur, Prime)) %>%
-  ggplot(aes(x=Valeur, y=str_sub(Typologie,12), fill=Typologie)) +
+  ggplot(aes(x=Valeur, y=Typologie, fill=Typologie)) +
   geom_boxplot(alpha=0.7) +
   scale_x_continuous(labels = smart_label) +
+  scale_fill_brewer(palette="Paired", name="", direction = -1) +
   #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
   facet_grid(Prime~Indicateur, scales = "free_x") +
   theme(legend.position = "none") +
@@ -226,7 +261,7 @@ ripec.esr %>%
                              "BudgetPrimeEC" = "Budget prime par EC",
                              "BudgetPrimeRessources" = "Part du budget prime")) %>%
   mutate(Label = paste(Indicateur, Prime)) %>%
-  ggplot(aes(x=Valeur, y=str_sub(Typologie,12), fill=Typologie)) +
+  ggplot(aes(x=Valeur, y=Typologie, fill=Typologie)) +
   geom_boxplot(alpha=0.7) +
   scale_x_continuous(labels = smart_label) +
   #facet_wrap(Label~., scales = "free_x", strip.position = "top", axes="all", dir="v") +
