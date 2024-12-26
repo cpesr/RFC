@@ -104,7 +104,7 @@ ripec.esr <- left_join(ripec, esr, by = "UAI") %>%
                                       paste("Univ.",replace_na(na_if(PerimEx,""),"NINI")), 
                                       "Autres"),
                                     levels = rev(c("Univ. NINI", "Univ. ISITE", "Univ. IDEx", "Autres")))) %>%
-  mutate(Typologie= factor(Typologie, levels = typos, labels = typoslab)) %>%
+  mutate(Typologie= factor(Typologie, levels = typos, labels = typoslab)) 
 
 
 ripec.esr.ens <- bind_rows(
@@ -143,7 +143,7 @@ smart_label <- function(x) {
   if(max(x, na.rm = TRUE) <=1) {
     return(scales::percent(x))
   } else {
-    return(scales::number(x))
+    return(paste0(scales::number(x/1e3),"k€"))
   }
 }
 
@@ -228,9 +228,15 @@ ripec.esr.ens %>%
        x = NULL, y = NULL) 
 ```
 
+```{r, results='asis'}
+ripec.esr.ens %>% mutate(v = Bénéficiaires*MontantMoyen/EC) %>% mmm("Budget prime par EC")
+
+ripec.esr.ens %>% mutate(v = Bénéficiaires*MontantMoyen/kpi.FIN.P.ressources) %>% mmm("Part du budget global")
+```
+
 ```{r}
 ripec.esr.ens %>%
-  filter(TypeEtablissement != "Autres") %>%
+  filter(!TypeEtablissement %in% c("Autres","Ensemble")) %>%
   mutate(
     BudgetPrimeEC = Bénéficiaires*MontantMoyen/EC,
     BudgetPrimeRessources = Bénéficiaires*MontantMoyen/kpi.FIN.P.ressources) %>%
@@ -304,10 +310,12 @@ ripec.esr %>%
   filter(Groupe == "Universités et assimilés") %>%
   #filter(kpi.FIN.P.ressources/EC < 6e5) %>%
   filter(!is.na(kpi.FIN.P.ressources)) %>%
+  filter(kpi.FIN.P.ressources/EC < 600e3) %>%
   ggplot(aes(x=kpi.FIN.P.ressources/EC, 
              y=MontantMoyen*Bénéficiaires/EC, 
              color=TypeEtablissement)) +
   geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=2) +
+  geom_smooth(method = "lm", se = FALSE, color="grey", size=0.5) +
   facet_wrap(~Prime, scales = "free_x") +
   scale_x_continuous(labels = euros) +
   scale_y_continuous(labels = euros) +
@@ -332,6 +340,7 @@ ripec.esr %>%
     y=MontantMoyen*Bénéficiaires/kpi.FIN.P.ressources, 
     color=TypeEtablissement)) +
   geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=2) +
+  geom_smooth(method = "lm", se = FALSE, color="grey", size=0.5) +
   facet_wrap(~Prime, scales = "free_x") +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
@@ -359,7 +368,7 @@ ripec.esr %>%
 ```
 
 
-```{r, fig.asp=16/9}
+```{r, fig.asp=16/9, results='asis'}
 c2only <- function(x) sum(x, ifelse(Prime == "C2", sum(.x,na.rm=TRUE)))
 
 ripec.esr %>%
@@ -368,8 +377,9 @@ ripec.esr %>%
   mutate(BudgetPrime = MontantMoyen*Bénéficiaires) %>%
   mutate(PartBudget = MontantMoyen*Bénéficiaires/kpi.FIN.P.ressources) %>%
   mutate(PartParPrime = BudgetPrime / sum(BudgetPrime), .by=UAI) %>%
-  filter(!is.na(PartParPrime)) %>%
-  ggplot(aes(x=PartBudget, 
+  filter(!is.na(PartParPrime)) %>% 
+  arrange(desc(PartBudget)) %>% 
+  ggcpesrthemes::ggplot_st(aes(x=PartBudget, 
              y=reorder(Etablissement.x,PartBudget, FUN = sum),
              alpha=TypeEtablissement,
              fill=Prime)) +
@@ -382,10 +392,11 @@ ripec.esr %>%
     subtitle = "C2 et C3 des universités, selon le périmètre d'excellence",
     x="Part du budget prime RIPEC C2 et C3",
     y=NULL
-  )
+  ) + 
+  theme(panel.grid.major.y = element_blank())
 ```
 
-```{r, fig.asp=16/9}
+```{r, fig.asp=16/9, results='asis'}
 c2only <- function(x) sum(x, ifelse(Prime == "C2", sum(.x,na.rm=TRUE)))
 
 ripec.esr %>%
@@ -393,8 +404,8 @@ ripec.esr %>%
   filter(Groupe == "Universités et assimilés") %>% 
   mutate(BudgetPrime = MontantMoyen*Bénéficiaires) %>%
   mutate(PartParPrime = BudgetPrime / sum(BudgetPrime), .by=UAI) %>%
-  filter(!is.na(PartParPrime)) %>%
-  ggplot(aes(x=PartParPrime, 
+  filter(!is.na(PartParPrime)) %>% 
+  ggcpesrthemes::ggplot_st(aes(x=PartParPrime, 
              y=reorder(Etablissement.x,PartParPrime, FUN = first),
              alpha=TypeEtablissement,
              fill=Prime)) +
@@ -407,7 +418,8 @@ ripec.esr %>%
     subtitle = "C2 et C3 des universités, selon le périmètre d'excellence",
     x="Part du budget prime RIPEC C2 et C3",
     y=NULL
-  )
+  ) + 
+  theme(panel.grid.major.y = element_blank())
 ```
 
 
@@ -445,7 +457,7 @@ ripec.esr %>%
 
 ```
 
-```{r}
+```{r, fig.asp=3/4}
 ripec.esr %>%
   filter(TypeEtablissement != "Autres") %>%
   filter(!Etablissement.x %in% c("MAYOTTE CUFR","CORTE")) %>%
@@ -453,7 +465,7 @@ ripec.esr %>%
     Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
     Taux.lauréats = (Lauréats.2022+Lauréats.2023)/(Candidats.2022+Candidats.2023)) %>%
   ggplot(aes(x=Taux.candidatures, y=Taux.lauréats, color=TypeEtablissement)) +
-  geom_point() + ggrepel::geom_text_repel(aes(label=Etablissement.x), size=3) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=str_to_sentence(Etablissement.x)), size=3) +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   labs(
