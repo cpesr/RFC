@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-12-26
+2025-01-01
 
 ## Données
 
@@ -123,8 +123,49 @@ Taux de bénéficiaires
 | C3    | Ensemble          |   0 |  88 |   40.5 |
 
 </details>
-
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
+<details>
+<summary>
+MontantMoyen
+</summary>
+
+| Prime | Typologie                                         |  min |   max | median |
+|:------|:--------------------------------------------------|-----:|------:|-------:|
+| C2    | Université scientifique et/ou médicale            | 2185 |  6306 | 4939.0 |
+| C2    | Université pluridisciplinaire avec santé          |  522 | 10263 | 3843.5 |
+| C2    | Université pluridisciplinaire hors santé          | 2367 |  7814 | 4317.0 |
+| C2    | Université tertiaire lettres et sciences Humaines |  714 |  4241 | 2866.0 |
+| C2    | Université tertiaire droit et économie            | 1636 |  6172 | 2451.5 |
+| C2    | NA                                                | 1261 | 14305 | 3529.0 |
+| C3    | Université scientifique et/ou médicale            | 4000 |  6177 | 4250.0 |
+| C3    | Université pluridisciplinaire avec santé          | 3500 |  5150 | 4300.0 |
+| C3    | Université pluridisciplinaire hors santé          | 3500 |  6055 | 4300.0 |
+| C3    | Université tertiaire lettres et sciences Humaines | 3500 |  5200 | 4400.0 |
+| C3    | Université tertiaire droit et économie            | 4000 |  5714 | 4750.0 |
+| C3    | NA                                                | 3500 |  7625 | 4950.0 |
+
+</details>
+<details>
+<summary>
+Taux de bénéficiaires
+</summary>
+
+| Prime | Typologie                                         | min | max | median |
+|:------|:--------------------------------------------------|----:|----:|-------:|
+| C2    | Université scientifique et/ou médicale            |   4 |   9 |    8.0 |
+| C2    | Université pluridisciplinaire avec santé          |   0 |  57 |   12.5 |
+| C2    | Université pluridisciplinaire hors santé          |   0 |  64 |   17.0 |
+| C2    | Université tertiaire lettres et sciences Humaines |   4 |  39 |   10.5 |
+| C2    | Université tertiaire droit et économie            |  29 |  86 |   68.5 |
+| C2    | NA                                                |   0 |  86 |   16.0 |
+| C3    | Université scientifique et/ou médicale            |  40 |  58 |   49.0 |
+| C3    | Université pluridisciplinaire avec santé          |  17 |  57 |   36.0 |
+| C3    | Université pluridisciplinaire hors santé          |  21 |  50 |   36.5 |
+| C3    | Université tertiaire lettres et sciences Humaines |  22 |  53 |   34.0 |
+| C3    | Université tertiaire droit et économie            |  31 |  38 |   36.5 |
+| C3    | NA                                                |   0 |  88 |   50.0 |
+
+</details>
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
 
@@ -239,4 +280,30 @@ Données unnamed-chunk-17
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-19-1.png" width="672" />
 
+<details>
+<summary>
+Données unnamed-chunk-20
+</summary>
+
+| UAI | Etablissement.x | Prime | EC | Bénéficiaires | MontantMoyen | Candidats.2022 | Lauréats.2022 | Candidats.2023 | Lauréats.2023 | pid | Etablissement.y | Groupe | Groupe.détaillé | Type | nb_datasets | PerimEx | Association | Comparable | Sigle | Typologie | Secteur | Statut | EPE | Fusion | Vague | Académie | url.siteweb | url.wikidata | url.legifrance | twitter | siren | siret | dataset | Rattachement | Plotable | Rentrée | kpi.ENS.P.effectif | kpi.ENS.S.titulaires | kpi.ENS.S.EC | kpi.ENS.S.DocATER | kpi.ENS.S.contractuels | kpi.ETU.P.effectif | kpi.ETU.S.cycle1_L | kpi.ETU.S.cycle2_M | kpi.ETU.S.cycle3_D | kpi.ETU.S.DU_DE | kpi.BIA.P.effectif | kpi.BIA.S.A | kpi.BIA.S.B | kpi.BIA.S.C | kpi.BIA.S.titulaires | kpi.FIN.P.ressources | kpi.FIN.S.masseSalariale | kpi.FIN.S.SCSP | kpi.FIN.S.recettesFormation | kpi.FIN.S.recettesRecherche | kpi.FIN.S.investissements | kpi.IMO.P.batiments | kpi.IMO.S.état_satisfaisant | kpi.IMO.S.énergie_ABC | kpi.IMO.S.GES_ABC | kpi.IMO.S.propriété_propre | kpi.K.dotPres | kpi.K.resPetu | kpi.K.forPetu | kpi.K.recPect | kpi.K.ensPetu | kpi.K.titPper | kpi.K.biaPper | kpi.K.dotPetu | TypeEtablissement | Taux.candidatures | Taux.lauréats |
+|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|:---|:---|:---|:---|:---|---:|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---|---:|---:|
+| 0062205P | COTE D’AZUR UNIVERSITE | C3 | 836 | 283 | 5150 | 223 | 61 | 218 | 91 | s3t8T | Université Côte d’Azur | Universités et assimilés | Universités et assimilés | Université | 6 | IDEx | Udice | TRUE | UCA | Université pluridisciplinaire |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| avec santé | public | EPSCP | TRUE | NA | Vague C | Nice | <https://univ-cotedazur.fr/> | <https://www.wikidata.org/entity/Q80186910> | <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000038821787/> | <https://twitter.com/Univ_CotedAzur> | 130025661 | 13002566100013 | etab.24 | NA | TRUE | 2023 | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | 290639104 | 236028182 | 219247158 | 11707115 | 15880606 | 26289966 | NA | NA | NA | NA | NA | 0.7543622 | NA | NA | NA | NA | NA | NA | NA | Univ. IDEx | 0.2637560 | 0.3446712 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 0134009M | AIX-MARSEILLE | C3 | 2033 | 813 | 4505 | 399 | 207 | 379 | 253 | xJdyB | Aix-Marseille Université | Universités et assimilés | Universités et assimilés | Université | 6 | IDEx | Udice | TRUE | AMU | Université pluridisciplinaire |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| avec santé | public | EPSCP | NA | TRUE | Vague C | Aix-Marseille | <https://www.univ-amu.fr/> | <https://www.wikidata.org/entity/Q2302586> | <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000024502554/> | <https://twitter.com/univamu> | 130015332 | 13001533200013 | etab.24 | NA | TRUE | 2023 | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | 730158262 | 586645130 | 559216604 | 51374115 | 64270486 | 122947640 | NA | NA | NA | NA | NA | 0.7658841 | NA | NA | NA | NA | NA | NA | NA | Univ. IDEx | 0.1913428 | 0.5912596 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 0141408E | CAEN | C3 | 761 | 252 | 4258 | 166 | 67 | 180 | 68 | p25Q3 | Université de Caen Normandie | Universités et assimilés | Universités et assimilés | Université | 6 |  | AUREF | TRUE | UNICAEN | Université pluridisciplinaire |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| avec santé | public | EPSCP | NA | NA | Vague B | Normandie | <http://www.unicaen.fr/> | <https://www.wikidata.org/entity/Q568554> | <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000511402/> | <https://twitter.com/universite_caen> | 191414085 | 19141408500016 | etab.24 | NA | TRUE | 2023 | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | 267632827 | 216578981 | 211606133 | 23370750 | 8128206 | 26965267 | NA | NA | NA | NA | NA | 0.7906584 | NA | NA | NA | NA | NA | NA | NA | Univ. NINI | 0.2273325 | 0.3901734 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 0171463Y | LA ROCHELLE | C3 | 240 | 98 | 5129 | 57 | 27 | 62 | 34 | atbEK | La Rochelle Université | Universités et assimilés | Universités et assimilés | Université | 6 |  | AUREF | TRUE | U. La Rochelle | Université pluridisciplinaire |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| hors santé | public | EPSCP | NA | NA | Vague B | Poitiers | <https://www.univ-larochelle.fr/> | <https://www.wikidata.org/entity/Q1500822> | <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000726433/> | <https://twitter.com/UnivLaRochelle> | 191700327 | 19170032700015 | etab.24 | NA | TRUE | 2023 | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | 99158119 | 80074709 | 68921050 | 2835591 | 6320989 | 18302640 | NA | NA | NA | NA | NA | 0.6950621 | NA | NA | NA | NA | NA | NA | NA | Univ. NINI | 0.2479167 | 0.5126050 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 0211237F | DIJON | C3 | 786 | 354 | 5000 | 171 | 115 | 174 | 85 | Lr94O | Université de Bourgogne | Universités et assimilés | Universités et assimilés | Université | 6 | ISITE |  | TRUE | uB | Université pluridisciplinaire |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| avec santé | public | EPSCP | NA | NA | Vague C | Dijon | <http://www.u-bourgogne.fr/> | <https://www.wikidata.org/entity/Q287072> | <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000850542/> | <https://twitter.com/univbourgogne> | 192112373 | 19211237300019 | etab.24 | NA | TRUE | 2023 | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | 289913340 | 227209357 | 216669852 | 27545133 | 7296366 | 24642165 | NA | NA | NA | NA | NA | 0.7473608 | NA | NA | NA | NA | NA | NA | NA | Univ. ISITE | 0.2194656 | 0.5797101 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 0251215K | BESANCON | C3 | 669 | 235 | 5000 | 176 | 58 | 157 | 77 | 7Mpgt | Université de Franche-Comté | Universités et assimilés | Universités et assimilés | Université | 6 | ISITE |  | TRUE | UFC | Université pluridisciplinaire |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| avec santé | public | EPSCP | NA | NA | Vague C | Besançon | <https://www.univ-fcomte.fr/> | <https://www.wikidata.org/entity/Q829449> | <https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000000511402/> | <https://twitter.com/fc_univ> | 192512150 | 19251215000363 | etab.24 | NA | TRUE | 2023 | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | NA | 235456131 | 193503700 | 186180337 | 18171532 | 4480277 | 23348342 | NA | NA | NA | NA | NA | 0.7907220 | NA | NA | NA | NA | NA | NA | NA | Univ. ISITE | 0.2488789 | 0.4054054 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+</details>
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-20-1.png" width="672" />
+
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-21-1.png" width="672" />

@@ -185,7 +185,7 @@ ripec.esr.ens %>% mutate(v = round(Bénéficiaires/EC*100)) %>% mmm("Taux de bé
 ```
 
 
-```{r, fig.asp=10/16}
+```{r, fig.asp=10/16, results='asis'}
 ripec.esr %>%
   filter(Groupe == "Universités et assimilés", !is.na(Typologie)) %>%
   mutate(TauxBénéficiaires = Bénéficiaires/EC) %>%
@@ -204,6 +204,24 @@ ripec.esr %>%
   labs(title = "Répartition des montants moyens et taux de bénéficiaires",
        subtitle = "des primes RIPEC C2 et C3 par typologie d'université",
        x = NULL, y = NULL) 
+
+
+mmmt <- function(df,title) {
+  df %>%
+    filter(is.finite(v)) %>%
+    summarize(min = min(v,na.rm = TRUE), 
+              max=max(v,na.rm=TRUE), 
+              median=median(v,na.rm=TRUE), 
+              .by = c(Prime,Typologie)) %>%
+    arrange(Prime,Typologie) %>%
+    mutate(Typologie = str_replace(Typologie,"\n"," ")) %>%
+    spoiler_table(title, trim = Inf)
+}
+
+ripec.esr %>% mutate(v = MontantMoyen) %>% mmmt("MontantMoyen")
+
+ripec.esr %>% mutate(v = round(Bénéficiaires/EC*100)) %>% mmmt("Taux de bénéficiaires")
+
 ```
 
 ```{r}
@@ -457,14 +475,16 @@ ripec.esr %>%
 
 ```
 
-```{r, fig.asp=3/4}
+```{r, fig.asp=3/4, results='asis'}
 ripec.esr %>%
-  filter(TypeEtablissement != "Autres") %>%
+  filter(TypeEtablissement != "Autres", Prime == "C3") %>%
   filter(!Etablissement.x %in% c("MAYOTTE CUFR","CORTE")) %>%
   mutate(
+    Etablissement.x,
+    TypeEtablissement,
     Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
-    Taux.lauréats = (Lauréats.2022+Lauréats.2023)/(Candidats.2022+Candidats.2023)) %>%
-  ggplot(aes(x=Taux.candidatures, y=Taux.lauréats, color=TypeEtablissement)) +
+    Taux.lauréats = (Lauréats.2022+Lauréats.2023)/(Candidats.2022+Candidats.2023)) %>%   ggplot_st(aes(x=Taux.candidatures, y=Taux.lauréats, color=TypeEtablissement)) +
+  geom_smooth(method = "lm", se = FALSE, color="grey", size=0.5) +
   geom_point() + ggrepel::geom_text_repel(aes(label=str_to_sentence(Etablissement.x)), size=3) +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
@@ -473,6 +493,27 @@ ripec.esr %>%
     subtitle = "des universités, hors Corse et Mayotte, moyenne 2022 et 2023",
     x = "Taux de candidatures",
     y = "Taux de lauréats",
+    color = "Périmètre d'excellence"
+  )
+
+```
+
+```{r, fig.asp=3/4}
+ripec.esr %>%
+  filter(TypeEtablissement != "Autres") %>%
+  filter(!Etablissement.x %in% c("MAYOTTE CUFR","CORTE")) %>%
+  mutate(
+    Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
+    Taux.bénéficaires = (Lauréats.2022+Lauréats.2023)/2/EC) %>%
+  ggplot(aes(x=Taux.candidatures, y=Taux.bénéficaires, color=TypeEtablissement)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=str_to_sentence(Etablissement.x)), size=3) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Taux de candidatures et taux de bénéficaires au RIPEC C3",
+    subtitle = "des universités, hors Corse et Mayotte, moyenne 2022 et 2023",
+    x = "Taux de candidatures",
+    y = "Taux de bénéficiaires",
     color = "Périmètre d'excellence"
   )
 
