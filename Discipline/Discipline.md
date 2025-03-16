@@ -31,11 +31,43 @@ Sexe ( 8 lignes)
 
 <details>
 <summary>
-Données unnamed-chunk-4 ( 44 lignes)
+Effectif ( 11 lignes)
+</summary>
+
+| Rentrée | Effectif |   Val100 |
+|--------:|---------:|---------:|
+|    2012 |    26124 | 100.0000 |
+|    2013 |    26969 | 103.2346 |
+|    2014 |    26770 | 102.4728 |
+|    2015 |    28342 | 108.4903 |
+|    2016 |    29165 | 111.6406 |
+|    2017 |    30612 | 117.1796 |
+|    2018 |    30661 | 117.3672 |
+|    2019 |    31909 | 122.1444 |
+|    2020 |    31971 | 122.3817 |
+|    2021 |    33450 | 128.0432 |
+|    2022 |    34315 | 131.3543 |
+
+</details>
+<details>
+<summary>
+Données unnamed-chunk-5 ( 44 lignes)
 </summary>
 
 | Rentrée | LMD | DN_DE | Effectif | Cursus | Diplôme         |
 |--------:|:----|:------|---------:|:-------|:----------------|
+|    2012 | M   | DN    |    22111 | M DN   | national        |
+|    2012 | L   | DN    |     3228 | L DN   | national        |
+|    2012 | L   | DU    |      441 | L DU   | d’établissement |
+|    2012 | M   | DU    |      344 | M DU   | d’établissement |
+|    2013 | M   | DN    |    22658 | M DN   | national        |
+|    2013 | L   | DN    |     3433 | L DN   | national        |
+|    2013 | L   | DU    |      575 | L DU   | d’établissement |
+|    2013 | M   | DU    |      303 | M DU   | d’établissement |
+|    2014 | M   | DN    |    22694 | M DN   | national        |
+|    2014 | L   | DU    |      694 | L DU   | d’établissement |
+|    2014 | L   | DN    |     3077 | L DN   | national        |
+|    2014 | M   | DU    |      305 | M DU   | d’établissement |
 |    2015 | L   | DU    |      652 | L DU   | d’établissement |
 |    2015 | M   | DN    |    23654 | M DN   | national        |
 |    2015 | M   | DU    |      298 | M DU   | d’établissement |
@@ -68,30 +100,18 @@ Données unnamed-chunk-4 ( 44 lignes)
 |    2022 | M   | DN    |    21736 | M DN   | national        |
 |    2022 | M   | DU    |      245 | M DU   | d’établissement |
 |    2022 | L   | DN    |    11572 | L DN   | national        |
-|    2012 | M   | DN    |    22111 | M DN   | national        |
-|    2012 | L   | DN    |     3228 | L DN   | national        |
-|    2012 | L   | DU    |      441 | L DU   | d’établissement |
-|    2012 | M   | DU    |      344 | M DU   | d’établissement |
-|    2013 | M   | DN    |    22658 | M DN   | national        |
-|    2013 | L   | DN    |     3433 | L DN   | national        |
-|    2013 | L   | DU    |      575 | L DU   | d’établissement |
-|    2013 | M   | DU    |      303 | M DU   | d’établissement |
-|    2014 | M   | DN    |    22694 | M DN   | national        |
-|    2014 | L   | DU    |      694 | L DU   | d’établissement |
-|    2014 | L   | DN    |     3077 | L DN   | national        |
-|    2014 | M   | DU    |      305 | M DU   | d’établissement |
 
 </details>
-
-<img src="Discipline_files/figure-gfm/unnamed-chunk-4-1.png" width="672" />
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
 
+<img src="Discipline_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />
+
 <details>
 <summary>
-Données unnamed-chunk-7 ( 28 lignes)
+Données unnamed-chunk-8 ( 28 lignes)
 </summary>
 
 | Rentrée | Catégorie | Effectif |
@@ -127,11 +147,11 @@ Données unnamed-chunk-7 ( 28 lignes)
 
 </details>
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />
+<img src="Discipline_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
 
 <details>
 <summary>
-Données unnamed-chunk-8 ( 51 lignes)
+Données unnamed-chunk-9 ( 51 lignes)
 </summary>
 
 | Rentrée | Etablissement | Catégorie | Effectif |
@@ -190,11 +210,11 @@ Données unnamed-chunk-8 ( 51 lignes)
 
 </details>
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
+<img src="Discipline_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
 
 <details>
 <summary>
-Données unnamed-chunk-9 ( 33 lignes)
+Données unnamed-chunk-10 ( 33 lignes)
 </summary>
 
 | Rentrée | Effectif | Type                   |    Val100 |
@@ -235,7 +255,7 @@ Données unnamed-chunk-9 ( 33 lignes)
 
 </details>
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
+<img src="Discipline_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />
 
 ## MonMaster
 
@@ -382,14 +402,14 @@ Discipline ( 1 lignes)
 
 </details>
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-14-1.png" width="672" />
-
 <img src="Discipline_files/figure-gfm/unnamed-chunk-15-1.png" width="672" />
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />
 
 ## Insersion Pro
 
 ## Carte MM IP
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-18-1.png" width="672" />
-
 <img src="Discipline_files/figure-gfm/unnamed-chunk-19-1.png" width="672" />
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-20-1.png" width="672" />

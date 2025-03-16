@@ -97,9 +97,19 @@ etu %>%
 ```{r, results='asis'}
 etu %>%
   filter(LMD!="D") %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée)) %>%
+  arrange(Rentrée) %>%
+  mutate(Val100 = Effectif / first(Effectif) * 100) %>%
+  spoiler_table("Effectif",Inf)
+```
+
+```{r, results='asis'}
+etu %>%
+  filter(LMD!="D") %>%
   summarise(Effectif = sum(Effectif), .by = c(Rentrée,LMD,DN_DE)) %>%
   mutate(Cursus = paste(LMD,DN_DE)) %>%
   mutate(Diplôme = recode(DN_DE, DU = "d'établissement", DN = "national")) %>%
+  arrange(Rentrée) %>%
   ggplot_st(aes(x=Rentrée,y=Effectif,fill=LMD,color=LMD,alpha=Diplôme)) +
   geom_area(position = position_stack(reverse=TRUE)) +
   scale_x_continuous(breaks=scales::pretty_breaks()) +
