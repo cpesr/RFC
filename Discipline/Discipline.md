@@ -214,7 +214,54 @@ Données unnamed-chunk-9 ( 51 lignes)
 
 <details>
 <summary>
-Données unnamed-chunk-10 ( 33 lignes)
+Données unnamed-chunk-10 ( 35 lignes)
+</summary>
+
+| Rentrée | Catégorie | Effectif |    Val100 |
+|--------:|:----------|---------:|----------:|
+|    2012 | MCF       |      230 | 100.00000 |
+|    2012 | PR        |      130 | 100.00000 |
+|    2012 | Doc       |     1289 | 100.00000 |
+|    2013 | PR        |      131 | 100.76923 |
+|    2013 | MCF       |      232 | 100.86957 |
+|    2013 | Doc       |     1217 |  94.41427 |
+|    2014 | PR        |      128 |  98.46154 |
+|    2014 | MCF       |      242 | 105.21739 |
+|    2014 | Doc       |     1194 |  92.62995 |
+|    2015 | PR        |      129 |  99.23077 |
+|    2015 | MCF       |      240 | 104.34783 |
+|    2015 | Doc       |     1131 |  87.74244 |
+|    2016 | MCF       |      258 | 112.17391 |
+|    2016 | PR        |      129 |  99.23077 |
+|    2016 | Doc       |     1065 |  82.62219 |
+|    2017 | MCF       |      262 | 113.91304 |
+|    2017 | PR        |      130 | 100.00000 |
+|    2017 | Doc       |     1213 |  94.10396 |
+|    2018 | MCF       |      265 | 115.21739 |
+|    2018 | PR        |      127 |  97.69231 |
+|    2018 | Doc       |     1166 |  90.45772 |
+|    2019 | MCF       |      270 | 117.39130 |
+|    2019 | PR        |      129 |  99.23077 |
+|    2019 | Doc       |     1136 |  88.13033 |
+|    2020 | MCF       |      279 | 121.30435 |
+|    2020 | PR        |      132 | 101.53846 |
+|    2020 | Doc       |     1174 |  91.07836 |
+|    2021 | MCF       |      275 | 119.56522 |
+|    2021 | PR        |      132 | 101.53846 |
+|    2021 | Doc       |     1145 |  88.82855 |
+|    2022 | MCF       |      276 | 120.00000 |
+|    2022 | PR        |      136 | 104.61538 |
+|    2022 | Doc       |     1119 |  86.81148 |
+|    2023 | MCF       |      276 | 120.00000 |
+|    2023 | PR        |      148 | 113.84615 |
+
+</details>
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />
+
+<details>
+<summary>
+Données unnamed-chunk-11 ( 33 lignes)
 </summary>
 
 | Rentrée | Effectif | Type                   |    Val100 |
@@ -255,7 +302,7 @@ Données unnamed-chunk-10 ( 33 lignes)
 
 </details>
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />
+<img src="Discipline_files/figure-gfm/unnamed-chunk-11-1.png" width="672" />
 
 ## MonMaster
 
@@ -402,14 +449,14 @@ Discipline ( 1 lignes)
 
 </details>
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-15-1.png" width="672" />
-
 <img src="Discipline_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-17-1.png" width="672" />
 
 ## Insersion Pro
 
 ## Carte MM IP
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-19-1.png" width="672" />
-
 <img src="Discipline_files/figure-gfm/unnamed-chunk-20-1.png" width="672" />
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-21-1.png" width="672" />

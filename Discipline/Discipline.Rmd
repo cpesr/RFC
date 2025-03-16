@@ -204,6 +204,30 @@ ens %>%
 ```{r, results='asis'}
 bind_rows(
   ens %>%
+    summarise(Effectif = sum(Effectif), .by = c(Rentrée,Catégorie)),
+  etu %>%
+    filter(LMD == "D") %>%
+    summarise(Effectif = sum(Effectif), .by = c(Rentrée)) %>% 
+    mutate(Catégorie = "Doc")
+) %>% 
+  arrange(Rentrée) %>%
+  filter(Rentrée > 2011) %>%
+  mutate(Val100 = Effectif / first(Effectif) * 100, .by=Catégorie) %>%
+  ggplot_st(aes(x=Rentrée,y=Val100,color=Catégorie)) +
+  geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
+  scale_x_continuous(breaks=scales::pretty_breaks(10)) +
+  scale_color_brewer(palette = "Set2", name="Effectif") +
+  labs(
+    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    x = "Année",
+    y = "Effectif (valeur 100 pour 2012)",
+    color = "LMD") 
+```
+
+
+```{r, results='asis'}
+bind_rows(
+  ens %>%
     summarise(Effectif = sum(Effectif), .by = c(Rentrée)) %>%
     mutate(Type = "Enseignants-chercheurs"),
   etu %>%
