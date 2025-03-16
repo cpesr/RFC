@@ -30,10 +30,10 @@ Poursuite d’étude
     ## [25] "Académie.du.Bac"                                                                                                                                   
     ## [26] "Code.académie.du.Bac"                                                                                                                              
     ## [27] "Code.Paysage.structure.de.l.académie"                                                                                                              
-    ## [28] "Poursuivants.public"                                                                                                                               
-    ## [29] "Poursuivants.privé"                                                                                                                                
-    ## [30] "Poursuivants.nc"                                                                                                                                   
-    ## [31] "Poursuivants"                                                                                                                                      
+    ## [28] "Poursuivants"                                                                                                                                      
+    ## [29] "Poursuivants.public"                                                                                                                               
+    ## [30] "Poursuivants.privé"                                                                                                                                
+    ## [31] "Poursuivants.nc"                                                                                                                                   
     ## [32] "Série"
 
 <img src="PoursuiteDEtude_files/figure-gfm/pe.all-1.png" width="672" />
@@ -55,14 +55,6 @@ Voir les données
 | 2013    |    20797.96 |          96378.99 |          28442.97 |
 | 2014    |    20414.00 |         122631.00 |          27330.00 |
 | 2015    |    21369.99 |         112150.00 |          24168.99 |
-| 2016    |    25101.01 |         114872.00 |          26093.01 |
-| 2017    |    27611.01 |         109028.00 |          26978.01 |
-| 2018    |    26038.98 |         108519.99 |          29497.99 |
-| 2019    |    21876.99 |         101044.99 |          26800.99 |
-| 2020    |    27346.10 |         107966.03 |          31875.04 |
-| 2021    |    22415.94 |          97691.97 |          27446.94 |
-| 2022    |    26752.00 |          92504.00 |          24914.00 |
-| 2023    |    27947.01 |          89661.00 |          24902.00 |
 
 </details>
 

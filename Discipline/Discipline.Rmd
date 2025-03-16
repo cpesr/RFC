@@ -1,0 +1,419 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 4)
+knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+```{r load}
+discipline <- "Sciences politiques"
+discipline.mm <- "SCIENCE POLITIQUE"
+cnu <- 4
+
+load(file="../data/sise.RData")
+etu <- sise %>% 
+  filter(Secteur.disciplinaire == discipline) %>%
+  transmute(
+    Rentrée,
+    Etablissement = ifelse(Etablissement == "Sciences Po", "Sciences Po", "Autres"),
+    LMD,
+    DN_DE,
+    Sexe = recode(SEXE, F = "Femme", M = "Homme"),
+    Etudiants) %>%
+  summarise(Effectif = sum(Etudiants,na.rm = TRUE),
+            .by = c(Rentrée, Etablissement, LMD, DN_DE,Sexe))
+
+ens <- read.csv2("../data/fr-esr-enseignants-titulaires-esr-public.csv", na.string = "") %>% 
+  filter(code_section_cnu == cnu) %>%
+  transmute(
+    Rentrée,
+    Etablissement = ifelse(Établissement == "Sciences Po", "Sciences Po", "Autres"),
+    Catégorie = Code.categorie.personnels,
+    Sexe,
+    Effectif = effectif) %>%
+  summarise(Effectif = sum(Effectif,na.rm = TRUE),
+            .by = c(Rentrée, Etablissement, Catégorie, Sexe)) 
+
+```
+
+
+## Explorations
+
+```{r, results='asis'}
+bind_rows(
+  ens %>%
+    summarise(Effectif = sum(Effectif), .by = c(Rentrée,Catégorie,Sexe)),
+  etu %>%
+    mutate(Catégorie = ifelse(LMD != "D","Etudiants LM","Doctorants")) %>%
+    summarise(Effectif = sum(Effectif), .by = c(Rentrée,Catégorie,Sexe)) 
+) %>% 
+  filter(Rentrée == 2022) %>%
+  mutate(Part = scales::percent(Effectif / sum(Effectif)), .by=Catégorie) %>%
+  arrange(Catégorie,Sexe) %>%
+  spoiler_table("Sexe",Inf)
+```
+
+```{r, results='asis'}
+etu %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,LMD)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,color=LMD)) +
+  geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
+  scale_x_continuous(breaks=scales::pretty_breaks()) +
+  labs(
+    title = "Effectifs étudiants en Sciences politiques",
+    x = "Année",
+    y = "Effectif",
+    color = "LMD") 
+```
+
+```{r, results='asis'}
+etu %>%
+  filter(LMD!="D") %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,LMD,DN_DE)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,color=LMD,shape=DN_DE,linetype=DN_DE)) +
+  geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
+  scale_x_continuous(breaks=scales::pretty_breaks()) +
+  labs(
+    title = "Effectifs étudiants en Sciences politiques",
+    x = "Année",
+    y = "Effectif",
+    color = "LMD") 
+```
+
+```{r, results='asis'}
+etu %>%
+  filter(LMD!="D") %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,LMD,DN_DE)) %>%
+  mutate(Cursus = paste(LMD,DN_DE)) %>%
+  mutate(Diplôme = recode(DN_DE, DU = "d'établissement", DN = "national")) %>%
+  ggplot_st(aes(x=Rentrée,y=Effectif,fill=LMD,color=LMD,alpha=Diplôme)) +
+  geom_area(position = position_stack(reverse=TRUE)) +
+  scale_x_continuous(breaks=scales::pretty_breaks()) +
+  scale_y_continuous(labels = ~ paste(.x/1e3,"k")) +
+  scale_fill_brewer(palette = "Dark2", direction = -1) +
+  scale_color_brewer(palette = "Dark2", direction = -1) +
+  scale_alpha_manual(values = c(0.8,0.4)) +
+  labs(
+    title = "Effectifs étudiants en Sciences politiques",
+    x = "Année",
+    y = "Effectif") 
+```
+
+
+
+```{r, results='asis'}
+etu %>%
+  filter(LMD!="D") %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,Etablissement,LMD,DN_DE)) %>%
+  mutate(Cursus = paste(LMD,DN_DE)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,fill=Cursus,color=Cursus)) +
+  geom_area(position = position_stack(reverse=TRUE)) +
+  scale_x_continuous(breaks=scales::pretty_breaks()) +
+  scale_fill_brewer(palette = "Paired", direction = -1) +
+  scale_color_brewer(palette = "Paired", direction = -1) +
+  facet_grid(~Etablissement) +
+  labs(
+    title = "Effectifs étudiants en Sciences politiques",
+    x = "Année",
+    y = "Effectif") 
+```
+
+
+
+```{r, results='asis'}
+sise %>% 
+  filter(Secteur.disciplinaire == discipline) %>%
+  filter(LMD!="D") %>%
+  transmute(
+    Rentrée,
+    Etablissement = ifelse(Etablissement == "Sciences Po", "Sciences Po", "Autres"),
+    LMD = paste(LMD,NIVEAU),
+    DN_DE,
+    Sexe = recode(SEXE, F = "Femme", M = "Homme"),
+    Etudiants) %>%
+  summarise(Effectif = sum(Etudiants,na.rm = TRUE),
+            .by = c(Rentrée, Etablissement, LMD, DN_DE,Sexe)) %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,Etablissement,LMD,DN_DE)) %>%
+  mutate(Cursus = paste(LMD,DN_DE)) %>%
+  ggplot(aes(x=Rentrée,y=Effectif,fill=LMD,color=LMD,alpha=DN_DE)) +
+  geom_area(position = position_stack(reverse=TRUE)) +
+  scale_x_continuous(breaks=scales::pretty_breaks()) +
+  facet_grid(~Etablissement) +
+  labs(
+    title = "Effectifs étudiants en Sciences politiques",
+    x = "Année",
+    y = "Effectif") 
+```
+
+
+
+
+```{r, results='asis'}
+ens %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,Catégorie)) %>%
+  ggplot_st(aes(x=Rentrée,y=Effectif,color=Catégorie)) +
+  geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
+  expand_limits(y=0) +
+  scale_x_continuous(breaks=scales::pretty_breaks(10)) +
+  labs(
+    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    x = "Année",
+    y = "Effectif",
+    color = "LMD") 
+```
+
+```{r, results='asis'}
+ens %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,Etablissement,Catégorie)) %>%
+  ggplot_st(aes(x=Rentrée,y=Effectif,color=Catégorie)) +
+  geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
+  expand_limits(y=0) +
+  scale_x_continuous(breaks=scales::pretty_breaks(10)) +
+  facet_wrap(~Etablissement, scales="free_y") +
+  labs(
+    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    x = "Année",
+    y = "Effectif",
+    color = "LMD") 
+```
+
+```{r, results='asis'}
+bind_rows(
+  ens %>%
+    summarise(Effectif = sum(Effectif), .by = c(Rentrée)) %>%
+    mutate(Type = "Enseignants-chercheurs"),
+  etu %>%
+    mutate(Type = ifelse(LMD != "D","Etudiants LM","Doctorants")) %>%
+    summarise(Effectif = sum(Effectif), .by = c(Rentrée,Type)) 
+) %>% 
+  filter(n() == 3, .by = Rentrée) %>% 
+  arrange(Rentrée) %>%
+  mutate(Val100 = Effectif / first(Effectif) * 100, .by=Type) %>%
+  ggplot_st(aes(x=Rentrée,y=Val100,color=Type)) +
+  geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
+  scale_x_continuous(breaks=scales::pretty_breaks(10)) +
+  scale_color_brewer(palette = "Set2", name="Effectif") +
+  labs(
+    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    x = "Année",
+    y = "Effectif (valeur 100 pour 2012)",
+    color = "LMD") 
+```
+
+## MonMaster
+
+```{r, results='asis', cache=TRUE}
+ mm <- read.csv2("../data/fr-esr-mon_master.csv", na.string = "") %>%
+  filter(Session == max(Session)) %>%
+  mutate(Secteur.disciplinaire = ifelse(Secteur.disciplinaire == discipline, Secteur.disciplinaire, "Autres"))
+
+mm %>%
+  summarise(Nombre = n(), .by = c(Session,Secteur.disciplinaire)) %>%
+  arrange(Session,Secteur.disciplinaire) %>%
+  mutate(Part = scales::percent(Nombre / sum(Nombre)), .by=Session) %>%
+  spoiler_table("Nombre Masters",Inf)
+```
+
+```{r, results='asis'}
+mm %>%
+  filter(Session == max(Session)) %>%
+  filter(Secteur.disciplinaire == discipline) %>%
+  summarize(
+    Capacité = sum(Capacité.offerte.limitée.par.la.formation),
+    Candidatures = sum(Effectif.de.candidats.ayant.confirmé.une.candidature.en.phase.principale),
+    Admis.PP = sum(Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.principale),
+    Admis.PC = sum(Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.complémentaire),
+    Admis.HP = sum(Effectif.de.recrutements.complémentaires.hors.plateforme, na.rm = TRUE),
+    .by = c(Session, Secteur.disciplinaire,Intitulé.de.la.mention,Intitulé.du.parcours)
+    ) %>%
+  arrange(desc(Admis.PP+Admis.PC+Admis.HP)) %>%
+  spoiler_table("Parcours",Inf)
+```
+
+```{r, results='asis'}
+mm %>%
+  filter(Session == max(Session)) %>%
+  filter(Secteur.disciplinaire == discipline) %>%
+  summarize(
+    Capacité = sum(Capacité.offerte.limitée.par.la.formation),
+    Candidatures = sum(Effectif.de.candidats.ayant.confirmé.une.candidature.en.phase.principale),
+    Admis.PP = sum(Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.principale),
+    Admis.PC = sum(Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.complémentaire),
+    Admis.HP = sum(Effectif.de.recrutements.complémentaires.hors.plateforme, na.rm=TRUE),
+    .by = c(Session, Secteur.disciplinaire,Intitulé.de.la.mention)
+    ) %>%
+  arrange(desc(Admis.PP+Admis.PC+Admis.HP)) %>%
+  spoiler_table("Mention",Inf)
+```
+
+```{r, results='asis'}
+mm %>%
+  filter(Session == max(Session)) %>%
+  filter(Secteur.disciplinaire == discipline) %>%
+  summarize(
+    Capacité = sum(Capacité.offerte.limitée.par.la.formation),
+    Candidatures = sum(Effectif.de.candidats.ayant.confirmé.une.candidature.en.phase.principale),
+    Admis.PP = sum(Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.principale),
+    Admis.PC = sum(Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.complémentaire),
+    Admis.HP = sum(Effectif.de.recrutements.complémentaires.hors.plateforme, na.rm=TRUE),
+    .by = c(Session, Secteur.disciplinaire)
+    ) %>%
+  arrange(desc(Admis.PP+Admis.PC+Admis.HP)) %>%
+  spoiler_table("Discipline",Inf)
+```
+
+
+```{r, results='asis'}
+mm.indicateurs <- mm %>%
+  filter(Session == max(Session)) %>%
+  mutate(Effectif.de.recrutements.complémentaires.hors.plateforme = replace_na(Effectif.de.recrutements.complémentaires.hors.plateforme,0)) %>%
+  mutate(
+    Capacité = Capacité.offerte.limitée.par.la.formation,
+    Taux.Pression = Effectif.de.candidats.ayant.confirmé.une.candidature.en.phase.principale / Capacité.offerte.limitée.par.la.formation,
+    Taux.Remplissage = 
+      ( Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.principale +
+        Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.complémentaire +
+        Effectif.de.recrutements.complémentaires.hors.plateforme) /
+      Capacité.offerte.limitée.par.la.formation,
+    Taux.Complémentaire = (Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.complémentaire + Effectif.de.recrutements.complémentaires.hors.plateforme) / ( Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.principale +
+        Effectif.de.candidats.ayant.accepté.une.proposition.d.admission.pour.une.candidature.formulée.en.phase.complémentaire +
+        Effectif.de.recrutements.complémentaires.hors.plateforme)
+  ) 
+
+
+mm.indicateurs %>%
+  pivot_longer(c(Capacité,Taux.Pression,Taux.Remplissage,Taux.Complémentaire), names_to = "Indicateur", values_to = "Valeur") %>%
+  ggplot(aes(y=Secteur.disciplinaire,x=Valeur,fill=Secteur.disciplinaire)) +
+  geom_boxplot() +
+  facet_wrap(Indicateur ~ ., scales = "free") 
+```
+
+```{r, results='asis', fig.asp=3/4}
+cowplot::plot_grid(ncol = 1, align = "hv",
+  mm.indicateurs %>%
+    ggplot(aes(y=Secteur.disciplinaire,x=Capacité,fill=Secteur.disciplinaire)) +
+    geom_boxplot() +
+    coord_cartesian(xlim=c(0,40)) +
+    theme(legend.position = "None") +
+    labs(
+      title = "Capacités d'accueil",
+      subtitle = "Périmètre : indicateur inférieur à 40",
+      x = NULL,
+      y = NULL),
+  
+  mm.indicateurs %>%
+    ggplot(aes(y=Secteur.disciplinaire,x=Taux.Pression,fill=Secteur.disciplinaire)) +
+    geom_boxplot() +
+    coord_cartesian(xlim=c(0,75)) +
+    theme(legend.position = "None") +
+    labs(
+      title = "Taux de pression (Candidats / Capacité)",
+      subtitle = "Périmètre : indicateur inférieur à 75",
+      x = NULL,
+      y = NULL),
+  
+  mm.indicateurs %>%
+    ggplot(aes(y=Secteur.disciplinaire,x=Taux.Remplissage,fill=Secteur.disciplinaire)) +
+    geom_boxplot() +
+    coord_cartesian(xlim=c(0,1.5)) +
+    scale_x_continuous(labels=scales::percent) +
+    theme(legend.position = "None") +
+    labs(
+      title = "Taux de remplissage (Admis / Capacité)",
+      subtitle = "Périmètre : indicateur inférieur à 150 %",
+      x = NULL,
+      y = NULL),
+  
+  mm.indicateurs %>%
+    ggplot(aes(y=Secteur.disciplinaire,x=Taux.Complémentaire,fill=Secteur.disciplinaire)) +
+    geom_boxplot() +
+    #coord_cartesian(xlim=c(0,0.5)) +
+    scale_x_continuous(labels=scales::percent) +
+    theme(legend.position = "None") +
+    labs(
+      title = "Taux d'admissions complémentaires (Admis en PC / Admis)",
+      subtitle = "Périmètre : totalité des Masters",
+      x = NULL,
+      y = NULL)
+)
+```
+
+## Insersion Pro
+
+```{r, results='asis', eval=FALSE}
+ip <- read.csv2("../data/fr-esr-insersup.csv", na.string = "") %>%  
+  filter(Date.d.insertion.en.emploi == "12 mois après le diplôme", Genre == "ensemble", Nationalité == "ensemble", Type.de.diplôme == "Master LMD") %>%
+  mutate(Secteur.disciplinaire = ifelse(Secteur.disciplinaire == discipline, Secteur.disciplinaire, "Autres"))
+```
+
+## Carte MM IP
+
+```{r, results='asis', cache=TRUE}
+cmm <- read.csv2("../data/fr-esr-mon_master.csv", na.string = "") %>%
+  filter(Session == max(Session)) %>%
+  mutate(Effectif.de.recrutements.complémentaires.hors.plateforme = replace_na(Effectif.de.recrutements.complémentaires.hors.plateforme,0)) %>%
+  summarise(
+    Capacité = sum(Capacité.offerte.limitée.par.la.formation),
+    Taux.Pression = sum(Effectif.de.candidats.ayant.confirmé.une.candidature.en.phase.principale) / sum(Capacité.offerte.limitée.par.la.formation),
+    .by = Secteur.disciplinaire
+  )
+
+cip <- read.csv2("../data/fr-esr-insersup.csv", na.string = "nd") %>%  
+  filter(Date.d.insertion.en.emploi == "12 mois après le diplôme", Genre == "ensemble", Nationalité == "ensemble", Type.de.diplôme == "Master LMD") %>%
+  filter(!is.na(Nombre.de.sortants.en.emploi.stable), !is.na(Nombre.de.sortants)) %>%
+  summarize(
+    Sortants = sum(Nombre.de.sortants),
+    Taux.d.emploi.salarié.en.France = sum(Nombre.de.sortants.en.emploi.salarié.en.France)/ sum(Nombre.de.sortants),
+    Taux.de.sortants.en.emploi.stable = sum(Nombre.de.sortants.en.emploi.stable)/ sum(Nombre.de.sortants),
+    .by = c(Secteur.disciplinaire, Domaine.disciplinaire)
+  )
+
+cmmip <- full_join(cmm,cip) %>%
+  mutate(Discipline = ifelse(Secteur.disciplinaire == discipline, Secteur.disciplinaire, "Autres")) %>%
+  filter(Domaine.disciplinaire %in% c("Sciences, technologies, santé", "Droit, économie, gestion", "Lettres, langues et arts", "Sciences humaines et sociales")) 
+```
+
+```{r, results='asis', fig.asp=3/4}
+cmmip %>%
+  mutate(lab = ifelse(Discipline!="Autres" | Capacité > median(Capacité, na.rm = TRUE),
+                      str_wrap(Secteur.disciplinaire,20), NA)) %>%
+  ggplot(aes(x=Taux.Pression, y=Taux.de.sortants.en.emploi.stable, 
+             label=lab,
+             size=Capacité)) +
+  geom_point(aes(color=Domaine.disciplinaire)) + 
+  ggrepel::geom_text_repel(alpha=ifelse(cmmip$Discipline=="Autres",0.3,1)) 
+```
+
+
+```{r, results='asis', fig.asp=4/4}
+cmmip %>%
+  mutate(lab = ifelse(Discipline!="Autres" | Capacité > median(Capacité, na.rm = TRUE),
+                      str_wrap(Secteur.disciplinaire,20), NA)) %>% 
+  ggplot(aes(x=Taux.Pression, y=Taux.d.emploi.salarié.en.France, 
+             label=lab,
+             size=Capacité)) +
+  geom_point(aes(color=Domaine.disciplinaire)) + 
+  ggrepel::geom_text_repel(alpha=ifelse(cmmip$Discipline=="Autres",0.3,1)) +
+  scale_y_continuous(labels=scales::percent) +
+  labs(
+    title = "Indicateurs MonMaster et InserSup",
+    x = "MonMaster : Taux de pression (Candidatures / Capacité)",
+    y = "InserSup : Taux d'emploi salarié en France",
+    color = "Domaine disciplinaire") +
+  theme(legend.position = "bottom", legend.direction = "vertical") 
+```
+

@@ -518,3 +518,70 @@ ripec.esr %>%
   )
 
 ```
+
+
+```{r, fig.asp=3/4, fig.width=8, results='asis'}
+c2only <- function(x) sum(x, ifelse(Prime == "C2", sum(.x,na.rm=TRUE)))
+
+quadrant <- ripec.esr %>%
+  #filter(!is.na(kpi.FIN.P.ressources)) %>%
+  filter(Groupe == "Universités et assimilés") %>% 
+  mutate(BudgetPrime = MontantMoyen*Bénéficiaires) %>%
+  arrange(Prime) %>%
+  summarise(
+    partBudget = sum(BudgetPrime,na.rm = TRUE)/first(kpi.FIN.P.ressources),
+    partC2 = first(BudgetPrime)/sum(BudgetPrime,na.rm = TRUE),
+    BudgetParEC = sum(BudgetPrime,na.rm = TRUE)/first(kpi.ENS.S.EC),
+    BudgetParEtu = sum(BudgetPrime,na.rm = TRUE)/first(kpi.ETU.P.effectif),
+    .by=c(Etablissement.x,TypeEtablissement)) 
+
+partBugdetMedian <- median(quadrant$partBudget,na.rm=TRUE)
+partC2Median <- median(quadrant$partC2,na.rm=TRUE)
+
+quadrant %>% 
+  ggcpesrthemes::ggplot_st(aes(
+    x=partBudget, 
+    y=partC2,
+    color=TypeEtablissement)) +
+  geom_vline(xintercept = partBugdetMedian, linetype="dashed") +
+  geom_hline(yintercept = partC2Median, linetype="dashed") +
+  geom_point() + 
+  ggrepel::geom_text_repel(
+    aes(label=str_to_title(Etablissement.x)), 
+    size=3, force_pull = 10, force=30, segment.size=0.2) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  annotate(geom="text", x=partBugdetMedian, y=-0.1, label=" ← moins généreux   plus généreux →    ") +
+  annotate(geom="text", x=0, y=partC2Median, label="← récompense individuelle   compensation collective →", angle = 90) +
+  labs(
+    title="Positionnement des universités en fonction de leur budget RIPEC C2 et C3",
+    x="Part du budget prime dans le budget global",
+    y="Part de la C2 dans le budget prime"
+  ) + 
+  theme(panel.grid.major.y = element_blank())
+```
+
+
+
+
+
+```{r, fig.asp=3/4}
+ripec.esr %>%
+  filter(TypeEtablissement != "Autres") %>%
+  filter(!Etablissement.x %in% c("MAYOTTE CUFR","CORTE")) %>%
+  mutate(
+    Taux.candidatures = (Candidats.2022+Candidats.2023)/2/EC,
+    Taux.bénéficaires = (Lauréats.2022+Lauréats.2023)/2/EC) %>%
+  ggplot(aes(x=Taux.candidatures, y=Taux.bénéficaires, color=TypeEtablissement)) +
+  geom_point() + ggrepel::geom_text_repel(aes(label=str_to_sentence(Etablissement.x)), size=3) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Taux de candidatures et taux de bénéficaires au RIPEC C3",
+    subtitle = "des universités, hors Corse et Mayotte, moyenne 2022 et 2023",
+    x = "Taux de candidatures",
+    y = "Taux de bénéficiaires",
+    color = "Périmètre d'excellence"
+  )
+
+```

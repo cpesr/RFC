@@ -24,6 +24,11 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/R
 etu <- read.csv2("../data/fr-esr-atlas_regional-effectifs-d-etudiants-inscrits-detail_etablissements.csv", dec='.')
 
 colnames(etu)
+
+etua <- read.csv2("../data/fr-esr-atlas_regional-effectifs-d-etudiants-inscrits_agregeables.csv", dec='.')
+
+colnames(etua)
+
 ```
 
 ## Explorations

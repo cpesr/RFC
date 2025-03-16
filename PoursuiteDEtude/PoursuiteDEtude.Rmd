@@ -18,26 +18,21 @@ theme_cpesr_setup(authors="Julien Gossa",
 
 theme_set(theme_cpesr())
 
-spoilerTable <- function(df) {
-  cat("\n<details>\n")
-  cat("  <summary>Voir les données</summary>\n\n")
-  
-  print(kableExtra::kable(df, format="pipe"))
-  
-  cat("\n\n</details>\n")
-}
-
 pe <- read.csv2("../data/fr-esr-taux-poursuite-enseignement-superieur-par-academie.csv", dec='.') %>% 
   rename(
     Session = Rentrée...Session,
     Bacheliers = Nombre.total.de.bacheliers
   ) %>%
   mutate(
-    Poursuivants.public = rowSums(.[c(5:12,17:18,23:24)]),
-    Poursuivants.privé = rowSums(.[c(15:16,21:22)]),
-    Poursuivants.nc = rowSums(.[c(13:14,19:20)])
+    Poursuivants = rowSums(select(.,starts_with("Néo.bacheliers"))),
+    Poursuivants.public = rowSums(select(.,
+                                         contains("université"),
+                                         contains("en.IUT"),
+                                         contains("public"))),
+    Poursuivants.privé = rowSums(select(.,contains("privé"))),
+    Poursuivants.nc = rowSums(select(.,contains("non.renseigné"))),
+
     ) %>%
-  mutate(Poursuivants = Poursuivants.public + Poursuivants.privé + Poursuivants.nc) %>%
   mutate(Session = as.character(Session)) %>%
   mutate(Série = factor(Série.du.bac, 
                         levels = c("Bac général","Bac technologique","Bac professionnel"),
@@ -55,7 +50,7 @@ colnames(pe)
 
 
 ```{r pe.all}
-pe %>%
+poursuites <- pe %>%
   group_by(Session = as.character(Session)) %>%
   summarise(across(c(starts_with("Néo")),sum)) %>% 
   pivot_longer(starts_with("Néo"), names_to = "Filière", values_to = "Poursuites") %>% 
@@ -70,11 +65,14 @@ pe %>%
   group_by(Session,Poursuite) %>%
   summarise(Poursuites = sum(Poursuites)) %>% 
   ggplot(aes(x=Session,y=Poursuites, group=Poursuite)) +
-  geom_vline(xintercept = "2017") +
+  geom_vline(xintercept = "2018") +
   geom_area(aes(fill=Poursuite,color=Poursuite), alpha=0.7, size=1) + 
-  scale_color_brewer(palette = "Paired") +
-  scale_fill_brewer(palette = "Paired") +
+  scale_y_continuous(label=~.x/1e3, name="Nombre de bacheliers\npoursuivants (milliers)") +
+  scale_color_brewer(palette = "Paired", direction=-1) +
+  scale_fill_brewer(palette = "Paired", direction=-1) +
   theme_cpesr_cap() 
+
+poursuites
 ```
 
 ```{r pe.all.val100}
@@ -95,26 +93,30 @@ pe %>%
   group_by(Secteur,Mobilité,Poursuite) %>%
   mutate(val100 = Poursuites / first(Poursuites) * 100) %>%
   ggplot(aes(x=Session,y=val100, group=1)) +
-  geom_vline(xintercept = "2017") +
+  geom_vline(xintercept = "2018") +
   geom_line(aes(fill=Poursuite,color=Poursuite), size=1) + 
-  scale_color_brewer(palette = "Paired") +
-  scale_fill_brewer(palette = "Paired") +
+  scale_color_brewer(palette = "Paired", direction=-1) +
+  scale_fill_brewer(palette = "Paired", direction=-1) +
   facet_grid(Mobilité~Secteur) +
   theme_cpesr_cap() 
 ```
 
 
 ```{r pe.np, fig.retina=2}
-pe %>%
+non_poursuites <- pe %>%
   group_by(Session = as.character(Session), Série.du.bac) %>%
   summarise(Non.poursuivants = sum(Bacheliers - Poursuivants)/1000) %>% 
+  mutate(Série.du.bac = factor(Série.du.bac, 
+                               levels = c("Bac professionnel","Bac technologique","Bac général"))) %>%
   ggplot(aes(x=Session,y=Non.poursuivants, group=Série.du.bac)) +
-  geom_vline(xintercept = "2017") +
+  geom_vline(xintercept = "2018") +
   geom_area(aes(fill=Série.du.bac,color=Série.du.bac), size=1, alpha = 0.6) + 
-  scale_fill_discrete(name="") + 
-  scale_color_discrete(name="") +
+  scale_fill_brewer(palette="Dark2", name="") +
+  scale_color_brewer(palette="Dark2", name="") +
   ylab("Nombre de bacheliers\nnon poursuivants (milliers)") +
   theme_cpesr_cap() 
+
+non_poursuites
 ```
 
 ```{r pe.np.data, results='asis'}
@@ -124,7 +126,7 @@ df <- pe %>%
   pivot_wider(names_from = Série.du.bac, values_from = Non.poursuivants) 
 write.csv(df,"non_poursuites.csv", row.names = FALSE)
 
-df %>% spoilerTable()
+df %>% spoiler_table()
 ```
 
 [non_poursuites.csv](non_poursuites.csv)
@@ -221,7 +223,7 @@ pe %>%
   mutate(Evolution = scales::percent(Bacheliers / first(Bacheliers) - 1 )) %>%
   pivot_wider(names_from = Série.du.bac, values_from = c(Bacheliers,Evolution)) %>% 
   mutate(Total = `Bacheliers_Gen.`+`Bacheliers_Pro.`+`Bacheliers_Techno.`) %>%
-  spoilerTable()
+  spoiler_table()
 ```
 
 ### Poursuites
@@ -798,7 +800,7 @@ iut %>%
 
 
 ```{r iut3}
-cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
+poursuites_iut <- cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
   iut %>%
     ggplot(aes(x=Session,y=val100,color=Série,group=Série)) +
     geom_vline(xintercept = "2020") +
@@ -813,7 +815,14 @@ cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
     ggplot(aes(x=Série,y=diff,fill=Série)) +
     geom_col() + geom_hline(yintercept = 0) +
     ylab("Différence 2018-2023") +
-    ggtitle("Différence", subtitle = "2018-2013") +
+    ggtitle("Différence", subtitle = "2018-2023") +
     theme(legend.position = "None")
 )
+
+poursuites_iut
+```
+
+
+```{r save}
+save(poursuites, non_poursuites, poursuites_iut, file="plot-poursuites.RData")
 ```

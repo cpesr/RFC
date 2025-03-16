@@ -57,6 +57,7 @@ pen <- right_join(naissances, pe) %>%
 ```{r pe.vs.n}
 pen %>%
   pivot_longer(-c(Session,Année.naissance), names_to="Variable", values_to="Valeur") %>%
+  mutate(Variable = relevel(factor(Variable),"Naissances")) %>%
   ggplot(aes(x=Session, y=Valeur,color=Variable,fill=Variable)) + 
   geom_line(size=1) + geom_point(shape=21, color="white",size=3,stroke=1) + 
   scale_x_continuous(labels = ~ paste(.x-18,.x,sep="\n"))+
@@ -76,16 +77,23 @@ projections <- naissances %>%
     Poursuivants.université = facteurs$Poursuivants.université * Naissances) %>%
   mutate(Type = "Projections")
 
-pen %>%
+predictions <- pen %>%
   mutate(Type = "Observations") %>%
   bind_rows(projections) %>%
   pivot_longer(-c(Session,Année.naissance,Type), names_to="Variable", values_to="Valeur") %>%
+  mutate(Variable = relevel(factor(Variable),"Naissances")) %>%
   ggplot(aes(x=Session, y=Valeur,color=Variable,fill=Variable,linetype=Type)) + 
   geom_line(size=1) + #geom_point(shape=21,color="white",size=3,stroke=1) + 
   geom_vline(xintercept = facteurs$Session, linetype="dashed") +
-  scale_x_continuous(labels = ~ paste(.x-18,.x,sep="\n"))+
-  scale_y_continuous(labels = ~ paste(.x/1e3,"k")) +
+  scale_x_continuous(labels = ~ paste(.x,"\n(",.x-18,")",sep=""), 
+                     breaks = scales::pretty_breaks(n=10),
+                     name="Session Parcoursup\n(Année de naissance)")+
+  scale_y_continuous(labels = ~ paste(.x/1e3,"k"), name="Effectifs") +
   scale_alpha_manual(values=c(1,0.6)) +
   scale_shape_manual(values=c(21,24)) +
   theme(legend.position = "right")
+
+save(predictions, file="plot-predictions.RData")
+
+predictions
 ```

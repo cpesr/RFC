@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2025-01-01
+2025-01-16
 
 ## Données
 
@@ -307,3 +307,21 @@ Données unnamed-chunk-20
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-20-1.png" width="672" />
 
 <img src="RIPEC_files/figure-gfm/unnamed-chunk-21-1.png" width="672" />
+
+<details>
+<summary>
+Données unnamed-chunk-22
+</summary>
+
+| Etablissement.x        | TypeEtablissement | partBudget |    partC2 |
+|:-----------------------|:------------------|-----------:|----------:|
+| COTE D’AZUR UNIVERSITE | Univ. IDEx        |  0.0072598 | 0.3092598 |
+| AIX-MARSEILLE          | Univ. IDEx        |  0.0087308 | 0.4254658 |
+| CAEN                   | Univ. NINI        |  0.0045776 | 0.1241529 |
+| LA ROCHELLE            | Univ. NINI        |  0.0068392 | 0.2588227 |
+| DIJON                  | Univ. ISITE       |  0.0066568 | 0.0828521 |
+| BESANCON               | Univ. ISITE       |  0.0060484 | 0.1749337 |
+
+</details>
+
+<img src="RIPEC_files/figure-gfm/unnamed-chunk-22-1.png" width="768" />
