@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 options(dplyr.summarise.inform = FALSE)
 knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 4)
 knitr::opts_chunk$set(dev.args = list(png = list(type = "cairo")))
+#knitr::opts_chunk$set(dev="cairo_pdf")
 
 library(tidyverse)
 library(ggcpesrthemes)
@@ -74,7 +75,7 @@ etu %>%
   geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
   scale_x_continuous(breaks=scales::pretty_breaks()) +
   labs(
-    title = "Effectifs étudiants en Sciences politiques",
+    title = "Effectifs étudiants en Science politique",
     x = "Année",
     y = "Effectif",
     color = "LMD") 
@@ -88,7 +89,7 @@ etu %>%
   geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
   scale_x_continuous(breaks=scales::pretty_breaks()) +
   labs(
-    title = "Effectifs étudiants en Sciences politiques",
+    title = "Effectifs étudiants en Science politique",
     x = "Année",
     y = "Effectif",
     color = "LMD") 
@@ -110,7 +111,7 @@ etu %>%
   mutate(Cursus = paste(LMD,DN_DE)) %>%
   mutate(Diplôme = recode(DN_DE, DU = "d'établissement", DN = "national")) %>%
   arrange(Rentrée) %>%
-  ggplot_st(aes(x=Rentrée,y=Effectif,fill=LMD,color=LMD,alpha=Diplôme)) +
+  ggplot_sd(aes(x=Rentrée,y=Effectif,fill=LMD,color=LMD,alpha=Diplôme)) +
   geom_area(position = position_stack(reverse=TRUE)) +
   scale_x_continuous(breaks=scales::pretty_breaks()) +
   scale_y_continuous(labels = ~ paste(.x/1e3,"k")) +
@@ -118,11 +119,36 @@ etu %>%
   scale_color_brewer(palette = "Dark2", direction = -1) +
   scale_alpha_manual(values = c(0.8,0.4)) +
   labs(
-    title = "Effectifs étudiants en Sciences politiques",
+    title = "Effectifs étudiants en Science politique",
     x = "Année",
     y = "Effectif") 
 ```
 
+```{r, results='asis'}
+etu %>%
+  filter(LMD!="D") %>%
+  summarise(Effectif = sum(Effectif), .by = c(Rentrée,LMD,DN_DE)) %>%
+  mutate(Cursus = factor(paste(recode(LMD, L = "Grade Licence", M = "Grade Master"),
+                        recode(DN_DE, DU = "Diplôme d'établissement", DN = "Diplôme national"),
+                        sep='\n'),
+                        levels = c("Grade Licence\nDiplôme national",
+                                   "Grade Licence\nDiplôme d'établissement",
+                                   "Grade Master\nDiplôme national",
+                                   "Grade Master\nDiplôme d'établissement"))
+    ) %>%
+  arrange(Rentrée) %>%
+  ggplot_sd(aes(x=Rentrée,y=Effectif,fill=Cursus,color=Cursus)) +
+  geom_area(position = position_stack(reverse=TRUE)) +
+  scale_x_continuous(breaks=scales::pretty_breaks()) +
+  scale_y_continuous(labels = ~ paste(.x/1e3,"k")) +
+  scale_fill_brewer(palette = "Paired", direction = -1) +
+  scale_color_brewer(palette = "Paired", direction = -1) +
+  labs(
+    title = "Effectifs étudiants en Science politique",
+    x = "Année",
+    y = "Effectif",
+    color="", fill="") 
+```
 
 
 ```{r, results='asis'}
@@ -137,7 +163,7 @@ etu %>%
   scale_color_brewer(palette = "Paired", direction = -1) +
   facet_grid(~Etablissement) +
   labs(
-    title = "Effectifs étudiants en Sciences politiques",
+    title = "Effectifs étudiants en Science politique",
     x = "Année",
     y = "Effectif") 
 ```
@@ -164,7 +190,7 @@ sise %>%
   scale_x_continuous(breaks=scales::pretty_breaks()) +
   facet_grid(~Etablissement) +
   labs(
-    title = "Effectifs étudiants en Sciences politiques",
+    title = "Effectifs étudiants en Science politique",
     x = "Année",
     y = "Effectif") 
 ```
@@ -175,12 +201,12 @@ sise %>%
 ```{r, results='asis'}
 ens %>%
   summarise(Effectif = sum(Effectif), .by = c(Rentrée,Catégorie)) %>%
-  ggplot_st(aes(x=Rentrée,y=Effectif,color=Catégorie)) +
+  ggplot_sd(aes(x=Rentrée,y=Effectif,color=Catégorie)) +
   geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
   expand_limits(y=0) +
   scale_x_continuous(breaks=scales::pretty_breaks(10)) +
   labs(
-    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    title = "Effectifs enseignants-chercheurs en Science politique",
     x = "Année",
     y = "Effectif",
     color = "LMD") 
@@ -189,13 +215,13 @@ ens %>%
 ```{r, results='asis'}
 ens %>%
   summarise(Effectif = sum(Effectif), .by = c(Rentrée,Etablissement,Catégorie)) %>%
-  ggplot_st(aes(x=Rentrée,y=Effectif,color=Catégorie)) +
+  ggplot_sd(aes(x=Rentrée,y=Effectif,color=Catégorie)) +
   geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
   expand_limits(y=0) +
   scale_x_continuous(breaks=scales::pretty_breaks(10)) +
   facet_wrap(~Etablissement, scales="free_y") +
   labs(
-    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    title = "Effectifs enseignants-chercheurs en Science politique",
     x = "Année",
     y = "Effectif",
     color = "LMD") 
@@ -213,12 +239,12 @@ bind_rows(
   arrange(Rentrée) %>%
   filter(Rentrée > 2011) %>%
   mutate(Val100 = Effectif / first(Effectif) * 100, .by=Catégorie) %>%
-  ggplot_st(aes(x=Rentrée,y=Val100,color=Catégorie)) +
+  ggplot_sd(aes(x=Rentrée,y=Val100,color=Catégorie)) +
   geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
   scale_x_continuous(breaks=scales::pretty_breaks(10)) +
   scale_color_brewer(palette = "Set2", name="Effectif") +
   labs(
-    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    title = "Effectifs enseignants-chercheurs en Science politique",
     x = "Année",
     y = "Effectif (valeur 100 pour 2012)",
     color = "LMD") 
@@ -237,12 +263,12 @@ bind_rows(
   filter(n() == 3, .by = Rentrée) %>% 
   arrange(Rentrée) %>%
   mutate(Val100 = Effectif / first(Effectif) * 100, .by=Type) %>%
-  ggplot_st(aes(x=Rentrée,y=Val100,color=Type)) +
+  ggplot_sd(aes(x=Rentrée,y=Val100,color=Type)) +
   geom_line(size=1) + geom_point(shape=21, size=1.5, stroke=1.5, fill="white") +
   scale_x_continuous(breaks=scales::pretty_breaks(10)) +
   scale_color_brewer(palette = "Set2", name="Effectif") +
   labs(
-    title = "Effectifs enseignants-chercheurs en Sciences politiques",
+    title = "Effectifs enseignants-chercheurs en Science politique",
     x = "Année",
     y = "Effectif (valeur 100 pour 2012)",
     color = "LMD") 

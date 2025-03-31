@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2025-03-16
+2025-03-31
 
 ## Données
 
@@ -49,260 +49,40 @@ Effectif ( 11 lignes)
 |    2022 |    34315 | 131.3543 |
 
 </details>
-<details>
-<summary>
-Données unnamed-chunk-5 ( 44 lignes)
-</summary>
 
-| Rentrée | LMD | DN_DE | Effectif | Cursus | Diplôme         |
-|--------:|:----|:------|---------:|:-------|:----------------|
-|    2012 | M   | DN    |    22111 | M DN   | national        |
-|    2012 | L   | DN    |     3228 | L DN   | national        |
-|    2012 | L   | DU    |      441 | L DU   | d’établissement |
-|    2012 | M   | DU    |      344 | M DU   | d’établissement |
-|    2013 | M   | DN    |    22658 | M DN   | national        |
-|    2013 | L   | DN    |     3433 | L DN   | national        |
-|    2013 | L   | DU    |      575 | L DU   | d’établissement |
-|    2013 | M   | DU    |      303 | M DU   | d’établissement |
-|    2014 | M   | DN    |    22694 | M DN   | national        |
-|    2014 | L   | DU    |      694 | L DU   | d’établissement |
-|    2014 | L   | DN    |     3077 | L DN   | national        |
-|    2014 | M   | DU    |      305 | M DU   | d’établissement |
-|    2015 | L   | DU    |      652 | L DU   | d’établissement |
-|    2015 | M   | DN    |    23654 | M DN   | national        |
-|    2015 | M   | DU    |      298 | M DU   | d’établissement |
-|    2015 | L   | DN    |     3738 | L DN   | national        |
-|    2016 | L   | DU    |     5297 | L DU   | d’établissement |
-|    2016 | M   | DN    |    19527 | M DN   | national        |
-|    2016 | M   | DU    |      295 | M DU   | d’établissement |
-|    2016 | L   | DN    |     4046 | L DN   | national        |
-|    2017 | L   | DU    |     5435 | L DU   | d’établissement |
-|    2017 | M   | DN    |    20341 | M DN   | national        |
-|    2017 | M   | DU    |      303 | M DU   | d’établissement |
-|    2017 | L   | DN    |     4533 | L DN   | national        |
-|    2018 | L   | DU    |     5460 | L DU   | d’établissement |
-|    2018 | M   | DN    |    20169 | M DN   | national        |
-|    2018 | M   | DU    |      319 | M DU   | d’établissement |
-|    2018 | L   | DN    |     4713 | L DN   | national        |
-|    2019 | L   | DU    |     5565 | L DU   | d’établissement |
-|    2019 | M   | DN    |    20899 | M DN   | national        |
-|    2019 | M   | DU    |      341 | M DU   | d’établissement |
-|    2019 | L   | DN    |     5104 | L DN   | national        |
-|    2020 | L   | DU    |     5452 | L DU   | d’établissement |
-|    2020 | M   | DN    |    21200 | M DN   | national        |
-|    2020 | M   | DU    |      226 | M DU   | d’établissement |
-|    2020 | L   | DN    |     5093 | L DN   | national        |
-|    2021 | L   | DU    |      679 | L DU   | d’établissement |
-|    2021 | M   | DN    |    21482 | M DN   | national        |
-|    2021 | M   | DU    |      342 | M DU   | d’établissement |
-|    2021 | L   | DN    |    10947 | L DN   | national        |
-|    2022 | L   | DU    |      762 | L DU   | d’établissement |
-|    2022 | M   | DN    |    21736 | M DN   | national        |
-|    2022 | M   | DU    |      245 | M DU   | d’établissement |
-|    2022 | L   | DN    |    11572 | L DN   | national        |
-
-</details>
+[Télécharger les
+données](Discipline_files/figure-data/unnamed-chunk-5.csv)
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
+
+[Télécharger les
+données](Discipline_files/figure-data/unnamed-chunk-6.csv)
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />
 
-<details>
-<summary>
-Données unnamed-chunk-8 ( 28 lignes)
-</summary>
-
-| Rentrée | Catégorie | Effectif |
-|--------:|:----------|---------:|
-|    2011 | MCF       |      220 |
-|    2011 | PR        |      129 |
-|    2013 | PR        |      131 |
-|    2013 | MCF       |      232 |
-|    2010 | MCF       |      224 |
-|    2010 | PR        |      124 |
-|    2012 | MCF       |      230 |
-|    2012 | PR        |      130 |
-|    2023 | MCF       |      276 |
-|    2023 | PR        |      148 |
-|    2016 | MCF       |      258 |
-|    2016 | PR        |      129 |
-|    2017 | MCF       |      262 |
-|    2017 | PR        |      130 |
-|    2014 | PR        |      128 |
-|    2014 | MCF       |      242 |
-|    2015 | PR        |      129 |
-|    2015 | MCF       |      240 |
-|    2021 | MCF       |      275 |
-|    2021 | PR        |      132 |
-|    2020 | MCF       |      279 |
-|    2020 | PR        |      132 |
-|    2018 | MCF       |      265 |
-|    2018 | PR        |      127 |
-|    2019 | MCF       |      270 |
-|    2019 | PR        |      129 |
-|    2022 | MCF       |      276 |
-|    2022 | PR        |      136 |
-
-</details>
-
 <img src="Discipline_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
 
-<details>
-<summary>
-Données unnamed-chunk-9 ( 51 lignes)
-</summary>
-
-| Rentrée | Etablissement | Catégorie | Effectif |
-|--------:|:--------------|:----------|---------:|
-|    2011 | Autres        | MCF       |      219 |
-|    2011 | Autres        | PR        |      117 |
-|    2013 | Autres        | PR        |      119 |
-|    2013 | Autres        | MCF       |      231 |
-|    2010 | Autres        | MCF       |      223 |
-|    2010 | Autres        | PR        |      113 |
-|    2012 | Autres        | MCF       |      229 |
-|    2012 | Autres        | PR        |      118 |
-|    2012 | Sciences Po   | PR        |       12 |
-|    2012 | Sciences Po   | MCF       |        1 |
-|    2023 | Autres        | MCF       |      276 |
-|    2023 | Autres        | PR        |      141 |
-|    2011 | Sciences Po   | PR        |       12 |
-|    2016 | Autres        | MCF       |      257 |
-|    2016 | Autres        | PR        |      117 |
-|    2017 | Autres        | MCF       |      261 |
-|    2017 | Autres        | PR        |      117 |
-|    2014 | Autres        | PR        |      116 |
-|    2014 | Autres        | MCF       |      241 |
-|    2015 | Autres        | PR        |      116 |
-|    2015 | Autres        | MCF       |      239 |
-|    2013 | Sciences Po   | MCF       |        1 |
-|    2013 | Sciences Po   | PR        |       12 |
-|    2014 | Sciences Po   | PR        |       12 |
-|    2014 | Sciences Po   | MCF       |        1 |
-|    2021 | Autres        | MCF       |      275 |
-|    2021 | Autres        | PR        |      124 |
-|    2020 | Autres        | MCF       |      279 |
-|    2020 | Autres        | PR        |      124 |
-|    2018 | Autres        | MCF       |      264 |
-|    2018 | Autres        | PR        |      119 |
-|    2017 | Sciences Po   | PR        |       13 |
-|    2019 | Autres        | MCF       |      270 |
-|    2019 | Autres        | PR        |      121 |
-|    2021 | Sciences Po   | PR        |        8 |
-|    2022 | Autres        | MCF       |      276 |
-|    2022 | Autres        | PR        |      127 |
-|    2023 | Sciences Po   | PR        |        7 |
-|    2022 | Sciences Po   | PR        |        9 |
-|    2020 | Sciences Po   | PR        |        8 |
-|    2010 | Sciences Po   | PR        |       11 |
-|    2019 | Sciences Po   | PR        |        8 |
-|    2018 | Sciences Po   | MCF       |        1 |
-|    2017 | Sciences Po   | MCF       |        1 |
-|    2015 | Sciences Po   | PR        |       13 |
-|    2015 | Sciences Po   | MCF       |        1 |
-|    2016 | Sciences Po   | PR        |       12 |
-|    2018 | Sciences Po   | PR        |        8 |
-|    2011 | Sciences Po   | MCF       |        1 |
-|    2016 | Sciences Po   | MCF       |        1 |
-|    2010 | Sciences Po   | MCF       |        1 |
-
-</details>
+[Télécharger les
+données](Discipline_files/figure-data/unnamed-chunk-9.csv)
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
 
-<details>
-<summary>
-Données unnamed-chunk-10 ( 35 lignes)
-</summary>
-
-| Rentrée | Catégorie | Effectif |    Val100 |
-|--------:|:----------|---------:|----------:|
-|    2012 | MCF       |      230 | 100.00000 |
-|    2012 | PR        |      130 | 100.00000 |
-|    2012 | Doc       |     1289 | 100.00000 |
-|    2013 | PR        |      131 | 100.76923 |
-|    2013 | MCF       |      232 | 100.86957 |
-|    2013 | Doc       |     1217 |  94.41427 |
-|    2014 | PR        |      128 |  98.46154 |
-|    2014 | MCF       |      242 | 105.21739 |
-|    2014 | Doc       |     1194 |  92.62995 |
-|    2015 | PR        |      129 |  99.23077 |
-|    2015 | MCF       |      240 | 104.34783 |
-|    2015 | Doc       |     1131 |  87.74244 |
-|    2016 | MCF       |      258 | 112.17391 |
-|    2016 | PR        |      129 |  99.23077 |
-|    2016 | Doc       |     1065 |  82.62219 |
-|    2017 | MCF       |      262 | 113.91304 |
-|    2017 | PR        |      130 | 100.00000 |
-|    2017 | Doc       |     1213 |  94.10396 |
-|    2018 | MCF       |      265 | 115.21739 |
-|    2018 | PR        |      127 |  97.69231 |
-|    2018 | Doc       |     1166 |  90.45772 |
-|    2019 | MCF       |      270 | 117.39130 |
-|    2019 | PR        |      129 |  99.23077 |
-|    2019 | Doc       |     1136 |  88.13033 |
-|    2020 | MCF       |      279 | 121.30435 |
-|    2020 | PR        |      132 | 101.53846 |
-|    2020 | Doc       |     1174 |  91.07836 |
-|    2021 | MCF       |      275 | 119.56522 |
-|    2021 | PR        |      132 | 101.53846 |
-|    2021 | Doc       |     1145 |  88.82855 |
-|    2022 | MCF       |      276 | 120.00000 |
-|    2022 | PR        |      136 | 104.61538 |
-|    2022 | Doc       |     1119 |  86.81148 |
-|    2023 | MCF       |      276 | 120.00000 |
-|    2023 | PR        |      148 | 113.84615 |
-
-</details>
+[Télécharger les
+données](Discipline_files/figure-data/unnamed-chunk-10.csv)
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />
 
-<details>
-<summary>
-Données unnamed-chunk-11 ( 33 lignes)
-</summary>
-
-| Rentrée | Effectif | Type                   |    Val100 |
-|--------:|---------:|:-----------------------|----------:|
-|    2012 |      360 | Enseignants-chercheurs | 100.00000 |
-|    2012 |     1289 | Doctorants             | 100.00000 |
-|    2012 |    26124 | Etudiants LM           | 100.00000 |
-|    2013 |      363 | Enseignants-chercheurs | 100.83333 |
-|    2013 |     1217 | Doctorants             |  94.41427 |
-|    2013 |    26969 | Etudiants LM           | 103.23457 |
-|    2014 |      370 | Enseignants-chercheurs | 102.77778 |
-|    2014 |     1194 | Doctorants             |  92.62995 |
-|    2014 |    26770 | Etudiants LM           | 102.47282 |
-|    2015 |      369 | Enseignants-chercheurs | 102.50000 |
-|    2015 |     1131 | Doctorants             |  87.74244 |
-|    2015 |    28342 | Etudiants LM           | 108.49028 |
-|    2016 |      387 | Enseignants-chercheurs | 107.50000 |
-|    2016 |     1065 | Doctorants             |  82.62219 |
-|    2016 |    29165 | Etudiants LM           | 111.64064 |
-|    2017 |      392 | Enseignants-chercheurs | 108.88889 |
-|    2017 |     1213 | Doctorants             |  94.10396 |
-|    2017 |    30612 | Etudiants LM           | 117.17960 |
-|    2018 |      392 | Enseignants-chercheurs | 108.88889 |
-|    2018 |     1166 | Doctorants             |  90.45772 |
-|    2018 |    30661 | Etudiants LM           | 117.36717 |
-|    2019 |      399 | Enseignants-chercheurs | 110.83333 |
-|    2019 |     1136 | Doctorants             |  88.13033 |
-|    2019 |    31909 | Etudiants LM           | 122.14439 |
-|    2020 |      411 | Enseignants-chercheurs | 114.16667 |
-|    2020 |     1174 | Doctorants             |  91.07836 |
-|    2020 |    31971 | Etudiants LM           | 122.38172 |
-|    2021 |      407 | Enseignants-chercheurs | 113.05556 |
-|    2021 |     1145 | Doctorants             |  88.82855 |
-|    2021 |    33450 | Etudiants LM           | 128.04318 |
-|    2022 |      412 | Enseignants-chercheurs | 114.44444 |
-|    2022 |     1119 | Doctorants             |  86.81148 |
-|    2022 |    34315 | Etudiants LM           | 131.35431 |
-
-</details>
+[Télécharger les
+données](Discipline_files/figure-data/unnamed-chunk-11.csv)
 
 <img src="Discipline_files/figure-gfm/unnamed-chunk-11-1.png" width="672" />
+
+[Télécharger les
+données](Discipline_files/figure-data/unnamed-chunk-12.csv)
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
 
 ## MonMaster
 
@@ -449,14 +229,14 @@ Discipline ( 1 lignes)
 
 </details>
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />
-
 <img src="Discipline_files/figure-gfm/unnamed-chunk-17-1.png" width="672" />
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-18-1.png" width="672" />
 
 ## Insersion Pro
 
 ## Carte MM IP
 
-<img src="Discipline_files/figure-gfm/unnamed-chunk-20-1.png" width="672" />
-
 <img src="Discipline_files/figure-gfm/unnamed-chunk-21-1.png" width="672" />
+
+<img src="Discipline_files/figure-gfm/unnamed-chunk-22-1.png" width="672" />
