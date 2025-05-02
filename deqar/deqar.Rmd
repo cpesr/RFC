@@ -1,0 +1,240 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://www.eqar.eu/qa-results/download-data-sets/
+- https://eter-project.com/data/data-for-download-and-visualisations/database/
+- https://eter-project.com/wp-content/uploads/2022/10/ETERIV_Handbook_2022.pdf
+
+```{r load}
+agencies <- read.csv("deqar-agencies.csv", dec='.')
+countries <- read.csv("deqar-countries.csv", dec='.')
+institutions <- read.csv("deqar-institutions.csv", dec='.')
+reports <- read.csv("deqar-reports.csv", dec='.') %>% mutate(report_crossborder = (report_crossborder == "t"))
+
+eter <- read.csv2("eter-export-selected-1746130192346.csv", na.strings = "m")
+#eter.all <- read.csv2("eter-export-all.csv", na.strings = "m")
+```
+
+## Explorations
+
+```{r, results='asis'}
+reports %>%
+  #filter(report_valid_from > "2011") %>%
+  summarise(Nombre_rapport = n_distinct(report_id), 
+            Nombre_institution = n_distinct(hei_deqar_id), 
+            Range = paste(range(report_valid_from), collapse = " - "),
+            .by = c(report_agency)) %>%
+  arrange(desc(Nombre_rapport)) %>%
+  spoiler_table("Nombre de rapports par agence", trim = Inf)
+```
+
+```{r, results='asis'}
+reports %>%
+  filter(report_agency %in% c("AQAS")) %>%
+  filter(!report_crossborder) %>%
+  summarise(Nombre_rapport = n_distinct(report_id), 
+            Nombre_institution = n_distinct(hei_deqar_id), 
+            Range = paste(range(report_valid_from), collapse = " - "),
+            .by = c(report_agency, country, report_crossborder, report_type, report_esg_activity_short)) %>%
+  arrange(desc(Nombre_rapport)) %>%
+  spoiler_table("Rapport AQAS", trim= Inf)
+```
+
+
+```{r, results='asis'}
+reports %>%
+  #filter(report_valid_from < "2020") %>%
+  #filter(report_agency %in% c("AQAS")) %>%
+  #filter(!report_crossborder) %>%
+  summarise(Nombre_rapport = n_distinct(report_id), 
+            Nombre_institution = n_distinct(hei_deqar_id), 
+            Nombre_agences = n_distinct(report_agency),
+            Range = paste(range(report_valid_from), collapse = " - "),
+            .by = c(country)) %>%
+  arrange(desc(Nombre_rapport)) %>%
+  spoiler_table("Nombre de rapports par pays", trim = Inf)
+```
+
+### CTI
+
+```{r, results='asis'}
+reports %>%
+  #filter(report_valid_from < "2020") %>%
+  filter(report_agency %in% c("CTI")) %>%
+  #filter(!report_crossborder) %>%
+  summarise(Nombre_rapport = n_distinct(report_id), 
+            Nombre_institution = n_distinct(hei_deqar_id), 
+            Nombre_agences = n_distinct(report_agency),
+            Range = paste(range(report_valid_from), collapse = " - "),
+            .by = c(country,report_decision)) %>%
+  arrange(desc(Nombre_rapport)) %>%
+  spoiler_table("Rapport CTI par décision", trim = Inf)
+```
+
+
+```{r, results='asis'}
+reports %>%
+  filter(country == "France") %>%
+  summarise(Nombre_rapport = n_distinct(report_id), 
+            Nombre_institution = n_distinct(hei_deqar_id), 
+            Nombre_agences = n_distinct(report_agency),
+            Range = paste(range(report_valid_from), collapse = " - "),
+            .by = c(country,report_agency, report_decision)) %>%
+  arrange(desc(Nombre_rapport)) %>%
+  spoiler_table("French reports by agency", trim = Inf)
+```
+
+
+
+```{r}
+reports %>%
+  filter(report_agency %in% c("HCERES","AQAS")) %>%
+  mutate(year = as.numeric(substr(report_valid_from, 1, 4))) %>%
+  summarise(Nombre_rapport = n_distinct(report_id), 
+            Nombre_lines = n(),
+            Nombre_institution = n_distinct(hei_deqar_id), 
+            Range = paste(range(report_valid_from), collapse = " - "),
+            .by = c(report_agency, year)) %>%
+  pivot_longer(c(Nombre_rapport, Nombre_lines), names_to = "type", values_to = "value") %>%
+  ggplot(aes(x = year, y = value, color = type)) + geom_line() +
+  facet_wrap(~report_agency) 
+```
+
+## Institutions non évaluées
+
+```{r}
+rc <- reports %>%
+  filter(country == "France") %>%
+  mutate(report_agency = fct_other(report_agency, keep = c("HCERES", "CTI"))) %>%
+  summarise(report_count = n_distinct(report_id), 
+            .by = c(hei_name, hei_eter_id, hei_deqar_id, report_agency))
+
+rct <- bind_rows(rc, rc %>% 
+  summarise(report_count = sum(report_count), 
+            .by = c(hei_name, hei_eter_id, hei_deqar_id)) %>%
+    mutate(report_agency = "Total")) %>%
+  pivot_wider(names_from = report_agency, values_from = report_count, values_fill = 0)
+  
+ir <- institutions %>%
+  filter(country == "France") %>%
+  slice_head(n=1, by=deqar_id) %>% 
+  left_join(eter %>% arrange(ETER.ID.Year) %>% slice_tail(n=1, by=ETER.ID),
+            join_by(eter_id == ETER.ID)) %>% 
+  left_join(rct, join_by(deqar_id == hei_deqar_id)) %>%
+  mutate(across(c(report_count,Other:Total), ~replace_na(.x, 0))) %>%
+  mutate(evaluated = (report_count > 0)) %>%
+  mutate(
+    Legal.status = factor(Legal.status, 
+                          levels = c("0","1","2"),
+                          labels = c("Public", "Private", "Private government-dependent")),
+    Institution.Category.standardized = factor(Institution.Category.standardized, 
+                          levels = c("0","1","2"),
+                          labels = c("Other", "University", "University of applied sciences"))
+  )
+```
+
+### Check
+
+```{r, results='asis'}
+institutions %>% 
+  filter(country == "France") %>%
+  filter(n() > 1, .by = deqar_id) %>%
+  spoiler_table("Doublon dquar_id")
+```
+
+```{r, results='asis'}
+ir %>% 
+  filter(country == "France") %>%
+  filter(n() > 1, .by = eter_id) %>%
+  spoiler_table("Doublon eter_id")
+```
+
+```{r, results='asis'}
+ir %>%
+  filter(is.na(Institution.Name)) %>%
+  spoiler_table("Not in ETER", trim=Inf)
+```
+
+
+```{r, results='asis'}
+ir %>% 
+  select(deqar_id, eter_id,name_primary,Institution.Name,Legal.status, Institution.Category...National.Language, Institution.Category.standardized, evaluated) %>% 
+  spoiler_table("Institutions",trim=Inf)
+```
+
+### Evaluation FR
+
+```{r}
+ir %>%
+  summarise(hei_count = n_distinct(deqar_id), .by=evaluated) %>%
+  mutate(proportion = hei_count / sum(hei_count)) 
+```
+
+```{r, results='asis'}
+ir %>%
+  summarise(hei_count = n_distinct(deqar_id), 
+            .by=c(Legal.status, Institution.Category...National.Language, Institution.Category.standardized, evaluated)) %>%
+  pivot_wider(names_from = evaluated, names_prefix = "eval_", values_from = hei_count, values_fill = 0) %>%
+  mutate(rate = eval_TRUE / (eval_FALSE+eval_TRUE)) %>% 
+  spoiler_table("rates", trim=Inf)
+```
+
+
+```{r}
+ir %>%
+  summarise(hei_count = n_distinct(deqar_id), 
+            .by=c(Legal.status, evaluated)) %>% 
+  ggplot(aes(x=hei_count, y=reorder(Legal.status,hei_count,FUN=sum), fill=evaluated)) + geom_col()
+```
+
+```{r}
+ir %>%
+  summarise(hei_count = n_distinct(deqar_id), 
+            .by=c(Legal.status, evaluated)) %>% 
+  ggplot(aes(x=hei_count, y=reorder(Legal.status,hei_count,FUN=sum), fill=evaluated)) + geom_col(position = "fill")
+```
+
+
+```{r}
+ir %>%
+  summarise(hei_count = n_distinct(deqar_id), 
+            .by=c(Institution.Category.standardized, evaluated)) %>% 
+  ggplot(aes(x=hei_count, y=reorder(Institution.Category.standardized,hei_count,FUN=sum), fill=evaluated)) + geom_col()
+```
+
+```{r}
+ir %>%
+  summarise(hei_count = n_distinct(deqar_id), 
+            .by=c(Institution.Category.standardized, evaluated)) %>% 
+  ggplot(aes(x=hei_count, y=reorder(Institution.Category.standardized,hei_count,FUN=sum), fill=evaluated)) + geom_col(position = "fill")
+```
+
+```{r, results='asis'}
+ir %>% 
+  filter(Institution.Category.standardized=="University", evaluated == FALSE) %>%
+  spoiler_table("University not evaluated", trim=Inf)
+```
+
+```{r}
+ir %>%
+  summarise(hei_count = n_distinct(deqar_id), 
+            .by=c(Institution.Category...National.Language, evaluated)) %>% 
+  ggplot(aes(x=hei_count, y=reorder(Institution.Category...National.Language,hei_count,FUN=sum), fill=evaluated)) + geom_col()
+```
