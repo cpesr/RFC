@@ -74,14 +74,16 @@ projections <- naissances %>%
     Bacheliers = facteurs$Bacheliers * Naissances,
     Poursuivants = facteurs$Poursuivants * Naissances,
     Poursuivants.public = facteurs$Poursuivants.public * Naissances,
-    Poursuivants.université = facteurs$Poursuivants.université * Naissances) %>%
-  mutate(Type = "Projections")
+    Poursuivants.université = facteurs$Poursuivants.université * Naissances) 
 
 predictions <- pen %>%
-  mutate(Type = "Observations") %>%
   bind_rows(projections) %>%
-  pivot_longer(-c(Session,Année.naissance,Type), names_to="Variable", values_to="Valeur") %>%
+  pivot_longer(-c(Session,Année.naissance), names_to="Variable", values_to="Valeur") %>%
   mutate(Variable = relevel(factor(Variable),"Naissances")) %>%
+  mutate(Type = case_when(
+    Variable == "Naissances" ~ "Observations",
+    Session <= facteurs$Session ~ "Observations",
+    TRUE ~ "Projections")) %>%
   ggplot(aes(x=Session, y=Valeur,color=Variable,fill=Variable,linetype=Type)) + 
   geom_line(size=1) + #geom_point(shape=21,color="white",size=3,stroke=1) + 
   geom_vline(xintercept = facteurs$Session, linetype="dashed") +
