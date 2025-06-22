@@ -1,7 +1,7 @@
 SCSP
 ================
 CPESR
-2024-09-26
+2025-06-22
 
 ## Données
 
@@ -13,8 +13,10 @@ CPESR
     ## Comparable)`
 
 <details>
+
 <summary>
-Données
+
+Données ( 350 lignes)
 </summary>
 
 | Etablissement | Typologie | PerimEx | Indicateur | Valeur100 | Valeur | Rang | Rang_Valeur100 | Rang_Typologie |
@@ -113,3 +115,7 @@ sont trop hors-norme.
 <img src="SCSP_files/figure-gfm/deficit-1.png" width="672" />
 
 <img src="SCSP_files/figure-gfm/deficit2-1.png" width="672" />
+
+## SCSCP vs RP
+
+<img src="SCSP_files/figure-gfm/scspvsrp-1.png" width="672" />

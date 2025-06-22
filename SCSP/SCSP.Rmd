@@ -444,3 +444,24 @@ fin %>%
   filter(!str_detect(Etablissement,"Lumière")) %>%
   ggplot(aes(x=PartDeficit,y=reorder(Etablissement,PartDeficit),fill=PerimEx)) + geom_col()
 ```
+
+
+
+## SCSCP vs RP
+
+```{r scspvsrp, fig.asp=3/4}
+fin %>% 
+  filter(str_detect(Etablissement, "niversité")) %>% 
+  summarize(
+    Ressources = sum(Produits.de.fonctionnement.encaissables, na.rm = TRUE),
+    Ressources.propres = sum(Ressources.propres.encaissables, na.rm = TRUE),
+    .by = exercice) %>% 
+  mutate(Proportion = Ressources.propres / Ressources) %>%
+  pivot_longer(-exercice, names_to = "Indicateur", values_to = "Valeur") %>%
+  ggplot(aes(x=exercice,y=Valeur,color=Indicateur)) + 
+  geom_vline(xintercept = c(2014,2020), linetype="dashed", color="grey") +
+  geom_line() + geom_point(shape=21, fill="white", stroke=1) + 
+  facet_grid(Indicateur~., scales = "free_y") +
+  scale_y_continuous(labels = ~ ifelse(.x<1,scales::percent(.x), paste(.x/1e9,"Md€")), name="") +
+  theme_cpesr()
+```

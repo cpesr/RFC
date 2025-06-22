@@ -95,7 +95,7 @@ predictions <- pen %>%
   scale_shape_manual(values=c(21,24)) +
   theme(legend.position = "right")
 
-save(predictions, file="plot-predictions.RData")
+save(predictions, file="predictions.RData")
 
 predictions
 ```
