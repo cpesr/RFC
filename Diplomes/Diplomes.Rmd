@@ -1,0 +1,38 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- url source
+
+```{r load, cache=TRUE}
+dip <- read.csv2("../data/fr_esr_sise_diplomes_delivres_esr_public.csv", dec='.')
+
+colnames(dip)
+```
+
+## Explorations
+
+```{r, results='asis'}
+dip %>%
+  summarise(Nombre.de.diplômes.délivrés = sum(Nombre.de.diplômes.délivrés),
+            Nombre.de.diplômes.intermédiaires.délivrés = sum(Nombre.de.diplômes.intermédiaires.délivrés),
+            .by = c(Année.universitaire,CURSUS_LMD_R)) %>%
+  arrange(desc(Année.universitaire),CURSUS_LMD_R) %>%
+  spoiler_table("Nb diplômés par année et LMD", trim = Inf)
+```
