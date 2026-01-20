@@ -1,7 +1,7 @@
 SCSP
 ================
 CPESR
-2025-06-22
+2026-01-20
 
 ## Données
 
@@ -16,17 +16,17 @@ CPESR
 
 <summary>
 
-Données ( 350 lignes)
+Données ( 323 lignes)
 </summary>
 
 | Etablissement | Typologie | PerimEx | Indicateur | Valeur100 | Valeur | Rang | Rang_Valeur100 | Rang_Typologie |
 |:---|:---|:---|:---|---:|---:|---:|---:|---:|
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP | 114.1050 | 5.592166e+08 | 1 | 163 | 1 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/E-EC | 109.7877 | 1.342796e+05 | 103 | 210 | 50 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant | 109.6914 | 8.815203e+03 | 216 | 212 | 105 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant(hors doc.) | 108.6437 | 9.167869e+03 | 208 | 223 | 101 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | Ressources/Etudiant(hors doc.) | 116.4541 | 1.211214e+04 | 156 | 133 | 73 |
-| Avignon Université | Université pluridisciplinaire hors santé | NINI | SCSP | 121.2591 | 5.658963e+07 | 63 | 77 | 15 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP | 113.6303 | 5.568901e+08 | 1 | 156 | 1 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/E-EC | 105.1323 | 1.285856e+05 | 120 | 256 | 62 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant | 103.9392 | 8.352934e+03 | 225 | 269 | 113 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant(hors doc.) | 103.1288 | 8.702496e+03 | 212 | 277 | 105 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | Ressources/Etudiant(hors doc.) | 108.9842 | 1.133521e+04 | 166 | 196 | 81 |
+| Avignon Université | Université pluridisciplinaire hors santé | NINI | SCSP | 121.3840 | 5.664792e+07 | 62 | 79 | 15 |
 
 </details>
 
@@ -78,6 +78,11 @@ sont trop hors-norme.
 
 <img src="SCSP_files/figure-gfm/cmp.perimex-1.png" width="672" />
 
+    ## Warning: Groups with fewer than two datapoints have been dropped.
+    ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
+    ## Groups with fewer than two datapoints have been dropped.
+    ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
+
 <img src="SCSP_files/figure-gfm/cmp.perimex.typo-1.png" width="672" />
 
 ## Rangs
@@ -119,3 +124,23 @@ sont trop hors-norme.
 ## SCSCP vs RP
 
 <img src="SCSP_files/figure-gfm/scspvsrp-1.png" width="672" />
+
+## Fix temporaire
+
+<img src="SCSP_files/figure-gfm/unnamed-chunk-1-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/unnamed-chunk-2-1.png" width="672" />
+
+<img src="SCSP_files/figure-gfm/unnamed-chunk-3-1.png" width="672" />
+
+    ## Joining with `by = join_by(pid)`
+
+<img src="SCSP_files/figure-gfm/unnamed-chunk-4-1.png" width="672" />
+
+    ## Joining with `by = join_by(pid)`
+
+<img src="SCSP_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
+
+    ## Joining with `by = join_by(pid)`
+
+<img src="SCSP_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />

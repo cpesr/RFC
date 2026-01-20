@@ -36,3 +36,14 @@ dip %>%
   arrange(desc(Année.universitaire),CURSUS_LMD_R) %>%
   spoiler_table("Nb diplômés par année et LMD", trim = Inf)
 ```
+
+
+```{r, results='asis'}
+dip %>%
+  summarise(Nombre.de.diplômes.délivrés = sum(Nombre.de.diplômes.délivrés),
+            Nombre.de.diplômes.intermédiaires.délivrés = sum(Nombre.de.diplômes.intermédiaires.délivrés),
+            .by = c(Année.universitaire,CURSUS_LMD_R)) %>%
+  arrange(desc(Année.universitaire),CURSUS_LMD_R) %>%
+  filter(CURSUS_LMD_R %in% c("L","M","D")) %>%
+  ggplot(aes(x=Année.universitaire,y=Nombre.de.diplômes.délivrés,color=CURSUS_LMD_R, group=CURSUS_LMD_R)) + geom_line()
+```
