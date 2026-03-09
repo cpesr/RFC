@@ -1,7 +1,7 @@
 CPESR
 ================
 CPESR
-2024-06-10
+2026-03-09
 
 ## Données
 
@@ -37,6 +37,8 @@ Attention : les valeurs sont une moyenne imparfaite.
 ## Différents taux domaine
 
 <img src="insertion-pro-tes_files/figure-gfm/tdx.dom-1.png" width="672" />
+
+<img src="insertion-pro-tes_files/figure-gfm/tdx.dom.bis-1.png" width="672" />
 
 <img src="insertion-pro-tes_files/figure-gfm/tdx.dom2-1.png" width="672" />
 
@@ -87,7 +89,7 @@ sur le taux d’emploi salarié en France
 
     ## 
     ## <details>
-    ##   <summary> ipmn miss </summary>
+    ##   <summary> ipmn miss ( 14 lignes) </summary>
     ## 
     ## 
     ## 
@@ -103,33 +105,33 @@ sur le taux d’emploi salarié en France
     ## 
     ## </details>
 
-<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-2-1.png" width="672" />
-
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-3-1.png" width="672" />
 
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-4-1.png" width="672" />
 
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
 
-## Taux chômage
-
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
 
-<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />
-<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
+## Taux chômage
 
+<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />
+
+<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-9-1.png" width="672" />
 
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />
 
-## Apprentissage
+<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-11-1.png" width="672" />
 
-<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
+## Apprentissage
 
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-13-1.png" width="672" />
 
-### Alternance vs SCSP
-
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-14-1.png" width="672" />
 
+### Alternance vs SCSP
+
 <img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-15-1.png" width="672" />
+
+<img src="insertion-pro-tes_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />

@@ -178,6 +178,24 @@ ipmn %>%
   cpesr_cap()
 ```
 
+```{r tdx.dom.bis}
+ipmn %>%
+  filter(str_detect(Secteur.disciplinaire,"Ensemble")) %>% 
+  mutate(Ensemble=str_detect(Domaine,"Ensemble")) %>%
+  mutate(diff=Taux.d.emploi.salarié.en.France-Taux.d.insertion) %>%
+  pivot_taux() %>%
+  ggplot(aes(x=Indicateur,y=Valeur,fill=Indicateur, color=Ensemble)) +
+  geom_col(alpha=0.8) +
+  scale_x_discrete(name="") +
+  scale_y_continuous(labels = ~ scales::percent(.x/100), name="Taux") +
+  scale_color_manual(values=c("white","black"), guide=FALSE) +
+  facet_grid(.~Code.du.domaine) +
+  expand_limits(y=100) +
+  theme(axis.text.x = element_blank()) +
+  ggtitle("Comparaison des trois taux des diplômés de Master","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
+  cpesr_cap()
+```
+
 ```{r tdx.dom2}
 ipmn %>%
   filter(str_detect(Secteur.disciplinaire,"Ensemble")) %>% 
@@ -411,8 +429,33 @@ ipm %>%
 
 ## IP vs socio
 
+```{r, eval=FALSE}
+sise.socio <- vroom("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv", delim = ";", locale = locale(decimal_mark = ","), 
+        .name_repair = "universal",
+        col_select = c(rentree,Type.d.établissement,Etablissement,etablissement_id_paysage_actuel,Diplôme,Grande.discipline,Secteur.disciplinaire,sexe,bac,Série.de.baccalauréat,dn_de,ESPE...INSPE,Attractivité.internationale,cursus_lmd,niveau,Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,Nombre.total.d.étudiants.inscrits..inscriptions.principales.et.secondes..hors.étudiants.inscrits.en.parallèle.en.CPGE)) %>%
+    filter(rentree == max(rentree)) %>%
+    group_by(
+      Rentrée = rentree,
+      Diplôme,
+      Grande.discipline,
+      Secteur.disciplinaire,
+      Sexe = sexe,
+      Bac=bac,
+      Série.de.baccalauréat,
+      Attractivité.internationale,
+      LMD = factor(cursus_lmd, levels = c("L","M","D")),
+      Niveau = niveau #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
+    ) %>%
+    summarise(
+      Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE),
+      Inscriptions = sum(Nombre.total.d.étudiants.inscrits..inscriptions.principales.et.secondes..hors.étudiants.inscrits.en.parallèle.en.CPGE, na.rm = TRUE)) %>%
+    ungroup()
+
+save(sise.socio, file="sise_socio.RData")
+```
+
 ```{r}
-load("../SISE/sise_socio.RData")
+load("sise_socio.RData")
 
 sise.socio <- sise.socio %>%
   filter(
@@ -435,8 +478,8 @@ sise2taux <- function(variable, filtre, nomtaux) {
 }
 
 sise.taux <- full_join(
-  sise2taux("SEXE","F","Féminité"),
-  sise2taux("Bac","Baccalauréat général","BacGénéral") ) 
+  sise2taux("Sexe","F","Féminité"),
+  sise2taux("Série.de.baccalauréat","Baccalauréat général","BacGénéral") ) 
 
 ipmn.taux <- ipmn %>%
   left_join(sise.taux) 
