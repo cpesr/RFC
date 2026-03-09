@@ -111,6 +111,8 @@ Voir les données ( 19 lignes)
     ## ℹ Do you need to adjust the group aesthetic?
     ## `geom_line()`: Each group consists of only one observation.
     ## ℹ Do you need to adjust the group aesthetic?
+    ## `geom_line()`: Each group consists of only one observation.
+    ## ℹ Do you need to adjust the group aesthetic?
 
 <img src="LvsM_files/figure-gfm/l3m1.univ.decal-1.png" width="960" />
 

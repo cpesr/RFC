@@ -169,7 +169,7 @@ sise %>%
 ## Flux
 
 ```{r flux, cache = TRUE}
-sise %>%
+flux <- sise %>%
   filter(Niveau != "XX", LMD != "D") %>%
   group_by(Rentrée,LMD, Niveau = as.factor(paste0(LMD,substr(Niveau,2,2)))) %>%
   summarise(Etudiants = sum(Etudiants, na.rm = TRUE)) %>%
@@ -186,6 +186,8 @@ sise %>%
   ) +
   enter_drift(x_mod = -1) + exit_drift(x_mod = 1) +
   labs(title = 'Effectifs en Licence et Master en {closest_state}')
+
+animate(flux, start_pause = 20, end_pause = 20)
 ```
 
 
