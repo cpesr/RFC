@@ -7,6 +7,7 @@ output: github_document
 knitr::opts_chunk$set(echo = FALSE, fig.asp=9/16, fig.retina = 2)
 library(tidyverse)
 library(ggcpesrthemes)
+library(vroom)
 
 theme_set(theme_cpesr())
 theme_cpesr_setup(authors = "Julien Gossa", source="fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public")
@@ -15,7 +16,7 @@ theme_cpesr_setup(authors = "Julien Gossa", source="fr-esr-sise-effectifs-d-etud
 ```{r etl, eval=FALSE}
 
 read.sise.2019 <- function(file, rentrée.max = Inf) {
-  df <- read.csv2(file, dec=".", stringsAsFactors=TRUE) %>%
+  vroom(file, delim = ";", locale = locale(decimal_mark = ","), .name_repair = "universal") %>%
     filter(RENTREE < rentrée.max) %>%
     group_by(
       Rentrée = RENTREE,
@@ -25,25 +26,24 @@ read.sise.2019 <- function(file, rentrée.max = Inf) {
       Diplôme,
       Grande.discipline,
       Secteur.disciplinaire,
-      SEXE,
+      Sexe = SEXE,
       DN_DE,
       INSPE = (ETABLISSEMENT_TYPE == "ESPE"),
       Attractivité.internationale,
       LMD = factor(CURSUS_LMD, levels = c("L","M","D")),
-      NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
+      Niveau = NIVEAU #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
     ) %>%
     summarise(
       Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE),
       Inscriptions = sum(Nombre.total.d.étudiants.inscrits..inscriptions.principales.et.secondes..hors.étudiants.inscrits.en.parallèle.en.CPGE, na.rm = TRUE)) %>%
     ungroup()
-  return(df)
 }
 
 #df <- read.sise.2019("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.2019.csv")
 
 
-read.sise <- function(file, rentrée.max = Inf) {
-  read.csv2(file, dec=".", stringsAsFactors=TRUE) %>%
+read.sise.2024 <- function(file, rentrée.max = Inf) {
+  vroom(file, delim = ";", locale = locale(decimal_mark = ","), .name_repair = "universal") %>%
     filter(rentree < rentrée.max) %>%
     group_by(
       Rentrée = rentree,
@@ -67,6 +67,32 @@ read.sise <- function(file, rentrée.max = Inf) {
 }
 
 
+read.sise <- function(file, rentrée.max = Inf) {
+  #read.csv2(file, dec=".", stringsAsFactors=TRUE) %>%
+  vroom(file, delim = ";", locale = locale(decimal_mark = ","), 
+        .name_repair = "universal",
+        col_select = c(rentree,Type.d.établissement,Etablissement,etablissement_id_paysage_actuel,Diplôme,Grande.discipline,Secteur.disciplinaire,sexe,dn_de,ESPE...INSPE,Attractivité.internationale,cursus_lmd,niveau,Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,Nombre.total.d.étudiants.inscrits..inscriptions.principales.et.secondes..hors.étudiants.inscrits.en.parallèle.en.CPGE)) %>%
+    filter(rentree < rentrée.max) %>%
+    group_by(
+      Rentrée = rentree,
+      Type.d.établissement,
+      Etablissement,
+      pid = etablissement_id_paysage_actuel,
+      Diplôme,
+      Grande.discipline,
+      Secteur.disciplinaire,
+      Sexe = sexe,
+      DN_DE = dn_de,
+      INSPE = (ESPE...INSPE != ""),
+      Attractivité.internationale,
+      LMD = factor(cursus_lmd, levels = c("L","M","D")),
+      Niveau = niveau #= ifelse(DIPLOME == "LIC_PRO", "3", NIVEAU)
+    ) %>%
+    summarise(
+      Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE,na.rm = TRUE),
+      Inscriptions = sum(Nombre.total.d.étudiants.inscrits..inscriptions.principales.et.secondes..hors.étudiants.inscrits.en.parallèle.en.CPGE, na.rm = TRUE)) %>%
+    ungroup()
+}
 
 sise <- read.sise("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv")
 sise <- bind_rows(sise,
@@ -186,7 +212,7 @@ info.att %>%
 
 ```{r info.niveau, results='asis'}
 info.niveau <- info %>%
-  group_by(Rentrée,Niveau = paste(LMD,NIVEAU, sep="-")) %>%
+  group_by(Rentrée,Niveau = paste(LMD,Niveau, sep="-")) %>%
   summarise(Etudiants = sum(Etudiants)) 
 
 info.niveau %>% pivot_wider(names_from = Niveau, values_from = Etudiants) %>% spoiler_table()
@@ -209,24 +235,6 @@ stat <- read.csv2("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-ins
 bind_rows(
   stat %>%
     filter(Attention != "* Attention : doubles comptes, établissement-composante") %>%
-    group_by(Rentrée = rentree) %>%
-    summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE)) %>%
-    mutate(dataset = "Stat"), 
-  sise %>%
-    group_by(Rentrée) %>%
-    summarise(Etudiants = sum(Etudiants)) %>%
-    mutate(dataset = "SISE")
-) %>%
-  ggplot(aes(x=Rentrée,y=Etudiants,color=dataset)) +
-  geom_line() + geom_point() +
-  scale_x_continuous(breaks = seq(2000,2025))
-```
-
-```{r svss}
-stat <- read.csv2("../data/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp.csv")
-
-bind_rows(
-  stat %>%
     group_by(Rentrée = rentree) %>%
     summarise(Etudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.doubles.inscriptions.CPGE)) %>%
     mutate(dataset = "Stat"), 
