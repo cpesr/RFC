@@ -43,8 +43,10 @@ Poursuite d’étude
 <img src="PoursuiteDEtude_files/figure-gfm/pe.np-1.png" width="672" />
 
 <details>
+
 <summary>
-Voir les données
+
+Voir les données ( 14 lignes)
 </summary>
 
 | Session | Bac général | Bac professionnel | Bac technologique |
@@ -81,8 +83,10 @@ Voir les données
 <img src="PoursuiteDEtude_files/figure-gfm/pe.pivot.norm.fun-1.png" width="672" />
 
 <details>
+
 <summary>
-Voir les données
+
+Voir les données ( 28 lignes)
 </summary>
 
 | Session | Critère | Poursuites |      Part |     Evol |   PartEvol | Session17 | PartEvol17 |

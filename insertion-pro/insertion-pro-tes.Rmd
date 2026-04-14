@@ -184,14 +184,18 @@ ipmn %>%
   mutate(Ensemble=str_detect(Domaine,"Ensemble")) %>%
   mutate(diff=Taux.d.emploi.salarié.en.France-Taux.d.insertion) %>%
   pivot_taux() %>%
-  ggplot(aes(x=Indicateur,y=Valeur,fill=Indicateur, color=Ensemble)) +
+  mutate(Indicateur.short = factor(case_match(Indicateur,
+                                       "Taux d'insertion" ~ "TI",
+                                       "Taux d'emploi" ~ "TE",
+                                       .default = "TESF"), levels = c("TI","TE","TESF"))) %>%
+  ggplot(aes(x=Indicateur.short,y=Valeur,fill=Indicateur, color=Ensemble)) +
   geom_col(alpha=0.8) +
   scale_x_discrete(name="") +
   scale_y_continuous(labels = ~ scales::percent(.x/100), name="Taux") +
   scale_color_manual(values=c("white","black"), guide=FALSE) +
   facet_grid(.~Code.du.domaine) +
   expand_limits(y=100) +
-  theme(axis.text.x = element_blank()) +
+  #theme(axis.text.x = element_blank()) +
   ggtitle("Comparaison des trois taux des diplômés de Master","Diplômés de la session 2020, à 30 mois, hors Master d'enseignement") +
   cpesr_cap()
 ```

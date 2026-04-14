@@ -1,0 +1,136 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- url source
+
+```{r load}
+ps <- read.csv2("../data/fr-esr-parcoursup.csv", dec='.')
+psL <- ps %>% 
+  filter(Filière.de.formation.très.agrégée == "Licence") %>%
+  mutate(
+    Secteur = factor(case_when(
+      str_detect(Établissement, "Université") ~ "Université",
+      Statut.de.l.établissement.de.la.filière.de.formation..public..privé.. == "Public" ~ "Autre Public",
+      TRUE ~ "Privé"
+      ),
+      levels = c("Université", "Autre Public", "Privé")
+    ),
+    Sélectivité.officielle = Sélectivité,
+    Sélectivité.réelle = fct_recode(
+      cut(Taux.d.accès, breaks=c(0,50,90,100,Inf), right=FALSE, ordered_result=TRUE),
+      "100" = "[100,Inf)")
+  ) %>%
+  filter(!is.na(Taux.d.accès))
+```
+
+## Explorations
+
+```{r}
+psLs <- psL %>%
+  summarise(
+    Nombre.formations = n(),
+    Nombre.admis = sum(Effectif.total.des.candidats.ayant.accepté.la.proposition.de.l.établissement..admis.),
+    .by = c(Secteur,Sélectivité.officielle, Sélectivité.réelle)
+  ) %>% 
+  arrange(Secteur,Sélectivité.officielle, Sélectivité.réelle) 
+
+psLs %>%
+  ggplot(aes(x=Sélectivité.réelle,y=Nombre.admis, fill=Sélectivité.réelle)) + 
+  geom_col() +
+  facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
+  scale_fill_discrete(palette = "Paired") +
+  labs(
+    title = "Sélectivité des Licences",
+    x = "Sélectivité (Taux d'accès)",
+    y = "Nombre d'admis"
+  ) +
+  theme(legend.position = "None")
+```
+
+```{r}
+psLs %>%
+  ggplot(aes(x=Sélectivité.réelle,y=Nombre.formations, fill=Sélectivité.réelle)) + 
+  geom_col() +
+  facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
+  scale_fill_discrete(palette = "Paired") +
+  labs(
+    title = "Sélectivité des Licences",
+    x = "Sélectivité (Taux d'accès)",
+    y = "Nombre de formations") +
+  theme(legend.position = "None")
+```
+
+
+```{r}
+psLsb <- psL %>%
+  pivot_longer(Effectif.des.admis.néo.bacheliers.généraux:Effectif.des.autres.candidats.admis,
+               names_to = "Bac", values_to = "Admis") %>%
+  summarise(
+    Nombre.admis = sum(Admis),
+    .by = c(Secteur,Sélectivité.officielle, Sélectivité.réelle,Bac)
+  ) %>% 
+  mutate(Bac = factor(Bac,
+                      levels=c(
+                        "Effectif.des.admis.néo.bacheliers.généraux",
+                        "Effectif.des.admis.néo.bacheliers.technologiques",
+                        "Effectif.des.admis.néo.bacheliers.professionnels", 
+                        "Effectif.des.autres.candidats.admis"),
+                      labels = c("Néo-Général","Néo-Techno","Néo-Pro","Autre"))) %>%
+  arrange(Secteur,Sélectivité.officielle, Sélectivité.réelle, Bac) 
+
+psLsb %>%
+  ggplot(aes(y=Sélectivité.réelle,x=Nombre.admis, fill=Bac)) + 
+  geom_col(position="fill", alpha=0.7) +
+  facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
+  scale_fill_discrete(palette = "Set2") +
+  scale_x_continuous(labels=scales::percent) +
+  labs(
+    title = "Sélectivité des Licences",
+    y = "Sélectivité (Taux d'accès)",
+    x = "Part des admis"
+  ) 
+```
+
+```{r}
+psLsbo <- psL %>%
+  mutate(
+    Boursiers = Effectif.des.admis.néo.bacheliers * X..d.admis.néo.bacheliers.boursiers / 100,
+    Non.boursiers = Effectif.des.admis.néo.bacheliers - Boursiers
+  ) %>%
+  pivot_longer(Boursiers:Non.boursiers,
+               names_to = "Néobacheliers", values_to = "Admis") %>%
+  summarise(
+    Nombre.admis = sum(Admis),
+    .by = c(Secteur,Sélectivité.officielle, Sélectivité.réelle,Néobacheliers)
+  ) %>%
+  arrange(Secteur,Sélectivité.officielle, Sélectivité.réelle, Néobacheliers) 
+
+psLsbo %>%
+  ggplot(aes(y=Sélectivité.réelle,x=Nombre.admis, fill=Néobacheliers)) + 
+  geom_col(position="fill", alpha=0.7) +
+  facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
+  scale_fill_discrete(palette = "Set1") +
+  scale_x_continuous(labels=scales::percent) +
+  labs(
+    title = "Sélectivité des Licences",
+    y = "Sélectivité (Taux d'accès)",
+    x = "Part des néo-bacheliers admis"
+  ) 
+```
