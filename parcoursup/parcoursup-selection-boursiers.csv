@@ -1,0 +1,45 @@
+"";"Secteur";"Sélectivité.officielle";"Sélectivité.réelle";"Néobacheliers";"Nombre.admis"
+"1";"Université";"formation non sélective";"[0,50)";"Boursiers";10526,94
+"2";"Université";"formation non sélective";"[0,50)";"Non.boursiers";43147,06
+"3";"Université";"formation non sélective";"[50,90)";"Boursiers";9986,46
+"4";"Université";"formation non sélective";"[50,90)";"Non.boursiers";36306,54
+"5";"Université";"formation non sélective";"[90,100)";"Boursiers";4715,77
+"6";"Université";"formation non sélective";"[90,100)";"Non.boursiers";14102,23
+"7";"Université";"formation non sélective";"100";"Boursiers";9911,15
+"8";"Université";"formation non sélective";"100";"Non.boursiers";27767,85
+"9";"Université";"formation sélective";"[0,50)";"Boursiers";1231,81
+"10";"Université";"formation sélective";"[0,50)";"Non.boursiers";7237,19
+"11";"Université";"formation sélective";"[50,90)";"Boursiers";528,08
+"12";"Université";"formation sélective";"[50,90)";"Non.boursiers";2658,92
+"13";"Université";"formation sélective";"[90,100)";"Boursiers";19,96
+"14";"Université";"formation sélective";"[90,100)";"Non.boursiers";128,04
+"15";"Université";"formation sélective";"100";"Boursiers";58,07
+"16";"Université";"formation sélective";"100";"Non.boursiers";144,93
+"17";"Autre Public";"formation non sélective";"[0,50)";"Boursiers";222,62
+"18";"Autre Public";"formation non sélective";"[0,50)";"Non.boursiers";1141,38
+"19";"Autre Public";"formation non sélective";"[50,90)";"Boursiers";279,87
+"20";"Autre Public";"formation non sélective";"[50,90)";"Non.boursiers";1022,13
+"21";"Autre Public";"formation non sélective";"[90,100)";"Boursiers";186,67
+"22";"Autre Public";"formation non sélective";"[90,100)";"Non.boursiers";488,33
+"23";"Autre Public";"formation non sélective";"100";"Boursiers";344,72
+"24";"Autre Public";"formation non sélective";"100";"Non.boursiers";904,28
+"25";"Autre Public";"formation sélective";"[0,50)";"Boursiers";54,67
+"26";"Autre Public";"formation sélective";"[0,50)";"Non.boursiers";383,33
+"27";"Autre Public";"formation sélective";"[50,90)";"Boursiers";34,66
+"28";"Autre Public";"formation sélective";"[50,90)";"Non.boursiers";170,34
+"29";"Privé";"formation non sélective";"[0,50)";"Boursiers";57,19
+"30";"Privé";"formation non sélective";"[0,50)";"Non.boursiers";498,81
+"31";"Privé";"formation non sélective";"[50,90)";"Boursiers";105,75
+"32";"Privé";"formation non sélective";"[50,90)";"Non.boursiers";995,25
+"33";"Privé";"formation non sélective";"[90,100)";"Boursiers";44,84
+"34";"Privé";"formation non sélective";"[90,100)";"Non.boursiers";333,16
+"35";"Privé";"formation non sélective";"100";"Boursiers";347,17
+"36";"Privé";"formation non sélective";"100";"Non.boursiers";2425,83
+"37";"Privé";"formation sélective";"[0,50)";"Boursiers";92,18
+"38";"Privé";"formation sélective";"[0,50)";"Non.boursiers";1091,82
+"39";"Privé";"formation sélective";"[50,90)";"Boursiers";220,66
+"40";"Privé";"formation sélective";"[50,90)";"Non.boursiers";3144,34
+"41";"Privé";"formation sélective";"[90,100)";"Boursiers";15,63
+"42";"Privé";"formation sélective";"[90,100)";"Non.boursiers";327,37
+"43";"Privé";"formation sélective";"100";"Boursiers";3,04
+"44";"Privé";"formation sélective";"100";"Non.boursiers";36,96

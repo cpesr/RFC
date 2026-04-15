@@ -26,7 +26,7 @@ psL <- ps %>%
   filter(Filière.de.formation.très.agrégée == "Licence") %>%
   mutate(
     Secteur = factor(case_when(
-      str_detect(Établissement, "Université") ~ "Université",
+      str_detect(Établissement, "niversité") ~ "Université",
       Statut.de.l.établissement.de.la.filière.de.formation..public..privé.. == "Public" ~ "Autre Public",
       TRUE ~ "Privé"
       ),
@@ -133,4 +133,10 @@ psLsbo %>%
     y = "Sélectivité (Taux d'accès)",
     x = "Part des néo-bacheliers admis"
   ) 
+```
+
+```{r}
+write.csv2(psLs, "parcoursup-selection.csv")
+write.csv2(psLsb, "parcoursup-selection-bac.csv")
+write.csv2(psLsbo, "parcoursup-selection-boursiers.csv")
 ```

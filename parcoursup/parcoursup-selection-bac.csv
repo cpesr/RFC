@@ -1,0 +1,89 @@
+"";"Secteur";"Sélectivité.officielle";"Sélectivité.réelle";"Bac";"Nombre.admis"
+"1";"Université";"formation non sélective";"[0,50)";"Néo-Général";48814
+"2";"Université";"formation non sélective";"[0,50)";"Néo-Techno";3411
+"3";"Université";"formation non sélective";"[0,50)";"Néo-Pro";1449
+"4";"Université";"formation non sélective";"[0,50)";"Autre";16472
+"5";"Université";"formation non sélective";"[50,90)";"Néo-Général";40173
+"6";"Université";"formation non sélective";"[50,90)";"Néo-Techno";4557
+"7";"Université";"formation non sélective";"[50,90)";"Néo-Pro";1563
+"8";"Université";"formation non sélective";"[50,90)";"Autre";20114
+"9";"Université";"formation non sélective";"[90,100)";"Néo-Général";14297
+"10";"Université";"formation non sélective";"[90,100)";"Néo-Techno";3038
+"11";"Université";"formation non sélective";"[90,100)";"Néo-Pro";1483
+"12";"Université";"formation non sélective";"[90,100)";"Autre";17703
+"13";"Université";"formation non sélective";"100";"Néo-Général";28522
+"14";"Université";"formation non sélective";"100";"Néo-Techno";5662
+"15";"Université";"formation non sélective";"100";"Néo-Pro";3495
+"16";"Université";"formation non sélective";"100";"Autre";33766
+"17";"Université";"formation sélective";"[0,50)";"Néo-Général";8203
+"18";"Université";"formation sélective";"[0,50)";"Néo-Techno";218
+"19";"Université";"formation sélective";"[0,50)";"Néo-Pro";48
+"20";"Université";"formation sélective";"[0,50)";"Autre";2578
+"21";"Université";"formation sélective";"[50,90)";"Néo-Général";2990
+"22";"Université";"formation sélective";"[50,90)";"Néo-Techno";153
+"23";"Université";"formation sélective";"[50,90)";"Néo-Pro";44
+"24";"Université";"formation sélective";"[50,90)";"Autre";1491
+"25";"Université";"formation sélective";"[90,100)";"Néo-Général";135
+"26";"Université";"formation sélective";"[90,100)";"Néo-Techno";10
+"27";"Université";"formation sélective";"[90,100)";"Néo-Pro";3
+"28";"Université";"formation sélective";"[90,100)";"Autre";104
+"29";"Université";"formation sélective";"100";"Néo-Général";159
+"30";"Université";"formation sélective";"100";"Néo-Techno";22
+"31";"Université";"formation sélective";"100";"Néo-Pro";22
+"32";"Université";"formation sélective";"100";"Autre";116
+"33";"Autre Public";"formation non sélective";"[0,50)";"Néo-Général";1295
+"34";"Autre Public";"formation non sélective";"[0,50)";"Néo-Techno";54
+"35";"Autre Public";"formation non sélective";"[0,50)";"Néo-Pro";15
+"36";"Autre Public";"formation non sélective";"[0,50)";"Autre";298
+"37";"Autre Public";"formation non sélective";"[50,90)";"Néo-Général";1136
+"38";"Autre Public";"formation non sélective";"[50,90)";"Néo-Techno";128
+"39";"Autre Public";"formation non sélective";"[50,90)";"Néo-Pro";38
+"40";"Autre Public";"formation non sélective";"[50,90)";"Autre";644
+"41";"Autre Public";"formation non sélective";"[90,100)";"Néo-Général";463
+"42";"Autre Public";"formation non sélective";"[90,100)";"Néo-Techno";151
+"43";"Autre Public";"formation non sélective";"[90,100)";"Néo-Pro";61
+"44";"Autre Public";"formation non sélective";"[90,100)";"Autre";524
+"45";"Autre Public";"formation non sélective";"100";"Néo-Général";861
+"46";"Autre Public";"formation non sélective";"100";"Néo-Techno";202
+"47";"Autre Public";"formation non sélective";"100";"Néo-Pro";186
+"48";"Autre Public";"formation non sélective";"100";"Autre";1286
+"49";"Autre Public";"formation sélective";"[0,50)";"Néo-Général";431
+"50";"Autre Public";"formation sélective";"[0,50)";"Néo-Techno";0
+"51";"Autre Public";"formation sélective";"[0,50)";"Néo-Pro";7
+"52";"Autre Public";"formation sélective";"[0,50)";"Autre";96
+"53";"Autre Public";"formation sélective";"[50,90)";"Néo-Général";202
+"54";"Autre Public";"formation sélective";"[50,90)";"Néo-Techno";1
+"55";"Autre Public";"formation sélective";"[50,90)";"Néo-Pro";2
+"56";"Autre Public";"formation sélective";"[50,90)";"Autre";182
+"57";"Privé";"formation non sélective";"[0,50)";"Néo-Général";535
+"58";"Privé";"formation non sélective";"[0,50)";"Néo-Techno";16
+"59";"Privé";"formation non sélective";"[0,50)";"Néo-Pro";5
+"60";"Privé";"formation non sélective";"[0,50)";"Autre";73
+"61";"Privé";"formation non sélective";"[50,90)";"Néo-Général";961
+"62";"Privé";"formation non sélective";"[50,90)";"Néo-Techno";103
+"63";"Privé";"formation non sélective";"[50,90)";"Néo-Pro";37
+"64";"Privé";"formation non sélective";"[50,90)";"Autre";383
+"65";"Privé";"formation non sélective";"[90,100)";"Néo-Général";321
+"66";"Privé";"formation non sélective";"[90,100)";"Néo-Techno";45
+"67";"Privé";"formation non sélective";"[90,100)";"Néo-Pro";12
+"68";"Privé";"formation non sélective";"[90,100)";"Autre";190
+"69";"Privé";"formation non sélective";"100";"Néo-Général";2241
+"70";"Privé";"formation non sélective";"100";"Néo-Techno";370
+"71";"Privé";"formation non sélective";"100";"Néo-Pro";162
+"72";"Privé";"formation non sélective";"100";"Autre";1628
+"73";"Privé";"formation sélective";"[0,50)";"Néo-Général";1146
+"74";"Privé";"formation sélective";"[0,50)";"Néo-Techno";33
+"75";"Privé";"formation sélective";"[0,50)";"Néo-Pro";5
+"76";"Privé";"formation sélective";"[0,50)";"Autre";254
+"77";"Privé";"formation sélective";"[50,90)";"Néo-Général";3154
+"78";"Privé";"formation sélective";"[50,90)";"Néo-Techno";184
+"79";"Privé";"formation sélective";"[50,90)";"Néo-Pro";27
+"80";"Privé";"formation sélective";"[50,90)";"Autre";692
+"81";"Privé";"formation sélective";"[90,100)";"Néo-Général";310
+"82";"Privé";"formation sélective";"[90,100)";"Néo-Techno";28
+"83";"Privé";"formation sélective";"[90,100)";"Néo-Pro";5
+"84";"Privé";"formation sélective";"[90,100)";"Autre";92
+"85";"Privé";"formation sélective";"100";"Néo-Général";38
+"86";"Privé";"formation sélective";"100";"Néo-Techno";2
+"87";"Privé";"formation sélective";"100";"Néo-Pro";0
+"88";"Privé";"formation sélective";"100";"Autre";8

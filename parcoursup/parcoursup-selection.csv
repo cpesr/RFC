@@ -1,0 +1,23 @@
+"";"Secteur";"Sélectivité.officielle";"Sélectivité.réelle";"Nombre.formations";"Nombre.admis"
+"1";"Université";"formation non sélective";"[0,50)";434;70146
+"2";"Université";"formation non sélective";"[50,90)";472;66407
+"3";"Université";"formation non sélective";"[90,100)";393;36521
+"4";"Université";"formation non sélective";"100";829;71445
+"5";"Université";"formation sélective";"[0,50)";334;11047
+"6";"Université";"formation sélective";"[50,90)";166;4678
+"7";"Université";"formation sélective";"[90,100)";12;252
+"8";"Université";"formation sélective";"100";7;319
+"9";"Autre Public";"formation non sélective";"[0,50)";20;1662
+"10";"Autre Public";"formation non sélective";"[50,90)";15;1946
+"11";"Autre Public";"formation non sélective";"[90,100)";20;1199
+"12";"Autre Public";"formation non sélective";"100";72;2535
+"13";"Autre Public";"formation sélective";"[0,50)";14;534
+"14";"Autre Public";"formation sélective";"[50,90)";5;387
+"15";"Privé";"formation non sélective";"[0,50)";10;629
+"16";"Privé";"formation non sélective";"[50,90)";20;1484
+"17";"Privé";"formation non sélective";"[90,100)";22;568
+"18";"Privé";"formation non sélective";"100";97;4401
+"19";"Privé";"formation sélective";"[0,50)";23;1438
+"20";"Privé";"formation sélective";"[50,90)";62;4057
+"21";"Privé";"formation sélective";"[90,100)";20;435
+"22";"Privé";"formation sélective";"100";4;48
