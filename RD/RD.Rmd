@@ -1,0 +1,80 @@
+---
+title: "CPESR"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+```{r load}
+rdfrge <- read.csv("RD-fr-ge.csv", dec='.')
+rdevol <- read.csv("RD-evolution.csv", dec='.')
+```
+
+## Explorations
+
+```{r}
+rdfrge %>%
+  pivot_longer(-Année, values_to = "RDpPIB", names_to = "Pays") %>%
+  ggplot(aes(x=Année,y=RDpPIB,color=Pays)) + geom_line(size=1) + geom_point(size=2,shape=21,stroke=1.5, fill="white") +
+  scale_y_continuous(labels = ~ paste(.x,"%")) +
+  scale_color_brewer(palette="Dark2") +
+  labs(
+    title = "Dépense nationale de R&D en pourcentage de PIB",
+    subtitle = "France et Allemagne, entre 1996 et 2023",
+    y = "RD (% PIB)"
+  )
+```
+
+
+```{r}
+rdfrge %>%
+  pivot_longer(-Année, values_to = "RDpPIB", names_to = "Pays") %>%
+  ggplot(aes(x=Année,y=RDpPIB,color=Pays)) + geom_smooth(method="lm", se=FALSE) +
+  geom_point(size=2) +
+  scale_y_continuous(labels = ~ paste(.x,"%")) +
+  scale_color_brewer(palette="Dark2") +
+  labs(
+    title = "Dépense nationale de R&D en pourcentage de PIB",
+    subtitle = "France et Allemagne, entre 1996 et 2023",
+    y = "RD (% PIB)"
+  )
+```
+
+
+
+```{r}
+rdevol %>%
+  ggplot(aes(x=RD_evol.1996_2023,y=reorder(Pays,RD_evol.1996_2023), color=(RD_evol.1996_2023>0))) + 
+  
+  annotate(
+    "rect",
+    xmin = -Inf,
+    xmax = Inf,
+    ymin = which(order(rdevol$RD_evol.1996_2023) == which(rdevol$Pays == "France")) + 1.5,
+    ymax = which(order(rdevol$RD_evol.1996_2023) == which(rdevol$Pays == "France")) + 0.5,
+    fill = "grey90"
+  ) +
+  geom_segment(xend=0, size=1) +
+  geom_point(size=2) +
+  scale_x_continuous(labels = ~ sprintf("%+1.1f", .x), breaks = seq(-1,2,0.5)) +
+  labs(
+    title = "Evolution de la dépense nationale de R&D en pourcentage de PIB",
+    subtitle = "Entre 1996 et 2023",
+    x = "Différence 1996-2023 (en points de % PIB)",
+    y = NULL
+  ) +
+  theme(legend.position = "None")
+```
