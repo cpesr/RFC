@@ -37,7 +37,7 @@ Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
 
 Années de référence :
 
-- Indicateurs financiers : 2024
+- Indicateurs financiers : 2025
 - Effectifs enseignants : 2023
 - Effectifs étudiants : 2024
 

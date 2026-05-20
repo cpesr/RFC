@@ -155,7 +155,7 @@ Téléchargement : [csv]("fr-cpesr-scsp.csv") [xlsx]("fr-cpesr-scsp.xlsx")
 
 Années de référence : 
 
-- Indicateurs financiers : `r Rentrée.max.SCSP`
+- Indicateurs financiers : `r exercice`
 - Effectifs enseignants : `r Rentrée.max.EEC`
 - Effectifs étudiants : `r Rentrée.max.Etu`
 
