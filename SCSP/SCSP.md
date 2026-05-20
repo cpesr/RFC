@@ -32,8 +32,7 @@ Données ( 345 lignes)
 
 </details>
 
-Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
-[xlsx](%22fr-cpesr-scsp.xlsx%22)
+Téléchargement : [csv](fr-cpesr-scsp.csv) [xlsx](fr-cpesr-scsp.xlsx)
 
 Années de référence :
 
