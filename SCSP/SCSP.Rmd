@@ -21,15 +21,41 @@ library(kpiESR)
 ## Données 
 
 - https://github.com/cpesr/kpiESR
+- https://data.enseignementsup-recherche.gouv.fr/explore/assets/fr-esr-operateurs-indicateurs-financiers/
+- https://www.insee.fr/fr/statistiques/serie/001763852
 
+```{r IPC}
+ipc <- read.csv2("../data/IPC.csv", skip=3, dec=".") 
+```
 
 
 ```{r scsp, fig.asp=4/3, results='asis'}
+Rentrée.max.SCSP <- max(esr %>%
+  filter(!is.na(kpi.FIN.S.SCSP)) %>%
+  pull(Rentrée))
+
+Rentrée.max.EEC <- max(esr %>%
+  filter(!is.na(kpi.ENS.P.effectif)) %>%
+  pull(Rentrée))
+
+Rentrée.max.Etu <- max(esr %>%
+  filter(!is.na(kpi.ETU.P.effectif)) %>%
+  pull(Rentrée))
+
+
+Rentrée.max <- Rentrée.max.SCSP
+Rentrée.min <- 2014
+exercice <- Rentrée.max + 1
+
+ipc.val2015 <- ipc %>% filter(Période == paste0(exercice,"-09")) %>% pull(X) 
+
 rangs <- esr %>%
   filter(Rentrée > 2013, Groupe == "Universités et assimilés") %>%
   left_join(esr.etab) %>%
+  fill(kpi.ENS.P.effectif) %>%
   transmute(
     Rentrée,
+    Exercice = Rentrée + 1,
     Etablissement,
     Typologie,
     PerimEx,
@@ -40,30 +66,35 @@ rangs <- esr %>%
     SCSPRessources_Etu_HorsDoc = kpi.FIN.P.ressources / (kpi.ETU.S.cycle1_L+kpi.ETU.S.cycle2_M)
   ) %>%
   pivot_longer(starts_with("SCSP"), names_to = "Indicateur", values_to = "Valeur") %>%
-  filter(!is.na(Valeur)) %>%
-  arrange(Rentrée) %>%
+  filter(!is.na(Valeur)) %>% 
+  filter(Rentrée %in% c(Rentrée.min,Rentrée.max)) %>%
+  arrange(Rentrée) %>% 
   summarise(
     Valeur100 = last(Valeur) / first(Valeur) * 100,
     Valeur = last(Valeur),
+    Rentrée.référence = first(Rentrée),
+    Rentrée = last(Rentrée),
     .by = c(Etablissement, Typologie, PerimEx, Indicateur)
-  ) %>%
-  mutate(Rang = rank(-Valeur), Rang_Valeur100 = rank(-Valeur100)) %>%
-  mutate(Rang_Typologie = rank(-Valeur), .by=Typologie) %>%
+  ) %>% 
+  mutate(Valeur100 = ifelse(Rentrée.référence == Rentrée.min,Valeur100,NA)) %>%
+  mutate(Rang = rank(-Valeur), Rang_Valeur100 = rank(-Valeur100), .by=Indicateur) %>%
+  mutate(Rang_Typologie = rank(-Valeur), .by=c(Indicateur,Typologie)) %>%
   mutate(Indicateur = factor(Indicateur, 
     levels = c("SCSP","SCSP_EEC","SCSP_Etu","SCSP_Etu_HorsDoc","SCSPRessources_Etu_HorsDoc"),
     labels  = c("SCSP","SCSP/E-EC","SCSP/Etudiant","SCSP/Etudiant(hors doc.)","Ressources/Etudiant(hors doc.)"))) %>%
   mutate(PerimEx = factor(PerimEx,
     levels=c("","ISITE","IDEx"),
-    labels=c("NINI","ISITE","IDEx")))
+    labels=c("NINI","ISITE","IDEx"))) 
 
 write_csv(rangs,"fr-cpesr-scsp.csv")
-#xlsx::write.xlsx(rangs,"fr-cpesr-scsp.xlsx")
+writexl::write_xlsx(rangs,"fr-cpesr-scsp.xlsx")
 rangs %>% spoiler_table("Données")
 
-rangs <- rangs %>% 
-  filter(!Etablissement %in% 
-           c("Université Paris sciences et lettres", 
-             "Université Gustave Eiffel",
+rangs <- rangs %>%
+  filter(!Etablissement %in%
+           c("Université Paris sciences et lettres",
+             #"Université Gustave Eiffel",
+             "Université de Bretagne Occidentale",
              "Université de Guyane",
              "Université de La Réunion",
              "Université des Antilles",
@@ -100,17 +131,20 @@ rankplot <- function(ind) {
 diffplot <- function(ind) {
   df <- rangs %>% filter(Indicateur == ind) 
     
-  max <- max(df$Valeur100, na.rm = TRUE)
-  min <- max(df$Valeur100, na.rm = TRUE)
+  max <- max(df$Valeur100-100, na.rm = TRUE)
+  min <- max(df$Valeur100-100, na.rm = TRUE)
   
   df %>%
+  filter(!is.na(Valeur100)) %>%
   mutate(EtabRang = paste(Etablissement,"-",rank(-Valeur100))) %>%
-  ggplot(aes(y=reorder(EtabRang,Valeur100),x=Valeur100, fill=Valeur100)) +
+  mutate(Valeur100.y = Valeur100 - 100 ) %>%
+  ggplot(aes(y=reorder(EtabRang,Valeur100.y),x=Valeur100.y, fill=Valeur100.y)) +
   geom_col() + geom_point(color="black", shape=3) + 
   geom_text(aes(label=str_label(Valeur100)), hjust=1, x = max*1.2) +
-  geom_vline(xintercept = 100) +
+  geom_vline(xintercept = 0, color="white") +
+  geom_vline(xintercept = ipc.val2015-100) +
   expand_limits(x=max*1.15) +
-  scale_x_continuous(labels = ~ str_label(.x), name=paste(ind,"(valeur 100 pour 2014)")) +
+  scale_x_continuous(labels = ~ str_label(.x+100), name=paste(ind,"(valeur 100 pour 2014)")) +
   scale_y_discrete(name="") +
   scale_fill_distiller(palette = "RdBu", guide = FALSE, direction = 1) 
 }
@@ -119,32 +153,39 @@ diffplot <- function(ind) {
 
 Téléchargement : [csv]("fr-cpesr-scsp.csv") [xlsx]("fr-cpesr-scsp.xlsx")
 
+Années de référence : 
 
-Dans la suite, les données sont limitées aux établissements en France métropolitaine, sans Paris Sciences et Lettres, dont les indicateurs sont trop hors-norme.
+- Indicateurs financiers : `r Rentrée.max.SCSP`
+- Effectifs enseignants : `r Rentrée.max.EEC`
+- Effectifs étudiants : `r Rentrée.max.Etu`
+
+Dans la suite, les données sont limitées aux établissements en France métropolitaine, sans Paris Sciences et Lettres et Université de Bretagne Occidentale, dont les indicateurs sont trop hors-norme.
+
+Dans les représentations en valeur 100, une barre verticale indique l'inflation (ipc en valeur 2015, à `r ipc.val2015`)
 
 
 ## SCSP
 
 ```{r rank.scsp, fig.asp=4/3}
   rankplot("SCSP") +
-  ggtitle("Subvention pour charge de service public (SCSP)", subtitle = "2022-2023, en millions d'euros")
+  ggtitle("Subvention pour charge de service public (SCSP)", subtitle = paste("Exercice comptable",exercice,"en millions d'euros"))
 ```
 
 ```{r val100.scsp, fig.asp=4/3}
   diffplot("SCSP") +
-  ggtitle("Subvention pour charge de service public (SCSP)", subtitle = "2022-2023, en valeur 100 pour 2014")
+  ggtitle("Subvention pour charge de service public (SCSP)", subtitle = paste("Exercice comptable",exercice,"en valeur 100 pour 2014"))
 ```
 
 ## SCSP par E-EC
 
 ```{r rank.scsp_eec, fig.asp=4/3}
   rankplot("SCSP/E-EC") +
-  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = "2021-2022, en milliers d'euros")
+  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = paste("Exercice comptable",exercice,"en milliers d'euros"))
 ```
 
 ```{r val100.scsp_eec, fig.asp=4/3}
   diffplot("SCSP/E-EC") +
-  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = "2021-2022, en valeur 100 pour 2014")
+  ggtitle("Subvention pour charge de service public (SCSP) par enseignant et/ou chercheur", subtitle = paste("Exercice comptable",exercice,"en valeur 100 pour 2014"))
 ```
 
 
@@ -153,12 +194,12 @@ Dans la suite, les données sont limitées aux établissements en France métrop
 
 ```{r rank.scsp_etu, fig.asp=4/3}
   rankplot("SCSP/Etudiant") +
-  ggtitle("Subvention pour charge de service public (SCSP) par étudiant", subtitle = "2022-2023, en milliers d'euros")
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant", subtitle = paste("Exercice comptable",exercice,"en milliers d'euros"))
 ```
 
 ```{r val100.scsp_etu, fig.asp=4/3}
   diffplot("SCSP/Etudiant") +
-  ggtitle("Subvention pour charge de service public (SCSP) par étudiant", subtitle = "2022-2023, en valeur 100 pour 2014")
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant", subtitle = paste("Exercice comptable",exercice,"en valeur 100 pour 2014"))
 ```
 
 
@@ -169,12 +210,12 @@ Dans la suite, les données sont limitées aux établissements en France métrop
 
 ```{r rank.scsp_etuhd, fig.asp=4/3}
   rankplot("SCSP/Etudiant(hors doc.)") +
-  ggtitle("Subvention pour charge de service public (SCSP) par étudiant (hors doc.)", subtitle = "2022-2023, en milliers d'euros")
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant (hors doc.)", subtitle = paste("Exercice comptable",exercice,"en milliers d'euros"))
 ```
 
 ```{r val100.scsp_etuhd, fig.asp=4/3}
   diffplot("SCSP/Etudiant(hors doc.)") +
-  ggtitle("Subvention pour charge de service public (SCSP) par étudiant (hors doc.)", subtitle = "2022-2023, en valeur 100 pour 2014")
+  ggtitle("Subvention pour charge de service public (SCSP) par étudiant (hors doc.)", subtitle = paste("Exercice comptable",exercice,"en valeur 100 pour 2014"))
 ```
 
 
@@ -184,12 +225,12 @@ Dans la suite, les données sont limitées aux établissements en France métrop
 
 ```{r rank.scspres_etuhd, fig.asp=4/3}
   rankplot("Ressources/Etudiant(hors doc.)") +
-  ggtitle("Total des ressources par étudiant (hors doc.)", subtitle = "2022-2023, en milliers d'euros")
+  ggtitle("Total des ressources par étudiant (hors doc.)", subtitle = paste("Exercice comptable",exercice,"en milliers d'euros"))
 ```
 
 ```{r val100.scspres_etuhd, fig.asp=4/3}
   diffplot("Ressources/Etudiant(hors doc.)") +
-  ggtitle("Total des ressources par étudiant (hors doc.)", subtitle = "2022-2023, en valeur 100 pour 2014")
+  ggtitle("Total des ressources par étudiant (hors doc.)", subtitle = paste("Exercice comptable",exercice,"en valeur 100 pour 2014"))
 ```
 
 
@@ -242,58 +283,55 @@ rangs %>%
 
 ```{r rangs, fig.asp=4/2}
 l <- levels(rangs$Indicateur)
-l <- paste(rep(l,each=2),c("2022-2023","évolution"))
+l <- paste(rep(l,each=2),c(exercice,"évolution"))
 rangs %>%
   pivot_longer(starts_with("Valeur")) %>%
   mutate(Rang = rank(-value), .by = c(Indicateur,name)) %>%
   mutate(
-    name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
-    ff = recode(name,"2022-2023"="bold","évolution"="plain"),
+    name = recode(name,"Valeur"="2025","Valeur100"="évolution"),
+    #ff = recode(name,!!exercice:="bold","évolution"="plain"),
     Indicateur2 = factor(paste(Indicateur,name),levels = l)
     ) %>%
   ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=Rang)) +
   geom_point(size=6,shape=15) +
-  geom_text(aes(label=Rang,fontface=ff) , color="black", size=3.5) +
+  geom_text(aes(label=Rang) , color="black", size=3.5) +
   scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
   theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), 
         axis.title.x = element_blank(), axis.title.y = element_blank()) +
-  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014")
+  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = paste("Exercice comptable",exercice,"et évolution depuis 2014"))
 ```
 
 
 ```{r rangs.perimex, fig.asp=4/2}
-l <- levels(rangs$Indicateur)
-l <- paste(rep(l,each=2),c("2022-2023","évolution"))
 rangs %>%
   pivot_longer(starts_with("Valeur")) %>%
   mutate(Rang = rank(-value), .by = c(Indicateur,name,PerimEx)) %>%
   mutate(RangNorm = scales::rescale(Rang), .by = c(Indicateur,name,PerimEx)) %>%
   mutate(
-    name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
-    ff = recode(name,"2022-2023"="bold","évolution"="plain"),
+    name = recode(name,"Valeur"="2025","Valeur100"="évolution"),
+    #ff = recode(name,"2022-2023"="bold","évolution"="plain"),
     Indicateur2 = factor(paste(Indicateur,name),levels = l)
     ) %>%
   ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=RangNorm)) +
   geom_point(size=6,shape=15) +
-  geom_text(aes(label=Rang, fontface=ff), color="black", size=3.5) +
+  geom_text(aes(label=Rang), color="black", size=3.5) +
   scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
   facet_grid(PerimEx~., scales = "free_y", space = "free") +
   theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), 
         axis.title.x = element_blank(), axis.title.y = element_blank()) +
-  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014, par PérimEx")
+  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = paste("Exercice comptable",exercice,"et évolution depuis 2014, par PérimEx"))
 ```
 
 
 ```{r rangs.typo, fig.asp=4/2}
-l <- levels(rangs$Indicateur)
-l <- paste(rep(l,each=2),c("2022-2023","évolution"))
+
 rangs %>%
   pivot_longer(starts_with("Valeur")) %>%
   mutate(Rang = rank(-value), .by = c(Indicateur,name,Typologie)) %>%
   mutate(RangNorm = scales::rescale(Rang), .by = c(Indicateur,name,Typologie)) %>%
   mutate(
-    name = recode(name,"Valeur"="2022-2023","Valeur100"="évolution"),
-    ff = recode(name,"2022-2023"="bold","évolution"="plain"),
+    name = recode(name,"Valeur"="2025","Valeur100"="évolution"),
+    #ff = recode(name,"2022-2023"="bold","évolution"="plain"),
     Indicateur2 = factor(paste(Indicateur,name),levels = l)
     ) %>%
   mutate(Typologie=recode(Typologie,
@@ -303,12 +341,12 @@ rangs %>%
     )) %>%
   ggplot(aes(x=Indicateur2,y=reorder(Etablissement, value, FUN=max),color=RangNorm)) +
   geom_point(size=6,shape=15) +
-  geom_text(aes(label=Rang, fontface=ff), color="black", size=3.5) +
+  geom_text(aes(label=Rang), color="black", size=3.5) +
   scale_color_distiller(palette = "RdBu", guide = FALSE, direction = -1) +
   facet_grid(Typologie~., scales = "free_y", space = "free") +
   theme(axis.text.x = element_text(angle=35,hjust=1,vjust=1), 
         axis.title.x = element_blank(), axis.title.y = element_blank()) +
-  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = "Année 2022-2023 et évolution depuis 2014, par typologie")
+  ggtitle("Classement des universités selon différents indicateurs SCSP", subtitle = paste("Exercice comptable",exercice,"et évolution depuis 2014, par typologie"))
 ```
 
 
@@ -396,7 +434,8 @@ kpiESR::esr.pnl %>%
 ### Autres indicateurs
 
 ```{r fdr}
-fin <- read.csv2("../data/fr-esr-operateurs-indicateurs-financiers.csv", dec='.')
+fin <- read.csv2("../data/fr-esr-operateurs-indicateurs-financiers.csv", dec='.') %>%
+  rename(Etablissement = Nom.Etablissement)
 
 fin %>% 
   filter(str_detect(Etablissement, "niversité")) %>% 
@@ -471,7 +510,7 @@ fin %>%
 ```{r}
   fin <- read.csv2("../data/fr-esr-operateurs-indicateurs-financiers.csv", na.strings="", dec=".") %>%
     mutate(
-      Etablissement,
+      Etablissement = Nom.Etablissement,
       pid = id...paysage,
       exercice,
       Charges.de.personnel = case_when(

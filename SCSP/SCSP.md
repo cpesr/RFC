@@ -1,11 +1,13 @@
 SCSP
 ================
 CPESR
-2026-01-20
+2026-05-20
 
 ## Données
 
 - <https://github.com/cpesr/kpiESR>
+- <https://data.enseignementsup-recherche.gouv.fr/explore/assets/fr-esr-operateurs-indicateurs-financiers/>
+- <https://www.insee.fr/fr/statistiques/serie/001763852>
 
 <!-- -->
 
@@ -16,26 +18,35 @@ CPESR
 
 <summary>
 
-Données ( 323 lignes)
+Données ( 345 lignes)
 </summary>
 
-| Etablissement | Typologie | PerimEx | Indicateur | Valeur100 | Valeur | Rang | Rang_Valeur100 | Rang_Typologie |
-|:---|:---|:---|:---|---:|---:|---:|---:|---:|
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP | 113.6303 | 5.568901e+08 | 1 | 156 | 1 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/E-EC | 105.1323 | 1.285856e+05 | 120 | 256 | 62 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant | 103.9392 | 8.352934e+03 | 225 | 269 | 113 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant(hors doc.) | 103.1288 | 8.702496e+03 | 212 | 277 | 105 |
-| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | Ressources/Etudiant(hors doc.) | 108.9842 | 1.133521e+04 | 166 | 196 | 81 |
-| Avignon Université | Université pluridisciplinaire hors santé | NINI | SCSP | 121.3840 | 5.664792e+07 | 62 | 79 | 15 |
+| Etablissement | Typologie | PerimEx | Indicateur | Valeur100 | Valeur | Rentrée.référence | Rentrée | Rang | Rang_Valeur100 | Rang_Typologie |
+|:---|:---|:---|:---|---:|---:|---:|---:|---:|---:|---:|
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP | 113.6303 | 5.568901e+08 | 2014 | 2024 | 1 | 49 | 1 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/E-EC | 104.0723 | 1.272892e+05 | 2014 | 2024 | 55 | 47 | 29 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant | 103.9392 | 8.352934e+03 | 2014 | 2024 | 21 | 38 | 10 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | SCSP/Etudiant(hors doc.) | 103.1288 | 8.702496e+03 | 2014 | 2024 | 17 | 36 | 8 |
+| Aix-Marseille Université | Université pluridisciplinaire avec santé | IDEx | Ressources/Etudiant(hors doc.) | 108.9842 | 1.133521e+04 | 2014 | 2024 | 22 | 38 | 11 |
+| Avignon Université | Université pluridisciplinaire hors santé | NINI | SCSP | 121.3840 | 5.664792e+07 | 2014 | 2024 | 62 | 15 | 15 |
 
 </details>
 
 Téléchargement : [csv](%22fr-cpesr-scsp.csv%22)
 [xlsx](%22fr-cpesr-scsp.xlsx%22)
 
+Années de référence :
+
+- Indicateurs financiers : 2024
+- Effectifs enseignants : 2023
+- Effectifs étudiants : 2024
+
 Dans la suite, les données sont limitées aux établissements en France
-métropolitaine, sans Paris Sciences et Lettres, dont les indicateurs
-sont trop hors-norme.
+métropolitaine, sans Paris Sciences et Lettres et Université de Bretagne
+Occidentale, dont les indicateurs sont trop hors-norme.
+
+Dans les représentations en valeur 100, une barre verticale indique
+l’inflation (ipc en valeur 2015, à 119.81)
 
 ## SCSP
 
@@ -77,11 +88,6 @@ sont trop hors-norme.
 <img src="SCSP_files/figure-gfm/cmp.typo-1.png" width="672" />
 
 <img src="SCSP_files/figure-gfm/cmp.perimex-1.png" width="672" />
-
-    ## Warning: Groups with fewer than two datapoints have been dropped.
-    ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
-    ## Groups with fewer than two datapoints have been dropped.
-    ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
 
 <img src="SCSP_files/figure-gfm/cmp.perimex.typo-1.png" width="672" />
 
