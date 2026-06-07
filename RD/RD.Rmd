@@ -78,3 +78,35 @@ rdevol %>%
   ) +
   theme(legend.position = "None")
 ```
+
+
+
+
+## Corporation
+
+```{r}
+rdcorp <- read.csv("scrapper/rd-expenses-annual.csv")
+
+rdcorp %>%
+  filter(annual_year == 2025) %>%
+  arrange(desc(annual_billion)) %>%
+  head(10) %>%
+  add_row(ticker="FRA", company_name="MIRES", country="France", annual_year=2025, annual_billion=35.21) %>%
+  arrange(desc(annual_billion)) %>%
+  mutate(country = factor(country, levels = unique(country))) %>%
+  head(11) %>%
+  ggplot(aes(x=annual_billion,y=reorder(company_name,annual_billion),fill=country)) +
+  geom_col() +
+  geom_text(aes(label = paste(round(annual_billion), "Md$")), hjust = 0, nudge_x = 0.5) +
+  scale_fill_brewer(palette = "Set2", direction=-1) +
+  expand_limits(x=120) +
+  coord_cartesian(clip = "off") +
+  labs(
+    title = "Dépenses R&D d'entreprises vs. MIRES",
+    x = "Dépense (Md$)",
+    y = NULL, 
+    fill = "Pays") +
+  theme(legend.position = "inside", legend.position.inside = c(0.85, 0.3))
+  
+
+```
