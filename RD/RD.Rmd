@@ -107,6 +107,53 @@ rdcorp %>%
     y = NULL, 
     fill = "Pays") +
   theme(legend.position = "inside", legend.position.inside = c(0.85, 0.3))
-  
+```
 
+
+```{r}
+top <- rdcorp %>%
+  filter(annual_year == 2025) %>%
+  arrange(desc(annual_billion)) %>%
+  head(5) %>%
+  pull(ticker)
+
+
+dirda <- read.csv2("insee/dirda.csv")
+
+rd <- rdcorp %>%
+  filter(ticker %in% top) %>%
+  bind_rows(
+    dirda %>%
+      transmute(
+        ticker = "DIRDA",
+        company_name = "DIRDA",
+        country = "France",
+        annual_year = Année,
+        annual_billion = DIRDA * 1.15
+      ) %>%
+      filter(annual_year>2010) %>%
+      add_row(annual_year = 2024) %>%
+      add_row(annual_year = 2025) %>%
+      fill(everything(), .direction = "down")      
+  )
+
+labels <- rd %>%
+  arrange(annual_year) %>%
+  group_by(ticker) %>%
+  slice_tail(n=1)
+
+rd %>%
+  ggplot(aes(x=annual_year, y=annual_billion, color=country, group=ticker)) + 
+  geom_line(size = 1) +
+  ggrepel::geom_text_repel(data=labels, aes(label=company_name), color="black", direction="y", nudge_x = 0.2, hjust=0) +
+  expand_limits(x=2027.5) +
+  scale_color_brewer(palette="Set1") +
+  labs(
+    title = "Dépenses R&D des GAFAMS et des administrations françaises",
+    subtitle = "DIRDA = dépense intérieure de R&D des administrations françaises",
+    x = "Année",
+    y = "Dépense de R&D (Md$)",
+    color = NULL
+  ) +
+  theme(legend.position = "None")
 ```

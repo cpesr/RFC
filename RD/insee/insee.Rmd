@@ -1,0 +1,56 @@
+---
+title: "DIRDA INSEE"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://www.insee.fr/fr/statistiques/3281637?sommaire=3281778&q=D%C3%A9penses+de+recherche
+- https://www.insee.fr/fr/statistiques/2830613#tableau-figure1
+
+```{r pib}
+pib <- readxl::read_xlsx("econ-gen-pib-composante.xlsx", sheet = 2, skip = 3) %>%
+  filter(Indicateur == "Produit intérieur brut (PIB)") %>%
+  pivot_longer(-Indicateur, names_to = "Année", values_to = "PIB") %>%
+  select(-Indicateur) %>%
+  mutate(Année = as.numeric(Année))
+
+```
+
+```{r load}
+dird <- readxl::read_xlsx("Effort-recherche_tableaux_2024.xlsx", sheet = 2, skip = 2) 
+
+dirda <- dird %>%
+  head(34) %>%
+  transmute(
+    Année = as.numeric(str_sub(...1,1,4)),
+    DIRD_PIB = `DIRD/PIB  France`,
+    DIRDE_PIB = `DIRDE/PIB France`
+  ) %>%
+  left_join(pib) %>%
+  mutate(
+    DIRD = DIRD_PIB * PIB / 100,
+    DIRDE = DIRDE_PIB * PIB / 100,
+    DIRDA = DIRD - DIRDE
+  )
+```
+
+## Save
+
+```{r}
+write.csv2(dirda, file="dirda.csv", row.names = FALSE)
+```
+
