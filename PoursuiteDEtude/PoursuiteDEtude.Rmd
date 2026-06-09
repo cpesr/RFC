@@ -800,6 +800,7 @@ iut %>%
 
 
 ```{r iut3}
+last_Session <- max(iut$Session)
 poursuites_iut <- cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
   iut %>%
     ggplot(aes(x=Session,y=val100,color=Série,group=Série)) +
@@ -814,7 +815,7 @@ poursuites_iut <- cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
     filter(Session == last(Session)) %>%
     ggplot(aes(x=Série,y=diff,fill=Série)) +
     geom_col() + geom_hline(yintercept = 0) +
-    ylab("Différence 2018-2023") +
+    ylab(paste0("Différence 2018-",last_Session)) +
     ggtitle("Différence", subtitle = "2018-2023") +
     theme(legend.position = "None")
 )

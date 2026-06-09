@@ -120,22 +120,35 @@ top <- rdcorp %>%
 
 dirda <- read.csv2("insee/dirda.csv")
 
+rd.dirda <- dirda %>%
+  transmute(
+    ticker = "DIRDA",
+    company_name = "DIRDA",
+    country = "France",
+    annual_year = Année,
+    annual_billion = DIRDA * 1.15
+  ) %>%
+  filter(annual_year>2010) %>%
+  add_row(annual_year = 2024) %>%
+  add_row(annual_year = 2025) %>%
+  fill(everything(), .direction = "down")      
+
+rd.dird <- dirda %>%
+  transmute(
+    ticker = "DIRD",
+    company_name = "DIRD",
+    country = "France",
+    annual_year = Année,
+    annual_billion = DIRD * 1.15
+  ) %>%
+  filter(annual_year>2010) %>%
+  add_row(annual_year = 2024) %>%
+  add_row(annual_year = 2025) %>%
+  fill(everything(), .direction = "down")      
+
 rd <- rdcorp %>%
   filter(ticker %in% top) %>%
-  bind_rows(
-    dirda %>%
-      transmute(
-        ticker = "DIRDA",
-        company_name = "DIRDA",
-        country = "France",
-        annual_year = Année,
-        annual_billion = DIRDA * 1.15
-      ) %>%
-      filter(annual_year>2010) %>%
-      add_row(annual_year = 2024) %>%
-      add_row(annual_year = 2025) %>%
-      fill(everything(), .direction = "down")      
-  )
+  bind_rows(rd.dird,rd.dirda)
 
 labels <- rd %>%
   arrange(annual_year) %>%
@@ -150,7 +163,7 @@ rd %>%
   scale_color_brewer(palette="Set1") +
   labs(
     title = "Dépenses R&D des GAFAMS et des administrations françaises",
-    subtitle = "DIRDA = dépense intérieure de R&D des administrations françaises",
+    subtitle = "DIRD = dépense intérieure de R&D en France - DIRDA = DIRD des administrations",
     x = "Année",
     y = "Dépense de R&D (Md$)",
     color = NULL

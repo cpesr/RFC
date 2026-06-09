@@ -4,30 +4,30 @@ Poursuite d’étude
 <https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-taux-poursuite-enseignement-superieur-par-academie/>
 
     ##  [1] "Session"                                                                                                                                           
-    ##  [2] "Série.du.bac"                                                                                                                                      
-    ##  [3] "Genre"                                                                                                                                             
-    ##  [4] "Bacheliers"                                                                                                                                        
-    ##  [5] "Néo.bacheliers.poursuivant.à.l.université..hors.IUT..dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                       
-    ##  [6] "Néo.bacheliers.poursuivant.à.l.université..hors.IUT..dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                             
-    ##  [7] "Néo.bacheliers.poursuivant.en.IUT.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                                          
-    ##  [8] "Néo.bacheliers.poursuivant.en.IUT.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                                                
-    ##  [9] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.privé.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                  
-    ## [10] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.privé.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                        
-    ## [11] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.public.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                 
-    ## [12] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.public.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                       
-    ## [13] "Néo.bacheliers.poursuivant.en.STS..secteur.non.renseigné..dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                  
-    ## [14] "Néo.bacheliers.poursuivant.en.STS..secteur.non.renseigné..dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                        
-    ## [15] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.privé.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                    
-    ## [16] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.privé.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                          
-    ## [17] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.public.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                   
-    ## [18] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.public.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                         
-    ## [19] "Néo.bacheliers.poursuivant.dans.une.autre.formation..secteur.non.renseigné..dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"
-    ## [20] "Néo.bacheliers.poursuivant.dans.une.autre.formation..secteur.non.renseigné..dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"      
-    ## [21] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.privé.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"       
-    ## [22] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.privé.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"             
-    ## [23] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.public.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"      
-    ## [24] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.public.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"            
-    ## [25] "Académie.du.Bac"                                                                                                                                   
+    ##  [2] "Académie.du.Bac"                                                                                                                                   
+    ##  [3] "Série.du.bac"                                                                                                                                      
+    ##  [4] "Genre"                                                                                                                                             
+    ##  [5] "Bacheliers"                                                                                                                                        
+    ##  [6] "Néo.bacheliers.poursuivant.à.l.université..hors.IUT..dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                       
+    ##  [7] "Néo.bacheliers.poursuivant.à.l.université..hors.IUT..dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                             
+    ##  [8] "Néo.bacheliers.poursuivant.en.IUT.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                                          
+    ##  [9] "Néo.bacheliers.poursuivant.en.IUT.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                                                
+    ## [10] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.privé.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                  
+    ## [11] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.privé.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                        
+    ## [12] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.public.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                 
+    ## [13] "Néo.bacheliers.poursuivant.dans.une.CPGE.du.secteur.public.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                       
+    ## [14] "Néo.bacheliers.poursuivant.en.STS..secteur.non.renseigné..dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                  
+    ## [15] "Néo.bacheliers.poursuivant.en.STS..secteur.non.renseigné..dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                        
+    ## [16] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.privé.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                    
+    ## [17] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.privé.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                          
+    ## [18] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.public.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"                   
+    ## [19] "Néo.bacheliers.poursuivant.en.STS.dans.le.secteur.public.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"                         
+    ## [20] "Néo.bacheliers.poursuivant.dans.une.autre.formation..secteur.non.renseigné..dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"
+    ## [21] "Néo.bacheliers.poursuivant.dans.une.autre.formation..secteur.non.renseigné..dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"      
+    ## [22] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.privé.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"       
+    ## [23] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.privé.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"             
+    ## [24] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.public.dans.une.académie.différente.de.celle.d.obtention.de.leur.baccalauréat"      
+    ## [25] "Néo.bacheliers.poursuivant.dans.une.autre.formation.du.secteur.public.dans.la.même.académie.que.celle.d.obtention.de.leur.baccalauréat"            
     ## [26] "Code.académie.du.Bac"                                                                                                                              
     ## [27] "Code.Paysage.structure.de.l.académie"                                                                                                              
     ## [28] "Poursuivants"                                                                                                                                      
@@ -46,7 +46,7 @@ Poursuite d’étude
 
 <summary>
 
-Voir les données ( 14 lignes)
+Voir les données ( 15 lignes)
 </summary>
 
 | Session | Bac général | Bac professionnel | Bac technologique |
@@ -86,7 +86,7 @@ Voir les données ( 14 lignes)
 
 <summary>
 
-Voir les données ( 28 lignes)
+Voir les données ( 30 lignes)
 </summary>
 
 | Session | Critère | Poursuites |      Part |     Evol |   PartEvol | Session17 | PartEvol17 |
@@ -105,6 +105,7 @@ Voir les données ( 28 lignes)
 | 2021    | Public  |  404.80501 | 0.8299570 | 125.7230 | -0.0527298 | 2021      |  0.0002636 |
 | 2022    | Public  |  397.63300 | 0.7607726 | 123.4956 | -0.1219143 | 2022      | -6.9181820 |
 | 2023    | Public  |  405.43099 | 0.7614714 | 125.9175 | -0.1212154 | 2023      | -6.8482945 |
+| 2024    | Public  |  413.43500 | 0.7634008 | 128.4033 | -0.1192860 | 2024      | -6.6553542 |
 | 2010    | Privé   |   42.79283 | 0.1173131 | 100.0000 |  0.0000000 | 2010      | -5.2732477 |
 | 2011    | Privé   |   53.50500 | 0.1401388 | 125.0326 |  0.0228257 | 2011      | -2.9906799 |
 | 2012    | Privé   |   62.08700 | 0.1518261 | 145.0874 |  0.0345130 | 2012      | -1.8219525 |
@@ -119,6 +120,7 @@ Voir les données ( 28 lignes)
 | 2021    | Privé   |   82.93712 | 0.1700430 | 193.8108 |  0.0527298 | 2021      | -0.0002636 |
 | 2022    | Privé   |  125.03700 | 0.2392274 | 292.1915 |  0.1219143 | 2022      |  6.9181820 |
 | 2023    | Privé   |  126.99999 | 0.2385286 | 296.7787 |  0.1212154 | 2023      |  6.8482945 |
+| 2024    | Privé   |  128.13500 | 0.2365992 | 299.4310 |  0.1192860 | 2024      |  6.6553542 |
 
 </details>
 
@@ -156,23 +158,23 @@ Voir les données ( 28 lignes)
 
     ## # A tibble: 15 × 5
     ## # Groups:   Série, Filière [15]
-    ##    Session Série   Filière    Poursuites    Diff
-    ##    <chr>   <fct>   <fct>           <dbl>   <dbl>
-    ##  1 2023    Gen.    Université    186986  14601. 
-    ##  2 2023    Gen.    IUT            25676  -6231  
-    ##  3 2023    Gen.    CPGE           37608. -2190. 
-    ##  4 2023    Gen.    STS            35831.  7496. 
-    ##  5 2023    Gen.    Autre          57782. 20104. 
-    ##  6 2023    Techno. Université     19445  -4707. 
-    ##  7 2023    Techno. IUT            19393   4682  
-    ##  8 2023    Techno. CPGE            2576.   158. 
-    ##  9 2023    Techno. STS            53240.   -17.0
-    ## 10 2023    Techno. Autre          14309.  7337. 
-    ## 11 2023    Pro.    Université      7316  -3917. 
-    ## 12 2023    Pro.    IUT              687    -77  
-    ## 13 2023    Pro.    CPGE             116.    29.0
-    ## 14 2023    Pro.    STS            66135. 11418. 
-    ## 15 2023    Pro.    Autre           5331.  3590.
+    ##    Session Série   Filière    Poursuites   Diff
+    ##    <chr>   <fct>   <fct>           <dbl>  <dbl>
+    ##  1 2024    Gen.    Université    189029. 16644.
+    ##  2 2024    Gen.    IUT            25375. -6532.
+    ##  3 2024    Gen.    CPGE           39164.  -634.
+    ##  4 2024    Gen.    STS            33669.  5334.
+    ##  5 2024    Gen.    Autre          60549. 22871.
+    ##  6 2024    Techno. Université     20460  -3692.
+    ##  7 2024    Techno. IUT            20758   6047 
+    ##  8 2024    Techno. CPGE            2866.   448.
+    ##  9 2024    Techno. STS            52857.  -400.
+    ## 10 2024    Techno. Autre          15655.  8683.
+    ## 11 2024    Pro.    Université      7748  -3485.
+    ## 12 2024    Pro.    IUT              672    -92 
+    ## 13 2024    Pro.    CPGE             222.   135.
+    ## 14 2024    Pro.    STS            66603. 11886.
+    ## 15 2024    Pro.    Autre           5943.  4202.
 
 <img src="PoursuiteDEtude_files/figure-gfm/diflux-1.png" width="672" />
 
