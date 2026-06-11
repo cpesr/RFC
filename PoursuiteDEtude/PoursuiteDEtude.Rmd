@@ -807,7 +807,7 @@ poursuites_iut <- cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
     geom_vline(xintercept = "2020") +
     geom_line(size=1) + geom_point(shape=21, fill="white", size=2, stroke=1.5) +
     ylab("Admissions en IUT (valeur 100 en 2018)") +
-    ggtitle("Admissions post-bac en IUT en fonction des Série du Bac", subtitle = "2020 marque la transition du DUT au BUT") +
+    ggtitle("Admissions post-bac en IUT par Série du Bac", subtitle = "2020 marque la transition du DUT au BUT") +
     cpesr_cap(),
 
   iut %>%

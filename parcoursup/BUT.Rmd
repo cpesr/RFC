@@ -148,7 +148,7 @@ iut.admis %>%
   scale_x_continuous(breaks = c(2020))
 ```
 
-```{r, fig.asp=8/16}
+```{r, fig.asp=9/16}
 iut.admis %>%
   mutate(Filière = factor(Filière, levels = indice.BGBT.Filière$Filière)) %>%
   summarize(
@@ -163,7 +163,9 @@ iut.admis %>%
   scale_x_continuous(breaks = c(2020)) +
   expand_limits(y=0) +
   theme(axis.text.y = element_blank(), 
-        panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank()) 
+        panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank()) +
+  labs(title = "Admissions Parcoursup des néobachelier⋅es généraux et technologiques",
+       y="Admissions")
   
 ```
 
@@ -207,7 +209,9 @@ iut.admis %>%
   geom_point(data = ~ slice_tail(.x,n=1, by = c(Admis,EtabFil)), size=2) +
   facet_wrap(~EtabFil, scales="free_y", nrow=2) +
   scale_size_continuous(range=c(0.4,1), guide = NULL) +
-  scale_x_continuous(breaks = c(2020))
+  scale_x_continuous(breaks = c(2020)) +
+  labs(title = "Admissions Parcoursup des néobachelier⋅es généraux et technologiques",
+       y="Admissions")
 
 ```
 
