@@ -1,0 +1,213 @@
+---
+title: "IUT DUT/BUT"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+
+load("ps.RData")
+```
+
+## Données 
+
+```{r load}
+iut <- ps %>% filter(Filière.de.formation.très.agrégée == "DUT_BUT") %>%
+  mutate(Filière = coalesce(Filière.de.formation.détaillée.1, Filière.de.formation.détaillée.bis, Filière.de.formation.détaillée)) %>%
+  filter(Session >= 2018)
+
+iut %>%
+  summarise(across(
+    c(Filière.de.formation.très.agrégée, Filière,
+      Effectif.des.admis.néo.bacheliers,
+      Effectif.des.admis.néo.bacheliers.généraux,
+      Effectif.des.admis.néo.bacheliers.technologiques,
+      Effectif.des.admis.néo.bacheliers.professionnels,
+      Effectif.des.autres.candidats.admis),
+    ~ sum(!is.na(.x))), .by=Session)
+```
+
+## Check
+
+```{r, fig.asp=16/9}
+iut %>%
+  summarise(nb=n(), .by=c(Session,Filière)) %>% 
+  ggplot(aes(x=Session,y=Filière,color=nb)) + geom_point()
+```
+
+```{r, fig.asp=3/4}
+iut <- iut %>%
+  mutate(Filière = case_when(
+    str_detect(Filière,"de commercialisation") ~ "TC",
+    str_detect(Filière,"formation communication") ~ "IC",
+    str_detect(Filière,"génie des matériaux") ~ "SGM",
+    str_detect(Filière,"informatique décisionnelle|données") ~ "STID",
+    str_detect(Filière,"Réseaux et télécom") ~ "RT",
+    str_detect(Filière,"Qualité, logistique") ~ "QLIO",
+    str_detect(Filière,"Packaging") ~ "PEC",
+    str_detect(Filière,"multimédia") ~ "MMI",
+    str_detect(Filière,"thermique|Transition") ~ "MTEE",
+    str_detect(Filière,"Mesures physiques") ~ "MP",
+    str_detect(Filière,"énie biologique") ~ "GB",
+    str_detect(Filière,"arrières sociales") ~ "CS",
+    str_detect(Filière,"arrières juridiques") ~ "CJ",
+    str_detect(Filière,"ransport") ~ "MLT",
+    str_detect(Filière,"énie civil") ~ "GC",
+    str_detect(Filière,"administrative et commerciale") ~ "GECO",
+    str_detect(Filière,"mécanique et productique") ~ "GMP",
+    str_detect(Filière,"entreprises et des administrations") ~ "GEA",
+    str_detect(Filière,"électrique") ~ "GEII",
+    str_detect(Filière,"procédés") ~ "GCGP",
+    str_detect(Filière,"industriel") ~ "GIM",
+    str_detect(Filière,"Sécurité") ~ "HSE",
+    str_detect(Filière,"Informatique") ~ "Info",
+    .default = Filière
+  )) 
+
+iut %>%
+  summarise(nb=n(), .by=c(Session,Filière)) %>% 
+  ggplot(aes(x=Session,y=Filière,color=nb)) + geom_point()
+```
+
+# admis
+
+```{r}
+iut.admis <- iut %>%
+  pivot_longer(
+    c(Effectif.des.admis.néo.bacheliers.généraux,
+      Effectif.des.admis.néo.bacheliers.technologiques,
+      Effectif.des.admis.néo.bacheliers.professionnels,
+      Effectif.des.autres.candidats.admis),
+    names_to = "Admis", values_to = "Effectifs") %>%
+  mutate(Admis = factor(Admis,
+                        levels = c("Effectif.des.admis.néo.bacheliers.généraux",
+                                   "Effectif.des.admis.néo.bacheliers.technologiques",
+                                   "Effectif.des.admis.néo.bacheliers.professionnels",
+                                   "Effectif.des.autres.candidats.admis"),
+                        labels = c("Néobac généraux", 
+                                   "Néobac techno", 
+                                   "Néobac pro", 
+                                   "Autres"))) %>%
+  filter(!is.na(Effectifs)) %>%
+  summarize(Effectifs = sum(Effectifs),
+            .by=c(Session,Établissement,Filière, Admis, Taux.d.accès))
+
+```
+## Explorations
+
+```{r}
+iut.admis %>%
+  summarize(Effectifs = sum(Effectifs), .by=c(Session, Admis)) %>%
+  ggplot(aes(x=Session,y=Effectifs,color=Admis)) + geom_line(size=1)
+```
+
+
+```{r}
+iut.admis %>%
+  summarize(Effectifs = sum(Effectifs), .by=c(Session, Admis)) %>%
+  mutate(val100 = Effectifs / first(Effectifs) * 100, .by=Admis) %>%
+  ggplot(aes(x=Session,y=val100,color=Admis)) + geom_line(size=1)
+```
+
+## Substitution BT/BG
+
+```{r, fig.asp=4/3}
+indice.BGBT.Filière <- iut %>%
+  summarize(BG = sum(Effectif.des.admis.néo.bacheliers.généraux, na.rm = TRUE), 
+            BT = sum(Effectif.des.admis.néo.bacheliers.technologiques, na.rm = TRUE), 
+            admis = sum(admis, na.rm = TRUE),
+            .by=c(Session, Filière)) %>%
+  arrange(Session) %>%
+  mutate(diff = BG/admis-BT/admis) %>% 
+  summarise(BGBT = last(diff) - first(diff), 
+            diff = (last(BG) - last(BT))/last(admis),
+            .by = c(Filière)) %>%
+  arrange(diff)
+```
+
+
+```{r, fig.asp=4/3}
+iut.admis %>%
+  mutate(Filière = factor(Filière, levels = indice.BGBT.Filière$Filière)) %>%
+  summarize(
+    Effectifs = sum(Effectifs),
+    .by=c(Session, Admis, Filière)) %>%
+  mutate(val100 = Effectifs / first(Effectifs) * 100, .by=Admis) %>% 
+  ggplot(aes(x=Session,y=Effectifs,color=Admis,size=Admis)) + geom_line() +
+  facet_wrap(~Filière, scales="free_y") +
+  scale_size_manual(values=c(0.6,0.6,0.2,0.2)) +
+  scale_x_continuous(breaks = c(2020))
+```
+
+```{r, fig.asp=8/16}
+iut.admis %>%
+  mutate(Filière = factor(Filière, levels = indice.BGBT.Filière$Filière)) %>%
+  summarize(
+    Effectifs = sum(Effectifs),
+    .by=c(Session, Admis, Filière)) %>%
+  filter(Admis %in% c("Néobac généraux","Néobac techno")) %>%
+  ggplot(aes(x=Session,y=Effectifs,color=Admis,size=Session)) + 
+  geom_line() + 
+  geom_point(data = ~ slice_tail(.x,n=1, by = c(Admis,Filière)), size=1) +
+  facet_wrap(~Filière, scales="free_y", nrow=2) +
+  scale_size_continuous(range=c(0.4,0.8), guide=NULL) +
+  scale_x_continuous(breaks = c(2020)) +
+  expand_limits(y=0) +
+  theme(axis.text.y = element_blank(), 
+        panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank()) 
+  
+```
+
+
+
+```{r, fig.asp=4/3}
+pasteEbabFil <- function(e,f) {
+  paste(gsub("(?: - )?(?:Site|Antenne).*$","",e), f, sep="\n")
+}
+
+indice.BGBT.Filière <- iut %>%
+  summarize(BG = sum(Effectif.des.admis.néo.bacheliers.généraux, na.rm = TRUE), 
+            BT = sum(Effectif.des.admis.néo.bacheliers.technologiques, na.rm = TRUE), 
+            admis = sum(admis, na.rm = TRUE),
+            .by=c(Session, Établissement, Filière)) %>%
+  arrange(Session) %>%
+  mutate(diff = BG/admis-BT/admis) %>% 
+  summarise(BGBT = last(diff) - first(diff), 
+            .by = c(Établissement, Filière)) %>%
+  arrange(BGBT)
+
+indice.BGBT.Filière.top <- bind_rows(
+  indice.BGBT.Filière %>% head(4),
+  indice.BGBT.Filière %>% tail(4)) %>%
+  mutate(EtabFil = pasteEbabFil(Établissement, Filière))
+```
+
+
+```{r, fig.asp=9/16}
+iut.admis %>%
+  mutate(EtabFil = pasteEbabFil(Établissement, Filière)) %>%
+  filter(EtabFil %in% indice.BGBT.Filière.top$EtabFil) %>%
+  filter(Admis %in% c("Néobac généraux","Néobac techno")) %>%
+  mutate(EtabFil = factor(EtabFil, levels = indice.BGBT.Filière.top$EtabFil)) %>%
+  summarize(
+    Effectifs = sum(Effectifs),
+    .by=c(Session, Admis, EtabFil)) %>%
+  mutate(val100 = Effectifs / first(Effectifs) * 100, .by=Admis) %>% 
+  ggplot(aes(x=Session,y=Effectifs,color=Admis,size=Session)) + 
+  geom_line() +
+  geom_point(data = ~ slice_tail(.x,n=1, by = c(Admis,EtabFil)), size=2) +
+  facet_wrap(~EtabFil, scales="free_y", nrow=2) +
+  scale_size_continuous(range=c(0.4,1), guide = NULL) +
+  scale_x_continuous(breaks = c(2020))
+
+```
+

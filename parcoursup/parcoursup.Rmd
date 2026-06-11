@@ -28,81 +28,7 @@ spoilerTable <- function(df) {
 
 ## Données 
 
-- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/information/
-- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup_2020/information/
-- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2019/information/
-- https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup-2018/information/
 
-```{r load, results='asis', eval=FALSE}
-apb.raw <- read.csv2("../data/fr-esr-apb_voeux-et-admissions.csv", na.strings = c("inconnu","ns"), dec=".") 
-apb <- apb.raw %>% 
-  transmute(
-    Session = Session,
-    Code.UAI.de.l.établissement = Code.UAI.de.l.établissement.d.accueil,
-    Établissement = Libellé.de.l.établissement.d.accueil,
-    Code.départemental.de.l.établissement = as.character(Code.département), 
-    Département.de.l.établissement = Départements, 
-    Région.de.l.établissement = Régions,
-    Académie.de.l.établissement = Académies, 
-    
-    Filière.de.formation.très.agrégée = case_when(
-      Filières.très.agrégées == "Autre" ~ "Autre formation",
-      Filières.très.agrégées == "7_Management" ~ "Ecole de Commerce",
-      Filières.très.agrégées == "8_Ingénieur" ~ "Ecole d'Ingénieur",
-      TRUE ~ str_sub(Filières.très.agrégées,3,50)),
-    Filière.de.formation = Filières.de.formations,
-    Filière.de.formation.détaillée = Filières.de.formations.très.détaillées,
-    
-    Capacité.de.l.établissement.par.formation = Capacité.de.l.établissement.par.formation,
-    Effectif.total.des.candidats.pour.une.formation = Effectif.total.des.candidats,
-    Rang.du.dernier.appelé = Rang.du.dernier.candidat.appelé,
-    Effectif.total.des.candidats.ayant.reçu.une.proposition.d.admission.de.la.part.de.l.établissement = Candidats.ayant.reçu.une.proposition,
-    Effectif.total.des.candidats.ayant.accepté.la.proposition.de.l.établissement..admis. = Effectif.total.des.candidats.admis
-    )
-
-ps18 <- read.csv2("../data/fr-esr-parcoursup-2018.csv",dec='.')
-ps19 <- read.csv2("../data/fr-esr-parcoursup-2019.csv",dec='.')
-
-ps20 <- read.csv2("../data/fr-esr-parcoursup-2020-xls.csv",dec=',') %>%
-  select(-X..d.admis.néo.bacheliers.issus.du.même.établissement..BTS.CPGE.)
-
-ps21 <- read.csv2("../data/fr-esr-parcoursup_2021.csv",dec='.') 
-
-ps22 <- read.csv2("../data/fr-esr-parcoursup-2022.csv",dec='.')
-
-ps23 <- read.csv2("../data/fr-esr-parcoursup-2023.csv",dec='.')
-
-
-ps <- bind_rows(apb,ps18,ps19,ps20,ps21,ps22,ps23) %>%
-  mutate(Filière.de.formation.très.agrégée = fct_recode(
-    factor(Filière.de.formation.très.agrégée),
-    DUT_BUT = "DUT",
-    DUT_BUT = "BUT",
-  )) %>%
-  rename(
-    places = Capacité.de.l.établissement.par.formation,
-    candidats = Effectif.total.des.candidats.pour.une.formation,
-    propositions = Effectif.total.des.candidats.ayant.reçu.une.proposition.d.admission.de.la.part.de.l.établissement,
-    admis = Effectif.total.des.candidats.ayant.accepté.la.proposition.de.l.établissement..admis.
-    ) %>%
-  mutate(rdda = ifelse(is.na(Rang.du.dernier.appelé),Rang.du.dernier.appelé.du.groupe.1,Rang.du.dernier.appelé)) %>%
-  mutate(Taux.sélection = rdda / candidats) %>%
-  mutate(
-    taux.accès = coalesce(
-      Taux.d.accès,
-      Taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.nombre.vœux.PP.,
-      Indicateur.Parcoursup.du.taux.d.accès.des.candidats.ayant.postulé.à.la.formation..ratio.entre.le.dernier.appelé.et.le.dernier.classé.) / 100,
-    Sélectivité = cut(Taux.sélection, 
-                      breaks = c(0,0.05,0.10,0.20,0.50,0.80,0.90,0.95,1.00,1000)),
-    Accessibilité = cut(taux.accès, 
-                        breaks = c(0,0.20,0.50,0.80,1.00,1.01),
-                        include.lowest = TRUE, right=FALSE),
-    taille = cut(admis,
-                 breaks=c(0,35,70,140,280,100000))
-  )
-
-save(ps, file="ps.RData")
-```
 
 ```{r load.data, results='asis'}
 load("ps.RData")
@@ -155,12 +81,14 @@ licence %>%
 
 ```{r licsec.ts}
 licence %>%
-  ggplot(aes(x=Taux.sélection)) +
+  mutate(Session = as.character(Session)) %>%
+  ggplot(aes(x=Taux.sélection, color=Session, group=Session)) +
   stat_ecdf() +
   xlim(0,1) +
   scale_x_continuous(limits = c(0,1), labels = scales::percent) +
-  facet_wrap(.~Session) +
-  ggtitle("Fonction de distribution cumulative des taux de sélection en Licence")
+  scale_color_brewer(palette = "RdBu") +
+  ggtitle("Fonction de distribution cumulative des taux de sélection en Licence") +
+  theme(legend.position = "right")
 ```
 
 
@@ -226,9 +154,9 @@ licence %>%
 ```{r tda.fil}
 licence %>% 
   filter(!is.na(taux.accès)) %>%
-  group_by(Accessibilité,Filière.de.formation) %>% 
+  group_by(Accessibilité,Filière.de.formation.très.agrégée) %>% 
   summarise(nb.Licences = n()) %>%
-  ggplot(aes(x=Filière.de.formation,y=nb.Licences,fill=Accessibilité)) +
+  ggplot(aes(x=Filière.de.formation.très.agrégée,y=nb.Licences,fill=Accessibilité)) +
     geom_col() +
     scale_fill_brewer(palette = "Purples",direction=-1) +
   coord_flip()
@@ -296,7 +224,7 @@ licence %>%
 ### Taille formation
 
 ```{r taille}
-session.palette <- RColorBrewer::brewer.pal(9,"RdBu")[c(1,3,5:9)]
+session.palette <- RColorBrewer::brewer.pal(10,"RdBu")[c(1:10)]
 licence %>% 
   filter(!is.na(taille)) %>%
   group_by(Session, taille) %>% 
@@ -352,71 +280,8 @@ ps %>%
 ```
 
 
-### Droit eco gestion
-
-```{r deg.admis}
-ps %>% 
-  filter(Filière.de.formation.très.agrégée == "Licence") %>%
-  filter(Filière.de.formation.détaillée %in% c("Droit","Economie","Economie et gestion")) %>%
-  group_by(Session, Filière = Filière.de.formation.détaillée) %>%
-  summarise(Admis = sum(admis)) %>% 
-  na.omit() %>%
-  ggplot(aes(x=Session, y=Admis, group=Filière, color=Filière)) +
-  geom_line() + geom_point() + 
-  expand_limits(y=0) +
-  theme_cpesr()
-```
 
 
-```{r deg.tda}
-ps %>% 
-  filter(Session >= 2020) %>%
-  mutate(Session = as.character(Session)) %>%
-  filter(Filière.de.formation.très.agrégée == "Licence") %>%
-  filter(Filière.de.formation.détaillée %in% c("Droit","Economie","Economie et gestion")) %>%
-  ggplot(aes(x=Session, y=taux.accès, fill=Filière.de.formation.détaillée, group=Session)) +
-  geom_boxplot() +
-  expand_limits(y=0) + 
-  facet_wrap(Filière.de.formation.détaillée~.) +
-  theme_cpesr()
-```
 
 
-```{r deg.tda.taille}
-ps %>% 
-  filter(Session >= 2021) %>%
-  mutate(Session = as.character(Session)) %>%
-  filter(Filière.de.formation.très.agrégée == "Licence") %>%
-  filter(Filière.de.formation.détaillée %in% c("Droit","Economie","Economie et gestion")) %>%
-  ggplot(aes(x=admis, y=taux.accès, color=Filière.de.formation.détaillée)) +
-  geom_point() +
-  expand_limits(y=0) + 
-  theme_cpesr()
-```
 
-
-```{r staps.tda}
-ps %>% 
-  filter(Session == 2022) %>%
-  filter(Filière.de.formation.très.agrégée == "Licence") %>%
-  mutate(admis.tot = sum(admis), .by = Filière.de.formation.détaillée) %>%
-  filter(admis.tot > 5000) %>%
-  ggplot(aes(x=taux.accès, y=reorder(Filière.de.formation.détaillée,-taux.accès))) +
-  geom_boxplot() +
-  expand_limits(x=0) + 
-  theme_cpesr()
-```
-
-
-```{r staps.tda.bac}
-ps %>% 
-  filter(Session == 2022) %>%
-  filter(Filière.de.formation.très.agrégée == "Licence") %>%
-  filter(Filière.de.formation.détaillée== "Sciences et Techniques des Activités Physiques et Sportives") %>%
-  select(Code.UAI.de.l.établissement, Filière.de.formation.très.détaillée, starts_with("Dont.taux.d.accès")) %>%
-  pivot_longer(starts_with("Dont.taux.d.accès")) %>%
-  ggplot(aes(x=value, y=reorder(name,-value))) +
-  geom_boxplot() +
-  expand_limits(x=0) + 
-  theme_cpesr()
-```
