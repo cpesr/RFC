@@ -1,7 +1,7 @@
 IUT DUT/BUT
 ================
 CPESR
-2026-06-11
+2026-06-18
 
 ## Données
 
@@ -78,3 +78,59 @@ CPESR
 <img src="BUT_files/figure-gfm/unnamed-chunk-8-1.png" width="672" />
 
 <img src="BUT_files/figure-gfm/unnamed-chunk-10-1.png" width="672" />
+
+## Places vs. Admis
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-11-1.png" width="672" />
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-12-1.png" width="672" />
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-13-1.png" width="672" />
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-14-1.png" width="672" />
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-15-1.png" width="672" />
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-16-1.png" width="672" />
+
+## Taux féminité
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-17-1.png" width="672" />
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-18-1.png" width="672" />
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-19-1.png" width="672" />
+
+## Taux même académie
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-20-1.png" width="672" />
+
+## Taux boursiers
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-21-1.png" width="672" />
+
+### Taux rétension
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 7 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 7 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-22-1.png" width="672" />
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-23-1.png" width="672" />
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 7 rows containing non-finite outside the scale range
+    ## (`stat_smooth()`).
+
+    ## Warning: Removed 7 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+<img src="BUT_files/figure-gfm/unnamed-chunk-24-1.png" width="672" />

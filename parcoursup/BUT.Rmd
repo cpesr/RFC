@@ -155,11 +155,12 @@ iut.admis %>%
     Effectifs = sum(Effectifs),
     .by=c(Session, Admis, Filière)) %>%
   filter(Admis %in% c("Néobac généraux","Néobac techno")) %>%
-  ggplot(aes(x=Session,y=Effectifs,color=Admis,size=Session)) + 
+  ggplot(aes(x=Session,y=Effectifs,color=Admis,size=Session,alpha=Session)) + 
   geom_line() + 
   geom_point(data = ~ slice_tail(.x,n=1, by = c(Admis,Filière)), size=1) +
   facet_wrap(~Filière, scales="free_y", nrow=2) +
-  scale_size_continuous(range=c(0.4,0.8), guide=NULL) +
+  scale_size_continuous(range=c(0.8,0.8), guide=NULL) +
+  scale_alpha_continuous(range=c(0.4,1), guide=NULL) +
   scale_x_continuous(breaks = c(2020)) +
   expand_limits(y=0) +
   theme(axis.text.y = element_blank(), 
@@ -204,14 +205,202 @@ iut.admis %>%
     Effectifs = sum(Effectifs),
     .by=c(Session, Admis, EtabFil)) %>%
   mutate(val100 = Effectifs / first(Effectifs) * 100, .by=Admis) %>% 
-  ggplot(aes(x=Session,y=Effectifs,color=Admis,size=Session)) + 
+  ggplot(aes(x=Session,y=Effectifs,color=Admis,size=Session,alpha=Session)) + 
   geom_line() +
   geom_point(data = ~ slice_tail(.x,n=1, by = c(Admis,EtabFil)), size=2) +
   facet_wrap(~EtabFil, scales="free_y", nrow=2) +
-  scale_size_continuous(range=c(0.4,1), guide = NULL) +
+  scale_size_continuous(range=c(0.8,0.8), guide=NULL) +
+  scale_alpha_continuous(range=c(0.4,1), guide=NULL) +
   scale_x_continuous(breaks = c(2020)) +
   labs(title = "Admissions Parcoursup des néobachelier⋅es généraux et technologiques",
        y="Admissions")
 
 ```
 
+
+
+## Places vs. Admis
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    places = sum(places), 
+    admis = sum(admis),
+    admis.PP = sum(Effectif.des.admis.en.phase.principale),
+    admis.PC = sum(Effectif.des.admis.en.phase.complémentaire),
+    .by=Session) %>%
+  pivot_longer(c(places,admis, admis.PP), values_to = "effectif", names_to = "indicateur") %>%
+  ggplot(aes(x=Session,y=effectif,color=indicateur)) + geom_line()
+```
+
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    places = sum(places), 
+    admis = sum(admis),
+    admis.PP = sum(Effectif.des.admis.en.phase.principale),
+    admis.PC = sum(Effectif.des.admis.en.phase.complémentaire),
+    .by=c(Session,Filière)) %>%
+  pivot_longer(c(places,admis, admis.PP), values_to = "effectif", names_to = "indicateur") %>%
+  ggplot(aes(x=Session,y=effectif,color=indicateur)) + geom_line() +
+  facet_wrap(.~Filière, scales="free_y")
+```
+
+
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    classés.BG = sum(Effectif.des.candidats.néo.bacheliers.généraux.classés.par.l.établissement),
+    classés.BT = sum(Effectif.des.candidats.néo.bacheliers.technologiques.classés.par.l.établissement),
+    classés.BP = sum(Effectif.des.candidats.néo.bacheliers.professionnels.classés.par.l.établissement),
+    .by=Session) %>%
+  pivot_longer(c(classés.BG, classés.BT, classés.BP), values_to = "effectif", names_to = "indicateur") %>%
+  ggplot(aes(x=Session,y=effectif,color=indicateur)) + geom_line()
+```
+
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    classés.BG = sum(Effectif.des.candidats.néo.bacheliers.généraux.classés.par.l.établissement),
+    classés.BT = sum(Effectif.des.candidats.néo.bacheliers.technologiques.classés.par.l.établissement),
+    classés.BP = sum(Effectif.des.candidats.néo.bacheliers.professionnels.classés.par.l.établissement),
+    .by=c(Session,Filière)) %>%
+  pivot_longer(c(classés.BG, classés.BT, classés.BP), values_to = "effectif", names_to = "indicateur") %>%
+  ggplot(aes(x=Session,y=effectif,color=indicateur)) + geom_line() +
+  facet_wrap(.~Filière, scales="free_y")
+```
+
+
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    mention.BG = sum(Effectif.des.admis.néo.bacheliers.généraux.ayant.eu.une.mention.au.bac),
+    mention.BT = sum(Effectif.des.admis.néo.bacheliers.technologiques.ayant.eu.une.mention.au.bac),
+    mention.BP = sum(Effectif.des.admis.néo.bacheliers.professionnels.ayant.eu.une.mention.au.bac),
+    .by=Session) %>%
+  pivot_longer(c(mention.BG,mention.BT,mention.BP), values_to = "effectif", names_to = "indicateur") %>%
+  ggplot(aes(x=Session,y=effectif,color=indicateur)) + geom_line()
+```
+
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    mention.BG = sum(Effectif.des.admis.néo.bacheliers.généraux.ayant.eu.une.mention.au.bac),
+    mention.BT = sum(Effectif.des.admis.néo.bacheliers.technologiques.ayant.eu.une.mention.au.bac),
+    mention.BP = sum(Effectif.des.admis.néo.bacheliers.professionnels.ayant.eu.une.mention.au.bac),
+    .by=c(Session,Filière)) %>%
+  pivot_longer(c(mention.BG,mention.BT,mention.BP), values_to = "effectif", names_to = "indicateur") %>%
+  ggplot(aes(x=Session,y=effectif,color=indicateur)) + geom_line() +
+  facet_wrap(.~Filière, scales="free_y")
+```
+
+
+## Taux féminité
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    Taux.féminité = sum(Dont.effectif.des.candidates.admises) / sum(admis),
+    .by=c(Session,Filière)) %>%
+  arrange(Taux.féminité) %>% 
+  mutate(Filière = factor(Filière,levels=unique(Filière))) %>%
+  ggplot(aes(x=Session,y=Taux.féminité, color=Taux.féminité)) + 
+  geom_line() +
+  facet_wrap(.~Filière, scales="free_y") +
+  scale_x_continuous(breaks = c(2020)) +
+  scale_y_continuous(breaks = range, labels = ~ scales::percent(.x, accuracy = 1)) +
+  scale_color_distiller(palette="RdBu", limits=c(0,1))
+```
+
+```{r}
+iut.fem <- iut %>%
+  summarise(
+    Admises = sum(Dont.effectif.des.candidates.admises),
+    .by=c(Session,Filière)) %>%
+  arrange(Session) %>%
+  summarise(
+    Admises.diff = last(Admises) - first(Admises),
+    .by=c(Filière) ) 
+
+bind_rows(iut.fem, iut.fem %>% summarise(Admises.diff = sum(Admises.diff), Filière = "Total")) %>% 
+  ggplot(aes(x=reorder(Filière,Admises.diff),y=Admises.diff)) + geom_col() +
+  theme(axis.text.x = element_text(angle=90))
+```
+
+
+```{r}
+iut.gen <- iut %>%
+  summarise(
+    Admis = sum(admis - Dont.effectif.des.candidates.admises),
+    Admises = sum(Dont.effectif.des.candidates.admises),
+    .by=c(Session,Filière)) %>%
+  pivot_longer(c(Admis,Admises), values_to = "Admissions", names_to = "Genre") %>%
+  arrange(Session) %>%
+  summarise(
+    Admissions.diff = last(Admissions) - first(Admissions),
+    .by=c(Filière,Genre) ) 
+
+bind_rows(iut.gen, iut.gen %>% summarise(Admissions.diff = sum(Admissions.diff), .by=Genre, Filière = "Total")) %>% 
+  ggplot(aes(x=reorder(Filière,Admissions.diff),y=Admissions.diff,fill=Genre)) + geom_col() +
+  theme(axis.text.x = element_text(angle=90))
+```
+
+## Taux même académie
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    Taux.meme_academie = sum(Dont.effectif.des.admis.issus.de.la.même.académie) / sum(admis),
+    .by=c(Session,Filière)) %>%
+  ggplot(aes(x=Session,y=Taux.meme_academie)) + geom_line() + facet_wrap(.~Filière, scales="free_y") +
+  scale_x_continuous(breaks = c(2020)) +
+  scale_y_continuous(breaks = range, labels = ~ scales::percent(.x, accuracy = 1))
+```
+
+
+## Taux boursiers
+
+```{r, fig.asp=9/16}
+iut %>%
+  summarise(
+    Taux.boursiers = sum(Dont.effectif.des.admis.boursiers.néo.bacheliers) / sum(admis),
+    .by=c(Session,Filière)) %>%
+  ggplot(aes(x=Session,y=Taux.boursiers)) + geom_line() + facet_wrap(.~Filière, scales="free_y") +
+  scale_x_continuous(breaks = c(2020)) +
+  scale_y_continuous(breaks = range, labels = ~ scales::percent(.x, accuracy = 1))
+```
+
+
+
+### Taux rétension
+
+```{r}
+iut.ret <- iut %>%
+  filter(Session == max(Session)) %>%
+  mutate(
+   Taux.rétension = Rang.du.dernier.appelé.du.groupe.1+Rang.du.dernier.appelé.du.groupe.2 / places,
+   Taux.rétension2 = (
+     Effectif.des.candidats.en.terminale.professionnelle.ayant.reçu.une.proposition.d.admission.de.la.part.de.l.établissement +
+     Effectif.des.candidats.en.terminale.générale.ayant.reçu.une.proposition.d.admission.de.la.part.de.l.établissement +
+     Effectif.des.candidats.en.terminale.technologique.ayant.reçu.une.proposition.d.admission.de.la.part.de.l.établissement ) / places
+  ) 
+
+iut.ret %>%
+  ggplot(aes(x=Taux.rétension, y=Taux.rétension2)) + geom_point() + geom_smooth()
+```
+
+```{r}
+iut.ret %>%
+  ggplot(aes(x=Taux.d.accès, y=Taux.rétension2)) + geom_point() + geom_smooth()
+```
+
+
+```{r}
+iut.ret %>%
+  ggplot(aes(x=Taux.sélection, y=Taux.rétension)) + geom_point() + geom_smooth()
+```
