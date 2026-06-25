@@ -321,7 +321,7 @@ iut %>%
 iut.fem <- iut %>%
   summarise(
     Admises = sum(Dont.effectif.des.candidates.admises),
-    .by=c(Session,Filière)) %>%
+    .by=c(Session,Filière)) %>% View()
   arrange(Session) %>%
   summarise(
     Admises.diff = last(Admises) - first(Admises),

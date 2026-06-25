@@ -1,0 +1,188 @@
+---
+title: "RD Data"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://donnees.banquemondiale.org/indicateur/GB.XPD.RSDV.GD.ZS (API_BG)
+- https://www.oecd.org/fr/data/insights/statistical-releases/2026/03/oecd-overall-rd-growth-stable-government-rd-budgets-decline-and-reorient-towards-defence.html (OCDE_)
+
+```{r load, results='asis', cache=TRUE}
+OECD <- read.csv("OECD.STI.STP,DSD_MSTI@DF_MSTI,+all.csv")
+
+spoiler_table(OECD %>% select(MEASURE, Mesure) %>% unique() %>% arrange(MEASURE), title = "Variables", trim = Inf)
+
+spoiler_table(OECD %>% select(UNIT_MEASURE, Unité.de.mesure) %>% unique() %>% arrange(UNIT_MEASURE), title = "Unité de mesure", trim = Inf)
+
+OECD %>% 
+  filter(REF_AREA == "USA", TIME_PERIOD == "1981", MEASURE == "G") %>%
+  View()
+```
+
+```{r}
+oecd_df <- function(m, pays_code = c("FRA","DEU","CHN","USA","GRB"), unité = "USD_PPP", mult = "Millions", base = 2020) { #PT_B1GQ
+  if(is.null(pays_code)) pays_code <- unique(OECD$REF_AREA)
+  OECD %>%
+    filter(MEASURE == m, REF_AREA %in% pays_code, UNIT_MEASURE == unité, Multiplicateur.d.unité == mult, BASE_PER == base) %>%
+    transmute(
+      Pays_Code = REF_AREA, 
+      Pays = Zone.de.référence, 
+      Mesure, 
+      Unité = Unité.de.mesure, 
+      Multiplicateur = Multiplicateur.d.unité,
+      Base = BASE_PER,
+      Date = TIME_PERIOD, 
+      Valeur = OBS_VALUE,
+      Statut = paste(Statut.d.observation, Statut.d.observation.2, Statut.d.observation.3)
+      ) %>%
+    mutate(Pays = recode(Pays, "Chine (République populaire de)" = "Chine"))
+}
+
+PPP = oecd_df("PPP")
+
+DIRD = oecd_df("G")
+DIRD = oecd_df("G", mult="Units")
+DIRD_GDP = oecd_df("G_XGDP")
+DIRDE = oecd_df("B")
+DIRDET = oecd_df("GV")
+DIRDES = oecd_df("H")
+```
+
+## Explorations
+
+```{r}
+last_val <- function(.x) {
+  .x %>%
+    arrange(Date) %>%
+    group_by(Pays) %>%
+    slice_tail(n=1)
+}
+
+oecd_plot <- function(m, pays_code = c("FRA","DEU","CHN","USA","GBR"), unité = "USD_PPP", mult = "Millions") {
+  df <- oecd_df(m,pays_code,unité,mult) 
+  titre = df$Mesure
+  df %>%
+    ggplot(aes(x=Date,y=Valeur,color=Pays)) + 
+    geom_line(size=1) +
+    ggrepel::geom_text_repel(data=last_val, aes(label=Pays), color="black", direction="y", nudge_x = 2, hjust=0) +
+    expand_limits(x=max(df$Date)+6) +
+    scale_y_continuous(labels = ~ paste(.x/1e3,"Md$")) +
+    labs(title = titre,
+         y=NULL)
+}
+
+oecd_plot("G")
+oecd_plot("B")
+oecd_plot("GV")
+oecd_plot("H")
+```
+
+
+### vs Corp
+
+```{r, cache = TRUE}
+library(WDI)
+
+us_deflator <- WDI(
+  country = "US",
+  indicator = "NY.GDP.DEFL.ZS.AD",
+  start = 2011,
+  end = 2025) %>%
+  arrange(year) %>%
+  mutate(
+    deflator = NY.GDP.DEFL.ZS.AD[year == 2020] / NY.GDP.DEFL.ZS.AD
+  )
+```
+
+```{r}
+rdcorp <- read.csv("scrapper/rd-expenses-annual.csv") %>%
+  transmute(
+    Pays_code = ticker,
+    Pays = str_to_sentence(company_name),
+    Date = annual_year,
+    Valeur.brute = annual_billion * 1000
+  ) %>%
+  left_join( us_deflator %>% rename(Date = year) ) %>%
+  arrange(Date) %>%
+  fill(deflator) %>%
+  mutate(Valeur = Valeur.brute * deflator)
+
+```
+
+```{r}
+oecd_corp_plot <- function(m, pays_code = c("FRA","DEU","CHN","USA","GBR"), unité = "USD_PPP", mult = "Millions", corp = c("AMZN","GOOG","META","AAPL","MSFT")) {
+  dfp <- oecd_df(m,pays_code,unité,mult) %>% mutate(Type = "Pays")
+  dfc <- rdcorp %>% filter(Pays_code %in% corp) %>% mutate(Type = "GAFAM")
+  titre = dfp$Mesure
+  bind_rows(dfp,dfc)%>%
+    filter(Date > 2010) %>%
+    ggplot(aes(x=Date,y=Valeur,color=Type, group = Pays)) + 
+    geom_line(size=1) +
+    ggrepel::geom_text_repel(data=last_val, aes(label=Pays), color="black", direction="y", nudge_x = 2, hjust=0) +
+    expand_limits(x=max(dfc$Date)+3) +
+    scale_y_continuous(labels = ~ paste(.x/1e3,"Md$")) +
+    labs(title = titre,
+         y=NULL)
+}
+
+oecd_corp_plot("G")
+oecd_corp_plot("B")
+oecd_corp_plot("GV")
+oecd_corp_plot("H")
+
+oecd_corp_plot("G", pays="FRA")
+oecd_corp_plot("B", pays="FRA")
+oecd_corp_plot("GV", pays="FRA")
+oecd_corp_plot("H", pays="FRA")
+```
+
+
+
+
+```{r}
+oecd_corp_top_plot <- function(m, top=10, unité = "USD_PPP", mult = "Millions") {
+  
+  dfp <- oecd_df(m,pays_code=NULL,unité,mult) %>% mutate(Type = "Pays") %>%
+    filter(!Pays_Code %in% c("EU27_2020","OECD"))
+  dfc <- rdcorp %>% mutate(Type = "GAFAM")
+  
+  titre = dfp$Mesure
+  
+  df <- bind_rows(dfp,dfc)%>%
+    slice_max(Date,n=1,by=Pays) %>%
+    slice_max(Valeur,n=top) %>%
+    mutate(PaysDate = paste0(Pays," (",Date,")")) 
+  
+  df %>%
+    ggplot(aes(x=Valeur,y=reorder(PaysDate,Valeur),fill=Type, group = Pays)) + 
+    scale_x_continuous(labels = ~ paste(.x/1e3,"Md$")) +
+    annotate("rect", xmin = -Inf, xmax = Inf, fill = "grey90", alpha = 0.6,
+      ymin = which(order(df$Valeur) == which(df$Pays == "France")) + 0.6,
+      ymax = which(order(df$Valeur) == which(df$Pays == "France")) - 0.6
+    ) +
+    geom_col() +    
+    labs(title = titre,
+         y=NULL,
+         x=NULL)
+}
+
+oecd_corp_top_plot("G")
+oecd_corp_top_plot("B")
+oecd_corp_top_plot("GV", top=20)
+oecd_corp_top_plot("H", top=15)
+```
+

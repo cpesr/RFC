@@ -811,6 +811,7 @@ poursuites_iut <- cowplot::plot_grid(ncol=2, rel_widths = c(3,1),
     cpesr_cap(),
 
   iut %>%
+    arrange(Session) %>%
     mutate(diff = Poursuites - first(Poursuites), .by = Série) %>%
     filter(Session == last(Session)) %>%
     ggplot(aes(x=Série,y=diff,fill=Série)) +
