@@ -375,7 +375,7 @@ kpiESR::esr.pnl %>%
   ggtitle("Dotation récurrente (SCSP) et masse salariale des établissement du MESR")
 ```
 
-```{r scsp.vs.ms, fig.asp=9/16}
+```{r scsp.vs.ms.bis, fig.asp=9/16}
 kpiESR::esr.pnl %>%
   #filter(pid=="Universités et assimilés", Rentrée > 2013) %>%
   filter(pid=="Ensemble") %>%

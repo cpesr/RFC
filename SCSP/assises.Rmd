@@ -19,9 +19,15 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/R
 
 ## Données 
 
-- url source
+- https://data.enseignementsup-recherche.gouv.fr/explore/assets/fr-esr-operateurs-indicateurs-financiers/export/?vt=chart&ct=col&page=2&refine=exercice%3A2025&orderBy=ressources_propres_produits_encaissables+DESC
 
-```{r load}
+```{r}
+scsp <- read.csv2("../data/fr-esr-operateurs-indicateurs-financiers.csv", dec='.') %>%
+  mutate(SCSP = Produits.de.fonctionnement.encaissables - Ressources.propres.encaissables) %>%
+  summarise(SCSP = sum(SCSP, na.rm=TRUE), .by=exercice)
+```
+
+```{r}
 scsp <- esr.pnl %>% 
   filter(pid %in% c("Ensemble","Universités et assimilés")) %>% 
   filter(kpi %in% c("kpi.FIN.S.SCSP","kpi.ETU.P.effectif")) %>% 
@@ -34,7 +40,8 @@ scsp %>%
   ggplot(aes(x=Rentrée,y=valeur,color=pid)) + 
   geom_line() +
   geom_vline(xintercept = 2018) +
-  facet_grid(kpi~.,scales="free_y")
+  facet_grid(kpi~.,scales="free_y") +
+  scale_x_continuous(breaks=scales::pretty_breaks(n=10))
 ```
 
 
@@ -48,6 +55,7 @@ bind_rows(
   geom_line() +
   geom_vline(xintercept = 2018) +
   geom_hline(yintercept = 100) +
-  facet_grid(kpi~.,scales="free_y")
+  facet_grid(kpi~.,scales="free_y") +
+  scale_x_continuous(breaks=scales::pretty_breaks(n=10))
 ```
 
