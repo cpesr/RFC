@@ -1,0 +1,53 @@
+---
+title: "CPESR Assises"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+library(kpiESR)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- url source
+
+```{r load}
+scsp <- esr.pnl %>% 
+  filter(pid %in% c("Ensemble","Universités et assimilés")) %>% 
+  filter(kpi %in% c("kpi.FIN.S.SCSP","kpi.ETU.P.effectif")) %>% 
+  select(pid,Rentrée,kpi,valeur)
+```
+
+
+```{r}
+scsp %>%
+  ggplot(aes(x=Rentrée,y=valeur,color=pid)) + 
+  geom_line() +
+  geom_vline(xintercept = 2018) +
+  facet_grid(kpi~.,scales="free_y")
+```
+
+
+
+```{r}
+bind_rows(
+  scsp %>% filter(Rentrée == 2018),
+  scsp %>% filter(Rentrée != 2018) ) %>%
+  mutate(valeur100 = valeur / first(valeur) * 100, .by=c(kpi,pid)) %>%
+  ggplot(aes(x=Rentrée,y=valeur100,color=pid)) + 
+  geom_line() +
+  geom_vline(xintercept = 2018) +
+  geom_hline(yintercept = 100) +
+  facet_grid(kpi~.,scales="free_y")
+```
+

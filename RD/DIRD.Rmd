@@ -22,7 +22,7 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/R
 - https://www.oecd.org/fr/data/insights/statistical-releases/2026/03/oecd-overall-rd-growth-stable-government-rd-budgets-decline-and-reorient-towards-defence.html (OCDE_)
 
 ```{r load, results='asis', cache=TRUE}
-OECD <- read.csv("OECD.STI.STP,DSD_MSTI@DF_MSTI,+all.csv")
+OECD <- read.csv("data/OECD.STI.STP,DSD_MSTI@DF_MSTI,+all.csv")
 
 spoiler_table(OECD %>% select(MEASURE, Mesure) %>% unique() %>% arrange(MEASURE), title = "Variables", trim = Inf)
 
@@ -37,7 +37,7 @@ OECD %>%
 oecd_df <- function(m, pays_code = c("FRA","DEU","CHN","USA","GRB"), unité = "USD_PPP", mult = "Millions", base = 2020) { #PT_B1GQ
   if(is.null(pays_code)) pays_code <- unique(OECD$REF_AREA)
   OECD %>%
-    filter(MEASURE == m, REF_AREA %in% pays_code, UNIT_MEASURE == unité, Multiplicateur.d.unité == mult, BASE_PER == base) %>%
+    filter(MEASURE == m, REF_AREA %in% pays_code, UNIT_MEASURE == unité, Multiplicateur.d.unité == mult, is.null(base) || BASE_PER == base) %>%
     transmute(
       Pays_Code = REF_AREA, 
       Pays = Zone.de.référence, 
