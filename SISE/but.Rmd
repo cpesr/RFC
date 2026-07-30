@@ -1,0 +1,68 @@
+---
+title: "BUT"
+author: "CPESR"
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(dplyr.summarise.inform = FALSE)
+knitr::opts_chunk$set(fig.asp = 9/16, fig.retina = 2)
+
+library(tidyverse)
+library(ggcpesrthemes)
+theme_set(theme_cpesr())
+theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/RFC/")
+```
+
+## Données 
+
+- https://data.enseignementsup-recherche.gouv.fr/explore/assets/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public/view/
+- Rentrée 2023
+
+```{r load}
+sise <- read.csv2("../data/fr-esr-sise-effectifs-d-etudiants-inscrits-esr-public.csv", dec='.')
+
+but <- sise %>%
+  filter(rentree == 2023, diplome == "BUT")
+```
+
+## Explorations
+
+```{r}
+but %>%
+  summarise(étudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE)) %>%
+  mutate(arrondi = round(étudiants,-2))
+```
+
+```{r}
+df <- but %>%
+  summarise(étudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE),
+            .by=sexe) %>%
+  mutate(arrondi = round(étudiants,-2))
+
+df 
+
+df %>%
+  summarise(
+    étudiants = sum(étudiants),
+    arrondi = sum(arrondi)
+  )
+
+```
+
+```{r}
+df <- but %>%
+  summarise(étudiants = sum(Nombre.d.étudiants.inscrits..inscriptions.principales..hors.étudiants.inscrits.en.parallèle.en.CPGE),
+            .by=niveau) %>%
+  mutate(arrondi = round(étudiants,-2))
+
+df 
+
+df %>%
+  summarise(
+    étudiants = sum(étudiants),
+    arrondi = sum(arrondi)
+  )
+```
