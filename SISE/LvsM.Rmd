@@ -65,7 +65,7 @@ sise %>%
   group_by(Rentrée,Niveau = paste(LMD,Niveau, sep="-")) %>%
   summarise(Etudiants = sum(Etudiants)) %>%
   filter(Niveau %in% c("L-03","M-01")) %>%
-  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
+  ggplot_sd(aes(x=Rentrée, y= Etudiants, color=Niveau)) +
   geom_line(linewidth = 1.5) + geom_point(shape = 21, stroke = 2, size = 2, fill="white") + 
   theme(legend.position = "None") +
   theme_cpesr_cap()
@@ -79,7 +79,7 @@ sise %>%
   filter(Niveau %in% c("L3","M1")) %>%
   mutate(Rentrée = ifelse(Niveau == "L3", Rentrée+1,Rentrée)) %>%
   filter(Rentrée != 2012, Rentrée != 2025) %>%
-  ggplot(aes(x=Rentrée, y= Etudiants, color=Niveau, shape=Niveau)) +
+  ggplot_sd(aes(x=Rentrée, y= Etudiants, color=Niveau, shape=Niveau)) +
   geom_line(linewidth = 1.5) + geom_point(stroke = 2, size = 2, fill="white") + 
   scale_x_continuous(labels = ~ paste0("L3 ", .x-1,"\nM1 ",.x), breaks = seq(2011,2030,2), name="Cohorte") +
   scale_y_continuous(labels = ~ paste0(.x/1e3,"k"), name = "Inscriptions étudiantes") +

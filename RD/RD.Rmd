@@ -150,6 +150,8 @@ rd <- rdcorp %>%
   filter(ticker %in% top) %>%
   bind_rows(rd.dird,rd.dirda)
 
+save(rd,file='RD.Rdata')
+
 labels <- rd %>%
   arrange(annual_year) %>%
   group_by(ticker) %>%
