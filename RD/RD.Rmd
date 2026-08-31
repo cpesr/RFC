@@ -19,8 +19,8 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/R
 ## Données 
 
 ```{r load}
-rdfrge <- read.csv("RD-fr-ge.csv", dec='.')
-rdevol <- read.csv("RD-evolution.csv", dec='.')
+rdfrge <- read.csv("data/RD-fr-ge.csv", dec='.')
+rdevol <- read.csv("data/RD-evolution.csv", dec='.')
 ```
 
 ## Explorations
@@ -150,8 +150,6 @@ rd <- rdcorp %>%
   filter(ticker %in% top) %>%
   bind_rows(rd.dird,rd.dirda)
 
-save(rd,file='RD.Rdata')
-
 labels <- rd %>%
   arrange(annual_year) %>%
   group_by(ticker) %>%
@@ -171,4 +169,14 @@ rd %>%
     color = NULL
   ) +
   theme(legend.position = "None")
+```
+
+```{r}
+e <- new.env()
+
+load("RD.RData", envir = e)
+
+e$rd <- rd
+
+save(list = ls(e), envir = e, file = "RD.RData")
 ```
