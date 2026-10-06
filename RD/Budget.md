@@ -1,7 +1,7 @@
 Bugdet
 ================
 CPESR
-2026-08-31
+2026-09-01
 
 ## Données
 
@@ -16,6 +16,8 @@ CPESR
 
 ## Explorations
 
+    ## [Télécharger les données]( Budget_files/figure-data/unnamed-chunk-1.csv )
+
     ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
     ## ℹ Please use `linewidth` instead.
     ## This warning is displayed once every 8 hours.
@@ -27,17 +29,23 @@ CPESR
 
 <img src="Budget_files/figure-gfm/unnamed-chunk-1-1.png" width="672" />
 
-    ## Warning: Removed 14 rows containing missing values or values outside the scale range
+    ## [Télécharger les données]( Budget_files/figure-data/unnamed-chunk-2.csv )
+
+    ## Warning: Removed 11 rows containing missing values or values outside the scale range
     ## (`geom_line()`).
 
 <img src="Budget_files/figure-gfm/unnamed-chunk-2-1.png" width="672" />
 
-    ## Warning: Removed 11 rows containing missing values or values outside the scale range
+    ## [Télécharger les données]( Budget_files/figure-data/unnamed-chunk-2.csv )
+
+    ## Warning: Removed 8 rows containing missing values or values outside the scale range
     ## (`geom_line()`).
 
 <img src="Budget_files/figure-gfm/unnamed-chunk-2-2.png" width="672" />
 
-    ## Warning: Removed 11 rows containing missing values or values outside the scale range
+    ## [Télécharger les données]( Budget_files/figure-data/unnamed-chunk-2.csv )
+
+    ## Warning: Removed 8 rows containing missing values or values outside the scale range
     ## (`geom_line()`).
 
 <img src="Budget_files/figure-gfm/unnamed-chunk-2-3.png" width="672" />

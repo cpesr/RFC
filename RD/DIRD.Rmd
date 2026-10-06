@@ -76,7 +76,7 @@ oecd_plot <- function(m, pays_code = c("FRA","DEU","CHN","USA","GBR"), unité = 
   df <- oecd_df(m,pays_code,unité,mult) 
   titre = df$Mesure
   df %>%
-    ggplot(aes(x=Date,y=Valeur,color=Pays)) + 
+    ggplot_sd(aes(x=Date,y=Valeur,color=Pays)) + 
     geom_line(size=1) +
     ggrepel::geom_text_repel(data=last_val, aes(label=Pays), color="black", direction="y", nudge_x = 2, hjust=0) +
     expand_limits(x=max(df$Date)+6) +
@@ -133,7 +133,7 @@ oecd_corp_plot <- function(m, pays_code = c("FRA","DEU","CHN","USA","GBR"), unit
   titre = dfp$Mesure
   bind_rows(dfp,dfc)%>%
     filter(Date > 2010) %>%
-    ggplot(aes(x=Date,y=Valeur,color=Type, group = Pays)) + 
+    ggplot_sd(aes(x=Date,y=Valeur,color=Type, group = Pays)) + 
     geom_line(size=1) +
     ggrepel::geom_text_repel(data=last_val, aes(label=Pays), color="black", direction="y", nudge_x = 2, hjust=0) +
     expand_limits(x=max(dfc$Date)+3) +
@@ -173,7 +173,7 @@ oecd_corp_top_plot <- function(m, top=10, unité = "USD_PPP", mult = "Millions")
     mutate(PaysDate = paste0(Pays," (",Date,")")) 
   
   df %>%
-    ggplot(aes(x=Valeur,y=reorder(PaysDate,Valeur),fill=Type, group = Pays)) + 
+    ggplot_sd(aes(x=Valeur,y=reorder(PaysDate,Valeur),fill=Type, group = Pays)) + 
     scale_x_continuous(labels = ~ paste(.x/1e3,"Md$")) +
     annotate("rect", xmin = -Inf, xmax = Inf, fill = "grey90", alpha = 0.6,
       ymin = which(order(df$Valeur) == which(df$Pays == "France")) + 0.6,

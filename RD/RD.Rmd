@@ -28,7 +28,7 @@ rdevol <- read.csv("data/RD-evolution.csv", dec='.')
 ```{r}
 rdfrge %>%
   pivot_longer(-Année, values_to = "RDpPIB", names_to = "Pays") %>%
-  ggplot(aes(x=Année,y=RDpPIB,color=Pays)) + geom_line(size=1) + geom_point(size=2,shape=21,stroke=1.5, fill="white") +
+  ggplot_sd(aes(x=Année,y=RDpPIB,color=Pays)) + geom_line(size=1) + geom_point(size=2,shape=21,stroke=1.5, fill="white") +
   scale_y_continuous(labels = ~ paste(.x,"%")) +
   scale_color_brewer(palette="Dark2") +
   labs(
@@ -42,7 +42,7 @@ rdfrge %>%
 ```{r}
 rdfrge %>%
   pivot_longer(-Année, values_to = "RDpPIB", names_to = "Pays") %>%
-  ggplot(aes(x=Année,y=RDpPIB,color=Pays)) + geom_smooth(method="lm", se=FALSE) +
+  ggplot_sd(aes(x=Année,y=RDpPIB,color=Pays)) + geom_smooth(method="lm", se=FALSE) +
   geom_point(size=2) +
   scale_y_continuous(labels = ~ paste(.x,"%")) +
   scale_color_brewer(palette="Dark2") +
@@ -57,7 +57,7 @@ rdfrge %>%
 
 ```{r}
 rdevol %>%
-  ggplot(aes(x=RD_evol.1996_2023,y=reorder(Pays,RD_evol.1996_2023), color=(RD_evol.1996_2023>0))) + 
+  ggplot_sd(aes(x=RD_evol.1996_2023,y=reorder(Pays,RD_evol.1996_2023), color=(RD_evol.1996_2023>0))) + 
   
   annotate(
     "rect",
@@ -95,7 +95,7 @@ rdcorp %>%
   arrange(desc(annual_billion)) %>%
   mutate(country = factor(country, levels = unique(country))) %>%
   head(11) %>%
-  ggplot(aes(x=annual_billion,y=reorder(company_name,annual_billion),fill=country)) +
+  ggplot_sd(aes(x=annual_billion,y=reorder(company_name,annual_billion),fill=country)) +
   geom_col() +
   geom_text(aes(label = paste(round(annual_billion), "Md$")), hjust = 0, nudge_x = 0.5) +
   scale_fill_brewer(palette = "Set2", direction=-1) +
@@ -156,7 +156,7 @@ labels <- rd %>%
   slice_tail(n=1)
 
 rd %>%
-  ggplot(aes(x=annual_year, y=annual_billion, color=country, group=ticker)) + 
+  ggplot_sd(aes(x=annual_year, y=annual_billion, color=country, group=ticker)) + 
   geom_line(size = 1) +
   ggrepel::geom_text_repel(data=labels, aes(label=company_name), color="black", direction="y", nudge_x = 0.2, hjust=0) +
   expand_limits(x=2027.5) +

@@ -1,7 +1,7 @@
 SCSP
 ================
 CPESR
-2026-06-28
+2026-10-06
 
 ## Données
 
@@ -108,9 +108,16 @@ l’inflation (ipc en valeur 2015, à 119.81)
 
 <img src="SCSP_files/figure-gfm/scsp.vs.ms-1.png" width="672" />
 
+<img src="SCSP_files/figure-gfm/scsp.vs.ms.bis-1.png" width="672" />
+
 <img src="SCSP_files/figure-gfm/scsp.vs.ms2-1.png" width="672" />
 
 <img src="SCSP_files/figure-gfm/scsp.vs.ms3-1.png" width="672" />
+
+\<
+
+    ## Warning: Removed 8 rows containing missing values or values outside the scale range
+    ## (`geom_col()`).
 
 <img src="SCSP_files/figure-gfm/scsp.vs.ms4-1.png" width="672" />
 
@@ -122,7 +129,13 @@ l’inflation (ipc en valeur 2015, à 119.81)
 
 <img src="SCSP_files/figure-gfm/scsp.vs.anr-1.png" width="672" />
 
+    ## Warning: Removed 1 row containing missing values or values outside the scale range
+    ## (`geom_col()`).
+
 <img src="SCSP_files/figure-gfm/deficit-1.png" width="672" />
+
+    ## Warning: Removed 1 row containing missing values or values outside the scale range
+    ## (`geom_col()`).
 
 <img src="SCSP_files/figure-gfm/deficit2-1.png" width="672" />
 
@@ -132,13 +145,12 @@ l’inflation (ipc en valeur 2015, à 119.81)
 
 ## Fix temporaire
 
-<img src="SCSP_files/figure-gfm/unnamed-chunk-1-1.png" width="672" />
-
 <img src="SCSP_files/figure-gfm/unnamed-chunk-2-1.png" width="672" />
 
 <img src="SCSP_files/figure-gfm/unnamed-chunk-3-1.png" width="672" />
 
-    ## Joining with `by = join_by(pid)`
+    ## Warning: Removed 1 row containing missing values or values outside the scale range
+    ## (`geom_point()`).
 
 <img src="SCSP_files/figure-gfm/unnamed-chunk-4-1.png" width="672" />
 
@@ -149,3 +161,9 @@ l’inflation (ipc en valeur 2015, à 119.81)
     ## Joining with `by = join_by(pid)`
 
 <img src="SCSP_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
+
+    ## Joining with `by = join_by(pid)`
+
+[Télécharger les données](SCSP_files/figure-data/unnamed-chunk-7.csv)
+
+<img src="SCSP_files/figure-gfm/unnamed-chunk-7-1.png" width="672" />

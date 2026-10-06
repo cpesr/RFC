@@ -40,7 +40,7 @@ budget <- read.csv2("data/budget.csv") %>%
 
 ```{r}
 budget %>% 
-  ggplot(aes(x=Année,y=Valeur2025,color=Dépense)) + 
+  ggplot_sd(aes(x=Année,y=Valeur2025,color=Dépense)) + 
   geom_vline(xintercept = c(2007,2018,2019)) +
   geom_line(size=1) +
   scale_x_continuous(breaks = seq(2003,2030, by=2), name=NULL) +
@@ -54,23 +54,24 @@ budget %>%
 ```{r}
 library(ggrepel)
 
-depense_plot <- function(vars) {
+depense_plot <- function(vars, enddate=2025) {
   reformes <- budget %>% 
     filter(Dépense == "CIR" & Année == 2006 | Dépense == "Alternance" & Année == 2018 | Dépense == vars[3] & Année == 2020 ) %>%
     add_column(reforme = c("Réforme du CIR", "Réforme de l'alternance", "Loi Recherche"))
   
   budget %>% 
+    filter(Année <= enddate) %>%
     filter(Dépense %in% vars) %>%
-    ggplot(aes(x=Année,y=Valeur2025)) + 
+    ggplot_sd(aes(x=Année,y=Valeur2025)) + 
+    geom_line(aes(color=Dépense), size=1) +
     geom_segment(data=reformes,aes(xend=Année,yend=32), color = "grey") +
     geom_text(data=reformes,aes(y=35, label=reforme),vjust = -0.5, hjust = 1, angle=90) +
-    geom_line(aes(color=Dépense), size=1) +
     geom_point(data=reformes,aes(color=Dépense), shape=21, size=2, stroke=1.5, fill="white") +
     scale_x_continuous(breaks = seq(2003,2030, by=2), name=NULL) +
-    scale_y_continuous(labels = ~ paste(.x,"Md€"), name=NULL) +
+    scale_y_continuous(labels = ~ paste(.x,"Md€")) +
     labs(
       title = "Dépenses nationales et grandes réformes",
-      y = "Md€ (2020)"
+      y = "Dépense en € constants 2020"
     )
 }
 

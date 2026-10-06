@@ -1,7 +1,7 @@
 RD Data
 ================
 CPESR
-2026-08-31
+2026-09-01
 
 ## Données
 
@@ -119,20 +119,78 @@ Unité de mesure ( 21 lignes)
 
 ## Explorations
 
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-2.csv )
+
     ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
     ## ℹ Please use `linewidth` instead.
     ## This warning is displayed once every 8 hours.
     ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
     ## generated.
 
-<img src="DIRD_files/figure-gfm/unnamed-chunk-2-1.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-2-2.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-2-3.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-2-4.png" width="672" />
+<img src="DIRD_files/figure-gfm/unnamed-chunk-2-1.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-2.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-2-2.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-2.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-2-3.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-2.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-2-4.png" width="672" />
 
 ### vs Corp
 
     ## Joining with `by = join_by(Date)`
 
-<img src="DIRD_files/figure-gfm/unnamed-chunk-5-1.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-5-2.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-5-3.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-5-4.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-5-5.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-5-6.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-5-7.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-5-8.png" width="672" />
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
 
-<img src="DIRD_files/figure-gfm/unnamed-chunk-6-1.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-6-2.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-6-3.png" width="672" /><img src="DIRD_files/figure-gfm/unnamed-chunk-6-4.png" width="672" />
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-1.png" width="672" />
 
-    ## <environment: 0x5ddc9992b1e8>
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-2.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-3.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-4.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-5.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-6.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-7.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-5.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-5-8.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-6.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-6-1.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-6.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-6-2.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-6.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-6-3.png" width="672" />
+
+    ## [Télécharger les données]( DIRD_files/figure-data/unnamed-chunk-6.csv )
+
+<img src="DIRD_files/figure-gfm/unnamed-chunk-6-4.png" width="672" />
+
+    ## <environment: 0x61aa49cc1180>
