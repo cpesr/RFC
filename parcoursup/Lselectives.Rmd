@@ -18,7 +18,7 @@ theme_cpesr_setup(authors = "Julien Gossa", source = "https://github.com/cpesr/R
 
 ## Données 
 
-- url source
+- https://data.enseignementsup-recherche.gouv.fr/explore/assets/fr-esr-parcoursup/export/
 
 ```{r load}
 ps <- read.csv2("../data/fr-esr-parcoursup.csv", dec='.')
@@ -42,17 +42,21 @@ psL <- ps %>%
 
 ## Explorations
 
-```{r}
+```{r, results='asis'}
 psLs <- psL %>%
   summarise(
     Nombre.formations = n(),
     Nombre.admis = sum(Effectif.total.des.candidats.ayant.accepté.la.proposition.de.l.établissement..admis.),
     .by = c(Secteur,Sélectivité.officielle, Sélectivité.réelle)
   ) %>% 
+  mutate(
+    Part.formations = Nombre.formations / sum(Nombre.formations),
+    Part.admis = Nombre.admis / sum(Nombre.admis),
+    .by = c(Secteur,Sélectivité.officielle)) %>%
   arrange(Secteur,Sélectivité.officielle, Sélectivité.réelle) 
 
 psLs %>%
-  ggplot(aes(x=Sélectivité.réelle,y=Nombre.admis, fill=Sélectivité.réelle)) + 
+  ggplot_st(aes(x=Sélectivité.réelle,y=Nombre.admis, fill=Sélectivité.réelle)) + 
   geom_col() +
   facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
   scale_fill_discrete(palette = "Paired") +
@@ -64,9 +68,25 @@ psLs %>%
   theme(legend.position = "None")
 ```
 
-```{r}
+```{r, results='asis'}
 psLs %>%
-  ggplot(aes(x=Sélectivité.réelle,y=Nombre.formations, fill=Sélectivité.réelle)) + 
+  filter(Secteur == "Université", Sélectivité.officielle == "formation non sélective") %>%
+  ggplot_st(aes(x=Sélectivité.réelle,y=Nombre.admis, fill=Sélectivité.réelle)) + 
+  geom_col() +
+  facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
+  scale_fill_discrete(palette = "Paired") +
+  labs(
+    title = "Sélectivité des Licences",
+    x = "Sélectivité (Taux d'accès)",
+    y = "Nombre d'admis"
+  ) +
+  theme(legend.position = "None")
+```
+
+
+```{r, results='asis'}
+psLs %>%
+  ggplot_st(aes(x=Sélectivité.réelle,y=Nombre.formations, fill=Sélectivité.réelle)) + 
   geom_col() +
   facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
   scale_fill_discrete(palette = "Paired") +
@@ -78,7 +98,7 @@ psLs %>%
 ```
 
 
-```{r}
+```{r, results='asis'}
 psLsb <- psL %>%
   pivot_longer(Effectif.des.admis.néo.bacheliers.généraux:Effectif.des.autres.candidats.admis,
                names_to = "Bac", values_to = "Admis") %>%
@@ -96,7 +116,7 @@ psLsb <- psL %>%
   arrange(Secteur,Sélectivité.officielle, Sélectivité.réelle, Bac) 
 
 psLsb %>%
-  ggplot(aes(y=Sélectivité.réelle,x=Nombre.admis, fill=Bac)) + 
+  ggplot_st(aes(y=Sélectivité.réelle,x=Nombre.admis, fill=Bac)) + 
   geom_col(position="fill", alpha=0.7) +
   facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
   scale_fill_discrete(palette = "Set2") +
@@ -108,7 +128,7 @@ psLsb %>%
   ) 
 ```
 
-```{r}
+```{r, results='asis'}
 psLsbo <- psL %>%
   mutate(
     Boursiers = Effectif.des.admis.néo.bacheliers * X..d.admis.néo.bacheliers.boursiers / 100,
@@ -123,7 +143,7 @@ psLsbo <- psL %>%
   arrange(Secteur,Sélectivité.officielle, Sélectivité.réelle, Néobacheliers) 
 
 psLsbo %>%
-  ggplot(aes(y=Sélectivité.réelle,x=Nombre.admis, fill=Néobacheliers)) + 
+  ggplot_st(aes(y=Sélectivité.réelle,x=Nombre.admis, fill=Néobacheliers)) + 
   geom_col(position="fill", alpha=0.7) +
   facet_grid(Secteur ~ Sélectivité.officielle, scales="free_y") +
   scale_fill_discrete(palette = "Set1") +
