@@ -110,12 +110,51 @@ iut.admis %>%
   ggplot(aes(x=Session,y=Effectifs,color=Admis)) + geom_line(size=1)
 ```
 
+```{r}
+iut.admis %>%
+  summarize(Effectifs = sum(Effectifs), .by=c(Session, Admis)) %>%
+  ggplot(aes(x=Session,y=Effectifs,color=Admis,fill=Admis)) + geom_area(size=1)
+```
+
 
 ```{r}
 iut.admis %>%
   summarize(Effectifs = sum(Effectifs), .by=c(Session, Admis)) %>%
   mutate(val100 = Effectifs / first(Effectifs) * 100, .by=Admis) %>%
   ggplot(aes(x=Session,y=val100,color=Admis)) + geom_line(size=1)
+```
+
+```{r, warning=FALSE}
+pflux <- iut.admis %>%
+  mutate(Admis = recode(Admis,"Néobac pro" = "Autres")) %>%
+  summarize(Effectifs = sum(Effectifs), .by=c(Session, Admis)) %>%
+  mutate(val100 = Effectifs / first(Effectifs) * 100, .by=Admis) %>%
+  ggplot(aes(x=Session,y=val100,color=Admis)) + 
+  geom_vline(xintercept = 2020, linewidth=0.2) +
+  geom_line(size=1) +
+  annotate(geom = "text", x=2020, y = 99, angle=90, hjust=1, vjust=-0.5, label="Réforme BUT") +
+  scale_x_continuous(breaks=scales::pretty_breaks(n=10)) +
+  theme(panel.grid.minor.x = element_blank())
+pflux
+
+
+pdiff <- iut.admis %>%
+  mutate(Admis = recode(Admis,"Néobac pro" = "Autres")) %>%
+  summarize(Effectifs = sum(Effectifs), .by=c(Session, Admis)) %>%
+  arrange(Session) %>%
+  summarise(Différence = last(Effectifs) - first(Effectifs), .by=Admis) %>%
+  ggplot(aes(x=Admis,y=Différence,fill=Admis)) + geom_col() 
+pdiff
+
+cowplot::plot_grid(nrow = 1, rel_widths = c(5,1),
+  pflux + labs(
+    title="Admissions en BUT dans Parcoursup",
+    caption="Source = dataESR - Traitements : CPERS / Julien Gossa",
+    x="Session Parcoursup", y="Nombre d'admissions (valeur 100 en 2018)"),
+  pdiff + 
+    ylab(paste("Différence", min(iut.admis$Session), "-", max(iut.admis$Session))) +
+    theme(legend.position = "None", axis.text.x = element_blank(), axis.title.x = element_blank())
+  ) 
 ```
 
 ## Substitution BT/BG
@@ -321,7 +360,7 @@ iut %>%
 iut.fem <- iut %>%
   summarise(
     Admises = sum(Dont.effectif.des.candidates.admises),
-    .by=c(Session,Filière)) %>% View()
+    .by=c(Session,Filière)) %>% 
   arrange(Session) %>%
   summarise(
     Admises.diff = last(Admises) - first(Admises),
